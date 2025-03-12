@@ -1,3 +1,5 @@
+package appointment;
+
 import java.util.ArrayList;
 
 public class Appointment {
@@ -6,7 +8,6 @@ public class Appointment {
     private String endTime;
     private String date;
     private String notes;
-    ArrayList<Appointment> apptList;
 
     public Appointment() {
         name = "";
@@ -14,18 +15,17 @@ public class Appointment {
         endTime = "";
         date = "";
         notes = "";
-        apptList = new ArrayList<Appointment>();
     }
 
-    public Appointment(String patient, String startTime, String endTime, String date, String notes) {
-        this.name = patient;
+    public Appointment(String name, String startTime, String endTime, String date, String notes) {
+        this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;
         this.notes = notes;
     }
 
-    public void addPatient(String name, String startTime, String endTime, String date, String notes) {
+    public static void addAppt(ArrayList<Appointment> apptList, String name, String startTime, String endTime, String date, String notes) {
         apptList.add(new Appointment(name, startTime, endTime, date, notes));
     }
 
@@ -34,4 +34,5 @@ public class Appointment {
         return "Name: " + name + ", " + "From: " + startTime + ", " + "To: " + endTime + ", " + "Date: " + date + ", " + "Notes: " + notes;
     }
 }
+
 
