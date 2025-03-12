@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import appointment.Appointment;
+import appointment.Parser;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -17,6 +19,39 @@ public class NurseSched {
         String notes = "Test notes";
         LocalTime startTime = LocalTime.now();
         LocalDate date = LocalDate.now();
+
+        Scanner line = new Scanner(System.in);
+        while(true) {
+            Parser parser = Parser.extractCommand(line);
+            if (parser == null) {
+                System.out.println("Input is null");
+                break;
+            }
+            String type = parser.getType();
+            String command = parser.getCommand();
+            switch (type) {
+            case "appt":
+                if (command.equals("add")) {
+                    System.out.println("Appointment added");
+                }
+                if (command.equals("del")) {
+                    System.out.println("Appointment deleted");
+                }
+                if (command.equals("mark")) {
+                    System.out.println("Appointment marked");
+                }
+                break;
+            case "pf":
+                //Todo
+                break;
+            case "shift":
+                //Todo
+                break;
+            default:
+                System.out.println("Unknown command");
+                break;
+            }
+        }
 
         Appointment.addAppt(apptList, name, startTime, startTime, date, notes);
         System.out.println("List after adding:" + apptList);

@@ -100,8 +100,6 @@ public class Appointment {
         return this.isDone;
     }
 
-
-
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
