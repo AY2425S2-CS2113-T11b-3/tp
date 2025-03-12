@@ -25,13 +25,18 @@ public class Appointment {
         this.notes = notes;
     }
 
-    public static void addAppt(ArrayList<Appointment> apptList, String name, String startTime, String endTime, String date, String notes) {
+    public static void addAppt(ArrayList<Appointment> apptList, String name,
+                               String startTime, String endTime, String date, String notes) {
         apptList.add(new Appointment(name, startTime, endTime, date, notes));
     }
 
     @Override
     public String toString() {
-        return "Name: " + name + ", " + "From: " + startTime + ", " + "To: " + endTime + ", " + "Date: " + date + ", " + "Notes: " + notes;
+        return "Name: " + name + ", " +
+                "From: " + startTime + ", " +
+                "To: " + endTime + ", " +
+                "Date: " + date + ", " +
+                "Notes: " + notes;
     }
 }
 
