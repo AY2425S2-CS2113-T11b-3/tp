@@ -53,23 +53,23 @@ public class NurseSched {
             }
         }
 
-        Appointment.addAppt(apptList, name, startTime, startTime, date, notes);
+        Appointment.addAppt(name, startTime, startTime, date, notes);
         System.out.println("List after adding:" + apptList);
 
         System.out.println("Status of appointment: " + apptList.get(0).getStatus());
-        Appointment.markApptByIndex(apptList,0);
+        Appointment.markApptByIndex(0);
         System.out.println("Status of appointment after marking by index: " + apptList.get(0).getStatus());
 
-        Appointment.unmarkApptByIndex(apptList,0);
+        Appointment.unmarkApptByIndex(0);
         System.out.println("Status of appointment after unmarking by index: " + apptList.get(0).getStatus());
 
-        Appointment.markApptByPatient(apptList,name, startTime,date);
+        Appointment.markApptByPatient(name, startTime,date);
         System.out.println("Status of appointment after marking by Patient name: " + apptList.get(0).getStatus());
 
-        Appointment.unmarkApptByPatient(apptList,name, startTime,date);
+        Appointment.unmarkApptByPatient(name, startTime,date);
         System.out.println("Status of appointment after unmarking by index: " + apptList.get(0).getStatus());
 
-        Appointment.deleteApptByPatient(apptList,name, startTime,date);
+        Appointment.deleteApptByPatient(name, startTime,date);
         System.out.println("List after deleting: " + apptList);
 
         boolean isRunning = false;
