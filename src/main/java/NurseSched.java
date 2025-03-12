@@ -42,8 +42,13 @@ public class NurseSched {
                 }
                 break;
             case "pf":
+                //Todo
                 break;
             case "shift":
+                //Todo
+                break;
+            default:
+                System.out.println("Unknown command");
                 break;
             }
         }
