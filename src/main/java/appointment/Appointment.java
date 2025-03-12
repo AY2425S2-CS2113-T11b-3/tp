@@ -82,7 +82,8 @@ public class Appointment {
         appointment.isDone = false;
     }
 
-    public static Appointment findAppointment(ArrayList<Appointment> apptList, String name, LocalTime startTime, LocalDate date) {
+    public static Appointment findAppointment(ArrayList<Appointment> apptList,
+                                              String name, LocalTime startTime, LocalDate date) {
         for (Appointment appointment : apptList) {
             if (appointment.name.toLowerCase().contains(name.toLowerCase())
                     && appointment.startTime.equals(startTime)
@@ -98,8 +99,6 @@ public class Appointment {
     public boolean getStatus() {
         return this.isDone;
     }
-
-
 
     @Override
     public String toString() {
