@@ -3,11 +3,11 @@ package patient;
 import java.util.ArrayList;
 
 public class Patient {
+    protected static ArrayList<Patient> patientsList = new ArrayList<>();
+    
     private String name;
     private String age;
     private String notes;
-
-    protected static ArrayList<Patient> patientsList = new ArrayList<>();
 
     public Patient(String name, String age, String notes) {
         this.name = name;
