@@ -1,7 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import appointment.Appointment;
-import appointment.Parser;
+import parser.ApptParser;
+import parser.Parser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,56 +21,66 @@ public class NurseSched {
         LocalTime startTime = LocalTime.now();
         LocalDate date = LocalDate.now();
 
-        Scanner line = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
+        String line = in.nextLine();
+
         while(true) {
-            Parser parser = Parser.extractCommand(line);
-            if (parser == null) {
-                System.out.println("Input is null");
-                break;
-            }
-            String type = parser.getType();
-            String command = parser.getCommand();
-            switch (type) {
-            case "appt":
+            String type = Parser.extractType(line);
+            switch(type) {
+            case "appt":;
+                ApptParser apptParser = ApptParser.extractInputs(line);
+                if (apptParser == null) {
+                    System.out.println("Invalid inputs for Appointment based command!");
+                    return;
+                }
+                String command = apptParser.getCommand();
                 if (command.equals("add")) {
                     System.out.println("Appointment added");
+                    return;
                 }
                 if (command.equals("del")) {
                     System.out.println("Appointment deleted");
+                    return;
                 }
                 if (command.equals("mark")) {
                     System.out.println("Appointment marked");
+                    return;
                 }
                 break;
             case "pf":
+                //Todo
                 break;
             case "shift":
+                //Todo
+                break;
+            default:
+                System.out.println("Unknown command!");
                 break;
             }
         }
 
-        Appointment.addAppt(apptList, name, startTime, startTime, date, notes);
+        /*Appointment.addAppt(name, startTime, startTime, date, notes);
         System.out.println("List after adding:" + apptList);
 
         System.out.println("Status of appointment: " + apptList.get(0).getStatus());
-        Appointment.markApptByIndex(apptList,0);
+        Appointment.markApptByIndex(0);
         System.out.println("Status of appointment after marking by index: " + apptList.get(0).getStatus());
 
-        Appointment.unmarkApptByIndex(apptList,0);
+        Appointment.unmarkApptByIndex(0);
         System.out.println("Status of appointment after unmarking by index: " + apptList.get(0).getStatus());
 
-        Appointment.markApptByPatient(apptList,name, startTime,date);
+        Appointment.markApptByPatient(name, startTime,date);
         System.out.println("Status of appointment after marking by Patient name: " + apptList.get(0).getStatus());
 
-        Appointment.unmarkApptByPatient(apptList,name, startTime,date);
+        Appointment.unmarkApptByPatient(name, startTime,date);
         System.out.println("Status of appointment after unmarking by index: " + apptList.get(0).getStatus());
 
-        Appointment.deleteApptByPatient(apptList,name, startTime,date);
+        Appointment.deleteApptByPatient(name, startTime,date);
         System.out.println("List after deleting: " + apptList);
 
         boolean isRunning = false;
         while (isRunning) {
             Scanner input = new Scanner(System.in);
-        }
+        }*/
     }
 }
