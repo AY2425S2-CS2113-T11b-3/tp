@@ -1,7 +1,5 @@
 package parser;
 
-import java.util.Scanner;
-
 public class Parser {
     protected String type;
 

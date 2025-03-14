@@ -2,7 +2,6 @@ package parser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Scanner;
 
 public class ApptParser extends Parser{
     private String command;
