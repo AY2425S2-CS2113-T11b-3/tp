@@ -3,7 +3,7 @@ package parser;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class ApptParser extends Parser{
+public class ApptParser extends Parser {
     private String command;
     private String name;
     private LocalTime startTime;
@@ -13,7 +13,7 @@ public class ApptParser extends Parser{
 
     //Constructor
     public ApptParser(String command, String name, LocalTime startTime, LocalTime endTime,
-                  LocalDate date, String notes) {
+                      LocalDate date, String notes) {
         this.command = command;
         this.name = name;
         this.startTime = startTime;
@@ -39,7 +39,7 @@ public class ApptParser extends Parser{
             line = line.substring(line.indexOf(" ") + 1);
 
             name = line.substring(line.indexOf("p/") + 2, line.indexOf("s/") - 1);
-            line  = line.substring(line.indexOf("s/"));
+            line = line.substring(line.indexOf("s/"));
 
             startTime = LocalTime.parse(line.substring(2, line.indexOf(" ")));
             date = LocalDate.parse(line.substring(line.indexOf("d/") + 2, line.indexOf("d/") + 12));
@@ -73,18 +73,23 @@ public class ApptParser extends Parser{
     public String getCommand() {
         return command;
     }
+
     public String getName() {
         return name;
     }
+
     public LocalTime getStartTime() {
         return startTime;
     }
+
     public LocalTime getEndTime() {
         return endTime;
     }
+
     public LocalDate getDate() {
         return date;
     }
+
     public String getNotes() {
         return notes;
     }
