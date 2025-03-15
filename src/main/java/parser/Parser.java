@@ -18,6 +18,7 @@ public class Parser {
         } catch (Exception e) {
             System.out.println("Invalid command!");
             System.out.println("Command should start with \"appt\", \"pf\" or \"shift\"");
+            return "";
         }
         return line;
     }
