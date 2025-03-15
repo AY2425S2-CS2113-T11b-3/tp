@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Patient {
     protected static ArrayList<Patient> patientsList = new ArrayList<>();
-    
+
     private String name;
     private String age;
     private String notes;
