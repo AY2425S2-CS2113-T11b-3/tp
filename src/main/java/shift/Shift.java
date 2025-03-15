@@ -13,7 +13,7 @@ public class Shift {
     private final LocalTime endTime;
     private final LocalDate date;
     private final String shiftTask;
-//    private boolean isDone = false;
+    //    private boolean isDone = false;
 
     public Shift(String nurseName, LocalTime startTime, LocalTime endTime, LocalDate date, String shiftTask) {
         this.nurseName = nurseName;
@@ -36,7 +36,7 @@ public class Shift {
         shiftList.remove(index);
     }
 
-    // check if shifts are successfully added (will delete after list is implemented)
+    //    check if shifts are successfully added (will delete after list is implemented)
     public static void listShifts() {
         if (shiftList.isEmpty()) {
             System.out.println("No shifts available.");

@@ -1,13 +1,10 @@
 import java.util.Scanner;
-import java.util.ArrayList;
 
 import parser.ShiftParser;
 import parser.ApptParser;
 import parser.Parser;
 import shift.Shift;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class NurseSched {
     /**
@@ -15,13 +12,13 @@ public class NurseSched {
      */
     public static void main(String[] args) {
 
-//        ArrayList<Appointment> apptList = new ArrayList<>();
+        //        ArrayList<Appointment> apptList = new ArrayList<>();
 
-        //test Appointment class methods
-//        String name = "James Gosling";
-//        String notes = "Test notes";
-//        LocalTime startTime = LocalTime.now();
-//        LocalDate date = LocalDate.now();
+        //        test Appointment class methods
+        //        String name = "James Gosling";
+        //        String notes = "Test notes";
+        //        LocalTime startTime = LocalTime.now();
+        //        LocalDate date = LocalDate.now();
 
         Scanner in = new Scanner(System.in);
         String line = in.nextLine();
