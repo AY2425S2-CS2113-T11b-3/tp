@@ -19,7 +19,7 @@ public class NurseSched {
 
         greetingMessage();
 
-        while(true) {
+        while (true) {
             String line = in.nextLine();
             String type = Parser.extractType(line);
             switch (type) {
@@ -81,7 +81,7 @@ public class NurseSched {
             case "shift":
                 ShiftParser shiftParser = ShiftParser.extractInputs(line);
                 if (shiftParser == null) {
-                    System.out.println("Invalid inputs for Appointment based command!");
+                    System.out.println("Invalid inputs for Shift based command!");
                     return;
                 }
                 String shift = shiftParser.getCommand();
@@ -95,8 +95,16 @@ public class NurseSched {
                     );
                     System.out.println("Shift added");
                     Shift.listShifts();
-                    return;
                 }
+
+                if (shift.equals("del")) {
+                    Shift.deleteShiftByIndex(
+                            shiftParser.getIndex()
+                    );
+                    System.out.println("Shift added");
+                    Shift.listShifts();
+                }
+
                 break;
             // Exit command "exit ns"
             case "exit":

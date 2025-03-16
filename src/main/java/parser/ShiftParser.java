@@ -10,65 +10,90 @@ public class ShiftParser extends Parser {
     private final LocalTime endTime; // END_TIME
     private final LocalDate date; // DATE
     private final String shiftTask; // SHIFT_TASK
+    private final int shiftIndex;
 
     public ShiftParser(String command, String nurseName, LocalTime startTime, LocalTime endTime,
-                       LocalDate date, String shiftTask) {
+                       LocalDate date, String shiftTask, int shiftIndex) {
         this.command = command;
         this.nurseName = nurseName;
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;
         this.shiftTask = shiftTask;
+        this.shiftIndex = shiftIndex;
     }
 
-    // Extracts all input parameters for Appointment based command
     public static ShiftParser extractInputs(String line) {
-        line = line.trim();
-        line = line.toLowerCase();
-        line = line.substring(line.indexOf(" ") + 1);
+        line = line.trim().toLowerCase();
+
+        String[] parts = line.split(" ", 2);
+        if (parts.length < 2) {
+            System.out.println("Invalid command format!");
+            return null;
+        }
+
+        String remaining = parts[1];
+
         String command = "";
         String nurseName = "";
+        int shiftIndex = -1;
         LocalTime startTime = null;
         LocalTime endTime = null;
         LocalDate date = null;
         String shiftTask = "";
 
         try {
-            command = line.substring(0, line.indexOf(" "));
-            line = line.substring(line.indexOf(" ") + 1);
+            // Extract actual command ("add" or "del")
+            String[] commandParts = remaining.split(" ", 2);
+            command = commandParts[0];
+            remaining = (commandParts.length > 1) ? commandParts[1] : "";
 
-            nurseName = line.substring(line.indexOf("nn/") + 3, line.indexOf("s/") - 1);
-            line = line.substring(line.indexOf("s/"));
+            if (command.equals("add")) {
+                if (!remaining.contains("nn/") || !remaining.contains("s/") || !remaining.contains("e/") ||
+                        !remaining.contains("d/") || !remaining.contains("st/")) {
+                    System.out.println("Invalid add shift format!");
+                    return null;
+                }
 
-            startTime = LocalTime.parse(line.substring(2, line.indexOf(" ")));
-            date = LocalDate.parse(line.substring(line.indexOf("d/") + 2, line.indexOf("d/") + 12));
+                // Extract values based on markers
+                nurseName = extractValue(remaining, "nn/", "s/");
+                startTime = LocalTime.parse(extractValue(remaining, "s/", "e/"));
+                endTime = LocalTime.parse(extractValue(remaining, "e/", "d/"));
+                date = LocalDate.parse(extractValue(remaining, "d/", "st/"));
+                shiftTask = extractValue(remaining, "st/", null);
 
-            // line only stores input parameters from here on
-            line = line.substring(line.indexOf(" ") + 1);
-        } catch (Exception e) {
-            System.out.println("Command: " + command);
-            System.out.println("Line: " + line);
-            System.out.println("Nurse's name: " + nurseName);
-            System.out.println("Start: " + startTime);
-            System.out.println("Date: " + date);
-            System.out.println("Command or type not valid!");
-            return null;
-        }
-
-        if (command.equals("add")) {
-            try {
-                endTime = LocalTime.parse(line.substring(line.indexOf("e/") + 2, line.indexOf("d/") - 1));
-                shiftTask = line.substring(line.indexOf("st/") + 2);
-            } catch (Exception e) {
-                System.out.println("Invalid appointment time/notes format!");
+                return new ShiftParser(command, nurseName, startTime, endTime, date, shiftTask, shiftIndex);
+            } else if (command.equals("del")) {
+                if (!remaining.contains("sn/")) {
+                    System.out.println("Invalid delete shift format!");
+                    return null;
+                }
+                shiftIndex = Integer.parseInt(extractValue(remaining, "sn/", null));
+                return new ShiftParser(command, nurseName, startTime, endTime, date, shiftTask, shiftIndex - 1);
+            } else {
+                System.out.println("Invalid command type!");
                 return null;
             }
-            return new ShiftParser(command, nurseName, startTime, endTime, date, shiftTask);
+        } catch (Exception e) {
+            System.out.println("Error parsing shift command: " + e.getMessage());
+            return null;
         }
-        return null;
     }
 
-    //Getters
+    private static String extractValue(String input, String startMarker, String endMarker) {
+        int start = input.indexOf(startMarker);
+        if (start == -1) {
+            return "";
+        }
+
+        start += startMarker.length();
+        int end = (endMarker != null) ? input.indexOf(endMarker, start) : -1;
+
+        return (end == -1) ? input.substring(start).trim() : input.substring(start, end).trim();
+    }
+
+
+    // Getters
     public String getCommand() {
         return command;
     }
@@ -91,5 +116,9 @@ public class ShiftParser extends Parser {
 
     public String getNotes() {
         return shiftTask;
+    }
+
+    public int getIndex() {
+        return shiftIndex;
     }
 }
