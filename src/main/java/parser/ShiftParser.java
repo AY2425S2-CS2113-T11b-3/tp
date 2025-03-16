@@ -82,7 +82,9 @@ public class ShiftParser extends Parser {
 
     private static String extractValue(String input, String startMarker, String endMarker) {
         int start = input.indexOf(startMarker);
-        if (start == -1) return "";
+        if (start == -1) {
+            return "";
+        }
 
         start += startMarker.length();
         int end = (endMarker != null) ? input.indexOf(endMarker, start) : -1;
