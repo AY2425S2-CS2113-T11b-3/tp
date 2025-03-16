@@ -10,7 +10,7 @@ import patient.Patient;
 
 public class ParserTest {
     @Test
-    public void testExtractInputs_PatientAddCommand() {
+    public void testExtractInputs_patientAddCommand() {
         String input = "pf add p/Jean Doe a/25 n/Allergic to penicillin";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
@@ -23,7 +23,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_PatientDeleteCommand() {
+    public void testExtractInputs_patientDeleteCommand() {
         String input = "pf del 2";
         Patient patientOne = new Patient("Jean Doe", "25", "Allergic to penicillin");
         Patient patientTwo = new Patient("John Doe", "40", "Allergic to peanuts");
@@ -41,7 +41,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_PatientDeleteInvalidIndexCommand() {
+    public void testExtractInputs_patientDeleteInvalidIndexCommand() {
         String input = "pf del 2";
 
         PatientParser patientParser = PatientParser.extractInputs(input);
@@ -50,7 +50,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_PatientListCommand() {
+    public void testExtractInputs_patientListCommand() {
         String input = "pf list";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
@@ -63,7 +63,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_PatientInvalidCommand() {
+    public void testExtractInputs_patientInvalidCommand() {
         String input = "pf invalid";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
@@ -71,7 +71,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_PatientList() {
+    public void testExtractInputs_patientList() {
         String input = "pf list";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
@@ -79,7 +79,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_PatientMissingParameters() {
+    public void testExtractInputs_patientMissingParameters() {
         String input = "pf add p/Jean Doe a/25";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
@@ -87,7 +87,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_PatientEmptyInput() {
+    public void testExtractInputs_patientEmptyInput() {
         String input = "";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
