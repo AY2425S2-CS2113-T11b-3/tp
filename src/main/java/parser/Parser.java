@@ -1,7 +1,5 @@
 package parser;
 
-import java.util.Scanner;
-
 public class Parser {
     protected String type;
 
@@ -9,9 +7,9 @@ public class Parser {
         type = "";
     }
 
-    public Parser(String command) {
-        this.type = command;
-    }
+    //    public Parser(String command) {
+    //        this.type = command;
+    //    }
 
     //Extracts type of command - Appointments/Patient Profiles/Shifts
     public static String extractType(String line) {
@@ -20,11 +18,12 @@ public class Parser {
         } catch (Exception e) {
             System.out.println("Invalid command!");
             System.out.println("Command should start with \"appt\", \"pf\" or \"shift\"");
+            return null;
         }
         return line;
     }
 
-    public String getType() {
-        return type;
-    }
+    //    public String getType() {
+    //        return type;
+    //    }
 }

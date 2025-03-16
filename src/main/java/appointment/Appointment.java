@@ -49,7 +49,7 @@ public class Appointment {
                                            LocalTime startTime, LocalDate date) {
 
         //TODO: throw error if start/end/date is invalid
-        Appointment appointment = findAppointment(name,startTime,date);
+        Appointment appointment = findAppointment(name, startTime, date);
         apptList.remove(appointment);
     }
 
@@ -64,7 +64,7 @@ public class Appointment {
                                          LocalTime startTime, LocalDate date) {
 
         //TODO: throw error if index is invalid
-        Appointment appointment = findAppointment(name,startTime,date);
+        Appointment appointment = findAppointment(name, startTime, date);
         appointment.isDone = true;
     }
 
@@ -76,10 +76,10 @@ public class Appointment {
     }
 
     public static void unmarkApptByPatient(String name,
-                                         LocalTime startTime, LocalDate date) {
+                                           LocalTime startTime, LocalDate date) {
 
         //TODO: throw error if index is invalid
-        Appointment appointment = findAppointment(name,startTime,date);
+        Appointment appointment = findAppointment(name, startTime, date);
         appointment.isDone = false;
     }
 

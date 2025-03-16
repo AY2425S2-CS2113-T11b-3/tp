@@ -1,0 +1,6 @@
+diff a/src/test/java/seedu/nursesched/parser/ParserTest.java b/src/test/java/seedu/nursesched/parser/ParserTest.java	(rejected hunks)
+@@ -0,0 +1,4 @@
++package seedu.nursesched;
++
++public class ParserTest {
++}
