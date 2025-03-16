@@ -1,5 +1,8 @@
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
 
+import appointment.Appointment;
 import parser.ShiftParser;
 import parser.ApptParser;
 import parser.Parser;
@@ -25,21 +28,33 @@ public class NurseSched {
             case "appt":
                 ApptParser apptParser = ApptParser.extractInputs(line);
                 if (apptParser == null) {
-                    System.out.println("Invalid inputs for Appointment based command!");
-                    return;
+                    break;
                 }
                 String command = apptParser.getCommand();
-                if (command.equals("add")) {
-                    System.out.println("Appointment added");
-                    return;
-                }
-                if (command.equals("del")) {
-                    System.out.println("Appointment deleted");
-                    return;
-                }
-                if (command.equals("mark")) {
-                    System.out.println("Appointment marked");
-                    return;
+                switch (command) {
+                case "add":
+                    Appointment.addAppt(
+                            apptParser.getName(),
+                            apptParser.getStartTime(),
+                            apptParser.getEndTime(),
+                            apptParser.getDate(),
+                            apptParser.getNotes()
+                    );
+                    break;
+                case "del":
+                    Appointment.deleteApptByPatient(
+                            apptParser.getName(),
+                            apptParser.getStartTime(),
+                            apptParser.getDate()
+                    );
+                    break;
+                case "mark":
+                    Appointment.markApptByPatient(
+                            apptParser.getName(),
+                            apptParser.getStartTime(),
+                            apptParser.getDate()
+                    );
+                    break;
                 }
                 break;
             case "pf":

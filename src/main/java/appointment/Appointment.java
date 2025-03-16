@@ -34,9 +34,23 @@ public class Appointment {
 
     public static void addAppt(String name,
                                LocalTime startTime, LocalTime endTime, LocalDate date, String notes) {
-
-        //TODO: throw error if start/end/date is invalid
+        for (Appointment appt : apptList) {
+            if (appt.startTime.equals(startTime) && appt.date.equals(date)) {
+                System.out.println("There is another patient, " + appt.name + " with the same appointment time and date! " +
+                        "Please enter a different time/date");
+                return;
+            }
+        }
         apptList.add(new Appointment(name, startTime, endTime, date, notes));
+        Appointment appt = apptList.get(apptList.size()-1);
+        System.out.println("Appointment added:");
+        System.out.println(
+                "Name: " + appt.name
+                        + ", Start: " + appt.startTime
+                        + ", End: " + appt.endTime
+                        + ", Date: " + appt.date
+                        + ", Notes: " + appt.notes
+        );
     }
 
     public static void deleteApptByIndex(int index) {
@@ -47,14 +61,22 @@ public class Appointment {
 
     public static void deleteApptByPatient(String name,
                                            LocalTime startTime, LocalDate date) {
-
         //TODO: throw error if start/end/date is invalid
         Appointment appointment = findAppointment(name, startTime, date);
+        if (appointment == null) {
+            System.out.println("Appointment does not exist!");
+            return;
+        }
         apptList.remove(appointment);
+        System.out.println("Appointment deleted:");
+        System.out.println(
+                "Name: " + appointment.name
+                + ", Start: " + appointment.startTime
+                + ", Date: " + appointment.date
+        );
     }
 
     public static void markApptByIndex(int index) {
-
         //TODO: throw error if index is invalid
         Appointment appointment = apptList.get(index);
         appointment.isDone = true;
@@ -62,10 +84,18 @@ public class Appointment {
 
     public static void markApptByPatient(String name,
                                          LocalTime startTime, LocalDate date) {
-
-        //TODO: throw error if index is invalid
         Appointment appointment = findAppointment(name, startTime, date);
+        if (appointment == null) {
+            System.out.println("Appointment does not exist!");
+            return;
+        }
         appointment.isDone = true;
+        System.out.println("Appointment marked: ");
+        System.out.println(
+                "Name: " + appointment.name
+                + ", Start: " + appointment.startTime
+                + ", Date: " + appointment.date
+        );
     }
 
     public static void unmarkApptByIndex(int index) {
@@ -80,16 +110,14 @@ public class Appointment {
 
         //TODO: throw error if index is invalid
         Appointment appointment = findAppointment(name, startTime, date);
-        appointment.isDone = false;
-    }
+        }
 
     public static Appointment findAppointment(String name,
                                               LocalTime startTime, LocalDate date) {
         for (Appointment appointment : apptList) {
-            if (appointment.name.toLowerCase().contains(name.toLowerCase())
+            if (appointment.name.equalsIgnoreCase(name)
                     && appointment.startTime.equals(startTime)
                     && appointment.date.equals(date)) {
-
                 return appointment;
             }
         }
