@@ -69,7 +69,7 @@ public class ShiftParser extends Parser {
                     return null;
                 }
                 shiftIndex = Integer.parseInt(extractValue(remaining, "sn/", null));
-                return new ShiftParser(command, nurseName, startTime, endTime, date, shiftTask, shiftIndex-1);
+                return new ShiftParser(command, nurseName, startTime, endTime, date, shiftTask, shiftIndex - 1);
             } else {
                 System.out.println("Invalid command type!");
                 return null;
