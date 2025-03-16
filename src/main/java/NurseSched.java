@@ -93,6 +93,11 @@ public class NurseSched {
                     return;
                 }
                 break;
+            // Exit command "exit ns"
+            case "exit":
+                in.close();
+                exitMessage();
+                return;
             default:
                 System.out.println("Unknown command!");
                 break;
@@ -127,5 +132,9 @@ public class NurseSched {
     public static void greetingMessage() {
         System.out.println("Welcome to Nurse Sched!");
         System.out.println("Please enter your command: ");
+    }
+
+    public static void exitMessage() {
+        System.out.println("Goodbye!");
     }
 }

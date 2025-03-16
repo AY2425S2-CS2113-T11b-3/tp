@@ -1,5 +1,7 @@
 package parser;
 
+import patient.Patient;
+
 public class PatientParser {
     private String command;
     private String name;
@@ -24,31 +26,47 @@ public class PatientParser {
         String notes = "";
         int index = -1;
 
-        if (line.equals("list")) {
-            command = "list";
-            return new PatientParser(command, name, age, notes, index);
+        // Handle cases where the line is just the command itself
+        // If there are additional parameters, the command will be correctly parsed
+        // If there are no parameters like "pf list", then throw an exception that treats
+        // the line as the command
+        try {
+            command = line.substring(0, line.indexOf(" "));
+        } catch (IndexOutOfBoundsException e) {
+            command = line;
         }
 
-        command = line.substring(0, line.indexOf(" "));
-        line = line.substring(line.indexOf(" ") + 1);
-
         if (command.equals("add")) {
-            name = line.substring(line.indexOf("p/") + 3, line.indexOf("a/") - 1);
-            line = line.substring(line.indexOf("a/"));
+            try {
+                line = line.substring(line.indexOf(" ") + 1);
 
-            age = line.substring(line.indexOf("a/") + 3, line.indexOf("n/") - 1);
-            line = line.substring(line.indexOf("n/"));
+                name = line.substring(line.indexOf("p/") + 2, line.indexOf("a/") - 1);
+                line = line.substring(line.indexOf("a/"));
 
-            notes = line.substring(line.indexOf("n/") + 2);
-            return new PatientParser(command, name, age, notes, index);
+                age = line.substring(line.indexOf("a/") + 2, line.indexOf("n/") - 1);
+                line = line.substring(line.indexOf("n/"));
+
+                notes = line.substring(line.indexOf("n/") + 2);
+                return new PatientParser(command, name, age, notes, index);
+            } catch (Exception e) {
+                System.out.println("Missing Parameters!");
+                return null;
+            }
         } else if (command.equals("del")) {
             try {
+                line = line.substring(line.indexOf(" ") + 1);
+
                 index = Integer.parseInt(line);
+                if (index < 0 || index > Patient.getSizeOfList()) {
+                    throw new NumberFormatException("This index doesn't exist within the list: " + index);
+                }
                 return new PatientParser(command, name, age, notes, index);
             } catch (NumberFormatException e) {
                 System.out.println("Invalid index: " + line);
                 return null;
             }
+        } else if (command.equals("list")) {
+            return new PatientParser(command, name, age, notes, index);
         }
         return null;
     }

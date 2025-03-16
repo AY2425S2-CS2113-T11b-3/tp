@@ -37,6 +37,10 @@ public class Patient {
         }
     }
 
+    public static int getSizeOfList() {
+        return patientsList.size();
+    }
+
     @Override
     public String toString() {
         return name + ", " + age + " years old" + ", " + notes;
