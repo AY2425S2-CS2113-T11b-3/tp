@@ -2,6 +2,11 @@ package parser;
 
 import patient.Patient;
 
+/**
+ * The PatientParser class parses the input of the user to make sense of the command.
+ * It stores a command, name, age, notes and index if successfully parsed.
+ * The methods within this class will return null if it does not understand the input.
+ */
 public class PatientParser {
     private String command;
     private String name;
@@ -9,6 +14,15 @@ public class PatientParser {
     private String notes;
     private int index;
 
+    /**
+     * Constructs a new PatientParser object with the specified parameters.
+     *
+     * @param command The command associated with the input given.
+     * @param name The name of the patient.
+     * @param age The age of the patient.
+     * @param notes Additional notes about the patient.
+     * @param index Chosen index within the patient list.
+     */
     public PatientParser(String command, String name, String age, String notes, int index) {
         this.command = command;
         this.name = name;
@@ -17,6 +31,26 @@ public class PatientParser {
         this.index = index;
     }
 
+    /**
+     * Extracts and parses the inputs from the given command line for patient-related operations.
+     * The method supports three commands: "add", "del", and "list".
+     *
+     * For the "add" command, the input line should follow the format:
+     * {@code pf add p/<name> a/<age> n/<notes>}
+     *
+     * For the "del" command, the input line should follow the format:
+     * {@code pf del <index>}
+     *
+     * For the "list" command, the input line should follow the format:
+     * {@code pf list}
+     *
+     * @param line The input command line to be parsed. It should start with "pf" followed by the command.
+     * @return A {@link PatientParser} object containing the parsed command and its associated parameters.
+     *         Returns {@code null} if the input line is invalid or if required parameters are missing.
+     *
+     * @throws IndexOutOfBoundsException If the input line does not contain the expected parameters.
+     * @throws NumberFormatException If the index provided for the "del" command is invalid or out of bounds.
+     */
     public static PatientParser extractInputs(String line) {
         line = line.trim();
         line = line.substring(line.indexOf(" ") + 1);
