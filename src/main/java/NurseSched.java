@@ -1,5 +1,3 @@
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Scanner;
 
 import appointment.Appointment;
@@ -54,6 +52,9 @@ public class NurseSched {
                             apptParser.getStartTime(),
                             apptParser.getDate()
                     );
+                    break;
+                default:
+                    System.out.println("Invalid appointment based command!");
                     break;
                 }
                 break;

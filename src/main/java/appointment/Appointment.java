@@ -36,7 +36,8 @@ public class Appointment {
                                LocalTime startTime, LocalTime endTime, LocalDate date, String notes) {
         for (Appointment appt : apptList) {
             if (appt.startTime.equals(startTime) && appt.date.equals(date)) {
-                System.out.println("There is another patient, " + appt.name + " with the same appointment time and date! " +
+                System.out.println("There is another patient, " + appt.name +
+                        " with the same appointment time and date! " +
                         "Please enter a different time/date");
                 return;
             }
@@ -107,10 +108,9 @@ public class Appointment {
 
     public static void unmarkApptByPatient(String name,
                                            LocalTime startTime, LocalDate date) {
-
         //TODO: throw error if index is invalid
         Appointment appointment = findAppointment(name, startTime, date);
-        }
+    }
 
     public static Appointment findAppointment(String name,
                                               LocalTime startTime, LocalDate date) {
