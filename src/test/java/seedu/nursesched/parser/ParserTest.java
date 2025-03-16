@@ -5,8 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
+import parser.ApptParser;
 import parser.PatientParser;
 import patient.Patient;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class ParserTest {
     @Test
@@ -92,5 +96,43 @@ public class ParserTest {
         PatientParser patientParser = PatientParser.extractInputs(input);
 
         assertNull(patientParser);
+    }
+
+    @Test
+    public void testExtractInputs_appointmentAddCommand() {
+        String input = "appt add p/Jean doe s/13:00 e/14:00 d/2025-02-15 n/Needs a wheelchair. Very annoying!";
+        ApptParser apptParser = ApptParser.extractInputs(input);
+
+        assertNotNull(apptParser);
+        assertEquals("add", apptParser.getCommand());
+        assertEquals("jean doe", apptParser.getName());
+        assertEquals(LocalTime.parse("13:00"), apptParser.getStartTime());
+        assertEquals(LocalTime.parse("14:00"), apptParser.getEndTime());
+        assertEquals(LocalDate.parse("2025-02-15"), apptParser.getDate());
+        assertEquals("needs a wheelchair. very annoying!", apptParser.getNotes());
+    }
+
+    @Test
+    public void testExtractInputs_appointmentDeleteCommand() {
+        String input = "appt del p/Jean doe s/13:00 d/2025-02-15";
+        ApptParser apptParser = ApptParser.extractInputs(input);
+
+        assertNotNull(apptParser);
+        assertEquals("del", apptParser.getCommand());
+        assertEquals("jean doe", apptParser.getName());
+        assertEquals(LocalTime.parse("13:00"), apptParser.getStartTime());
+        assertEquals(LocalDate.parse("2025-02-15"), apptParser.getDate());
+    }
+
+    @Test
+    public void testExtractInputs_appointmentMarkCommand() {
+        String input = "appt mark p/Jean doe s/13:00 d/2025-02-15";
+        ApptParser apptParser = ApptParser.extractInputs(input);
+
+        assertNotNull(apptParser);
+        assertEquals("mark", apptParser.getCommand());
+        assertEquals("jean doe", apptParser.getName());
+        assertEquals(LocalTime.parse("13:00"), apptParser.getStartTime());
+        assertEquals(LocalDate.parse("2025-02-15"), apptParser.getDate());
     }
 }

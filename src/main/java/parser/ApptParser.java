@@ -35,24 +35,22 @@ public class ApptParser extends Parser {
         String notes = "";
 
         try {
+            //extracts command
             command = line.substring(0, line.indexOf(" "));
             line = line.substring(line.indexOf(" ") + 1);
 
+            //extracts patient name
             name = line.substring(line.indexOf("p/") + 2, line.indexOf("s/") - 1);
             line = line.substring(line.indexOf("s/"));
 
+            //extracts appointment's start time
             startTime = LocalTime.parse(line.substring(2, line.indexOf(" ")));
+
+            //extracts appointment's date
             date = LocalDate.parse(line.substring(line.indexOf("d/") + 2, line.indexOf("d/") + 12));
 
-            //line only stores input parameters from here on
-            line = line.substring(line.indexOf(" ") + 1);
         } catch (Exception e) {
-            System.out.println("Command: " + command);
-            System.out.println("Line: " + line);
-            System.out.println("Name: " + name);
-            System.out.println("Start: " + startTime);
-            System.out.println("Date: " + date);
-            System.out.println("Command or type not valid!");
+            System.out.println("Invalid inputs! Please try again.");
             return null;
         }
 
@@ -61,12 +59,12 @@ public class ApptParser extends Parser {
                 endTime = LocalTime.parse(line.substring(line.indexOf("e/") + 2, line.indexOf("d/") - 1));
                 notes = line.substring(line.indexOf("n/") + 2);
             } catch (Exception e) {
-                System.out.println("Invalid appointment time/notes format!");
+                System.out.println("Invalid inputs! Please try again.");
                 return null;
             }
             return new ApptParser(command, name, startTime, endTime, date, notes);
         }
-        return null;
+        return new ApptParser(command, name, startTime, endTime, date, notes);
     }
 
     //Getters
