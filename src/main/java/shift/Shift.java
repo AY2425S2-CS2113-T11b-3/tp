@@ -36,7 +36,7 @@ public class Shift {
         shiftList.remove(index);
     }
 
-    //    check if shifts are successfully added (will delete after list is implemented)
+    // check if shifts are successfully added (will delete after list is implemented)
     public static void listShifts() {
         if (shiftList.isEmpty()) {
             System.out.println("No shifts available.");
