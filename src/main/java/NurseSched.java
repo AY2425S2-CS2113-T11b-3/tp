@@ -1,10 +1,11 @@
 import java.util.Scanner;
-import java.util.ArrayList;
-import appointment.Appointment;
+
+import parser.ShiftParser;
 import parser.ApptParser;
 import parser.Parser;
 import parser.PatientParser;
 import patient.Patient;
+import shift.Shift;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,15 +16,14 @@ public class NurseSched {
      */
     public static void main(String[] args) {
 
-        ArrayList<Appointment> apptList = new ArrayList<>();
+        //        ArrayList<Appointment> apptList = new ArrayList<>();
 
+        //        test Appointment class methods
+        //        String name = "James Gosling";
+        //        String notes = "Test notes";
+        //        LocalTime startTime = LocalTime.now();
+        //        LocalDate date = LocalDate.now();
         String input = null;
-
-        //test Appointment class methods
-        String name = "James Gosling";
-        String notes = "Test notes";
-        LocalTime startTime = LocalTime.now();
-        LocalDate date = LocalDate.now();
 
         Scanner in = new Scanner(System.in);
 
@@ -32,8 +32,8 @@ public class NurseSched {
         while(true) {
             String line = in.nextLine();
             String type = Parser.extractType(line);
-            switch(type) {
-            case "appt":;
+            switch (type) {
+            case "appt":
                 ApptParser apptParser = ApptParser.extractInputs(line);
                 if (apptParser == null) {
                     System.out.println("Invalid inputs for Appointment based command!");
@@ -74,7 +74,24 @@ public class NurseSched {
                 }
                 break;
             case "shift":
-                //Todo
+                ShiftParser shiftParser = ShiftParser.extractInputs(line);
+                if (shiftParser == null) {
+                    System.out.println("Invalid inputs for Appointment based command!");
+                    return;
+                }
+                String shift = shiftParser.getCommand();
+                if (shift.equals("add")) {
+                    Shift.addShift(
+                            shiftParser.getName(),
+                            shiftParser.getStartTime(),
+                            shiftParser.getEndTime(),
+                            shiftParser.getDate(),
+                            shiftParser.getNotes()
+                    );
+                    System.out.println("Shift added");
+                    Shift.listShifts();
+                    return;
+                }
                 break;
             default:
                 System.out.println("Unknown command!");
