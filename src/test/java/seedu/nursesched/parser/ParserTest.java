@@ -135,4 +135,30 @@ public class ParserTest {
         assertEquals(LocalTime.parse("13:00"), apptParser.getStartTime());
         assertEquals(LocalDate.parse("2025-02-15"), apptParser.getDate());
     }
+
+    @Test
+    public void testExtractInputs_appointmentUnmarkCommand() {
+        String input = "appt unmark p/Jean doe s/13:00 d/2025-02-15";
+        ApptParser apptParser = ApptParser.extractInputs(input);
+
+        assertNotNull(apptParser);
+        assertEquals("unmark", apptParser.getCommand());
+        assertEquals("jean doe", apptParser.getName());
+        assertEquals(LocalTime.parse("13:00"), apptParser.getStartTime());
+        assertEquals(LocalDate.parse("2025-02-15"), apptParser.getDate());
+    }
+
+    @Test
+    public void testExtractInputs_appointmentInvalidCommand() {
+        String input = "appt invalid";
+        ApptParser apptParser = ApptParser.extractInputs(input);
+        assertNull(apptParser);
+    }
+
+    @Test
+    public void testExtractInputs_appointmentMissingParameters() {
+        String input = "appt add p/Jean Doe s/13:00";
+        ApptParser apptParser = ApptParser.extractInputs(input);
+        assertNull(apptParser);
+    }
 }
