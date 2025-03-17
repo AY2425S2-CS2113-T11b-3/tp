@@ -11,7 +11,6 @@ import java.util.ArrayList;
  */
 public class Shift {
     protected static ArrayList<Shift> shiftList = new ArrayList<>();
-    private final String nurseName;
     private final LocalTime startTime;
     private final LocalTime endTime;
     private final LocalDate date;
@@ -20,14 +19,12 @@ public class Shift {
     /**
      * Constructs a Shift object.
      *
-     * @param nurseName The name of the nurse assigned to the shift.
      * @param startTime The start time of the shift.
      * @param endTime   The end time of the shift.
      * @param date      The date of the shift.
      * @param shiftTask The task assigned during the shift.
      */
-    public Shift(String nurseName, LocalTime startTime, LocalTime endTime, LocalDate date, String shiftTask) {
-        this.nurseName = nurseName;
+    public Shift(LocalTime startTime, LocalTime endTime, LocalDate date, String shiftTask) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;
@@ -37,15 +34,14 @@ public class Shift {
     /**
      * Adds a new shift to the shift list.
      *
-     * @param nurseName The name of the nurse assigned to the shift.
      * @param startTime The start time of the shift.
      * @param endTime   The end time of the shift.
      * @param date      The date of the shift.
      * @param shiftTask The task assigned during the shift.
      */
-    public static void addShift(String nurseName, LocalTime startTime, LocalTime endTime, LocalDate date,
+    public static void addShift(LocalTime startTime, LocalTime endTime, LocalDate date,
                                 String shiftTask) {
-        shiftList.add(new Shift(nurseName, startTime, endTime, date, shiftTask));
+        shiftList.add(new Shift(startTime, endTime, date, shiftTask));
     }
 
     /**
@@ -88,8 +84,7 @@ public class Shift {
         String formattedStartTime = startTime.format(formatter);
         String formattedEndTime = endTime.format(formatter);
 
-        return "nurseName: " + nurseName + ", " +
-                "From: " + formattedStartTime + ", " +
+        return "From: " + formattedStartTime + ", " +
                 "To: " + formattedEndTime + ", " +
                 "Date: " + date + ", " +
                 "shiftTask: " + shiftTask;
