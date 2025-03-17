@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
+import ui.Ui;
 import appointment.Appointment;
-import exception.ExceptionMessage;
 import exception.NurseSchedException;
 import parser.ShiftParser;
 import parser.ApptParser;
@@ -11,18 +11,23 @@ import patient.Patient;
 import shift.Shift;
 
 public class NurseSched {
-    /**
-     * Main entry-point for the NurseSched application.
-     */
-    public static void main(String[] args) throws NurseSchedException {
+    private final Ui ui;
+
+
+    public NurseSched() {
+        ui = new Ui();
+    }
+
+    public void run() {
         String input = null;
-
+        boolean isExit = false;
         Scanner in = new Scanner(System.in);
+        ui.greetingMessage();
 
-        greetingMessage();
-        try {
-            while (true) {
-                String line = in.nextLine();
+
+        while (!isExit) {
+            try {
+                String line = ui.readCommand(in);
                 String type = Parser.extractType(line);
                 switch (type) {
                 case "appt":
@@ -93,38 +98,33 @@ public class NurseSched {
                         System.out.println("Shift added");
                         Shift.listShifts();
                     }
-
                     if (shift.equals("del")) {
                         Shift.deleteShiftByIndex(
                                 shiftParser.getIndex()
                         );
-                        System.out.println("Shift added");
+                        System.out.println("Shift deleted");
                         Shift.listShifts();
                     }
-
                     break;
+
                 // Exit command "exit ns"
                 case "exit":
                     in.close();
-                    exitMessage();
-                    return;
+                    ui.exitMessage();
+                    isExit = true;
+
                 default:
                     System.out.println("Unknown command!");
                     break;
                 }
+            } catch (NurseSchedException e) {
+                ui.showError(e.getMessage());
             }
-        } catch (NurseSchedException e) {
-            // Catch the exception and print the error message
-            NurseSchedException.showError(e.getMessage());
         }
     }
 
-    public static void greetingMessage() {
-        System.out.println("Welcome to Nurse Sched!");
-        System.out.println("Please enter your command: ");
+    public static void main(String[] args) {
+        new NurseSched().run();
     }
 
-    public static void exitMessage() {
-        System.out.println("Goodbye!");
-    }
 }

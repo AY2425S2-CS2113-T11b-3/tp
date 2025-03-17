@@ -7,10 +7,6 @@ public class Parser {
         type = "";
     }
 
-    //    public Parser(String command) {
-    //        this.type = command;
-    //    }
-
     //Extracts type of command - Appointments/Patient Profiles/Shifts
     public static String extractType(String line) {
         try {
@@ -22,8 +18,4 @@ public class Parser {
         }
         return line;
     }
-
-    //    public String getType() {
-    //        return type;
-    //    }
 }
