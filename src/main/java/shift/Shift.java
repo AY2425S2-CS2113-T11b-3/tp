@@ -43,7 +43,8 @@ public class Shift {
      * @param date      The date of the shift.
      * @param shiftTask The task assigned during the shift.
      */
-    public static void addShift(String nurseName, LocalTime startTime, LocalTime endTime, LocalDate date, String shiftTask) {
+    public static void addShift(String nurseName, LocalTime startTime, LocalTime endTime, LocalDate date,
+                                String shiftTask) {
         shiftList.add(new Shift(nurseName, startTime, endTime, date, shiftTask));
     }
 
