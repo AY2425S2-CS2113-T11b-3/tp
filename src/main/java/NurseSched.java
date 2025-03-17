@@ -112,6 +112,7 @@ public class NurseSched {
                     in.close();
                     ui.exitMessage();
                     isExit = true;
+                    break;
 
                 default:
                     System.out.println("Unknown command!");
@@ -126,5 +127,4 @@ public class NurseSched {
     public static void main(String[] args) {
         new NurseSched().run();
     }
-
 }
