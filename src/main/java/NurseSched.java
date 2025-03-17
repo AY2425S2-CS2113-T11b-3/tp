@@ -32,6 +32,7 @@ public class NurseSched {
                 case "appt":
                     ApptParser apptParser = ApptParser.extractInputs(line);
                     if (apptParser == null) {
+                        System.out.println("Invalid inputs for appointment based command!");
                         break;
                     }
                     String command = apptParser.getCommand();

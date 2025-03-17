@@ -112,11 +112,17 @@ public class ApptParser extends Parser {
             return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex);
         }
 
+        if (command.equals("unmark")) {
+            apptIndex = parseIndex(line);
+            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex);
+        }
+
         if (command.equals("list")) {
             return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex);
         }
 
-        return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex);
+
+        return null;
     }
 
     public static int parseIndex (String line) throws NurseSchedException {

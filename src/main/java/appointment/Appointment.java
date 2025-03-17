@@ -108,7 +108,7 @@ public class Appointment {
             apptList.get(index).setDone(false);
             System.out.println("Marked appointment as undone!");
         }catch (IndexOutOfBoundsException e) {
-            System.out.println("There is no appointment with index: " + index+1);
+            System.out.println("There is no appointment with index: " + (index+1));
         }
     }
 
