@@ -24,7 +24,6 @@ public class NurseSched {
         Scanner in = new Scanner(System.in);
         ui.greetingMessage();
 
-
         while (!isExit) {
             try {
                 String line = ui.readCommand(in);
@@ -33,6 +32,7 @@ public class NurseSched {
                 case "appt":
                     ApptParser apptParser = ApptParser.extractInputs(line);
                     if (apptParser == null) {
+                        System.out.println("Invalid inputs for appointment based command!");
                         break;
                     }
                     String command = apptParser.getCommand();
@@ -47,24 +47,29 @@ public class NurseSched {
                         );
                         break;
                     case "del":
-                        Appointment.deleteApptByPatient(
-                                apptParser.getName(),
-                                apptParser.getStartTime(),
-                                apptParser.getDate()
+
+                        Appointment.deleteApptByIndex(
+                                apptParser.getIndex()
                         );
                         break;
                     case "mark":
-                        Appointment.markApptByPatient(
-                                apptParser.getName(),
-                                apptParser.getStartTime(),
-                                apptParser.getDate()
+                        Appointment.markApptByIndex(
+                                apptParser.getIndex()
                         );
+                        break;
+                    case "unmark":
+                        Appointment.unmarkApptByIndex(
+                                apptParser.getIndex()
+                        );
+                        break;
+                    case "list":
+                        Appointment.list();
                         break;
                     default:
                         System.out.println("Invalid appointment based command!");
                         break;
                     }
-                    break;
+                    break; 
                 case "pf":
                     //Todo
                     PatientParser patientParser = PatientParser.extractInputs(line);
