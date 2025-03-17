@@ -1,8 +1,6 @@
 package appointment;
 
-import exception.ExceptionMessage;
 import exception.NurseSchedException;
-import ui.Ui;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
