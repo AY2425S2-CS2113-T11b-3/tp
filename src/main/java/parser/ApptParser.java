@@ -13,13 +13,14 @@ import java.time.format.DateTimeParseException;
  * The methods within this class will return null if it does not understand the input.
  */
 public class ApptParser extends Parser {
+
+    private static int apptIndex;
     private String command;
     private String name;
     private LocalTime startTime;
     private LocalTime endTime;
     private LocalDate date;
     private String notes;
-    private static int apptIndex;
 
     /**
      * Constructs a new ApptParser object with the specified parameters.

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import exception.NurseSchedException;
 import org.junit.jupiter.api.Test;
 import parser.ApptParser;
 import parser.PatientParser;
@@ -99,7 +100,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_appointmentUnmarkCommand() {
+    public void testExtractInputs_appointmentUnmarkCommand() throws NurseSchedException {
         String input = "appt unmark p/Jean doe s/13:00 d/2025-02-15";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
@@ -111,21 +112,21 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_appointmentInvalidCommand() {
+    public void testExtractInputs_appointmentInvalidCommand() throws NurseSchedException {
         String input = "appt invalid";
         ApptParser apptParser = ApptParser.extractInputs(input);
         assertNull(apptParser);
     }
 
     @Test
-    public void testExtractInputs_appointmentMissingParameters() {
+    public void testExtractInputs_appointmentMissingParameters() throws NurseSchedException {
         String input = "appt add p/Jean Doe s/13:00";
         ApptParser apptParser = ApptParser.extractInputs(input);
         assertNull(apptParser);
     }
 
     @Test
-    public void testExtractInputs_appointmentAddCommand() {
+    public void testExtractInputs_appointmentAddCommand() throws NurseSchedException {
         String input = "appt add p/Jean doe s/13:00 e/14:00 d/2025-02-15 n/Needs a wheelchair. Very annoying!";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
@@ -139,7 +140,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_appointmentDeleteCommand() {
+    public void testExtractInputs_appointmentDeleteCommand() throws NurseSchedException {
         String input = "appt del p/Jean doe s/13:00 d/2025-02-15";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
@@ -151,7 +152,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_appointmentMarkCommand() {
+    public void testExtractInputs_appointmentMarkCommand() throws NurseSchedException {
         String input = "appt mark p/Jean doe s/13:00 d/2025-02-15";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
@@ -163,7 +164,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_appointmentInvalidTime() {
+    public void testExtractInputs_appointmentInvalidTime() throws NurseSchedException {
         String input = "appt add p/Jean doe s/1pm e/2pm d/2025-02-15 n/Needs wheelchair.";
         String input2 = "appt del p/Jean doe s/1300 d/2025-02-15";
         String input3 = "appt mark p/Jean doe s/24:00 d/2025-02-15";
@@ -176,7 +177,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_appointmentInvalidDate() {
+    public void testExtractInputs_appointmentInvalidDate() throws NurseSchedException {
         String input = "appt add p/Jean doe s/15:00 e/17:00 d/05 June 2025 n/Needs wheelchair.";
         String input2 = "appt del p/Jean doe s/15:00 d/12-02-2025";
         String input3 = "appt mark p/Jean doe s/15:00 d/2025-15-02";
