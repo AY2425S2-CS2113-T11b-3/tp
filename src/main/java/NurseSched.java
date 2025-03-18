@@ -6,7 +6,6 @@ import seedu.nursesched.ui.Ui;
 public class NurseSched {
     private final Ui ui;
 
-
     public NurseSched() {
         ui = new Ui();
     }
