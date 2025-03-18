@@ -30,7 +30,10 @@ public class ShiftParser extends Parser {
      * @param shiftIndex The index of the shift (for deletion).
      */
     public ShiftParser(String command, LocalTime startTime, LocalTime endTime,
-                       LocalDate date, String shiftTask, int shiftIndex) {
+                       LocalDate date, String shiftTask, int shiftIndex) throws NurseSchedException {
+        assert command != null : "Command should not be null";
+        assert shiftIndex >= 0 : "Shift index should not be negative";
+
         this.command = command;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -47,6 +50,7 @@ public class ShiftParser extends Parser {
      * @throws NurseSchedException If the input is invalid or incorrectly formatted.
      */
     public static ShiftParser extractInputs(String line) throws NurseSchedException {
+        assert line != null : "Input line should not be null";
         if (line == null || line.trim().isEmpty()) {
             throw new NurseSchedException(ExceptionMessage.INPUT_EMPTY);
         }
@@ -61,7 +65,7 @@ public class ShiftParser extends Parser {
 
         // Variables for extracted values
         String command = "";
-        int shiftIndex = -1;
+        int shiftIndex = 0;
         LocalTime startTime = null;
         LocalTime endTime = null;
         LocalDate date = null;
@@ -100,6 +104,7 @@ public class ShiftParser extends Parser {
     private static ShiftParser getShiftDelParser(String remaining, String command, LocalTime startTime,
                                                  LocalTime endTime, LocalDate date,
                                                  String shiftTask) throws NurseSchedException {
+        assert remaining != null : "Remaining command should not be null";
         int shiftIndex;
         if (!remaining.contains("sn/")) {
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTDEL_FORMAT);
@@ -127,6 +132,7 @@ public class ShiftParser extends Parser {
      */
     private static ShiftParser getShiftAddParser(String remaining, String command, int shiftIndex)
             throws NurseSchedException {
+        assert remaining != null : "Remaining command should not be null";
         LocalDate date;
         LocalTime startTime;
         LocalTime endTime;
@@ -173,6 +179,9 @@ public class ShiftParser extends Parser {
      * @return The extracted value as a {@code String}, or an empty string if the value is not found.
      */
     private static String extractValue(String input, String startMarker, String endMarker) {
+        assert input != null : "Input string must not be null";
+        assert startMarker != null : "Start marker must not be null";
+
         int start = input.indexOf(startMarker);
         if (start == -1) {
             return "";
