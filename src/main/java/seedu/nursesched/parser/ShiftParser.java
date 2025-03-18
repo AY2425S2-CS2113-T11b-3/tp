@@ -1,11 +1,11 @@
-package parser;
+package seedu.nursesched.parser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
-import exception.ExceptionMessage;
-import exception.NurseSchedException;
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
 
 /**
  * The {@code ShiftParser} class is responsible for parsing shift-related commands.
@@ -73,58 +73,73 @@ public class ShiftParser extends Parser {
             remaining = (commandParts.length > 1) ? commandParts[1] : "";
 
             if (command.equals("add")) {
-                // Ensure all required markers exist
-                if (!remaining.contains("s/") || !remaining.contains("e/") ||
-                        !remaining.contains("d/") || !remaining.contains("st/")) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTADD_FORMAT);
-                }
-
-
-                try {
-                    startTime = LocalTime.parse(extractValue(remaining, "s/", "e/"));
-                    endTime = LocalTime.parse(extractValue(remaining, "e/", "d/"));
-                } catch (DateTimeParseException e) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_TIME_FORMAT);
-                }
-
-                try {
-                    date = LocalDate.parse(extractValue(remaining, "d/", "st/"));
-                } catch (DateTimeParseException e) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_DATE_FORMAT);
-                }
-
-                shiftTask = extractValue(remaining, "st/", null);
-                if (shiftTask.isEmpty()) {
-                    throw new NurseSchedException(ExceptionMessage.SHIFT_TASK_EMPTY);
-                }
-
-                // Validate start time before end time
-                if (startTime.isAfter(endTime) || startTime.equals(endTime)) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_START_TIME);
-                }
-
-                return new ShiftParser(command, startTime, endTime, date, shiftTask, shiftIndex);
+                return getShiftAddParser(remaining, command, shiftIndex);
             } else if (command.equals("del")) {
-                if (!remaining.contains("sn/")) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTDEL_FORMAT);
-                }
-
-                try {
-                    shiftIndex = Integer.parseInt(extractValue(remaining, "sn/", null)) - 1;
-                    if (shiftIndex < 0) {
-                        throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
-                    }
-                } catch (NumberFormatException e) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
-                }
-
-                return new ShiftParser(command, startTime, endTime, date, shiftTask, shiftIndex);
+                return getShiftDelParser(remaining, command, startTime, endTime, date, shiftTask);
             } else {
                 throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
             }
         } catch (Exception e) {
             throw new NurseSchedException(ExceptionMessage.PARSING_ERROR);
         }
+    }
+
+    private static ShiftParser getShiftDelParser(String remaining, String command, LocalTime startTime,
+                                                 LocalTime endTime, LocalDate date,
+                                                 String shiftTask) throws NurseSchedException {
+        int shiftIndex;
+        if (!remaining.contains("sn/")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTDEL_FORMAT);
+        }
+        try {
+            shiftIndex = Integer.parseInt(extractValue(remaining, "sn/", null)) - 1;
+            if (shiftIndex < 0) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
+            }
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
+        }
+
+        return new ShiftParser(command, startTime, endTime, date, shiftTask, shiftIndex);
+    }
+
+    private static ShiftParser getShiftAddParser(String remaining, String command, int shiftIndex)
+            throws NurseSchedException {
+        LocalDate date;
+        LocalTime startTime;
+        LocalTime endTime;
+        String shiftTask;
+
+        // Ensure all required markers exist
+        if (!remaining.contains("s/") || !remaining.contains("e/") ||
+                !remaining.contains("d/") || !remaining.contains("st/")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTADD_FORMAT);
+        }
+
+        try {
+            startTime = LocalTime.parse(extractValue(remaining, "s/", "e/"));
+            endTime = LocalTime.parse(extractValue(remaining, "e/", "d/"));
+        } catch (DateTimeParseException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_TIME_FORMAT);
+        }
+
+        try {
+            date = LocalDate.parse(extractValue(remaining, "d/", "st/"));
+        } catch (DateTimeParseException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_DATE_FORMAT);
+        }
+
+        shiftTask = extractValue(remaining, "st/", null);
+        if (shiftTask.isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.SHIFT_TASK_EMPTY);
+        }
+
+        // Validate start time before end time
+        if (startTime.isAfter(endTime) || startTime.equals(endTime)) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_START_TIME);
+        }
+
+        return new ShiftParser(command, startTime, endTime, date, shiftTask, shiftIndex);
     }
 
     /**
@@ -146,8 +161,6 @@ public class ShiftParser extends Parser {
 
         return (end == -1) ? input.substring(start).trim() : input.substring(start, end).trim();
     }
-
-    // Getters
 
     /**
      * Gets the command type.
@@ -201,5 +214,9 @@ public class ShiftParser extends Parser {
      */
     public int getIndex() {
         return shiftIndex;
+    }
+
+    public String getShiftTask() {
+        return shiftTask;
     }
 }

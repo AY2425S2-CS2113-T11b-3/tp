@@ -1,6 +1,6 @@
-package parser;
+package seedu.nursesched.parser;
 
-import patient.Patient;
+import seedu.nursesched.patient.Patient;
 
 /**
  * The PatientParser class parses the input of the user to make sense of the command.

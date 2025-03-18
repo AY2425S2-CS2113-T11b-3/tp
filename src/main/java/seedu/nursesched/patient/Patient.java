@@ -1,4 +1,4 @@
-package patient;
+package seedu.nursesched.patient;
 
 import java.util.ArrayList;
 

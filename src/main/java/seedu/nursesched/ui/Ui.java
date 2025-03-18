@@ -1,4 +1,4 @@
-package ui;
+package seedu.nursesched.ui;
 
 import java.util.Scanner;
 

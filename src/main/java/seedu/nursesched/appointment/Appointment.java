@@ -1,6 +1,6 @@
-package appointment;
+package seedu.nursesched.appointment;
 
-import exception.NurseSchedException;
+import seedu.nursesched.exception.NurseSchedException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -112,8 +112,8 @@ public class Appointment {
         System.out.println("Appointment marked: ");
         System.out.println(
                 "Name: " + appointment.name
-                + ", Start: " + appointment.startTime
-                + ", Date: " + appointment.date
+                        + ", Start: " + appointment.startTime
+                        + ", Date: " + appointment.date
         );
     }
 

@@ -1,7 +1,7 @@
-package parser;
+package seedu.nursesched.parser;
 
-import exception.ExceptionMessage;
-import exception.NurseSchedException;
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

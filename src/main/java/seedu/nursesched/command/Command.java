@@ -1,14 +1,14 @@
-package command;
+package seedu.nursesched.command;
 
-import appointment.Appointment;
-import exception.NurseSchedException;
-import parser.ApptParser;
-import parser.Parser;
-import parser.PatientParser;
-import parser.ShiftParser;
-import patient.Patient;
-import shift.Shift;
-import ui.Ui;
+import seedu.nursesched.appointment.Appointment;
+import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.parser.ApptParser;
+import seedu.nursesched.parser.Parser;
+import seedu.nursesched.parser.PatientParser;
+import seedu.nursesched.parser.ShiftParser;
+import seedu.nursesched.patient.Patient;
+import seedu.nursesched.shift.Shift;
+import seedu.nursesched.ui.Ui;
 
 import java.util.Scanner;
 
@@ -91,14 +91,12 @@ public class Command {
                                 shiftParser.getDate(),
                                 shiftParser.getNotes()
                         );
-                        System.out.println("Shift added");
                         Shift.listShifts();
                     }
                     if (shift.equals("del")) {
                         Shift.deleteShiftByIndex(
                                 shiftParser.getIndex()
                         );
-                        System.out.println("Shift deleted");
                         Shift.listShifts();
                     }
                     break;

@@ -1,11 +1,10 @@
 import java.util.Scanner;
 
-import command.Command;
-import ui.Ui;
+import seedu.nursesched.command.Command;
+import seedu.nursesched.ui.Ui;
 
 public class NurseSched {
     private final Ui ui;
-
 
     public NurseSched() {
         ui = new Ui();

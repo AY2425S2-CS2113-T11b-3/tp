@@ -1,4 +1,4 @@
-package exception;
+package seedu.nursesched.exception;
 
 public class NurseSchedException extends Exception {
     public NurseSchedException(ExceptionMessage message) {
