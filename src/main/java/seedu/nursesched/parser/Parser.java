@@ -1,4 +1,4 @@
-package parser;
+package seedu.nursesched.parser;
 
 public class Parser {
     protected String type;
