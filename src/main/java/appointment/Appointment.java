@@ -75,6 +75,10 @@ public class Appointment {
 
     public static void deleteApptByPatient(String name,
                                            LocalTime startTime, LocalDate date) {
+        assert !name.isEmpty() : "Name should not be empty!";
+        assert startTime!=null : "Appointment's start time is required!";
+        assert date!=null : "Appointment's date is required!";
+
         Appointment appointment = findAppointment(name, startTime, date);
         if (appointment == null) {
             System.out.println("Appointment does not exist!");
@@ -114,6 +118,7 @@ public class Appointment {
     }
 
     public static void unmarkApptByIndex(int index) {
+        assert index>0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
             apptList.get(index).setDone(false);
             System.out.println("Marked appointment as undone!");
@@ -124,8 +129,23 @@ public class Appointment {
 
     public static void unmarkApptByPatient(String name,
                                            LocalTime startTime, LocalDate date) {
-        //TODO: throw error if index is invalid
+        assert name != null && !name.isEmpty() : "Name should not be empty!";
+        assert startTime != null : "Appointment's start time is required!";
+        assert date != null : "Appointment's date is required!";
+
         Appointment appointment = findAppointment(name, startTime, date);
+        if (appointment == null) {
+            System.out.println("Appointment does not exist!");
+            return;
+        }
+
+        appointment.setDone(false);
+        System.out.println("Appointment unmarked: ");
+        System.out.println(
+                "Name: " + appointment.name
+                        + ", Start: " + appointment.startTime
+                        + ", Date: " + appointment.date
+        );
     }
 
     public static Appointment findAppointment(String name,
@@ -137,7 +157,6 @@ public class Appointment {
                 return appointment;
             }
         }
-        //TODO: throw appointment not found error
         return null;
     }
 
