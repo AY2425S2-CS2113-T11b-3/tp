@@ -6,8 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
- * Represents a shift assigned to a nurse.
- * Stores shift details including nurse name, start and end times, date, and task description.
+ * Represents a work shift assigned to a nurse.
+ * It stores details such as the start time, end time, date, and the assigned task.
  */
 public class Shift {
     protected static ArrayList<Shift> shiftList = new ArrayList<>();
@@ -17,11 +17,11 @@ public class Shift {
     private final String shiftTask;
 
     /**
-     * Constructs a Shift object.
+     * Constructs a Shift object with specified details.
      *
      * @param startTime The start time of the shift.
      * @param endTime   The end time of the shift.
-     * @param date      The date of the shift.
+     * @param date      The date on which the shift occurs.
      * @param shiftTask The task assigned during the shift.
      */
     public Shift(LocalTime startTime, LocalTime endTime, LocalDate date, String shiftTask) {
@@ -46,9 +46,9 @@ public class Shift {
     }
 
     /**
-     * Deletes a shift from the shift list by index.
+     * Deletes a shift from the shift list based on the given index.
      *
-     * @param index The index of the shift to be removed.
+     * @param index The index of the shift to be removed (0-based index).
      */
     public static void deleteShiftByIndex(int index) {
         if (index < 0 || index >= shiftList.size()) {
@@ -60,7 +60,8 @@ public class Shift {
     }
 
     /**
-     * Lists all shifts currently stored in the shift list.
+     * Displays all shifts currently stored in the shift list.
+     * If no shifts are available, it notifies the user.
      */
     public static void listShifts() {
         if (shiftList.isEmpty()) {
@@ -76,9 +77,9 @@ public class Shift {
     }
 
     /**
-     * Returns a formatted string representation of the shift.
+     * Returns a formatted string representation of the shift details.
      *
-     * @return A string describing the shift details.
+     * @return A string describing the shift including start and end times, date, and task.
      */
     @Override
     public String toString() {
@@ -92,22 +93,38 @@ public class Shift {
                 "shiftTask: " + shiftTask;
     }
 
-    public static ArrayList<Shift> getShiftList() {
-        return shiftList;
-    }
-
+    /**
+     * Retrieves the start time of the shift.
+     *
+     * @return The start time as a {@link LocalTime} object.
+     */
     public LocalTime getStartTime() {
         return startTime;
     }
 
+    /**
+     * Retrieves the end time of the shift.
+     *
+     * @return The end time as a {@link LocalTime} object.
+     */
     public LocalTime getEndTime() {
         return endTime;
     }
 
+    /**
+     * Retrieves the date of the shift.
+     *
+     * @return The date as a {@link LocalDate} object.
+     */
     public LocalDate getDate() {
         return date;
     }
 
+    /**
+     * Retrieves the task assigned to the shift.
+     *
+     * @return The task description as a {@link String}.
+     */
     public String getShiftTask() {
         return shiftTask;
     }

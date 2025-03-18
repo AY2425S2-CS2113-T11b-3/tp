@@ -43,7 +43,8 @@ public class ShiftParser extends Parser {
      * Parses the input command and extracts shift-related details.
      *
      * @param line The input command string.
-     * @return A {@code ShiftParser} object containing the extracted shift details, or {@code null} if parsing fails.
+     * @return A {@code ShiftParser} object containing the extracted shift details.
+     * @throws NurseSchedException If the input is invalid or incorrectly formatted.
      */
     public static ShiftParser extractInputs(String line) throws NurseSchedException {
         if (line == null || line.trim().isEmpty()) {
@@ -84,6 +85,18 @@ public class ShiftParser extends Parser {
         }
     }
 
+    /**
+     * Parses a delete shift command and extracts the shift index.
+     *
+     * @param remaining The remaining command string.
+     * @param command   The command type.
+     * @param startTime Placeholder for start time (not used).
+     * @param endTime   Placeholder for end time (not used).
+     * @param date      Placeholder for date (not used).
+     * @param shiftTask Placeholder for shift task (not used).
+     * @return A ShiftParser object containing the shift index.
+     * @throws NurseSchedException If the format is incorrect or shift index is invalid.
+     */
     private static ShiftParser getShiftDelParser(String remaining, String command, LocalTime startTime,
                                                  LocalTime endTime, LocalDate date,
                                                  String shiftTask) throws NurseSchedException {
@@ -103,6 +116,15 @@ public class ShiftParser extends Parser {
         return new ShiftParser(command, startTime, endTime, date, shiftTask, shiftIndex);
     }
 
+    /**
+     * Parses an add shift command and extracts the shift details.
+     *
+     * @param remaining  The remaining command string.
+     * @param command    The command type.
+     * @param shiftIndex Placeholder for shift index (not used).
+     * @return A ShiftParser object containing shift details.
+     * @throws NurseSchedException If the format is incorrect or values are invalid.
+     */
     private static ShiftParser getShiftAddParser(String remaining, String command, int shiftIndex)
             throws NurseSchedException {
         LocalDate date;
