@@ -25,6 +25,12 @@ public class Shift {
      * @param shiftTask The task assigned during the shift.
      */
     public Shift(LocalTime startTime, LocalTime endTime, LocalDate date, String shiftTask) {
+        assert startTime != null : "Start time cannot be null";
+        assert endTime != null : "End time cannot be null";
+        assert date != null : "Date cannot be null";
+        assert shiftTask != null && !shiftTask.isEmpty() : "Shift task cannot be null or empty";
+        assert startTime.isBefore(endTime) : "Start time must be before end time";
+
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;
@@ -41,6 +47,7 @@ public class Shift {
      */
     public static void addShift(LocalTime startTime, LocalTime endTime, LocalDate date,
                                 String shiftTask) {
+        assert startTime != null && endTime != null && date != null && shiftTask != null : "Invalid shift details";
         shiftList.add(new Shift(startTime, endTime, date, shiftTask));
         System.out.println("Shift added");
     }
@@ -51,6 +58,7 @@ public class Shift {
      * @param index The index of the shift to be removed (0-based index).
      */
     public static void deleteShiftByIndex(int index) {
+        assert index >= 0 : "Shift index cannot be negative";
         if (index < 0 || index >= shiftList.size()) {
             System.out.println("Invalid shift index.");
             return;
