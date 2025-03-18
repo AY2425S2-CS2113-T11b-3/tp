@@ -1,10 +1,9 @@
 package seedu.nursesched.parser;
 
-import exception.NurseSchedException;
+import seedu.nursesched.exception.NurseSchedException;
 import org.junit.jupiter.api.Test;
-import parser.ApptParser;
-import parser.PatientParser;
-import patient.Patient;
+
+import seedu.nursesched.patient.Patient;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

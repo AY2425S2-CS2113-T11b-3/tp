@@ -1,6 +1,6 @@
-package appointment;
+package seedu.nursesched.appointment;
 
-import exception.NurseSchedException;
+import seedu.nursesched.exception.NurseSchedException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

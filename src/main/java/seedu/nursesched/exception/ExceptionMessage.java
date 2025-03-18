@@ -1,4 +1,4 @@
-package exception;
+package seedu.nursesched.exception;
 
 public enum ExceptionMessage {
     INPUT_EMPTY("Input line cannot be empty!"),

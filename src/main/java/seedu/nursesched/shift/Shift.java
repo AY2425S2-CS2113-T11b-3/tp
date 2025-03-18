@@ -1,4 +1,4 @@
-package shift;
+package seedu.nursesched.shift;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -55,6 +55,7 @@ public class Shift {
             return;
         }
         shiftList.remove(index);
+        System.out.println("Shift deleted.");
     }
 
     /**
@@ -88,5 +89,25 @@ public class Shift {
                 "To: " + formattedEndTime + ", " +
                 "Date: " + date + ", " +
                 "shiftTask: " + shiftTask;
+    }
+
+    public static ArrayList<Shift> getShiftList() {
+        return shiftList;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public String getShiftTask() {
+        return shiftTask;
     }
 }

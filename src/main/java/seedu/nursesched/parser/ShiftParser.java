@@ -1,11 +1,11 @@
-package parser;
+package seedu.nursesched.parser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
-import exception.ExceptionMessage;
-import exception.NurseSchedException;
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
 
 /**
  * The {@code ShiftParser} class is responsible for parsing shift-related commands.
@@ -201,5 +201,9 @@ public class ShiftParser extends Parser {
      */
     public int getIndex() {
         return shiftIndex;
+    }
+
+    public String getShiftTask() {
+        return shiftTask;
     }
 }

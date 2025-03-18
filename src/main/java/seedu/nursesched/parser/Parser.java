@@ -1,4 +1,4 @@
-package parser;
+package seedu.nursesched.parser;
 
 public class Parser {
     protected String type;
@@ -12,7 +12,6 @@ public class Parser {
         try {
             line = line.substring(0, line.indexOf(" "));
         } catch (Exception e) {
-            System.out.println("Invalid command!");
             System.out.println("Command should start with \"appt\", \"pf\" or \"shift\"");
             return "";
         }
