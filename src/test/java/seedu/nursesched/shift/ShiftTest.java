@@ -1,6 +1,7 @@
 package seedu.nursesched.shift;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,7 +22,8 @@ class ShiftTest {
         ShiftParser shiftParser = ShiftParser.extractInputs(inputString);
         assertNotNull(shiftParser);
 
-        shiftList.add(new Shift(shiftParser.getStartTime(), shiftParser.getEndTime(), shiftParser.getDate(), shiftParser.getShiftTask()));
+        shiftList.add(new Shift(shiftParser.getStartTime(), shiftParser.getEndTime(), shiftParser.getDate(),
+                shiftParser.getShiftTask()));
 
         LocalTime startTime = shiftParser.getStartTime();
         LocalTime endTime = shiftParser.getEndTime();

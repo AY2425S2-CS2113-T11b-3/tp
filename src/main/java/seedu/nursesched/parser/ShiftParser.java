@@ -84,7 +84,9 @@ public class ShiftParser extends Parser {
         }
     }
 
-    private static ShiftParser getShiftDelParser(String remaining, String command, LocalTime startTime, LocalTime endTime, LocalDate date, String shiftTask) throws NurseSchedException {
+    private static ShiftParser getShiftDelParser(String remaining, String command, LocalTime startTime,
+                                                 LocalTime endTime, LocalDate date,
+                                                 String shiftTask) throws NurseSchedException {
         int shiftIndex;
         if (!remaining.contains("sn/")) {
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTDEL_FORMAT);
@@ -101,7 +103,8 @@ public class ShiftParser extends Parser {
         return new ShiftParser(command, startTime, endTime, date, shiftTask, shiftIndex);
     }
 
-    private static ShiftParser getShiftAddParser(String remaining, String command, int shiftIndex) throws NurseSchedException {
+    private static ShiftParser getShiftAddParser(String remaining, String command, int shiftIndex)
+            throws NurseSchedException {
         LocalDate date;
         LocalTime startTime;
         LocalTime endTime;
