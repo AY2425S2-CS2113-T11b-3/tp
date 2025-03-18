@@ -42,6 +42,7 @@ public class Shift {
     public static void addShift(LocalTime startTime, LocalTime endTime, LocalDate date,
                                 String shiftTask) {
         shiftList.add(new Shift(startTime, endTime, date, shiftTask));
+        System.out.println("Shift added");
     }
 
     /**

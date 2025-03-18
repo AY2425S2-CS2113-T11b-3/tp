@@ -112,8 +112,8 @@ public class Appointment {
         System.out.println("Appointment marked: ");
         System.out.println(
                 "Name: " + appointment.name
-                + ", Start: " + appointment.startTime
-                + ", Date: " + appointment.date
+                        + ", Start: " + appointment.startTime
+                        + ", Date: " + appointment.date
         );
     }
 
@@ -163,8 +163,18 @@ public class Appointment {
 
     public static void list(){
         int index = 1;
+        boolean isDone = false;
+        String statusBadge = "[ ]";
         for (Appointment appointment : apptList) {
-            System.out.println(index+ ". "+ appointment);
+
+            isDone = appointment.getStatus();
+            if (isDone) {
+                statusBadge = "[X]";
+            }else{
+                statusBadge = "[ ]";
+            }
+
+            System.out.println(index+ ". "+ statusBadge + appointment);
         }
         System.out.println("You have " + apptList.size() + " appointment(s)");
     }

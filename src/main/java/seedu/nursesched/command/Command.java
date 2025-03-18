@@ -81,7 +81,7 @@ public class Command {
                         Patient.printPatientInformation();
                     }
                     break;
-                case "seedu/nursesched/shift":
+                case "shift":
                     ShiftParser shiftParser = ShiftParser.extractInputs(line);
                     String shift = shiftParser.getCommand();
                     if (shift.equals("add")) {
@@ -91,7 +91,6 @@ public class Command {
                                 shiftParser.getDate(),
                                 shiftParser.getNotes()
                         );
-                        System.out.println("Shift added");
                         Shift.listShifts();
                     }
                     if (shift.equals("del")) {
@@ -111,6 +110,7 @@ public class Command {
 
                 default:
                     System.out.println("Unknown command!");
+                    System.out.println("Command should start with \"appt\", \"pf\" or \"shift\"");
                     break;
                 }
             } catch (NurseSchedException e) {

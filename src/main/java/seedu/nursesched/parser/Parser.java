@@ -1,4 +1,4 @@
-package seedu.nursesched.parser;
+package parser;
 
 public class Parser {
     protected String type;
@@ -9,11 +9,8 @@ public class Parser {
 
     //Extracts type of command - Appointments/Patient Profiles/Shifts
     public static String extractType(String line) {
-        try {
-            line = line.substring(0, line.indexOf(" "));
-        } catch (Exception e) {
-            System.out.println("Command should start with \"appt\", \"pf\" or \"shift\"");
-            return "";
+        if (line.contains(" ")) {
+            return line.substring(0, line.indexOf(" "));
         }
         return line;
     }
