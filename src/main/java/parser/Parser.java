@@ -9,12 +9,8 @@ public class Parser {
 
     //Extracts type of command - Appointments/Patient Profiles/Shifts
     public static String extractType(String line) {
-        try {
-            line = line.substring(0, line.indexOf(" "));
-        } catch (Exception e) {
-            System.out.println("Invalid command!");
-            System.out.println("Command should start with \"appt\", \"pf\" or \"shift\"");
-            return "";
+        if (line.contains(" ")) {
+            return line.substring(0, line.indexOf(" "));
         }
         return line;
     }
