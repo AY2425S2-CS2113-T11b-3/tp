@@ -37,6 +37,11 @@ public class Appointment {
 
     public static void addAppt(String name,
                                LocalTime startTime, LocalTime endTime, LocalDate date, String notes) {
+        LocalDate today = LocalDate.now();
+        assert !name.isEmpty() : "Name should not be empty!";
+        assert startTime.isBefore(endTime) : "Appointment's start time cannot be after its end time!";
+        assert date.isEqual(today) || date.isAfter(today) : "Appointment date cannot be in the past!";
+
         for (Appointment appt : apptList) {
             if (appt.startTime.equals(startTime) && appt.date.equals(date)) {
                 System.out.println("There is another patient, " + appt.name +
@@ -58,6 +63,7 @@ public class Appointment {
     }
 
     public static void deleteApptByIndex(int index) throws NurseSchedException {
+        assert index >= 1 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
             Appointment appt = apptList.get(index);
             System.out.println("Appointment deleted: " + appt);
@@ -79,6 +85,7 @@ public class Appointment {
     }
 
     public static void markApptByIndex(int index) throws NurseSchedException {
+        assert index >= 0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
             apptList.get(index).setDone(true);
             System.out.println("Marked appointment as done!");
@@ -89,6 +96,9 @@ public class Appointment {
 
     public static void markApptByPatient(String name,
                                          LocalTime startTime, LocalDate date) {
+        assert name != null && !name.isEmpty() : "Name should not be empty!";
+        assert startTime != null : "Appointment's start time is required!";
+        assert date != null : "Appointment's date is required!";
         Appointment appointment = findAppointment(name, startTime, date);
         if (appointment == null) {
             System.out.println("Appointment does not exist!");
