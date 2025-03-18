@@ -1,5 +1,7 @@
 package appointment;
 
+import exception.NurseSchedException;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +16,7 @@ public class Appointment {
     private final LocalDate date;
     private final String notes;
     private boolean isDone = false;
+
 
 
     public Appointment() {
@@ -34,6 +37,11 @@ public class Appointment {
 
     public static void addAppt(String name,
                                LocalTime startTime, LocalTime endTime, LocalDate date, String notes) {
+        LocalDate today = LocalDate.now();
+        assert !name.isEmpty() : "Name should not be empty!";
+        assert startTime.isBefore(endTime) : "Appointment's start time cannot be after its end time!";
+        assert date.isEqual(today) || date.isAfter(today) : "Appointment date cannot be in the past!";
+
         for (Appointment appt : apptList) {
             if (appt.startTime.equals(startTime) && appt.date.equals(date)) {
                 System.out.println("There is another patient, " + appt.name +
@@ -54,37 +62,43 @@ public class Appointment {
         );
     }
 
-    public static void deleteApptByIndex(int index) {
-
-        //TODO: throw error if index is invalid
-        apptList.remove(index);
+    public static void deleteApptByIndex(int index) throws NurseSchedException {
+        assert index >= 1 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
+        try{
+            Appointment appt = apptList.get(index);
+            System.out.println("Appointment deleted: " + appt);
+            apptList.remove(index);
+        } catch (IndexOutOfBoundsException e) {  // Catching out-of-bounds exception instead of NullPointerException
+            System.out.println("There is no appointment with index: " + (index + 1));
+        }
     }
 
     public static void deleteApptByPatient(String name,
                                            LocalTime startTime, LocalDate date) {
-        //TODO: throw error if start/end/date is invalid
         Appointment appointment = findAppointment(name, startTime, date);
         if (appointment == null) {
             System.out.println("Appointment does not exist!");
             return;
         }
+        System.out.println("Appointment deleted: " + appointment);
         apptList.remove(appointment);
-        System.out.println("Appointment deleted:");
-        System.out.println(
-                "Name: " + appointment.name
-                + ", Start: " + appointment.startTime
-                + ", Date: " + appointment.date
-        );
     }
 
-    public static void markApptByIndex(int index) {
-        //TODO: throw error if index is invalid
-        Appointment appointment = apptList.get(index);
-        appointment.isDone = true;
+    public static void markApptByIndex(int index) throws NurseSchedException {
+        assert index >= 0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
+        try{
+            apptList.get(index).setDone(true);
+            System.out.println("Marked appointment as done!");
+        }catch (IndexOutOfBoundsException e) {
+            System.out.println("There is no appointment with index: " + (index + 1));
+        }
     }
 
     public static void markApptByPatient(String name,
                                          LocalTime startTime, LocalDate date) {
+        assert name != null && !name.isEmpty() : "Name should not be empty!";
+        assert startTime != null : "Appointment's start time is required!";
+        assert date != null : "Appointment's date is required!";
         Appointment appointment = findAppointment(name, startTime, date);
         if (appointment == null) {
             System.out.println("Appointment does not exist!");
@@ -100,10 +114,12 @@ public class Appointment {
     }
 
     public static void unmarkApptByIndex(int index) {
-
-        //TODO: throw error if index is invalid
-        Appointment appointment = apptList.get(index);
-        appointment.isDone = false;
+        try{
+            apptList.get(index).setDone(false);
+            System.out.println("Marked appointment as undone!");
+        }catch (IndexOutOfBoundsException e) {
+            System.out.println("There is no appointment with index: " + (index+1));
+        }
     }
 
     public static void unmarkApptByPatient(String name,
@@ -123,6 +139,19 @@ public class Appointment {
         }
         //TODO: throw appointment not found error
         return null;
+    }
+
+
+    public static void list(){
+        int index = 1;
+        for (Appointment appointment : apptList) {
+            System.out.println(index+ ". "+ appointment);
+        }
+        System.out.println("You have " + apptList.size() + " appointment(s)");
+    }
+
+    public void setDone(boolean done) {
+        this.isDone = done;
     }
 
     public boolean getStatus() {
