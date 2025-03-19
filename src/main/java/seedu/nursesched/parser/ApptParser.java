@@ -3,9 +3,16 @@ package seedu.nursesched.parser;
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
+import java.io.File;
 
 /**
  * The ApptParser class parses the input of the user to make sense of the command.
@@ -14,6 +21,8 @@ import java.time.format.DateTimeParseException;
  */
 public class ApptParser extends Parser {
 
+    private static final Logger logr = Logger.getLogger("ApptParser");
+
     private static int apptIndex;
     private String command;
     private String name;
@@ -21,6 +30,24 @@ public class ApptParser extends Parser {
     private LocalTime endTime;
     private LocalDate date;
     private String notes;
+
+    static {
+        try {
+            File logDir = new File("logs/parser");
+            if (!logDir.exists()) {
+                logDir.mkdirs();  // Creates the directory and any missing parent directories
+            }
+
+            LogManager.getLogManager().reset();
+            FileHandler fh = new FileHandler("logs/parser/apptParser.log", true);
+            fh.setFormatter(new SimpleFormatter());
+            logr.addHandler(fh);
+            logr.setLevel(Level.ALL);
+        } catch (IOException e) {
+            logr.log(Level.SEVERE, "File logger not working", e);
+        }
+    }
+
 
     /**
      * Constructs a new ApptParser object with the specified parameters.
@@ -41,6 +68,8 @@ public class ApptParser extends Parser {
         this.date = date;
         this.notes = notes;
         this.apptIndex = apptIndex;
+
+        logr.info("ApptParser created: " + this);
     }
 
     /**
@@ -55,6 +84,8 @@ public class ApptParser extends Parser {
      * @throws DateTimeParseException If the input time or date is not of the expected format.
      */
     public static ApptParser extractInputs (String line) throws NurseSchedException {
+        assert line != null : "Input line should not be null";
+        logr.info("Extracting inputs from: " + line);
         line = line.trim();
         line = line.toLowerCase();
         line = line.substring(line.indexOf(" ") + 1);
@@ -73,6 +104,7 @@ public class ApptParser extends Parser {
                 command = line;
             }
         } catch (IndexOutOfBoundsException e) {
+            logr.warning("Invalid command: " + command);
             System.out.println("Invalid inputs! Please try again.");
             return null;
         }
@@ -80,6 +112,7 @@ public class ApptParser extends Parser {
         if (command.equals("add")) {
             if (!line.contains("p/") || !line.contains("s/") ||
                     !line.contains("d/") || !line.contains("e/")) {
+                logr.warning("Missing fields");
                 throw new NurseSchedException(ExceptionMessage.INVALID_APPTADD_FORMAT);
             }
 
@@ -121,7 +154,7 @@ public class ApptParser extends Parser {
             return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex);
         }
 
-
+        logr.warning("Invalid command: " + command);
         return null;
     }
 
@@ -130,9 +163,11 @@ public class ApptParser extends Parser {
         try {
             index = Integer.parseInt(line) - 1;
             if (index < 0) {
+                logr.warning("Negative index: " + line);
                 throw new NurseSchedException(ExceptionMessage.NEGATIVE_INDEX);
             }
         } catch (NumberFormatException e) {
+            logr.warning("Invalid index: " + line);
             throw new NurseSchedException(ExceptionMessage.INVALID_APPT_NUMBER);
         }
         return index;
