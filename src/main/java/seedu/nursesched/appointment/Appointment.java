@@ -2,6 +2,7 @@ package seedu.nursesched.appointment;
 
 import seedu.nursesched.exception.NurseSchedException;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -31,6 +32,11 @@ public class Appointment {
 
     static {
         try {
+            File logDir = new File("logs/appointment");
+            if (!logDir.exists()) {
+                logDir.mkdirs();  // Creates the directory and any missing parent directories
+            }
+
             LogManager.getLogManager().reset();
             FileHandler fh = new FileHandler("logs/appointment/appointment.log", true);
             fh.setFormatter(new SimpleFormatter());
