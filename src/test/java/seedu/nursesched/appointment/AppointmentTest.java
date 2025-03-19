@@ -33,7 +33,7 @@ public class AppointmentTest {
     }
 
     @Test
-    void testToString_AppointmentAsString() throws NurseSchedException {
+    void testToString_appointmentAsString() throws NurseSchedException {
         String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 n/Needs a wheelchair";
         ApptParser apptParser = ApptParser.extractInputs(input);
 

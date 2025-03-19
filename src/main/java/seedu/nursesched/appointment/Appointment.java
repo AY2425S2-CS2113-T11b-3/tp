@@ -22,8 +22,6 @@ public class Appointment {
     private final String notes;
     private boolean isDone = false;
 
-    private static Logger logger = Logger.getLogger("Appointment");
-
     /**
      * Constructs an Appointment object with specified details.
      *
