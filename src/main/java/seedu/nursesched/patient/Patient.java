@@ -55,8 +55,8 @@ public class Patient {
         if (index >= patientsList.size()) {
             throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_NUMBER);
         }
-        patientsList.remove(index);
         System.out.println("Patient information removed for " + patientsList.get(index).name + ".");
+        patientsList.remove(index);
     }
 
     /**
