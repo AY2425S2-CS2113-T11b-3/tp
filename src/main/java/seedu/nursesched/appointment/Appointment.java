@@ -19,9 +19,9 @@ import java.util.logging.SimpleFormatter;
  * It stores details such as the start time, end time, date, patient name and notes.
  */
 public class Appointment {
+    protected static ArrayList<Appointment> apptList = new ArrayList<Appointment>();
     private static final Logger logr = Logger.getLogger("Appointment");
 
-    protected static ArrayList<Appointment> apptList = new ArrayList<Appointment>();
     private final String name;
     private final LocalTime startTime;
     private final LocalTime endTime;
