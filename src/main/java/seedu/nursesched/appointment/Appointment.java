@@ -239,4 +239,24 @@ public class Appointment {
                 "Date: " + date + ", " +
                 "Notes: " + notes;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getStartTime() {
+        return this.startTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getEndTime() {
+        return this.endTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getDate() {
+        return this.date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public String getNotes() {
+        return notes;
+    }
 }
