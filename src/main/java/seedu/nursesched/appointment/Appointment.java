@@ -2,11 +2,13 @@ package seedu.nursesched.appointment;
 
 import seedu.nursesched.exception.NurseSchedException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.logging.*;
 
 /**
  * Represents all appointments.
@@ -20,6 +22,20 @@ public class Appointment {
     private final LocalDate date;
     private final String notes;
     private boolean isDone = false;
+
+    private final static Logger logr = Logger.getLogger("Appointment");
+
+    static {
+        try {
+            LogManager.getLogManager().reset();
+            FileHandler fh = new FileHandler("logs/appointment/appointment.log", true);
+            fh.setFormatter(new SimpleFormatter());
+            logr.addHandler(fh);
+            logr.setLevel(Level.ALL);
+        } catch (IOException e) {
+            logr.log(Level.SEVERE, "File logger not working", e);
+        }
+    }
 
     /**
      * Constructs an Appointment object with specified details.
@@ -37,6 +53,7 @@ public class Appointment {
         this.endTime = endTime;
         this.date = date;
         this.notes = notes;
+        logr.info("Appointment object created");
     }
 
     /**
@@ -60,6 +77,7 @@ public class Appointment {
                 System.out.println("There is another patient, " + appt.name +
                         " with the same appointment time and date! " +
                         "Please enter a different time/date");
+                logr.info("Appointment already exists, appointment not added");
                 return;
             }
         }
@@ -73,6 +91,7 @@ public class Appointment {
                         + ", Date: " + appt.date
                         + ", Notes: " + appt.notes
         );
+        logr.info("Appointment added: " + appt.toString());
     }
 
     /**
@@ -86,8 +105,10 @@ public class Appointment {
             Appointment appt = apptList.get(index);
             System.out.println("Appointment deleted: " + appt);
             apptList.remove(index);
+            logr.info("Appointment deleted" + appt.toString());
         } catch (IndexOutOfBoundsException e) {  // Catching out-of-bounds exception instead of NullPointerException
             System.out.println("There is no appointment with index: " + (index + 1));
+            logr.warning("There is no appointment with index: " + (index + 1));
         }
     }
 
@@ -116,8 +137,10 @@ public class Appointment {
         try{
             apptList.get(index).setDone(true);
             System.out.println("Marked appointment as done!");
+            logr.info("Appointment marked: " + apptList.get(index).toString());
         }catch (IndexOutOfBoundsException e) {
             System.out.println("There is no appointment with index: " + (index + 1));
+            logr.warning("There is no appointment with index: " + (index + 1));
         }
     }
 
@@ -150,8 +173,10 @@ public class Appointment {
         try{
             apptList.get(index).setDone(false);
             System.out.println("Marked appointment as undone!");
+            logr.info("Appointment unmarked: " + apptList.get(index).toString());
         }catch (IndexOutOfBoundsException e) {
             System.out.println("There is no appointment with index: " + (index+1));
+            logr.warning("There is no appointment with index: " + (index+1));
         }
     }
 
