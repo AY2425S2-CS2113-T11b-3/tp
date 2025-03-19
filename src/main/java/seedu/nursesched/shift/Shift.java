@@ -28,7 +28,7 @@ public class Shift {
     static {
         try {
             LogManager.getLogManager().reset();
-            FileHandler fh = new FileHandler("src/logging/shift/shift.log", true);
+            FileHandler fh = new FileHandler("logs/shift/shift.log", true);
             fh.setFormatter(new SimpleFormatter());
             logr.addHandler(fh);
             logr.setLevel(Level.ALL);
