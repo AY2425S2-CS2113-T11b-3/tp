@@ -1,8 +1,14 @@
 package seedu.nursesched.parser;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
@@ -12,12 +18,26 @@ import seedu.nursesched.exception.NurseSchedException;
  * It extracts the necessary details to create or delete a shift.
  */
 public class ShiftParser extends Parser {
+    private static final Logger logr = Logger.getLogger("ShiftParser");
+
     private final String command;
     private final LocalTime startTime;
     private final LocalTime endTime;
     private final LocalDate date;
     private final String shiftTask;
     private final int shiftIndex;
+
+    static {
+        try {
+            LogManager.getLogManager().reset();
+            FileHandler fh = new FileHandler("src/logging/parser/shiftParser.log", true);
+            fh.setFormatter(new SimpleFormatter());
+            logr.addHandler(fh);
+            logr.setLevel(Level.ALL);
+        } catch (IOException e) {
+            logr.log(Level.SEVERE, "File logger not working", e);
+        }
+    }
 
     /**
      * Constructs a {@code ShiftParser} object with extracted shift details.
@@ -40,6 +60,8 @@ public class ShiftParser extends Parser {
         this.date = date;
         this.shiftTask = shiftTask;
         this.shiftIndex = shiftIndex;
+
+        logr.info("ShiftParser created: " + this);
     }
 
     /**
@@ -51,13 +73,17 @@ public class ShiftParser extends Parser {
      */
     public static ShiftParser extractInputs(String line) throws NurseSchedException {
         assert line != null : "Input line should not be null";
+        logr.info("Extracting inputs from: " + line);
+
         if (line == null || line.trim().isEmpty()) {
+            logr.warning("Input is empty.");
             throw new NurseSchedException(ExceptionMessage.INPUT_EMPTY);
         }
 
         line = line.trim().toLowerCase();
         String[] parts = line.split(" ", 2);
         if (parts.length < 2) {
+            logr.warning("Invalid input format: " + line);
             throw new NurseSchedException(ExceptionMessage.INVALID_FORMAT);
         }
 
@@ -82,9 +108,11 @@ public class ShiftParser extends Parser {
             } else if (command.equals("del")) {
                 return getShiftDelParser(remaining, command, startTime, endTime, date, shiftTask);
             } else {
+                logr.warning("Invalid command: " + command);
                 throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
             }
-        } catch (Exception e) {
+        } catch (NurseSchedException e) {
+            logr.severe("Parsing error: " + e.getMessage());
             throw new NurseSchedException(ExceptionMessage.PARSING_ERROR);
         }
     }
@@ -105,16 +133,21 @@ public class ShiftParser extends Parser {
                                                  LocalTime endTime, LocalDate date,
                                                  String shiftTask) throws NurseSchedException {
         assert remaining != null : "Remaining command should not be null";
+        logr.info("Parsing delete command: " + remaining);
         int shiftIndex;
+
         if (!remaining.contains("sn/")) {
+            logr.warning("Invalid delete format.");
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTDEL_FORMAT);
         }
         try {
             shiftIndex = Integer.parseInt(extractValue(remaining, "sn/", null)) - 1;
             if (shiftIndex < 0) {
+                logr.warning("Invalid shift index: " + shiftIndex);
                 throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
             }
         } catch (NumberFormatException e) {
+            logr.warning("Invalid shift index format.");
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
         }
 
@@ -133,6 +166,8 @@ public class ShiftParser extends Parser {
     private static ShiftParser getShiftAddParser(String remaining, String command, int shiftIndex)
             throws NurseSchedException {
         assert remaining != null : "Remaining command should not be null";
+        logr.info("Parsing add command: " + remaining);
+
         LocalDate date;
         LocalTime startTime;
         LocalTime endTime;
@@ -141,6 +176,7 @@ public class ShiftParser extends Parser {
         // Ensure all required markers exist
         if (!remaining.contains("s/") || !remaining.contains("e/") ||
                 !remaining.contains("d/") || !remaining.contains("st/")) {
+            logr.warning("Invalid add format.");
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTADD_FORMAT);
         }
 
@@ -159,11 +195,13 @@ public class ShiftParser extends Parser {
 
         shiftTask = extractValue(remaining, "st/", null);
         if (shiftTask.isEmpty()) {
+            logr.warning("Shift task is empty.");
             throw new NurseSchedException(ExceptionMessage.SHIFT_TASK_EMPTY);
         }
 
         // Validate start time before end time
         if (startTime.isAfter(endTime) || startTime.equals(endTime)) {
+            logr.warning("Invalid start/end time: " + startTime + " - " + endTime);
             throw new NurseSchedException(ExceptionMessage.INVALID_START_TIME);
         }
 

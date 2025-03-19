@@ -1,9 +1,16 @@
 package seedu.nursesched.shift;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Represents a work shift assigned to a nurse.
@@ -11,10 +18,24 @@ import java.util.ArrayList;
  */
 public class Shift {
     protected static ArrayList<Shift> shiftList = new ArrayList<>();
+    private static final Logger logr = Logger.getLogger("Shift");
+
     private final LocalTime startTime;
     private final LocalTime endTime;
     private final LocalDate date;
     private final String shiftTask;
+
+    static {
+        try {
+            LogManager.getLogManager().reset();
+            FileHandler fh = new FileHandler("src/logging/shift/shift.log", true);
+            fh.setFormatter(new SimpleFormatter());
+            logr.addHandler(fh);
+            logr.setLevel(Level.ALL);
+        } catch (IOException e) {
+            logr.log(Level.SEVERE, "File logger not working", e);
+        }
+    }
 
     /**
      * Constructs a Shift object with specified details.
@@ -35,6 +56,7 @@ public class Shift {
         this.endTime = endTime;
         this.date = date;
         this.shiftTask = shiftTask;
+        logr.info("Shift created: " + this);
     }
 
     /**
@@ -48,7 +70,9 @@ public class Shift {
     public static void addShift(LocalTime startTime, LocalTime endTime, LocalDate date,
                                 String shiftTask) {
         assert startTime != null && endTime != null && date != null && shiftTask != null : "Invalid shift details";
-        shiftList.add(new Shift(startTime, endTime, date, shiftTask));
+        Shift shift = new Shift(startTime, endTime, date, shiftTask);
+        shiftList.add(shift);
+        logr.info("Shift added: " + shift);
         System.out.println("Shift added");
     }
 
@@ -60,10 +84,12 @@ public class Shift {
     public static void deleteShiftByIndex(int index) {
         assert index >= 0 : "Shift index cannot be negative";
         if (index < 0 || index >= shiftList.size()) {
+            logr.warning("Attempted to delete shift with invalid index: " + index);
             System.out.println("Invalid shift index.");
             return;
         }
-        shiftList.remove(index);
+        Shift removedShift = shiftList.remove(index);
+        logr.info("Shift deleted: " + removedShift);
         System.out.println("Shift deleted.");
     }
 
