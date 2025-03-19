@@ -64,3 +64,27 @@ Mar 19, 2025 11:27:56 AM seedu.nursesched.parser.ShiftParser getShiftAddParser
 INFO: Parsing add command: s/10:00 e/11:00 d/2004-01-01 st/test
 Mar 19, 2025 11:27:56 AM seedu.nursesched.parser.ShiftParser <init>
 INFO: ShiftParser created: seedu.nursesched.parser.ShiftParser@6aa8e115
+Mar 19, 2025 11:22:04 PM seedu.nursesched.parser.ShiftParser extractInputs
+INFO: Extracting inputs from: shift add s/10:00 e/11:00 d/2022-02-02 st/test
+Mar 19, 2025 11:22:04 PM seedu.nursesched.parser.ShiftParser getShiftAddParser
+INFO: Parsing add command: s/10:00 e/11:00 d/2022-02-02 st/test
+Mar 19, 2025 11:22:04 PM seedu.nursesched.parser.ShiftParser <init>
+INFO: ShiftParser created: seedu.nursesched.parser.ShiftParser@4534b60d
+Mar 19, 2025 11:24:24 PM seedu.nursesched.parser.ShiftParser extractInputs
+INFO: Extracting inputs from: shift add s/10:00 e/11:00 d/2022-02-02 st/test
+Mar 19, 2025 11:24:24 PM seedu.nursesched.parser.ShiftParser getShiftAddParser
+INFO: Parsing add command: s/10:00 e/11:00 d/2022-02-02 st/test
+Mar 19, 2025 11:24:24 PM seedu.nursesched.parser.ShiftParser <init>
+INFO: ShiftParser created: seedu.nursesched.parser.ShiftParser@4534b60d
+Mar 19, 2025 11:26:03 PM seedu.nursesched.parser.ShiftParser extractInputs
+INFO: Extracting inputs from: shift add s/10:00 e/11:00 d/2022-02-02 st/test
+Mar 19, 2025 11:26:03 PM seedu.nursesched.parser.ShiftParser getShiftAddParser
+INFO: Parsing add command: s/10:00 e/11:00 d/2022-02-02 st/test
+Mar 19, 2025 11:26:03 PM seedu.nursesched.parser.ShiftParser <init>
+INFO: ShiftParser created: seedu.nursesched.parser.ShiftParser@4534b60d
+Mar 19, 2025 11:27:55 PM seedu.nursesched.parser.ShiftParser extractInputs
+INFO: Extracting inputs from: shift add s/10:00 e/11:00 d/2022-02-02 st/test
+Mar 19, 2025 11:27:55 PM seedu.nursesched.parser.ShiftParser getShiftAddParser
+INFO: Parsing add command: s/10:00 e/11:00 d/2022-02-02 st/test
+Mar 19, 2025 11:27:55 PM seedu.nursesched.parser.ShiftParser <init>
+INFO: ShiftParser created: seedu.nursesched.parser.ShiftParser@4534b60d

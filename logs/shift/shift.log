@@ -1,0 +1,20 @@
+Mar 19, 2025 11:45:47 AM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2022-02-02, shiftTask: test
+Mar 19, 2025 11:45:47 AM seedu.nursesched.shift.Shift addShift
+INFO: Shift added: From: 10:00, To: 11:00, Date: 2022-02-02, shiftTask: test
+Mar 19, 2025 11:45:56 AM seedu.nursesched.shift.Shift deleteShiftByIndex
+WARNING: Attempted to delete shift with invalid index: 3
+Mar 19, 2025 11:46:01 AM seedu.nursesched.shift.Shift deleteShiftByIndex
+INFO: Shift deleted: From: 10:00, To: 11:00, Date: 2022-02-02, shiftTask: test
+Mar 19, 2025 11:46:41 AM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
+Mar 19, 2025 11:46:41 AM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
+Mar 19, 2025 11:46:41 AM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
+Mar 19, 2025 11:47:54 AM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
+Mar 19, 2025 11:47:54 AM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
+Mar 19, 2025 11:47:54 AM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
