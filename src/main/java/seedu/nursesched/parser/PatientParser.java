@@ -1,5 +1,7 @@
 package seedu.nursesched.parser;
 
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.patient.Patient;
 
 /**
@@ -7,12 +9,12 @@ import seedu.nursesched.patient.Patient;
  * It stores a command, name, age, notes and index if successfully parsed.
  * The methods within this class will return null if it does not understand the input.
  */
-public class PatientParser {
-    private String command;
-    private String name;
-    private String age;
-    private String notes;
-    private int index;
+public class PatientParser extends Parser {
+    private final String command;
+    private final String name;
+    private final String age;
+    private final String notes;
+    private final int index;
 
     /**
      * Constructs a new PatientParser object with the specified parameters.
@@ -24,6 +26,9 @@ public class PatientParser {
      * @param index Chosen index within the patient list.
      */
     public PatientParser(String command, String name, String age, String notes, int index) {
+        assert command != null : "Command cannot be null";
+        assert index >= 0 : "Patient index cannot be negative";
+
         this.command = command;
         this.name = name;
         this.age = age;
@@ -51,29 +56,39 @@ public class PatientParser {
      * @throws IndexOutOfBoundsException If the input line does not contain the expected parameters.
      * @throws NumberFormatException If the index provided for the "del" command is invalid or out of bounds.
      */
-    public static PatientParser extractInputs(String line) {
+    public static PatientParser extractInputs(String line) throws NurseSchedException {
+        assert line != null : "Input line cannot be null";
+
+        if (line.trim().isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.INPUT_EMPTY);
+        }
+
         line = line.trim();
         line = line.substring(line.indexOf(" ") + 1);
         String command = "";
         String name = "";
         String age = "";
         String notes = "";
-        int index = -1;
+        int index = 0;
 
         // Handle cases where the line is just the command itself
         // If there are additional parameters, the command will be correctly parsed
         // If there are no parameters like "pf list", then throw an exception that treats
         // the line as the command
         try {
-            command = line.substring(0, line.indexOf(" "));
+            if (line.contains(" ")) {
+                command = line.substring(0, line.indexOf(" "));
+                line = line.substring(line.indexOf(" ") + 1);
+            } else {
+                command = line;
+            }
         } catch (IndexOutOfBoundsException e) {
-            command = line;
+            System.out.println("Invalid inputs! Please try again.");
+            return null;
         }
 
         if (command.equals("add")) {
             try {
-                line = line.substring(line.indexOf(" ") + 1);
-
                 name = line.substring(line.indexOf("p/") + 2, line.indexOf("a/") - 1);
                 line = line.substring(line.indexOf("a/"));
 
@@ -83,26 +98,28 @@ public class PatientParser {
                 notes = line.substring(line.indexOf("n/") + 2);
                 return new PatientParser(command, name, age, notes, index);
             } catch (Exception e) {
-                System.out.println("Missing Parameters!");
-                return null;
+                throw new NurseSchedException(ExceptionMessage.INVALID_PATIENTADD_FORMAT);
             }
         } else if (command.equals("del")) {
-            try {
-                line = line.substring(line.indexOf(" ") + 1);
-
-                index = Integer.parseInt(line);
-                if (index < 0 || index > Patient.getSizeOfList()) {
-                    throw new NumberFormatException("This index doesn't exist within the list: " + index);
-                }
-                return new PatientParser(command, name, age, notes, index);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid index: " + line);
-                return null;
-            }
+            index = parseIndex(line);
+            return new PatientParser(command, name, age, notes, index);
         } else if (command.equals("list")) {
             return new PatientParser(command, name, age, notes, index);
         }
         return null;
+    }
+
+    public static int parseIndex (String line) throws NurseSchedException {
+        int index = 0;
+        try {
+            index = Integer.parseInt(line) - 1;
+            if (index < 0) {
+                throw new NurseSchedException(ExceptionMessage.NEGATIVE_INDEX);
+            }
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_NUMBER);
+        }
+        return index;
     }
 
     public String getCommand() {

@@ -78,7 +78,7 @@ public class Command {
                         Patient.removePatient(patientParser.getIndex());
                     }
                     if (input.equals("list")) {
-                        Patient.printPatientInformation();
+                        Patient.listPatientInformation();
                     }
                     break;
                 case "shift":
