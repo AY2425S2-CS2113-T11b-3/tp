@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ParserTest {
     @Test
-    public void testExtractInputs_patientAddCommand() {
+    public void testExtractInputs_patientAddCommand() throws NurseSchedException {
         String input = "pf add p/Jean Doe a/25 n/Allergic to penicillin";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
@@ -24,11 +24,11 @@ public class ParserTest {
         assertEquals("Jean Doe", patientParser.getName());
         assertEquals("25", patientParser.getAge());
         assertEquals("Allergic to penicillin", patientParser.getNotes());
-        assertEquals(-1, patientParser.getIndex());
+        assertEquals(0, patientParser.getIndex());
     }
 
     @Test
-    public void testExtractInputs_patientDeleteCommand() {
+    public void testExtractInputs_patientDeleteCommand() throws NurseSchedException {
         String input = "pf del 2";
         Patient patientOne = new Patient("Jean Doe", "25", "Allergic to penicillin");
         Patient patientTwo = new Patient("John Doe", "40", "Allergic to peanuts");
@@ -42,20 +42,20 @@ public class ParserTest {
         assertEquals("", patientParser.getName());
         assertEquals("", patientParser.getAge());
         assertEquals("", patientParser.getNotes());
-        assertEquals(2, patientParser.getIndex());
+        assertEquals(1, patientParser.getIndex());
     }
 
     @Test
-    public void testExtractInputs_patientDeleteInvalidIndexCommand() {
+    public void testExtractInputs_patientDeleteInvalidIndexCommand() throws NurseSchedException {
         String input = "pf del 2";
 
         PatientParser patientParser = PatientParser.extractInputs(input);
 
-        assertNull(patientParser);
+        assertNotNull(patientParser);
     }
 
     @Test
-    public void testExtractInputs_patientListCommand() {
+    public void testExtractInputs_patientListCommand() throws NurseSchedException {
         String input = "pf list";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
@@ -64,11 +64,11 @@ public class ParserTest {
         assertEquals("", patientParser.getName());
         assertEquals("", patientParser.getAge());
         assertEquals("", patientParser.getNotes());
-        assertEquals(-1, patientParser.getIndex());
+        assertEquals(0, patientParser.getIndex());
     }
 
     @Test
-    public void testExtractInputs_patientInvalidCommand() {
+    public void testExtractInputs_patientInvalidCommand() throws NurseSchedException {
         String input = "pf invalid";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
@@ -76,7 +76,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_patientList() {
+    public void testExtractInputs_patientList() throws NurseSchedException {
         String input = "pf list";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
@@ -84,19 +84,17 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_patientMissingParameters() {
+    public void testExtractInputs_patientMissingParameters() throws NurseSchedException {
         String input = "pf add p/Jean Doe a/25";
-        PatientParser patientParser = PatientParser.extractInputs(input);
 
-        assertNull(patientParser);
+        assertThrows(NurseSchedException.class, () -> PatientParser.extractInputs(input));
     }
 
     @Test
-    public void testExtractInputs_patientEmptyInput() {
+    public void testExtractInputs_patientEmptyInput() throws NurseSchedException {
         String input = "";
-        PatientParser patientParser = PatientParser.extractInputs(input);
 
-        assertNull(patientParser);
+        assertThrows(NurseSchedException.class, () -> PatientParser.extractInputs(input));
     }
 
     @Test

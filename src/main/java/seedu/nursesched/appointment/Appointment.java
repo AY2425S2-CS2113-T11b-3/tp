@@ -2,14 +2,26 @@ package seedu.nursesched.appointment;
 
 import seedu.nursesched.exception.NurseSchedException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
 
+/**
+ * Represents all appointments.
+ * It stores details such as the start time, end time, date, patient name and notes.
+ */
 public class Appointment {
     protected static ArrayList<Appointment> apptList = new ArrayList<Appointment>();
+    private static final Logger logr = Logger.getLogger("Appointment");
+
     private final String name;
     private final LocalTime startTime;
     private final LocalTime endTime;
@@ -17,15 +29,27 @@ public class Appointment {
     private final String notes;
     private boolean isDone = false;
 
-
-
-    public Appointment() {
-        name = "";
-        startTime = null;
-        endTime = null;
-        date = null;
-        notes = "";
+    static {
+        try {
+            LogManager.getLogManager().reset();
+            FileHandler fh = new FileHandler("logs/appointment/appointment.log", true);
+            fh.setFormatter(new SimpleFormatter());
+            logr.addHandler(fh);
+            logr.setLevel(Level.ALL);
+        } catch (IOException e) {
+            logr.log(Level.SEVERE, "File logger not working", e);
+        }
     }
+
+    /**
+     * Constructs an Appointment object with specified details.
+     *
+     * @param name      The name of the patient involved in the appointment.
+     * @param startTime The start time of the appointment.
+     * @param endTime   The end time of the appointment.
+     * @param date      The date on which the appointment occurs.
+     * @param notes     The notes for the specified appointment.
+     */
 
     public Appointment(String name, LocalTime startTime, LocalTime endTime, LocalDate date, String notes) {
         this.name = name;
@@ -33,8 +57,18 @@ public class Appointment {
         this.endTime = endTime;
         this.date = date;
         this.notes = notes;
+        logr.info("Appointment object created");
     }
 
+    /**
+     * Adds a new appointment to the appointment list.
+     *
+     * @param name The name of the patient involved in the appointment.
+     * @param startTime The start time of the appointment.
+     * @param endTime   The end time of the appointment.
+     * @param date      The date of the appointment.
+     * @param notes     The notes for the appointment.
+     */
     public static void addAppt(String name,
                                LocalTime startTime, LocalTime endTime, LocalDate date, String notes) {
         LocalDate today = LocalDate.now();
@@ -47,6 +81,7 @@ public class Appointment {
                 System.out.println("There is another patient, " + appt.name +
                         " with the same appointment time and date! " +
                         "Please enter a different time/date");
+                logr.info("Appointment already exists, appointment not added");
                 return;
             }
         }
@@ -60,16 +95,24 @@ public class Appointment {
                         + ", Date: " + appt.date
                         + ", Notes: " + appt.notes
         );
+        logr.info("Appointment added: " + appt.toString());
     }
 
+    /**
+     * Deletes aan appointment from the appointment list based on the given index.
+     *
+     * @param index The index of the appointment to be removed (1-based index).
+     */
     public static void deleteApptByIndex(int index) throws NurseSchedException {
         assert index >= 1 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
             Appointment appt = apptList.get(index);
             System.out.println("Appointment deleted: " + appt);
             apptList.remove(index);
+            logr.info("Appointment deleted" + appt.toString());
         } catch (IndexOutOfBoundsException e) {  // Catching out-of-bounds exception instead of NullPointerException
             System.out.println("There is no appointment with index: " + (index + 1));
+            logr.warning("There is no appointment with index: " + (index + 1));
         }
     }
 
@@ -88,13 +131,20 @@ public class Appointment {
         apptList.remove(appointment);
     }
 
+    /**
+     * Mark an appointment from the appointment list as done based on the given index.
+     *
+     * @param index The index of the appointment to be removed (1-based index).
+     */
     public static void markApptByIndex(int index) throws NurseSchedException {
         assert index >= 0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
             apptList.get(index).setDone(true);
             System.out.println("Marked appointment as done!");
+            logr.info("Appointment marked: " + apptList.get(index).toString());
         }catch (IndexOutOfBoundsException e) {
             System.out.println("There is no appointment with index: " + (index + 1));
+            logr.warning("There is no appointment with index: " + (index + 1));
         }
     }
 
@@ -117,13 +167,20 @@ public class Appointment {
         );
     }
 
+    /**
+     * Unmark an appointment from the appointment list based on the given index.
+     *
+     * @param index The index of the appointment to be removed (1-based index).
+     */
     public static void unmarkApptByIndex(int index) {
         assert index>0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
             apptList.get(index).setDone(false);
             System.out.println("Marked appointment as undone!");
+            logr.info("Appointment unmarked: " + apptList.get(index).toString());
         }catch (IndexOutOfBoundsException e) {
             System.out.println("There is no appointment with index: " + (index+1));
+            logr.warning("There is no appointment with index: " + (index+1));
         }
     }
 
@@ -148,6 +205,15 @@ public class Appointment {
         );
     }
 
+    /**
+     * Finds and returns an appointment from the appointment list that matches
+     * the given patient name, start time, and date.
+     *
+     * @param name      The name of the patient involved in the appointment.
+     * @param startTime The start time of the appointment.
+     * @param date      The date of the appointment.
+     * @return          The matching appointment if found, otherwise return null.
+     */
     public static Appointment findAppointment(String name,
                                               LocalTime startTime, LocalDate date) {
         for (Appointment appointment : apptList) {
@@ -160,7 +226,10 @@ public class Appointment {
         return null;
     }
 
-
+    /**
+     * Displays all appointment currently stored in the appointment list.
+     * If no appointments are in the list, it notifies the user.
+     */
     public static void list(){
         int index = 1;
         boolean isDone = false;
@@ -198,5 +267,25 @@ public class Appointment {
                 "To: " + formattedEndTime + ", " +
                 "Date: " + date + ", " +
                 "Notes: " + notes;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getStartTime() {
+        return this.startTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getEndTime() {
+        return this.endTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getDate() {
+        return this.date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public String getNotes() {
+        return notes;
     }
 }

@@ -30,7 +30,7 @@ public class ShiftParser extends Parser {
     static {
         try {
             LogManager.getLogManager().reset();
-            FileHandler fh = new FileHandler("src/logging/parser/shiftParser.log", true);
+            FileHandler fh = new FileHandler("logs/parser/shiftParser.log", true);
             fh.setFormatter(new SimpleFormatter());
             logr.addHandler(fh);
             logr.setLevel(Level.ALL);
