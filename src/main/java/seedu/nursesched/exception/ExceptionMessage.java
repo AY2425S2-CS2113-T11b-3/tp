@@ -18,6 +18,7 @@ public enum ExceptionMessage {
             " shift del [sn/SHIFT_NUMBER]"),
     INVALID_SHIFT_NUMBER("Shift index must be a positive integer!"),
     NEGATIVE_INDEX("Index must be a positive integer!"),
+    ZERO_INDEX("Index cannot be zero!"),
     INVALID_APPT_NUMBER("Index is greater than number of appointments in the list!"),
     INVALID_PATIENT_NUMBER("Index is greater than number of patients in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),

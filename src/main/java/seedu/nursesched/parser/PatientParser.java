@@ -113,8 +113,10 @@ public class PatientParser extends Parser {
         int index = 0;
         try {
             index = Integer.parseInt(line) - 1;
-            if (index < 0) {
-                throw new NurseSchedException(ExceptionMessage.NEGATIVE_INDEX);
+            if (index == -1) {
+                throw new NurseSchedException(ExceptionMessage.ZERO_INDEX);
+            } else if (index < 0) {
+                throw new NurseSchedException((ExceptionMessage.NEGATIVE_INDEX));
             }
         } catch (NumberFormatException e) {
             throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_NUMBER);

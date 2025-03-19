@@ -1,5 +1,8 @@
 package seedu.nursesched.patient;
 
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
+
 import java.util.ArrayList;
 
 /**
@@ -47,11 +50,10 @@ public class Patient {
      *
      * @param index The index of the patient to be removed based on the patients list.
      */
-    public static void removePatient(int index) {
-        assert index > 0 : "Patient index number is invalid";
-        if (index > patientsList.size()) {
-            System.out.println("Invalid patient index.");
-            return;
+    public static void removePatient(int index) throws NurseSchedException{
+        assert index >= 0 : "Patient index number is invalid";
+        if (index >= patientsList.size()) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_NUMBER);
         }
         patientsList.remove(index);
         System.out.println("Patient information removed for " + patientsList.get(index).name + ".");
