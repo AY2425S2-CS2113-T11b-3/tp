@@ -99,6 +99,9 @@ public class Command {
                         );
                         Shift.listShifts();
                     }
+                    if (shift.equals("list")) {
+                        Shift.listShifts();
+                    }
                     break;
 
                 // Exit command "exit ns"

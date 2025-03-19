@@ -107,10 +107,13 @@ public class ShiftParser extends Parser {
                 return getShiftAddParser(remaining, command, shiftIndex);
             } else if (command.equals("del")) {
                 return getShiftDelParser(remaining, command, startTime, endTime, date, shiftTask);
+            } else if (command.equals("list")) {
+                return new ShiftParser("list", null, null, null, "", 0);
             } else {
                 logr.warning("Invalid command: " + command);
                 throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
             }
+
         } catch (NurseSchedException e) {
             logr.severe("Parsing error: " + e.getMessage());
             throw new NurseSchedException(ExceptionMessage.PARSING_ERROR);
