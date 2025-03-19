@@ -112,3 +112,15 @@ Mar 19, 2025 11:28:31 PM seedu.nursesched.shift.Shift <init>
 INFO: Shift created: From: 10:00, To: 11:00, Date: 2022-02-02, shiftTask: jiaefhike
 Mar 19, 2025 11:28:31 PM seedu.nursesched.shift.Shift addShift
 INFO: Shift added: From: 10:00, To: 11:00, Date: 2022-02-02, shiftTask: jiaefhike
+Mar 19, 2025 11:42:45 PM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
+Mar 19, 2025 11:42:45 PM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
+Mar 19, 2025 11:42:45 PM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
+Mar 19, 2025 11:43:04 PM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
+Mar 19, 2025 11:43:04 PM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
+Mar 19, 2025 11:43:04 PM seedu.nursesched.shift.Shift <init>
+INFO: Shift created: From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test
