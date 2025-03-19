@@ -8,7 +8,11 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
-import java.util.logging.*;
+import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Represents all appointments.
@@ -23,7 +27,7 @@ public class Appointment {
     private final String notes;
     private boolean isDone = false;
 
-    private final static Logger logr = Logger.getLogger("Appointment");
+    private static final Logger logr = Logger.getLogger("Appointment");
 
     static {
         try {
