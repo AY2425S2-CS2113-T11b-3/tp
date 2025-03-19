@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * Represents all appointments.
@@ -20,6 +21,8 @@ public class Appointment {
     private final LocalDate date;
     private final String notes;
     private boolean isDone = false;
+
+    private static Logger logger = Logger.getLogger("Appointment");
 
     /**
      * Constructs an Appointment object with specified details.
@@ -238,5 +241,25 @@ public class Appointment {
                 "To: " + formattedEndTime + ", " +
                 "Date: " + date + ", " +
                 "Notes: " + notes;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getStartTime() {
+        return this.startTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getEndTime() {
+        return this.endTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public String getDate() {
+        return this.date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public String getNotes() {
+        return notes;
     }
 }
