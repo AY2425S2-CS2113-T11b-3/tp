@@ -1,5 +1,8 @@
 package seedu.nursesched.patient;
 
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
+
 import java.util.ArrayList;
 
 /**
@@ -8,11 +11,11 @@ import java.util.ArrayList;
  * This class also provides methods to add, remove, and display patient information.
  */
 public class Patient {
-    private static ArrayList<Patient> patientsList = new ArrayList<>();
+    protected static ArrayList<Patient> patientsList = new ArrayList<>();
 
-    private String name = "";
-    private String age = "";
-    private String notes = "";
+    private final String name;
+    private final String age;
+    private final String notes;
 
     /**
      * Constructs a new Patient object with the specified name, age, and notes.
@@ -22,6 +25,9 @@ public class Patient {
      * @param notes Additional notes about the patient.
      */
     public Patient(String name, String age, String notes) {
+        assert name != null : "Name cannot be null";
+        assert age != null : "Age cannot be null";
+
         this.name = name;
         this.age = age;
         this.notes = notes;
@@ -33,8 +39,10 @@ public class Patient {
      * @param patient The Patient object to be added.
      */
     public static void addPatient(Patient patient) {
-        System.out.println("Patient information added for " + patient.name + ".");
+        assert patient != null : "Patient details are invalid";
+
         patientsList.add(patient);
+        System.out.println("Patient information added for " + patient.name + ".");
     }
 
     /**
@@ -42,16 +50,20 @@ public class Patient {
      *
      * @param index The index of the patient to be removed based on the patients list.
      */
-    public static void removePatient(int index) {
-        System.out.println("Patient information removed for " + patientsList.get(index - 1).name + ".");
-        patientsList.remove(index - 1);
+    public static void removePatient(int index) throws NurseSchedException{
+        assert index >= 0 : "Patient index number is invalid";
+        if (index >= patientsList.size()) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_NUMBER);
+        }
+        patientsList.remove(index);
+        System.out.println("Patient information removed for " + patientsList.get(index).name + ".");
     }
 
     /**
      * Prints the information of all patients in the list.
      * If the list is empty, it prints a message indicating that no patient information is available.
      */
-    public static void printPatientInformation() {
+    public static void listPatientInformation() {
         if (patientsList.isEmpty()) {
             System.out.println("Patient information is empty.");
             return;
@@ -80,6 +92,6 @@ public class Patient {
      */
     @Override
     public String toString() {
-        return name + ", " + age + " years old" + ", " + notes;
+        return name + ", " + age + " years old" + (notes.isEmpty() ? "." : ", " + notes + ".");
     }
 }
