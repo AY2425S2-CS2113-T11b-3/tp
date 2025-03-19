@@ -8,6 +8,10 @@ import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
+/**
+ * Represents all appointments.
+ * It stores details such as the start time, end time, date, patient name and notes.
+ */
 public class Appointment {
     protected static ArrayList<Appointment> apptList = new ArrayList<Appointment>();
     private final String name;
@@ -17,15 +21,15 @@ public class Appointment {
     private final String notes;
     private boolean isDone = false;
 
-
-
-    public Appointment() {
-        name = "";
-        startTime = null;
-        endTime = null;
-        date = null;
-        notes = "";
-    }
+    /**
+     * Constructs an Appointment object with specified details.
+     *
+     * @param name      The name of the patient involved in the appointment.
+     * @param startTime The start time of the appointment.
+     * @param endTime   The end time of the appointment.
+     * @param date      The date on which the appointment occurs.
+     * @param notes     The notes for the specified appointment.
+     */
 
     public Appointment(String name, LocalTime startTime, LocalTime endTime, LocalDate date, String notes) {
         this.name = name;
@@ -35,6 +39,15 @@ public class Appointment {
         this.notes = notes;
     }
 
+    /**
+     * Adds a new appointment to the appointment list.
+     *
+     * @param name The name of the patient involved in the appointment.
+     * @param startTime The start time of the appointment.
+     * @param endTime   The end time of the appointment.
+     * @param date      The date of the appointment.
+     * @param notes     The notes for the appointment.
+     */
     public static void addAppt(String name,
                                LocalTime startTime, LocalTime endTime, LocalDate date, String notes) {
         LocalDate today = LocalDate.now();
@@ -62,6 +75,11 @@ public class Appointment {
         );
     }
 
+    /**
+     * Deletes aan appointment from the appointment list based on the given index.
+     *
+     * @param index The index of the appointment to be removed (1-based index).
+     */
     public static void deleteApptByIndex(int index) throws NurseSchedException {
         assert index >= 1 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
@@ -88,6 +106,11 @@ public class Appointment {
         apptList.remove(appointment);
     }
 
+    /**
+     * Mark an appointment from the appointment list as done based on the given index.
+     *
+     * @param index The index of the appointment to be removed (1-based index).
+     */
     public static void markApptByIndex(int index) throws NurseSchedException {
         assert index >= 0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
@@ -117,6 +140,11 @@ public class Appointment {
         );
     }
 
+    /**
+     * Unmark an appointment from the appointment list based on the given index.
+     *
+     * @param index The index of the appointment to be removed (1-based index).
+     */
     public static void unmarkApptByIndex(int index) {
         assert index>0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
@@ -148,6 +176,15 @@ public class Appointment {
         );
     }
 
+    /**
+     * Finds and returns an appointment from the appointment list that matches
+     * the given patient name, start time, and date.
+     *
+     * @param name      The name of the patient involved in the appointment.
+     * @param startTime The start time of the appointment.
+     * @param date      The date of the appointment.
+     * @return          The matching appointment if found, otherwise return null.
+     */
     public static Appointment findAppointment(String name,
                                               LocalTime startTime, LocalDate date) {
         for (Appointment appointment : apptList) {
@@ -160,7 +197,10 @@ public class Appointment {
         return null;
     }
 
-
+    /**
+     * Displays all appointment currently stored in the appointment list.
+     * If no appointments are in the list, it notifies the user.
+     */
     public static void list(){
         int index = 1;
         boolean isDone = false;
