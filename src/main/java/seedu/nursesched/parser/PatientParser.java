@@ -2,7 +2,6 @@ package seedu.nursesched.parser;
 
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
-import seedu.nursesched.patient.Patient;
 
 /**
  * The PatientParser class parses the input of the user to make sense of the command.
