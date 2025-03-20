@@ -50,4 +50,27 @@ public class AppointmentTest {
         String expected = "Name: jean doe, From: 15:00, To: 16:00, Date: 2026-02-15, Notes: needs a wheelchair";
         assertEquals(expected, Appointment.apptList.get(1).toString());
     }
+
+    @Test
+    void testAddAppt_invalidTimeFormat_shouldThrowException() {
+        String input = "appt add p/Jean Doe s/25:00 e/26:00 d/2026-02-15 n/Invalid time";
+
+        try {
+            ApptParser.extractInputs(input);
+            throw new AssertionError("Expected NurseSchedException to be thrown");
+        } catch (NurseSchedException e) {
+            assertEquals("Invalid date or time format! Input date as YYYY-MM-DD, input time as HH:mm", e.getMessage());
+        }
+    }
+
+    @Test
+    void testAddAppt_invalidDateFormat_shouldThrowException() {
+        String input = "appt add p/Jean Doe s/10:00 e/11:00 d/15-02-2026 n/Invalid date";
+        try {
+            ApptParser.extractInputs(input);
+            throw new AssertionError("Expected NurseSchedException to be thrown");
+        } catch (NurseSchedException e) {
+            assertEquals("Invalid date or time format! Input date as YYYY-MM-DD, input time as HH:mm", e.getMessage());
+        }
+    }
 }
