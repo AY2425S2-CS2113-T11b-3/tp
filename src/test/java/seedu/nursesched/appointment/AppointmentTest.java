@@ -73,4 +73,38 @@ public class AppointmentTest {
             assertEquals("Invalid date or time format! Input date as YYYY-MM-DD, input time as HH:mm", e.getMessage());
         }
     }
+
+    @Test
+    void testAddAppt_duplicateAppointments_shouldNotBeAdded() throws NurseSchedException {
+        String input1 = "appt add p/Jean Doe s/13:00 e/14:00 d/2026-02-15 n/First appointment";
+        ApptParser apptParser1 = ApptParser.extractInputs(input1);
+
+        assertNotNull(apptParser1);
+
+        Appointment.addAppt(
+                apptParser1.getName(),
+                apptParser1.getStartTime(),
+                apptParser1.getEndTime(),
+                apptParser1.getDate(),
+                apptParser1.getNotes()
+        );
+
+        String input2 = "appt add p/John Doe s/13:00 e/14:00 d/2026-02-15 n/Conflicting appointment";
+        ApptParser apptParser2 = ApptParser.extractInputs(input2);
+
+        assertNotNull(apptParser2);
+
+        int sizeBefore = Appointment.apptList.size();
+
+        Appointment.addAppt(
+                apptParser2.getName(),
+                apptParser2.getStartTime(),
+                apptParser2.getEndTime(),
+                apptParser2.getDate(),
+                apptParser2.getNotes()
+        );
+
+        int sizeAfter = Appointment.apptList.size();
+        assertEquals(sizeBefore, sizeAfter, "Appointment with clashing start time should not be added.");
+    }
 }
