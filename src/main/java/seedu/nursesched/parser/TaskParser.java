@@ -44,7 +44,8 @@ public class TaskParser extends Parser {
         }
     }
 
-    public TaskParser(String command, String description, LocalDate byDate, LocalTime byTime, boolean isDone, int taskIndex) {
+    public TaskParser(String command, String description, LocalDate byDate,
+                      LocalTime byTime, boolean isDone, int taskIndex) {
         this.command = command;
         this.description = description;
         this.byDate = byDate;
@@ -128,6 +129,9 @@ public class TaskParser extends Parser {
             return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
         case "list":
             return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
+        default:
+            System.out.println("Unknown command: " + command);
+            break;
         }
 
         logr.warning("Invalid command: " + command);
