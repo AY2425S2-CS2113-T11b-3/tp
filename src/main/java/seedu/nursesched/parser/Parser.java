@@ -7,7 +7,7 @@ public class Parser {
         type = "";
     }
 
-    //Extracts type of command - Appointments/Patient Profiles/Shifts
+    //Extracts type of command - Appointments/Patient Profiles/Shifts/Tasks
     public static String extractType(String line) {
         if (line.contains(" ")) {
             return line.substring(0, line.indexOf(" "));
