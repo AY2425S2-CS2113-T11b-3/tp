@@ -1,9 +1,13 @@
 package seedu.nursesched.task;
 
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -68,7 +72,7 @@ public class Task {
      * @param byTime The task's due time.
      * @param isDone The task's completion status, whether it is completed or not.
      */
-    public void addTask(String description, LocalDate byDate, LocalTime byTime,  boolean isDone) {
+    public static void addTask(String description, LocalDate byDate, LocalTime byTime,  boolean isDone) {
         assert byTime.isAfter(LocalTime.now())
                 && (byDate.isEqual(LocalDate.now()) || byDate.isAfter(LocalDate.now()))
                 : "Due date and time should not be set in the past!";
@@ -83,13 +87,18 @@ public class Task {
      *
      * @param index The index of the task according to the list of all tasks.
      */
-    public void markTask(int index) {
+    public static void markTask(int index) throws NurseSchedException {
         assert index > 0 && index <= taskList.size()
                 : "Task index should not be less than zero or greater than task list size!";
-        Task task = taskList.get(index);
-        task.setIsDone(true);
-        System.out.println("Task marked: " + taskList.get(index).toString());
-        logr.info("Task marked: " + taskList.get(index).description);
+        try {
+            Task task = taskList.get(index - 1);
+            task.setIsDone(true);
+            System.out.println("Task marked: " + taskList.get(index - 1).toString());
+            logr.info("Task marked: " + taskList.get(index - 1).description);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("There is no index " + index + " in the task list!");
+            logr.warning("There is no index " + index + " in the task list!");
+        }
     }
 
     /**
@@ -97,24 +106,29 @@ public class Task {
      *
      * @param index The index of the task according to the list of all tasks.
      */
-    public void unmarkTask(int index) {
+    public static void unmarkTask(int index) {
         assert index > 0 && index <= taskList.size()
                 : "Task index should not be less than zero or greater than task list size!";
-        Task task = taskList.get(index);
-        task.setIsDone(false);
-        System.out.println("Task unmarked: " + taskList.get(index).toString());
-        logr.info("Task unmarked: " + taskList.get(index).description);
+        try {
+            Task task = taskList.get(index - 1);
+            task.setIsDone(false);
+            System.out.println("Task unmarked: " + taskList.get(index - 1).toString());
+            logr.info("Task unmarked: " + taskList.get(index - 1).description);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("There is no index " + index + " in the task list!");
+            logr.warning("There is no index " + index + " in the task list!");
+        }
     }
 
     /**
      * Lists out all tasks in the task list.
      */
-    public void listTasks() {
+    public static void listTasks() {
         int listSize = taskList.size();
         for (int index = 0; index < listSize; index++) {
             System.out.println((index + 1) + ". " + taskList.get(index).toString());
         }
-        System.out.println("You have " + listSize + " tasks!");
+        System.out.println("You have " + listSize + (listSize == 1 ? " task!" : " tasks!"));
         logr.info("All tasks listed");
     }
 
@@ -124,8 +138,11 @@ public class Task {
 
     @Override
     public String toString() {
-        return isDone ? "[X] " : "[ ] "
-                + "Task: " + description
-                + ", By: " + byDate + " " + byTime;
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        return (isDone ? "[X] " : "[ ] ")
+                + description
+                + ", By: " + byDate.format(dateFormatter)
+                + ", " + byTime.format(timeFormatter);
     }
 }
