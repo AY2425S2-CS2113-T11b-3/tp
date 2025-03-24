@@ -1,6 +1,5 @@
 package seedu.nursesched.task;
 
-import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 
 import java.io.File;

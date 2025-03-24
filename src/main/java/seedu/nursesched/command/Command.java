@@ -2,7 +2,11 @@ package seedu.nursesched.command;
 
 import seedu.nursesched.appointment.Appointment;
 import seedu.nursesched.exception.NurseSchedException;
-import seedu.nursesched.parser.*;
+import seedu.nursesched.parser.ApptParser;
+import seedu.nursesched.parser.PatientParser;
+import seedu.nursesched.parser.ShiftParser;
+import seedu.nursesched.parser.TaskParser;
+import seedu.nursesched.parser.Parser;
 import seedu.nursesched.patient.Patient;
 import seedu.nursesched.shift.Shift;
 import seedu.nursesched.task.Task;
