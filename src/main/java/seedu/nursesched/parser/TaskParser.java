@@ -99,10 +99,10 @@ public class TaskParser extends Parser {
 
             try {
                 //extracts task description
-                description = line.substring(line.indexOf("td/") + 2, line.indexOf("d/") - 1);
+                description = line.substring(line.indexOf("td/") + 3, line.indexOf(" d/"));
 
                 //extracts task's due date
-                byDate = LocalDate.parse(line.substring(line.indexOf("d/") + 2, line.indexOf("t/") - 1));
+                byDate = LocalDate.parse(line.substring(line.indexOf(" d/") + 3, line.indexOf("t/") - 1));
 
                 //extracts task's due time
                 byTime = LocalTime.parse(line.substring(line.indexOf("t/") + 2));
@@ -113,12 +113,16 @@ public class TaskParser extends Parser {
             } catch (DateTimeParseException e) {
                 logr.warning("Invalid date or time format.");
                 throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Invalid inputs! Please try again.");
+                logr.warning("Invalid or missing fields");
+                break;
             }
             return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
         case "mark", "unmark":
             try {
                 taskIndex = Integer.parseInt(line.substring(line.indexOf(" ") + 1));
-                if (taskIndex < 1) {
+                if (taskIndex < 0) {
                     throw new NurseSchedException(ExceptionMessage.NEGATIVE_INDEX);
                 }
             } catch (IndexOutOfBoundsException e) {
@@ -136,5 +140,29 @@ public class TaskParser extends Parser {
 
         logr.warning("Invalid command: " + command);
         return null;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public LocalDate getByDate() {
+        return byDate;
+    }
+
+    public LocalTime getByTime() {
+        return byTime;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public int getTaskIndex() {
+        return taskIndex;
     }
 }

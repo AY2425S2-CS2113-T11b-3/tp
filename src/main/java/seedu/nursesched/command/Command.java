@@ -3,11 +3,13 @@ package seedu.nursesched.command;
 import seedu.nursesched.appointment.Appointment;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.parser.ApptParser;
-import seedu.nursesched.parser.Parser;
 import seedu.nursesched.parser.PatientParser;
 import seedu.nursesched.parser.ShiftParser;
+import seedu.nursesched.parser.TaskParser;
+import seedu.nursesched.parser.Parser;
 import seedu.nursesched.patient.Patient;
 import seedu.nursesched.shift.Shift;
+import seedu.nursesched.task.Task;
 import seedu.nursesched.ui.Ui;
 
 import java.util.Scanner;
@@ -103,7 +105,35 @@ public class Command {
                         Shift.listShifts();
                     }
                     break;
-
+                case "task":
+                    TaskParser taskParser = TaskParser.extractInputs(line);
+                    if (taskParser == null) {
+                        break;
+                    }
+                    String taskCommand = taskParser.getCommand();
+                    switch (taskCommand) {
+                    case "add":
+                        Task.addTask(
+                                taskParser.getDescription(),
+                                taskParser.getByDate(),
+                                taskParser.getByTime(),
+                                taskParser.isDone()
+                        );
+                        break;
+                    case "mark":
+                        Task.markTask(taskParser.getTaskIndex());
+                        break;
+                    case "unmark":
+                        Task.unmarkTask(taskParser.getTaskIndex());
+                        break;
+                    case "list":
+                        Task.listTasks();
+                        break;
+                    default:
+                        System.out.println("Invalid task based command!");
+                        break;
+                    }
+                    break;
                 // Exit command "exit ns"
                 case "exit":
                     in.close();
@@ -113,7 +143,7 @@ public class Command {
 
                 default:
                     System.out.println("Unknown command!");
-                    System.out.println("Command should start with \"appt\", \"pf\" or \"shift\"");
+                    System.out.println("Command should start with \"appt\", \"pf\", \"shift\" or \"task\"");
                     break;
                 }
             } catch (NurseSchedException e) {
