@@ -73,7 +73,8 @@ public class Task {
      * @param isDone The task's completion status, whether it is completed or not.
      * @throws NurseSchedException If the {@code byDate} and {@code byTime} is in the past.
      */
-    public static void addTask(String description, LocalDate byDate, LocalTime byTime,  boolean isDone) throws NurseSchedException {
+    public static void addTask(String description, LocalDate byDate, LocalTime byTime,
+                               boolean isDone) throws NurseSchedException {
         assert description != null : "Task description cannot be null";
         LocalDate dateNow = LocalDate.now();
         LocalTime timeNow = LocalTime.now();
