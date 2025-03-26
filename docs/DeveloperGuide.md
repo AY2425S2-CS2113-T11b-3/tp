@@ -8,15 +8,24 @@
 
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
+## Implementation
+This section describes some noteworthy details on how certain features are implemented.
+
+### [Proposed] PatientInfo feature
+#### Proposed Implementation
+
+
 
 ## Product scope
 ### Target user profile
 
-{Describe the target user profile}
+Nurses working in hospitals who have shifts, schedules to manage.
 
 ### Value proposition
 
-{Describe the value proposition: what problem does it solve?}
+We want to organise shifts for Nurses, so that they can quickly retrieve information compared to digging out 
+information from many different sources. To do this, users can add appointment dates/time to the schedule and handle
+patient appointments to ensure that no patients are left out.
 
 ## User Stories
 
