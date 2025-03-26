@@ -2,7 +2,9 @@ package seedu.nursesched.command;
 
 import seedu.nursesched.appointment.Appointment;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.medicine.Medicine;
 import seedu.nursesched.parser.ApptParser;
+import seedu.nursesched.parser.MedicineParser;
 import seedu.nursesched.parser.PatientParser;
 import seedu.nursesched.parser.ShiftParser;
 import seedu.nursesched.parser.TaskParser;
@@ -134,6 +136,35 @@ public class Command {
                         break;
                     }
                     break;
+
+                case "medicine":
+                    MedicineParser medicineParser = MedicineParser.extractInputs(line);
+                    if (medicineParser == null) {
+                        break;
+                    }
+                    String medicineCommand = medicineParser.getCommand();
+                    switch (medicineCommand) {
+                    case "add":
+                        Medicine.addMedicine(
+                                medicineParser.getQuantity(),
+                                medicineParser.getMedicineName()
+                        );
+                        break;
+                    case "remove":
+                        Medicine.removeMedicine(
+                                medicineParser.getQuantity(),
+                                medicineParser.getMedicineName()
+                        );
+                        break;
+                    case "list":
+                        Medicine.listMedicine();
+                        break;
+                    default:
+                        System.out.println("Invalid medicine based command!");
+                        break;
+                    }
+                    break;
+
                 // Exit command "exit ns"
                 case "exit":
                     in.close();
