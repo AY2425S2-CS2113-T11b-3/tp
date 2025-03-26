@@ -1,5 +1,6 @@
 package seedu.nursesched.task;
 
+import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 
 import java.io.File;
@@ -70,12 +71,15 @@ public class Task {
      * @param byDate The task's due date.
      * @param byTime The task's due time.
      * @param isDone The task's completion status, whether it is completed or not.
+     * @throws NurseSchedException If the {@code byDate} and {@code byTime} is in the past.
      */
-    public static void addTask(String description, LocalDate byDate, LocalTime byTime,  boolean isDone) {
-        assert byTime.isAfter(LocalTime.now())
-                && (byDate.isEqual(LocalDate.now()) || byDate.isAfter(LocalDate.now()))
-                : "Due date and time should not be set in the past!";
-
+    public static void addTask(String description, LocalDate byDate, LocalTime byTime,  boolean isDone) throws NurseSchedException {
+        assert description != null : "Task description cannot be null";
+        LocalDate dateNow = LocalDate.now();
+        LocalTime timeNow = LocalTime.now();
+        if (byDate.isBefore(dateNow) || (byDate.isEqual(dateNow) && byTime.isBefore(timeNow))) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_DUE_DATE_TIME);
+        }
         taskList.add(new Task(description, byDate, byTime, isDone));
         System.out.println("Task added: " + description);
         logr.info("Task added: " + description);
@@ -85,10 +89,15 @@ public class Task {
      * Marks a task as done.
      *
      * @param index The index of the task according to the list of all tasks.
+     * @throws NurseSchedException If task index is out of the range of the task list.
      */
     public static void markTask(int index) throws NurseSchedException {
-        assert index > 0 && index <= taskList.size()
-                : "Task index should not be less than zero or greater than task list size!";
+        assert index > 0
+                : "Task index should not be negative.";
+        if (index > taskList.size()) {
+            logr.warning("Task index out of range.");
+            throw new NurseSchedException(ExceptionMessage.INVALID_TASK_NUMBER);
+        }
         try {
             Task task = taskList.get(index - 1);
             task.setIsDone(true);
@@ -104,10 +113,15 @@ public class Task {
      * Unmarks a task as undone.
      *
      * @param index The index of the task according to the list of all tasks.
+     * @throws NurseSchedException If task index is out of the range of the task list.
      */
-    public static void unmarkTask(int index) {
-        assert index > 0 && index <= taskList.size()
-                : "Task index should not be less than zero or greater than task list size!";
+    public static void unmarkTask(int index) throws NurseSchedException {
+        assert index > 0
+                : "Task index should not be negative.";
+        if (index > taskList.size()) {
+            logr.warning("Task index out of range.");
+            throw new NurseSchedException(ExceptionMessage.INVALID_TASK_NUMBER);
+        }
         try {
             Task task = taskList.get(index - 1);
             task.setIsDone(false);
@@ -133,6 +147,22 @@ public class Task {
 
     public void setIsDone(boolean isDone) {
         this.isDone = isDone;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public LocalDate getByDate() {
+        return byDate;
+    }
+
+    public LocalTime getByTime() {
+        return byTime;
+    }
+
+    public boolean getIsDone() {
+        return isDone;
     }
 
     @Override
