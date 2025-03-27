@@ -27,7 +27,12 @@ public enum ExceptionMessage {
     INVALID_TASK_NUMBER("Task index is not within 1 and the total number of tasks in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
     PARSING_ERROR("Error parsing command!"),
-    MISSING_SEARCH_TERM("Missing search term after 'find'!");
+    MISSING_SEARCH_TERM("Missing search term after 'find'!"),
+    INVALID_ID_LENGTH("Patient ID must be 4 digits long."),
+    INVALID_ID_INPUT("Patient ID must contain only digits."),
+    EMPTY_PATIENT_INFO("Patient information cannot be empty!"),
+    INVALID_PATIENT_INFO("Patient ID is invalid!"),
+    MISSING_PATIENT_FIELDS("Some patient fields are missing!");
 
     private final String message;
 
