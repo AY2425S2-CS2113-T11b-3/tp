@@ -72,7 +72,12 @@ public class Command {
                     }
                     input = patientParser.getCommand();
                     if (input.equals("add")) {
-                        Patient newPatient = new Patient(patientParser.getName(), patientParser.getAge(),
+                        Patient newPatient = new Patient(
+                                patientParser.getId(),
+                                patientParser.getName(),
+                                patientParser.getAge(),
+                                patientParser.getGender(),
+                                patientParser.getContact(),
                                 patientParser.getNotes());
                         Patient.addPatient(newPatient);
                     }
@@ -81,6 +86,9 @@ public class Command {
                     }
                     if (input.equals("list")) {
                         Patient.listPatientInformation();
+                    }
+                    if (input.equals("search")) {
+                        Patient.printProfileWithID(patientParser.getId());
                     }
                     break;
                 case "shift":

@@ -30,8 +30,10 @@ public class ParserTest {
     @Test
     public void testExtractInputs_patientDeleteCommand() throws NurseSchedException {
         String input = "pf del 2";
-        Patient patientOne = new Patient("Jean Doe", "25", "Allergic to penicillin");
-        Patient patientTwo = new Patient("John Doe", "40", "Allergic to peanuts");
+        Patient patientOne = new Patient("1000", "Jean Doe", "25",
+                "F", "12345678", "Allergic to penicillin");
+        Patient patientTwo = new Patient("2000", "John Doe", "40",
+                "M", "87654321","Allergic to peanuts");
         Patient.addPatient(patientOne);
         Patient.addPatient(patientTwo);
 
