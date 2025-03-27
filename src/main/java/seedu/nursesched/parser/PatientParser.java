@@ -103,7 +103,7 @@ public class PatientParser extends Parser {
 
             // Extract and validate ID first
             try {
-                id = line.substring(line.indexOf("id/") + 3, line.indexOf("p/"));
+                id = line.substring(line.indexOf("id/") + 3, line.indexOf("p/") - 1);
             } catch (StringIndexOutOfBoundsException e) {
                 if (!line.contains("p/")) {
                     throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
@@ -112,7 +112,7 @@ public class PatientParser extends Parser {
             }
 
             // Validate ID format (4 digits)
-            if (id.length() != 4) {
+            if (id.trim().length() != 4) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
             }
 

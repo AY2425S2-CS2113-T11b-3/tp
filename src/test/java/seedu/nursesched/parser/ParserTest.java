@@ -16,13 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class ParserTest {
     @Test
     public void testExtractInputs_patientAddCommand() throws NurseSchedException {
-        String input = "pf add p/Jean Doe a/25 n/Allergic to penicillin";
+        String input = "pf add id/1221 p/Jean Doe a/25 g/M c/12345678 n/Allergic to penicillin";
         PatientParser patientParser = PatientParser.extractInputs(input);
 
         assertNotNull(patientParser);
         assertEquals("add", patientParser.getCommand());
+        assertEquals("1221", patientParser.getId());
         assertEquals("Jean Doe", patientParser.getName());
         assertEquals("25", patientParser.getAge());
+        assertEquals("M", patientParser.getGender());
+        assertEquals("12345678", patientParser.getContact());
         assertEquals("Allergic to penicillin", patientParser.getNotes());
         assertEquals(0, patientParser.getIndex());
     }
