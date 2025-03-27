@@ -162,6 +162,49 @@ public class ApptParser extends Parser {
             return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex, searchKeyword);
         }
 
+        if (command.equals("edit")) {
+            if (!line.contains("i/") || !line.contains("p/") || !line.contains("s/")
+                    || !line.contains("e/") || !line.contains("d/") || !line.contains("n/")) {
+                logr.warning("Missing fields in edit command");
+                throw new NurseSchedException(ExceptionMessage.INVALID_APPTEDIT_FORMAT);
+            }
+
+            try {
+                // Extract index
+                int indexStart = line.indexOf("i/") + 2;
+                int nameStart = line.indexOf("p/");
+                String indexStr = line.substring(indexStart, nameStart).trim();
+                apptIndex = Integer.parseInt(indexStr) - 1;
+
+                // Extract name
+                int sIndex = line.indexOf("s/");
+                name = line.substring(nameStart + 2, sIndex).trim();
+
+                // Extract start time
+                int eIndex = line.indexOf("e/");
+                startTime = LocalTime.parse(line.substring(sIndex + 2, eIndex).trim());
+
+                // Extract end time
+                int dIndex = line.indexOf("d/");
+                endTime = LocalTime.parse(line.substring(eIndex + 2, dIndex).trim());
+
+                // Extract date
+                int nIndex = line.indexOf("n/");
+                date = LocalDate.parse(line.substring(dIndex + 2, nIndex).trim());
+
+                // Extract notes
+                notes = line.substring(nIndex + 2).trim();
+
+            } catch (NumberFormatException e) {
+                logr.warning("Invalid appointment index format in edit command");
+                throw new NurseSchedException(ExceptionMessage.INVALID_APPT_NUMBER);
+            } catch (DateTimeParseException e) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
+            }
+
+            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex, searchKeyword);
+        }
+
         logr.warning("Invalid command: " + command);
         return null;
     }

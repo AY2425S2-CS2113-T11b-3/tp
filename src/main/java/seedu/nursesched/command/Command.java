@@ -61,7 +61,18 @@ public class Command {
                     case "find":
                         Appointment.filterAppointment(apptParser.getSearchKeyword());
                         break;
-                    default:
+                    case "edit":
+                        Appointment.editApptByIndex(
+                                apptParser.getIndex(),
+                                apptParser.getName(),
+                                apptParser.getStartTime(),
+                                apptParser.getEndTime(),
+                                apptParser.getDate(),
+                                apptParser.getNotes()
+                        );
+                        break;
+
+                        default:
                         System.out.println("Invalid appointment based command!");
                         break;
                     }
@@ -152,7 +163,7 @@ public class Command {
                     isExit = true;
                     break;
 
-                default:
+                    default:
                     System.out.println("Unknown command!");
                     System.out.println("Command should start with \"appt\", \"pf\", \"shift\" or \"task\"");
                     break;
