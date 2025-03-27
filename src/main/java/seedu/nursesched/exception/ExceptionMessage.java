@@ -29,7 +29,7 @@ public enum ExceptionMessage {
     PARSING_ERROR("Error parsing command!"),
     INVALID_MEDICINEADD_FORMAT("Invalid medicine add format! Input as: medicine add mn/[MEDICINE_NAME] q/[QUANTITY]"),
     INVALID_MEDICINE_QUANTITY("Medicine quantity must be a positive integer!"),
-    MEDICINE_INPUT_NOT_FOUND("Medicine not found!"),;
+    MEDICINE_INPUT_NOT_FOUND("Medicine not found!");
 
     private final String message;
 

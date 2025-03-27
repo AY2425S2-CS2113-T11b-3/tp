@@ -26,7 +26,8 @@ public class Medicine {
         Medicine existingMedicine = findMedicine(medicineName);
         if (existingMedicine != null) {
             existingMedicine.addQuantity(quantity);
-            System.out.println(quantity + " more of " + medicineName + " added. New quantity: " + existingMedicine.getQuantity());
+            System.out.println(quantity + " more of " + medicineName + " added. New quantity: " +
+                    existingMedicine.getQuantity());
         } else {
             Medicine medicine = new Medicine(quantity, medicineName);
             medicineList.add(medicine);
@@ -45,11 +46,13 @@ public class Medicine {
         }
 
         existingMedicine.removeQuantity(quantity);
-        System.out.println(quantity + " more of " + medicineName + " removed. New quantity: " + existingMedicine.getQuantity());
+        System.out.println(quantity + " more of " + medicineName + " removed. New quantity: " +
+                existingMedicine.getQuantity());
     }
 
     public static void deleteMedicine(String medicineName) throws NurseSchedException {
-        boolean removed = medicineList.removeIf(medicine -> medicine.getMedicineName().equalsIgnoreCase(medicineName));
+        boolean removed = medicineList.removeIf(medicine ->
+                medicine.getMedicineName().equalsIgnoreCase(medicineName));
 
         if (removed) {
             System.out.println("Medicine deleted: " + medicineName);
@@ -85,10 +88,6 @@ public class Medicine {
         return "[" + quantity + "] " + medicineName;
     }
 
-    public static ArrayList<Medicine> getMedicineList() {
-        return medicineList;
-    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -103,13 +102,5 @@ public class Medicine {
 
     public void removeQuantity(int amount) {
         this.quantity -= amount;
-    }
-
-    public void updateQuantity(int amount) {
-        this.quantity = amount;
-    }
-
-    public void updateMedicineName(String medicineName) {
-        this.medicineName = medicineName;
     }
 }

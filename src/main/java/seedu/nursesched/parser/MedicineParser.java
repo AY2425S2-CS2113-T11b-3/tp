@@ -41,7 +41,8 @@ public class MedicineParser extends Parser {
             if (command.equals("add")) {
                 return getMedicineAddParser(remaining, command);
             } else if (command.equals("list")) {
-                return new MedicineParser("list", "", 0, "", 0);
+                return new MedicineParser("list", "", 0, "",
+                        0);
             } else if (command.equals("remove")) {
                 return getMedicineRemoveParser(remaining, command);
             } else if (command.equals("find")) {
@@ -58,7 +59,7 @@ public class MedicineParser extends Parser {
         }
     }
 
-    private static MedicineParser getMedicineAddParser(String remaining, String command) throws NurseSchedException{
+    private static MedicineParser getMedicineAddParser(String remaining, String command) throws NurseSchedException {
         String medicineName;
         int quantity;
 
