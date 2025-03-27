@@ -209,6 +209,23 @@ public class Appointment {
         Ui.printSearchResults(searchResults, patientName);
     }
 
+    public static void editApptByIndex(int index, String name,
+                                       LocalTime startTime, LocalTime endTime,
+                                       LocalDate date, String notes) {
+        assert index >= 0 && index < apptList.size() : "Index must be valid and within bounds!";
+        try {
+            Appointment appt = apptList.get(index);
+            Appointment updatedAppt = new Appointment(name, startTime, endTime, date, notes);
+            apptList.set(index, updatedAppt);
+            System.out.println("Appointment updated:");
+            System.out.println(updatedAppt);
+            logr.info("Appointment edited at index " + index + ": " + updatedAppt.toString());
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("There is no appointment with index: " + (index + 1));
+            logr.warning("Edit failed. Invalid index: " + (index + 1));
+        }
+    }
+
     /**
      * Displays all appointment currently stored in the appointment list.
      * If no appointments are in the list, it notifies the user.
