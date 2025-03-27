@@ -1,5 +1,7 @@
 package seedu.nursesched.parser;
 
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
 
 public class MedicineParser extends Parser {
     private final String command;
@@ -16,12 +18,16 @@ public class MedicineParser extends Parser {
         this.updatedName = updatedName;
     }
 
-    public static MedicineParser extractInputs(String line) {
+    public static MedicineParser extractInputs(String line) throws NurseSchedException {
+        if (line == null || line.trim().isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.INPUT_EMPTY);
+        }
+
         line = line.trim().toLowerCase();
         String[] parts = line.split(" ", 2);
 
         if (parts.length < 2) {
-            throw new RuntimeException("Invalid command format");
+            throw new NurseSchedException(ExceptionMessage.INVALID_FORMAT);
         }
 
         String remaining = parts[1];
@@ -45,16 +51,20 @@ public class MedicineParser extends Parser {
             } else if (command.equals("edit")) {
                 return getMedicineEditParser(remaining, command);
             } else {
-                throw new RuntimeException("Invalid command: " + command);
+                throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
             }
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Error parsing input: " + e.getMessage(), e);
+        } catch (NurseSchedException e) {
+            throw new NurseSchedException(ExceptionMessage.PARSING_ERROR);
         }
     }
 
-    private static MedicineParser getMedicineAddParser(String remaining, String command) {
+    private static MedicineParser getMedicineAddParser(String remaining, String command) throws NurseSchedException{
         String medicineName;
         int quantity;
+
+        if (!remaining.contains("mn/") || !remaining.contains("q/")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEADD_FORMAT);
+        }
 
         try {
             medicineName = extractValue(remaining, "mn/", "q/");

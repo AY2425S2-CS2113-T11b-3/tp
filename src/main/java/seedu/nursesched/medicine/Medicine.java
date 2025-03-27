@@ -1,5 +1,8 @@
 package seedu.nursesched.medicine;
 
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
+
 import java.util.ArrayList;
 
 public class Medicine {
@@ -12,7 +15,14 @@ public class Medicine {
         this.medicineName = medicineName;
     }
 
-    public static void addMedicine(int quantity, String medicineName) {
+    public static void addMedicine(int quantity, String medicineName) throws NurseSchedException {
+        if (medicineName == null || medicineName.trim().isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEADD_FORMAT);
+        }
+        if (quantity <= 0) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_QUANTITY);
+        }
+
         Medicine existingMedicine = findMedicine(medicineName);
         if (existingMedicine != null) {
             existingMedicine.addQuantity(quantity);
@@ -24,23 +34,27 @@ public class Medicine {
         }
     }
 
-    public static void removeMedicine(int quantity, String medicineName) {
+    public static void removeMedicine(int quantity, String medicineName) throws NurseSchedException {
         Medicine existingMedicine = findMedicine(medicineName);
-        if (existingMedicine != null) {
-            existingMedicine.removeQuantity(quantity);
-            System.out.println(quantity + " more of " + medicineName + " removed. New quantity: " + existingMedicine.getQuantity());
-        } else {
-            System.out.println("Medicine does not exist");
+
+        if (existingMedicine == null) {
+            throw new NurseSchedException(ExceptionMessage.MEDICINE_INPUT_NOT_FOUND);
         }
+        if (quantity <= 0 || quantity > existingMedicine.getQuantity()) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_QUANTITY);
+        }
+
+        existingMedicine.removeQuantity(quantity);
+        System.out.println(quantity + " more of " + medicineName + " removed. New quantity: " + existingMedicine.getQuantity());
     }
 
-    public static void deleteMedicine(String medicineName) {
+    public static void deleteMedicine(String medicineName) throws NurseSchedException {
         boolean removed = medicineList.removeIf(medicine -> medicine.getMedicineName().equalsIgnoreCase(medicineName));
 
         if (removed) {
             System.out.println("Medicine deleted: " + medicineName);
         } else {
-            System.out.println("Medicine does not exist");
+            throw new NurseSchedException(ExceptionMessage.MEDICINE_INPUT_NOT_FOUND);
         }
     }
 
@@ -65,20 +79,6 @@ public class Medicine {
         }
         return null;
     }
-
-    public static void editMedicine(int quantity, String medicineName) {
-        Medicine existingMedicine = findMedicine(medicineName);
-        if (existingMedicine != null) {
-            existingMedicine.updateQuantity(quantity);
-            existingMedicine.updateMedicineName(medicineName);
-            System.out.println("Edited " + medicineName + " information: quantity updated to " + quantity + " name updated to" + medicineName);
-        } else {
-            Medicine medicine = new Medicine(quantity, medicineName);
-            medicineList.add(medicine);
-            System.out.println(quantity + " " + medicineName + " added to the list");
-        }
-    }
-
 
     @Override
     public String toString() {
