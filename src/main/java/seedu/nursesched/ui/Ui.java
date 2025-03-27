@@ -1,8 +1,6 @@
 package seedu.nursesched.ui;
 
 import seedu.nursesched.appointment.Appointment;
-
-import javax.naming.directory.SearchResult;
 import java.util.ArrayList;
 import java.util.Scanner;
 

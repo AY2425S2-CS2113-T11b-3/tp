@@ -23,14 +23,15 @@ public class ApptParser extends Parser {
 
     private static final Logger logr = Logger.getLogger("ApptParser");
 
+
     private static int apptIndex;
+    private static String searchKeyword;
     private String command;
     private String name;
     private LocalTime startTime;
     private LocalTime endTime;
     private LocalDate date;
     private String notes;
-    private static String searchKeyword;
 
     static {
         try {
@@ -210,6 +211,8 @@ public class ApptParser extends Parser {
         return apptIndex;
     }
 
-    public String getSearchKeyword () {return searchKeyword;}
+    public String getSearchKeyword () {
+        return searchKeyword;
+    }
 
 }
