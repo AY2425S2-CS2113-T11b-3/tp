@@ -24,13 +24,14 @@ import seedu.nursesched.ui.Ui;
  */
 public class Appointment {
 
-    private static final Logger logr = Logger.getLogger("Appointment");
+
     private final String name;
     private final LocalTime startTime;
     private final LocalTime endTime;
     private final LocalDate date;
     private final String notes;
     private boolean isDone = false;
+    private static final Logger logr = Logger.getLogger("Appointment");
     protected static ArrayList<Appointment> apptList = AppointmentStorage.readFile();
     static {
         try {
