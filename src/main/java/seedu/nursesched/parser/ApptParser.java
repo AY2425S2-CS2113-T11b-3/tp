@@ -23,7 +23,9 @@ public class ApptParser extends Parser {
 
     private static final Logger logr = Logger.getLogger("ApptParser");
 
+
     private static int apptIndex;
+    private static String searchKeyword;
     private String command;
     private String name;
     private LocalTime startTime;
@@ -60,7 +62,7 @@ public class ApptParser extends Parser {
      * @param notes The additional things to note about the patient.
      */
     public ApptParser(String command, String name, LocalTime startTime, LocalTime endTime,
-                      LocalDate date, String notes, int apptIndex) {
+                      LocalDate date, String notes, int apptIndex, String searchKeyword) {
         this.command = command;
         this.name = name;
         this.startTime = startTime;
@@ -68,6 +70,7 @@ public class ApptParser extends Parser {
         this.date = date;
         this.notes = notes;
         this.apptIndex = apptIndex;
+        this.searchKeyword = searchKeyword;
 
         logr.info("ApptParser created: " + this);
     }
@@ -102,6 +105,7 @@ public class ApptParser extends Parser {
                 line = line.substring(line.indexOf(" ") + 1);
             } else {
                 command = line;
+                line = null;
             }
         } catch (IndexOutOfBoundsException e) {
             logr.warning("Invalid command: " + command);
@@ -132,26 +136,30 @@ public class ApptParser extends Parser {
             }
 
             notes = line.substring(line.indexOf("n/") + 2);
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex);
+            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex, searchKeyword);
         }
 
         if (command.equals("del")) {
             apptIndex = parseIndex(line);
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex);
+            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex,searchKeyword);
         }
 
-        if (command.equals("mark")) {
+        if (command.equals("mark") || command.equals("unmark")) {
             apptIndex = parseIndex(line);
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex);
+            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex,searchKeyword);
         }
 
-        if (command.equals("unmark")) {
-            apptIndex = parseIndex(line);
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex);
-        }
 
         if (command.equals("list")) {
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex);
+            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex,searchKeyword);
+        }
+
+        if (command.equals("find")) {
+            if (line == null){
+                throw new NurseSchedException(ExceptionMessage.MISSING_SEARCH_TERM);
+            }
+            searchKeyword = line;
+            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex, searchKeyword);
         }
 
         logr.warning("Invalid command: " + command);
@@ -201,6 +209,10 @@ public class ApptParser extends Parser {
 
     public int getIndex () {
         return apptIndex;
+    }
+
+    public String getSearchKeyword () {
+        return searchKeyword;
     }
 
 }

@@ -58,6 +58,9 @@ public class Command {
                     case "list":
                         Appointment.list();
                         break;
+                    case "find":
+                        Appointment.filterAppointment(apptParser.getSearchKeyword());
+                        break;
                     default:
                         System.out.println("Invalid appointment based command!");
                         break;
