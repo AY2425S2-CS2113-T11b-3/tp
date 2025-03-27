@@ -26,7 +26,8 @@ public enum ExceptionMessage {
     INVALID_PATIENT_NUMBER("Index is greater than number of patients in the list!"),
     INVALID_TASK_NUMBER("Task index is not within 1 and the total number of tasks in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
-    PARSING_ERROR("Error parsing command!");
+    PARSING_ERROR("Error parsing command!"),
+    MISSING_SEARCH_TERM("Missing search term after 'find'!");
 
     private final String message;
 
