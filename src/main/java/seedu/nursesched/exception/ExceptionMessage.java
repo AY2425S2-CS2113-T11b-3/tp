@@ -33,8 +33,9 @@ public enum ExceptionMessage {
     EMPTY_PATIENT_INFO("Patient information cannot be empty!"),
     INVALID_PATIENT_INFO("Patient ID is invalid!"),
     MISSING_PATIENT_FIELDS("Some patient fields are missing!"),
-    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: " +
-                                    "appt edit [i/INDEX] [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]");
+    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit [i/INDEX] [p/PATIENT_NAME] " +
+            "[s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]");
+
 
 
     private final String message;

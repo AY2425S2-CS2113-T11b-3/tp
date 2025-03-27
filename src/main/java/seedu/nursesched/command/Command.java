@@ -71,8 +71,7 @@ public class Command {
                                 apptParser.getNotes()
                         );
                         break;
-
-                        default:
+                    default:
                         System.out.println("Invalid appointment based command!");
                         break;
                     }
@@ -163,7 +162,7 @@ public class Command {
                     isExit = true;
                     break;
 
-                    default:
+                default:
                     System.out.println("Unknown command!");
                     System.out.println("Command should start with \"appt\", \"pf\", \"shift\" or \"task\"");
                     break;
