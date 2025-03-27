@@ -29,7 +29,13 @@ public enum ExceptionMessage {
     PARSING_ERROR("Error parsing command!"),
     INVALID_MEDICINEADD_FORMAT("Invalid medicine add format! Input as: medicine add mn/[MEDICINE_NAME] q/[QUANTITY]"),
     INVALID_MEDICINE_QUANTITY("Medicine quantity must be a positive integer!"),
-    MEDICINE_INPUT_NOT_FOUND("Medicine not found!");
+    MEDICINE_INPUT_NOT_FOUND("Medicine not found!"),
+    MISSING_SEARCH_TERM("Missing search term after 'find'!"),
+    INVALID_ID_LENGTH("Patient ID must be 4 digits long."),
+    INVALID_ID_INPUT("Patient ID must contain only digits."),
+    EMPTY_PATIENT_INFO("Patient information cannot be empty!"),
+    INVALID_PATIENT_INFO("Patient ID is invalid!"),
+    MISSING_PATIENT_FIELDS("Some patient fields are missing!");
 
     private final String message;
 

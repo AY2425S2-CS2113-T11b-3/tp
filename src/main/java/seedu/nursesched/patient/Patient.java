@@ -4,6 +4,7 @@ import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * The Patient class represents a patient in the healthcare system.
@@ -13,8 +14,11 @@ import java.util.ArrayList;
 public class Patient {
     protected static ArrayList<Patient> patientsList = new ArrayList<>();
 
+    private final String id;
     private final String name;
     private final String age;
+    private final String gender;
+    private final String contact;
     private final String notes;
 
     /**
@@ -24,13 +28,23 @@ public class Patient {
      * @param age   The age of the patient.
      * @param notes Additional notes about the patient.
      */
-    public Patient(String name, String age, String notes) {
+    public Patient(String id, String name, String age, String gender, String contact, String notes) {
+        assert id != null : "id cannot be null";
         assert name != null : "Name cannot be null";
         assert age != null : "Age cannot be null";
+        assert gender != null : "Gender cannot be null";
+        assert contact != null : "Contact cannot be null";
 
+        this.id = id;
         this.name = name;
         this.age = age;
         this.notes = notes;
+        this.gender = gender;
+        this.contact = contact;
+    }
+
+    public String getId() {
+        return id;
     }
 
     /**
@@ -68,10 +82,37 @@ public class Patient {
             System.out.println("Patient information is empty.");
             return;
         }
-        System.out.println("Patient information:");
-        System.out.println("");
-        for (int index = 0; index < patientsList.size(); index++) {
-            System.out.println((index + 1) + ". " + patientsList.get(index).toString());
+        for (Patient patient : patientsList) {
+            System.out.println(patient.toString());
+        }
+    }
+
+    public static void printProfileWithID(String id) throws NurseSchedException {
+        if (id.length() > 4 || id.length() < 3) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
+        }
+
+        for (char c : id.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
+            }
+        }
+
+        if (patientsList.isEmpty()) {
+            System.out.println("There are no patients found!");
+            return;
+        }
+
+        ArrayList<Patient> filteredList = patientsList.stream()
+                .filter(patient -> patient.getId().equals(id))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if (filteredList.isEmpty()) {
+            System.out.println("No patient found with ID: " + id);
+        } else {
+            for (Patient patient : filteredList) {
+                System.out.println(patient.toString());
+            }
         }
     }
 
@@ -92,6 +133,12 @@ public class Patient {
      */
     @Override
     public String toString() {
-        return name + ", " + age + " years old" + (notes.isEmpty() ? "." : ", " + notes + ".");
+        return "Patient Details:\n" +
+                "  ID: P" + id + "\n" +
+                "  Name: " + name + "\n" +
+                "  Age: " + age + " years old\n" +
+                "  Gender: " + gender + "\n" +
+                "  Contact: " + contact + "\n" +
+                (notes.isEmpty() ? "" : "  Notes: " + notes + "\n");
     }
 }

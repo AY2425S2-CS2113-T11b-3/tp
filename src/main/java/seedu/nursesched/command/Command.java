@@ -60,6 +60,9 @@ public class Command {
                     case "list":
                         Appointment.list();
                         break;
+                    case "find":
+                        Appointment.filterAppointment(apptParser.getSearchKeyword());
+                        break;
                     default:
                         System.out.println("Invalid appointment based command!");
                         break;
@@ -74,7 +77,12 @@ public class Command {
                     }
                     input = patientParser.getCommand();
                     if (input.equals("add")) {
-                        Patient newPatient = new Patient(patientParser.getName(), patientParser.getAge(),
+                        Patient newPatient = new Patient(
+                                patientParser.getId(),
+                                patientParser.getName(),
+                                patientParser.getAge(),
+                                patientParser.getGender(),
+                                patientParser.getContact(),
                                 patientParser.getNotes());
                         Patient.addPatient(newPatient);
                     }
@@ -83,6 +91,9 @@ public class Command {
                     }
                     if (input.equals("list")) {
                         Patient.listPatientInformation();
+                    }
+                    if (input.equals("search")) {
+                        Patient.printProfileWithID(patientParser.getId());
                     }
                     break;
                 case "shift":

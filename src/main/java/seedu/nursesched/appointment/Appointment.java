@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
 
+import seedu.nursesched.ui.Ui;
+
 /**
  * Represents all appointments.
  * It stores details such as the start time, end time, date, patient name and notes.
@@ -154,24 +156,6 @@ public class Appointment {
         }
     }
 
-    public static void markApptByPatient(String name,
-                                         LocalTime startTime, LocalDate date) {
-        assert name != null && !name.isEmpty() : "Name should not be empty!";
-        assert startTime != null : "Appointment's start time is required!";
-        assert date != null : "Appointment's date is required!";
-        Appointment appointment = findAppointment(name, startTime, date);
-        if (appointment == null) {
-            System.out.println("Appointment does not exist!");
-            return;
-        }
-        appointment.isDone = true;
-        System.out.println("Appointment marked: ");
-        System.out.println(
-                "Name: " + appointment.name
-                        + ", Start: " + appointment.startTime
-                        + ", Date: " + appointment.date
-        );
-    }
 
     /**
      * Unmark an appointment from the appointment list based on the given index.
@@ -188,27 +172,6 @@ public class Appointment {
             System.out.println("There is no appointment with index: " + (index+1));
             logr.warning("There is no appointment with index: " + (index+1));
         }
-    }
-
-    public static void unmarkApptByPatient(String name,
-                                           LocalTime startTime, LocalDate date) {
-        assert name != null && !name.isEmpty() : "Name should not be empty!";
-        assert startTime != null : "Appointment's start time is required!";
-        assert date != null : "Appointment's date is required!";
-
-        Appointment appointment = findAppointment(name, startTime, date);
-        if (appointment == null) {
-            System.out.println("Appointment does not exist!");
-            return;
-        }
-
-        appointment.setDone(false);
-        System.out.println("Appointment unmarked: ");
-        System.out.println(
-                "Name: " + appointment.name
-                        + ", Start: " + appointment.startTime
-                        + ", Date: " + appointment.date
-        );
     }
 
     /**
@@ -233,25 +196,25 @@ public class Appointment {
     }
 
     /**
+     * Filter for appointments by patient names.
+     * @param patientName The keyword to search for in patient name.
+     */
+    public static void filterAppointment(String patientName) {
+        ArrayList<Appointment> searchResults = new ArrayList<>();
+        for (Appointment appointment : apptList) {
+            if (appointment.getName().toLowerCase().contains(patientName.toLowerCase())) {
+                searchResults.add(appointment);
+            }
+        }
+        Ui.printSearchResults(searchResults, patientName);
+    }
+
+    /**
      * Displays all appointment currently stored in the appointment list.
      * If no appointments are in the list, it notifies the user.
      */
     public static void list(){
-        int index = 1;
-        boolean isDone = false;
-        String statusBadge = "[ ]";
-        for (Appointment appointment : apptList) {
-
-            isDone = appointment.getStatus();
-            if (isDone) {
-                statusBadge = "[X]";
-            }else{
-                statusBadge = "[ ]";
-            }
-
-            System.out.println(index+ ". "+ statusBadge + appointment);
-        }
-        System.out.println("You have " + apptList.size() + " appointment(s)");
+        Ui.printAppointmentList(apptList);
     }
 
     public void setDone(boolean done) {
