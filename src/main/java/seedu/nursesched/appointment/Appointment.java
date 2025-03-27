@@ -23,6 +23,8 @@ import seedu.nursesched.ui.Ui;
  * It stores details such as the start time, end time, date, patient name and notes.
  */
 public class Appointment {
+    protected static ArrayList<Appointment> apptList;
+    private static final Logger logr = Logger.getLogger("Appointment");
 
     private final String name;
     private final LocalTime startTime;
@@ -30,9 +32,6 @@ public class Appointment {
     private final LocalDate date;
     private final String notes;
     private boolean isDone = false;
-
-    protected static ArrayList<Appointment> apptList;
-    private static final Logger logr = Logger.getLogger("Appointment");
 
     static {
         try {
