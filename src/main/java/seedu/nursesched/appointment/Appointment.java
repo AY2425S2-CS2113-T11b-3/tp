@@ -24,9 +24,6 @@ import seedu.nursesched.ui.Ui;
  */
 public class Appointment {
 
-    private static final Logger logr = Logger.getLogger("Appointment");
-    protected static ArrayList<Appointment> apptList = AppointmentStorage.readFile();
-
     private final String name;
     private final LocalTime startTime;
     private final LocalTime endTime;
@@ -34,6 +31,7 @@ public class Appointment {
     private final String notes;
     private boolean isDone = false;
 
+    private static final Logger logr = Logger.getLogger("Appointment");
     static {
         try {
             File logDir = new File("logs/appointment");
@@ -50,6 +48,7 @@ public class Appointment {
             logr.log(Level.SEVERE, "File logger not working", e);
         }
     }
+    protected static ArrayList<Appointment> apptList = AppointmentStorage.readFile();
 
 
     /**
