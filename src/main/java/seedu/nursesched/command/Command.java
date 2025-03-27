@@ -41,17 +41,17 @@ public class Command {
                         break;
                     case "del":
 
-                        Appointment.deleteApptByIndex(
+                        Appointment.deleteAppt(
                                 apptParser.getIndex()
                         );
                         break;
                     case "mark":
-                        Appointment.markApptByIndex(
+                        Appointment.markAppt(
                                 apptParser.getIndex()
                         );
                         break;
                     case "unmark":
-                        Appointment.unmarkApptByIndex(
+                        Appointment.unmarkAppt(
                                 apptParser.getIndex()
                         );
                         break;
