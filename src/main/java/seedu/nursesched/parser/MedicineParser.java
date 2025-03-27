@@ -5,11 +5,15 @@ public class MedicineParser extends Parser {
     private final String command;
     private final String medicineName;
     private final int quantity;
+    private final int updatedQuantity;
+    private final String updatedName;
 
-    public MedicineParser(String command, String medicineName, int quantity) {
+    public MedicineParser(String command, String medicineName, int quantity, String updatedName, int updatedQuantity) {
         this.command = command;
         this.medicineName = medicineName;
         this.quantity = quantity;
+        this.updatedQuantity = updatedQuantity;
+        this.updatedName = updatedName;
     }
 
     public static MedicineParser extractInputs(String line) {
@@ -31,9 +35,15 @@ public class MedicineParser extends Parser {
             if (command.equals("add")) {
                 return getMedicineAddParser(remaining, command);
             } else if (command.equals("list")) {
-                return new MedicineParser("list", "", 0);
+                return new MedicineParser("list", "", 0, "", 0);
             } else if (command.equals("remove")) {
                 return getMedicineRemoveParser(remaining, command);
+            } else if (command.equals("find")) {
+                return getMedicineFindParser(remaining, command);
+            } else if (command.equals("delete")) {
+                return getMedicineDeleteParser(remaining, command);
+            } else if (command.equals("edit")) {
+                return getMedicineEditParser(remaining, command);
             } else {
                 throw new RuntimeException("Invalid command: " + command);
             }
@@ -58,7 +68,7 @@ public class MedicineParser extends Parser {
             throw new RuntimeException("Invalid quantity format");
         }
 
-        return new MedicineParser(command, medicineName, quantity);
+        return new MedicineParser(command, medicineName, quantity, "", 0);
     }
 
     private static MedicineParser getMedicineRemoveParser(String remaining, String command) {
@@ -77,7 +87,57 @@ public class MedicineParser extends Parser {
             throw new RuntimeException("Invalid quantity format");
         }
 
-        return new MedicineParser(command, medicineName, quantity);
+        return new MedicineParser(command, medicineName, quantity, "", 0);
+    }
+
+    private static MedicineParser getMedicineFindParser(String remaining, String command) {
+        String medicineName;
+
+        try {
+            medicineName = extractValue(remaining, "mn/", null);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Missing or invalid medicine name format");
+        }
+
+        return new MedicineParser(command, medicineName, 0, "", 0);
+    }
+
+    private static MedicineParser getMedicineDeleteParser(String remaining, String command) {
+        String medicineName;
+
+        try {
+            medicineName = extractValue(remaining, "mn/", null);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Missing or invalid medicine name format");
+        }
+
+        return new MedicineParser(command, medicineName, 0, "", 0);
+    }
+
+    private static MedicineParser getMedicineEditParser(String remaining, String command) {
+        String medicineName;
+        String updatedName;
+        int updatedQuantity;
+
+        try {
+            medicineName = extractValue(remaining, "mn/", "un/");
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Missing or invalid medicine name format");
+        }
+
+        try {
+            updatedName = extractValue(remaining, "un/", "uq/");
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Missing or invalid medicine name format");
+        }
+
+        try {
+            updatedQuantity = Integer.parseInt(extractValue(remaining, "uq/", null));
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Missing or invalid medicine name format");
+        }
+
+        return new MedicineParser(command, medicineName, 0, updatedName, updatedQuantity);
     }
 
 
@@ -106,5 +166,13 @@ public class MedicineParser extends Parser {
 
     public String getCommand() {
         return command;
+    }
+
+    public int getUpdatedQuantity() {
+        return updatedQuantity;
+    }
+
+    public String getUpdatedName() {
+        return updatedName;
     }
 }

@@ -159,6 +159,27 @@ public class Command {
                     case "list":
                         Medicine.listMedicine();
                         break;
+                    case "find":
+                        Medicine matchingMedicine = Medicine.findMedicine(
+                                medicineParser.getMedicineName()
+                        );
+                        System.out.println(matchingMedicine);
+                        break;
+                    case "delete":
+                        Medicine.deleteMedicine(
+                                medicineParser.getMedicineName()
+                        );
+                        break;
+                    case "edit":
+                        Medicine.deleteMedicine(
+                                medicineParser.getMedicineName()
+                        );
+                        Medicine.addMedicine(
+                                medicineParser.getUpdatedQuantity(),
+                                medicineParser.getUpdatedName()
+                        );
+                        break;
+
                     default:
                         System.out.println("Invalid medicine based command!");
                         break;
