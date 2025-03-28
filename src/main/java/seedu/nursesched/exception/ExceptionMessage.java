@@ -24,7 +24,7 @@ public enum ExceptionMessage {
     ZERO_INDEX("Index cannot be zero!"),
     INVALID_APPT_NUMBER("Index is greater than number of appointments in the list!"),
     INVALID_PATIENT_NUMBER("Index is greater than number of patients in the list!"),
-    INVALID_TASK_NUMBER("Task index is not within 1 and the total number of tasks in the list!"),
+    TASK_INDEX_OUT_OF_BOUNDS("Task index is not within 1 and the total number of tasks in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
     PARSING_ERROR("Error parsing command!"),
     INVALID_MEDICINEADD_FORMAT("Invalid medicine add format! Input as: medicine add mn/[MEDICINE_NAME] q/[QUANTITY]"),
@@ -37,7 +37,8 @@ public enum ExceptionMessage {
     INVALID_PATIENT_INFO("Patient ID is invalid!"),
     MISSING_PATIENT_FIELDS("Some patient fields are missing!"),
     INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit [i/INDEX] [p/PATIENT_NAME] " +
-            "[s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]");
+            "[s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
+    INVALID_TASK_INDEX("Invalid task index! Index should be an integer!");
 
 
 
