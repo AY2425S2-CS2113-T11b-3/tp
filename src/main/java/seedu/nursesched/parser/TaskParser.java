@@ -56,7 +56,7 @@ public class TaskParser extends Parser {
 
     /**
      * Extracts and parses the inputs from the given command for appointment-related operations.
-     * This method supports 4 commands "add", "mark", "unmark" and "list".
+     * This method supports 5 commands "add", "mark", "unmark", "list" and "edit".
      *
      * @param line The user's input command to be parsed.
      * @return An {@link TaskParser} object which contains the parsed commands and associated parameters.
@@ -135,10 +135,18 @@ public class TaskParser extends Parser {
         case "list":
             return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
         case "edit":
+            if (!line.contains("id/")|| !line.contains("td/")
+                    || !line.contains("d/") || !line.contains("t/")) {
+                logr.warning("Missing fields");
+                throw new NurseSchedException(ExceptionMessage.INVALID_TASK_EDIT_FORMAT);
+            }
             try {
-                taskIndex = Integer.parseInt(line.substring(line.indexOf("id/") + 3), line.indexOf(" td/"));
+                taskIndex = Integer.parseInt(line.substring(line.indexOf("id/") + 3, line.indexOf(" td/")));
+                if (taskIndex <= 0) {
+                    throw new NurseSchedException(ExceptionMessage.NEGATIVE_INDEX);
+                }
                 description = line.substring(line.indexOf("td/") + 3, line.indexOf(" d/"));
-                String byDateString = line.substring(line.indexOf("td/") + 3, line.indexOf(" t/"));
+                String byDateString = line.substring(line.indexOf(" d/") + 3, line.indexOf(" t/"));
                 String byTimeString = line.substring(line.indexOf("t/") + 2);
                 if (!byDateString.isEmpty()) {
                     byDate = LocalDate.parse(byDateString);
@@ -153,10 +161,14 @@ public class TaskParser extends Parser {
                     throw new NurseSchedException(ExceptionMessage.INVALID_DUE_DATE_TIME);
                 }
             } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
+                logr.warning("Task index not an integer!");
+                throw new NurseSchedException(ExceptionMessage.INVALID_TASK_INDEX);
             } catch (DateTimeParseException e) {
                 logr.warning("Invalid date or time format.");
                 throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
+            } catch (IndexOutOfBoundsException e) {
+                logr.warning("Invalid or missing fields");
+                throw new NurseSchedException(ExceptionMessage.INVALID_TASK_EDIT_FORMAT);
             }
             return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
         default:
