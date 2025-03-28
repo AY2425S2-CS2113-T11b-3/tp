@@ -131,6 +131,31 @@ public class TaskParser extends Parser {
             return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
         case "list":
             return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
+        case "edit":
+            try {
+                taskIndex = Integer.parseInt(line.substring(line.indexOf("id/") + 3), line.indexOf(" td/"));
+                description = line.substring(line.indexOf("td/") + 3, line.indexOf(" d/"));
+                String byDateString = line.substring(line.indexOf("td/") + 3, line.indexOf(" t/"));
+                String byTimeString = line.substring(line.indexOf("t/") + 2);
+                if (!byDateString.isEmpty()) {
+                    byDate = LocalDate.parse(byDateString);
+                }
+                if (!byTimeString.isEmpty()) {
+                    byTime = LocalTime.parse(byTimeString);
+                }
+                if ((byDate != null && byTime != null)
+                        && byDate.isEqual(LocalDate.now())
+                        && byTime.isBefore(LocalTime.now())) {
+                    logr.warning("Due date and time cannot be before current date and time.");
+                    throw new NurseSchedException(ExceptionMessage.INVALID_DUE_DATE_TIME);
+                }
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
+            } catch (DateTimeParseException e) {
+                logr.warning("Invalid date or time format.");
+                throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
+            }
+            return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
         default:
             System.out.println("Unknown command: " + command);
             break;

@@ -146,24 +146,68 @@ public class Task {
         logr.info("All tasks listed");
     }
 
-    public void setIsDone(boolean isDone) {
-        this.isDone = isDone;
+    /**
+     * Edits a task's {@code description}, {@code byDate} and/or {@code byTime}.
+     *
+     * @param index The index of the task to be edited.
+     * @param description The new description of the task.
+     * @param byDate The new due date of the task.
+     * @param byTime The new due time of the task.
+     * @throws NurseSchedException If task index is out of range or not an integer.
+     */
+    public static void editTask(int index, String description,
+                                LocalDate byDate, LocalTime byTime) throws NurseSchedException {
+        assert index > 0
+                : "Task index should not be negative.";
+        if (index > taskList.size()) {
+            logr.warning("Task index out of range.");
+            throw new NurseSchedException(ExceptionMessage.INVALID_TASK_NUMBER);
+        }
+        Task task = taskList.get(index - 1);
+        System.out.println("Task details before edit:\n" + task.toString());
+        if (description != null) {
+            task.setDescription(description);
+        }
+        if (byDate != null) {
+            task.setByDate(byDate);
+        }
+        if (byTime != null) {
+            task.setByTime(byTime);
+        }
+        System.out.println("Task details after edit:\n" + task.toString());
+        logr.info("Task edited successfully!");
     }
 
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public LocalDate getByDate() {
         return byDate;
+    }
+
+    public void setByDate(LocalDate byDate) {
+        this.byDate = byDate;
     }
 
     public LocalTime getByTime() {
         return byTime;
     }
 
+    public void setByTime(LocalTime byTime) {
+        this.byTime = byTime;
+    }
+
     public boolean getIsDone() {
         return isDone;
+    }
+
+    public void setIsDone(boolean isDone) {
+        this.isDone = isDone;
     }
 
     @Override
