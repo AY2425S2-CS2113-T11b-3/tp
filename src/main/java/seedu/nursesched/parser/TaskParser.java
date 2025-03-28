@@ -114,9 +114,8 @@ public class TaskParser extends Parser {
                 logr.warning("Invalid date or time format.");
                 throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("Invalid inputs! Please try again.");
                 logr.warning("Invalid or missing fields");
-                break;
+                throw new NurseSchedException(ExceptionMessage.INVALID_TASKADD_FORMAT);
             }
             return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
         case "mark", "unmark":

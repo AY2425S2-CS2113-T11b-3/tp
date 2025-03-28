@@ -42,6 +42,21 @@ public class TaskTest {
     }
 
     @Test
+    public void addTask_missingParameters_throwsNurseSchedException() {
+        Task.taskList.clear();
+        String input1 = "task add d/2026-02-02 t/13:00";
+        String input2 = "task add td/Register new dr t/13:00";
+        String input3 = "task add td/Register new dr d/2026-02-02";
+
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.extractInputs(input1));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.extractInputs(input2));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.extractInputs(input3));
+    }
+
+    @Test
     public void markTask_validIndex_taskMarked() throws NurseSchedException {
         Task.taskList.clear();
         Task.addTask(
