@@ -32,6 +32,7 @@ public class Ui {
             }
 
             System.out.println(index+ ". "+ statusBadge + appointment);
+            index += 1;
         }
         System.out.println("You have " + apptList.size() + " appointment(s)");
     }
