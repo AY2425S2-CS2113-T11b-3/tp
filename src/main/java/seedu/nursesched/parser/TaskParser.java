@@ -112,21 +112,24 @@ public class TaskParser extends Parser {
                 logr.warning("Invalid date or time format.");
                 throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("Invalid inputs! Please try again.");
                 logr.warning("Invalid or missing fields");
-                break;
+                throw new NurseSchedException(ExceptionMessage.INVALID_TASKADD_FORMAT);
             }
             return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
         case "mark", "unmark":
             try {
-                taskIndex = Integer.parseInt(line.substring(line.indexOf(" ") + 1));
-                if (taskIndex < 0) {
+                System.out.println(line);
+                taskIndex = Integer.parseInt(line);
+                if (taskIndex <= 0) {
                     throw new NurseSchedException(ExceptionMessage.NEGATIVE_INDEX);
                 }
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("Task index is missing!");
                 logr.warning("Task index missing.");
                 return null;
+            } catch (NumberFormatException e) {
+                logr.warning("Task index not an integer!");
+                throw new NurseSchedException(ExceptionMessage.INVALID_TASK_INDEX);
             }
             return new TaskParser(command, description, byDate, byTime, isDone, taskIndex);
         case "list":
