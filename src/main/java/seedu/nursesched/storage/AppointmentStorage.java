@@ -126,7 +126,7 @@ public class AppointmentStorage {
      * @param appt Appointment object to append to the storage file.
      */
     public static void appendToFile(Appointment appt) {
-        try(FileWriter writer = new FileWriter(FILE_PATH, true)) { // create a FileWriter in append mode
+        try (FileWriter writer = new FileWriter(FILE_PATH, true)) { // create a FileWriter in append mode
             writer.write(formatString(appt)+ "\n");
         } catch (IOException e) {
             System.out.println("Error saving tasks: " + e.getMessage());
