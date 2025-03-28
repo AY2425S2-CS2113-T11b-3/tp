@@ -56,15 +56,13 @@ public class TaskParser extends Parser {
 
     /**
      * Extracts and parses the inputs from the given command for appointment-related operations.
-     * This method supports 4 commands "add", "mark", "unmark" and "list.
+     * This method supports 4 commands "add", "mark", "unmark" and "list".
      *
      * @param line The user's input command to be parsed.
      * @return An {@link TaskParser} object which contains the parsed commands and associated parameters.
      *         Returns {@code null} if the input parameters are missing or invalid.
      *
-     * @throws NurseSchedException if any inputs are invalid.
-     * @throws IndexOutOfBoundsException If the input line does not contain the expected parameters.
-     * @throws DateTimeParseException If the input time or date is not of the expected format.
+     * @throws NurseSchedException If any inputs are invalid.
      */
     public static TaskParser extractInputs(String line) throws NurseSchedException {
         assert line != null : "Input line should not be null";
