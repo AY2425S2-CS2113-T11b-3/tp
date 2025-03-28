@@ -2,6 +2,7 @@ package seedu.nursesched.task;
 
 import org.junit.jupiter.api.Test;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.parser.TaskParser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -68,6 +69,21 @@ public class TaskTest {
     }
 
     @Test
+    public void markTaskParser_invalidStringInput_throwsNumberFormatException()
+            throws NurseSchedException {
+        Task.taskList.clear();
+        Task.addTask(
+                "Prepare medication for Jean",
+                LocalDate.of(2026, 2, 14),
+                LocalTime.of(13, 0),
+                false
+        );
+        String input = "task mark one";
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.extractInputs(input));
+    }
+
+    @Test
     public void unmarkTask_validIndex_taskMarked() throws NurseSchedException {
         Task.taskList.clear();
         Task.addTask(
@@ -92,5 +108,20 @@ public class TaskTest {
         );
         assertThrows(NurseSchedException.class,
                 () -> Task.markTask(2));
+    }
+
+    @Test
+    public void unmarkTaskParser_invalidStringInput_throwsNumberFormatException()
+            throws NurseSchedException {
+        Task.taskList.clear();
+        Task.addTask(
+                "Prepare medication for Jean",
+                LocalDate.of(2026, 2, 14),
+                LocalTime.of(13, 0),
+                false
+        );
+        String input = "task unmark one";
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.extractInputs(input));
     }
 }

@@ -97,7 +97,7 @@ public class Task {
                 : "Task index should not be negative.";
         if (index > taskList.size()) {
             logr.warning("Task index out of range.");
-            throw new NurseSchedException(ExceptionMessage.INVALID_TASK_NUMBER);
+            throw new NurseSchedException(ExceptionMessage.TASK_INDEX_OUT_OF_BOUNDS);
         }
         try {
             Task task = taskList.get(index - 1);
@@ -121,7 +121,7 @@ public class Task {
                 : "Task index should not be negative.";
         if (index > taskList.size()) {
             logr.warning("Task index out of range.");
-            throw new NurseSchedException(ExceptionMessage.INVALID_TASK_NUMBER);
+            throw new NurseSchedException(ExceptionMessage.TASK_INDEX_OUT_OF_BOUNDS);
         }
         try {
             Task task = taskList.get(index - 1);
