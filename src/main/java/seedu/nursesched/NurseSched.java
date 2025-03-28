@@ -1,3 +1,5 @@
+package seedu.nursesched;
+
 import java.util.Scanner;
 
 import seedu.nursesched.command.Command;
