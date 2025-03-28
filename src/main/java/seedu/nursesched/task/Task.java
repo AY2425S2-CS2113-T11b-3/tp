@@ -90,7 +90,7 @@ public class Task {
      * Marks a task as done.
      *
      * @param index The index of the task according to the list of all tasks.
-     * @throws NurseSchedException If task index is out of the range of the task list.
+     * @throws NurseSchedException If task index is out of range or not an integer.
      */
     public static void markTask(int index) throws NurseSchedException {
         assert index > 0
@@ -114,7 +114,7 @@ public class Task {
      * Unmarks a task as undone.
      *
      * @param index The index of the task according to the list of all tasks.
-     * @throws NurseSchedException If task index is out of the range of the task list.
+     * @throws NurseSchedException If task index is out of range or not an integer.
      */
     public static void unmarkTask(int index) throws NurseSchedException {
         assert index > 0
