@@ -155,6 +155,10 @@ public class Patient {
         return id;
     }
 
+    public static ArrayList<Patient> getPatientsList() {
+        return patientsList;
+    }
+
     /**
      * Returns a string representation of the patient in the format:
      * "name, age years old, notes".

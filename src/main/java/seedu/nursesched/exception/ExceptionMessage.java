@@ -39,6 +39,9 @@ public enum ExceptionMessage {
     INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit [i/INDEX] [p/PATIENT_NAME] " +
             "[s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
     INVALID_TASK_INDEX("Invalid task index! Index should be an integer!"),
+    PATIENT_NOT_FOUND("Patient not found!"),
+    EMPTY_PATIENT_TEST_NAME("Patient test name cannot be empty!"),
+    EMPTY_PATIENT_TEST_RESULT("Patient test result cannot be empty!"),
     INVALID_TASK_EDIT_FORMAT("Invalid task edit format! Input as: "
             + "task edit [id/TASK_INDEX] [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]"),
     EMPTY_INPUT_DETAILS("Input details cannot be empty!"),
