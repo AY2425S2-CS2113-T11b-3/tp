@@ -146,16 +146,16 @@ public class Patient {
                 if (!newName.isEmpty()) {
                     patient.name = newName;
                 }
-                if (newAge != null) {
+                if (!newAge.isEmpty()) {
                     patient.age = newAge;
                 }
-                if (newGender != null) {
+                if (!newGender.isEmpty()) {
                     patient.gender = newGender.toUpperCase();
                 }
-                if (newContact != null) {
+                if (!newContact.isEmpty()) {
                     patient.contact = newContact;
                 }
-                if (newNotes != null) {
+                if (!newNotes.isEmpty()) {
                     patient.notes = newNotes;
                 }
                 System.out.println("Patient information updated for ID: " + id);
