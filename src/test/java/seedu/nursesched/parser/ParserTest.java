@@ -32,7 +32,7 @@ public class ParserTest {
 
     @Test
     public void testExtractInputs_patientDeleteCommand() throws NurseSchedException {
-        String input = "pf del 2";
+        String input = "pf del id/1000";
         Patient patientOne = new Patient("1000", "Jean Doe", "25",
                 "F", "12345678", "Allergic to penicillin");
         Patient patientTwo = new Patient("2000", "John Doe", "40",
@@ -44,15 +44,14 @@ public class ParserTest {
 
         assertNotNull(patientParser);
         assertEquals("del", patientParser.getCommand());
-        assertEquals("", patientParser.getName());
-        assertEquals("", patientParser.getAge());
-        assertEquals("", patientParser.getNotes());
-        assertEquals(1, patientParser.getIndex());
+        assertNull(patientParser.getName());
+        assertNull(patientParser.getAge());
+        assertNull(patientParser.getNotes());
     }
 
     @Test
     public void testExtractInputs_patientDeleteInvalidIndexCommand() throws NurseSchedException {
-        String input = "pf del 2";
+        String input = "pf del id/1000";
 
         PatientParser patientParser = PatientParser.extractInputs(input);
 
@@ -66,10 +65,9 @@ public class ParserTest {
 
         assertNotNull(patientParser);
         assertEquals("list", patientParser.getCommand());
-        assertEquals("", patientParser.getName());
-        assertEquals("", patientParser.getAge());
-        assertEquals("", patientParser.getNotes());
-        assertEquals(0, patientParser.getIndex());
+        assertNull(patientParser.getName());
+        assertNull(patientParser.getAge());
+        assertNull(patientParser.getNotes());
     }
 
     @Test
