@@ -161,6 +161,13 @@ public class Command {
                     case "list":
                         Task.listTasks();
                         break;
+                    case "edit":
+                        Task.editTask(
+                                taskParser.getTaskIndex(),
+                                taskParser.getDescription(),
+                                taskParser.getByDate(),
+                                taskParser.getByTime());
+                        break;
                     default:
                         System.out.println("Invalid task based command!");
                         break;
