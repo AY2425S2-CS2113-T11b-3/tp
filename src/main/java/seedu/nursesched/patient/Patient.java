@@ -94,7 +94,7 @@ public class Patient {
         }
 
         if (!found) {
-            throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND); // You can replace this with the appropriate exception message
+            throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
         }
     }
 
