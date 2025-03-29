@@ -7,8 +7,8 @@ public enum ExceptionMessage {
             " shift add [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
     INVALID_APPTADD_FORMAT("Invalid appointment add format! Input as:" +
             " appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
-    INVALID_PATIENTADD_FORMAT("Invalid patient add format! Input as:" +
-            " pf add [p/PATIENT_NAME] [a/AGE] [n/NOTES]"),
+    INVALID_PATIENT_ADD_FORMAT("Invalid patient add format! Input as:\n" +
+            "pf add [id/ID] [p/PATIENT_NAME] [a/AGE] [g/GENDER] [c/CONTACT] [n/NOTES]"),
     INVALID_TASKADD_FORMAT("Invalid task add format! Input as: "
             + "task add [td/TASK_DESCRIPTION] [d/DUE_DATE] [t/DUE_TIME]"),
     INVALID_TIME_FORMAT("Invalid time format! Input as HH:mm"),
@@ -46,6 +46,7 @@ public enum ExceptionMessage {
             + "task edit [id/TASK_INDEX] [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]"),
     EMPTY_INPUT_DETAILS("Input details cannot be empty!"),
     MISSING_ID("Patient ID cannot be empty!"),
+    EMPTY_PATIENT_FIELDS("Some patient fields are empty!"),
     MISSING_EDIT_INPUT("Edit fields cannot be empty!");
 
 
