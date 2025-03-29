@@ -92,12 +92,12 @@ public class PatientParser extends Parser {
         line = line.trim();
         line = line.substring(line.indexOf(" ") + 1);
         String command;
-        String id = "";
-        String name = "";
-        String age = "";
-        String gender = "";
-        String contact = "";
-        String notes = "";
+        String id = null;
+        String name = null;
+        String age = null;
+        String gender = null;
+        String contact = null;
+        String notes = null;
         int index = 0;
 
         // Handle cases where the line is just the command itself
@@ -169,7 +169,26 @@ public class PatientParser extends Parser {
             }
         }
         case "del" -> {
-            index = parseIndex(line);
+            if (line.contains("id/")) {
+                if (line.length() == 7) {
+                    id = line.substring(line.indexOf("id/") + 3);
+                }
+            } else {
+                throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
+            }
+
+            // Validate ID format (4 digits)
+            assert id != null;
+            if (id.trim().length() != 4) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
+            }
+
+            for (char c : id.toCharArray()) {
+                if (!Character.isDigit(c)) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
+                }
+            }
+
             return new PatientParser(command, id, name, age, gender, contact, notes, index);
         }
         case "list" -> {
@@ -221,8 +240,6 @@ public class PatientParser extends Parser {
                     if (name.isEmpty()) {
                         throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
                     }
-                } else {
-                    name = null;
                 }
 
                 if (line.contains("a/")) {
@@ -233,8 +250,6 @@ public class PatientParser extends Parser {
                     if (age.isEmpty()) {
                         throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
                     }
-                } else {
-                    age = null;
                 }
 
                 if (line.contains("g/")) {
@@ -245,8 +260,6 @@ public class PatientParser extends Parser {
                     if (gender.isEmpty()) {
                         throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
                     }
-                } else {
-                    gender = null;
                 }
 
                 if (line.contains("c/")) {
@@ -257,8 +270,6 @@ public class PatientParser extends Parser {
                     if (contact.isEmpty()) {
                         throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
                     }
-                } else {
-                    contact = null;
                 }
 
                 if (line.contains("n/")) {
@@ -268,8 +279,6 @@ public class PatientParser extends Parser {
                     if (notes.isEmpty()) {
                         throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
                     }
-                } else {
-                    notes = null;
                 }
             } catch (IndexOutOfBoundsException e) {
                 System.out.print(e.getMessage());
@@ -357,29 +366,6 @@ public class PatientParser extends Parser {
             return null;
         }
         }
-    }
-
-    /**
-     * Parses the given line to extract and validate the patient index.
-     * The index is expected to be a positive integer (1-based).
-     *
-     * @param line The input string containing the index.
-     * @return The zero-based index parsed from the input.
-     * @throws NurseSchedException If the index is zero, negative, or not a valid number.
-     */
-    public static int parseIndex (String line) throws NurseSchedException {
-        int index;
-        try {
-            index = Integer.parseInt(line) - 1;
-            if (index == -1) {
-                throw new NurseSchedException(ExceptionMessage.ZERO_INDEX);
-            } else if (index < 0) {
-                throw new NurseSchedException((ExceptionMessage.NEGATIVE_INDEX));
-            }
-        } catch (NumberFormatException e) {
-            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_NUMBER);
-        }
-        return index;
     }
 
     // Helper method to find where the next field starts

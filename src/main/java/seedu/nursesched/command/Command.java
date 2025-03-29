@@ -97,7 +97,7 @@ public class Command {
                         Patient.addPatient(newPatient);
                     }
                     if (input.equals("del")) {
-                        Patient.removePatient(patientParser.getIndex());
+                        Patient.removePatient(patientParser.getId());
                     }
                     if (input.equals("list")) {
                         Patient.listPatientInformation();

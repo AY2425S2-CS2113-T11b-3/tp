@@ -44,6 +44,16 @@ public class Patient {
             throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_FIELDS);
         }
 
+        if (!gender.equals("M") && !gender.equals("F")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_GENDER);
+        }
+
+        for (Patient patient : patientsList) {
+            if (patient.getId().equals(id)) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_ID_EXIST);
+            }
+        }
+
         this.id = id;
         this.name = name;
         this.age = age;
@@ -65,18 +75,29 @@ public class Patient {
     }
 
     /**
-     * Removes a patient from the list of patients based on the provided index.
+     * Removes a patient from the list of patients based on the provided ID.
      *
-     * @param index The index of the patient to be removed based on the patients list.
+     * @param id The unique identifier of the patient to be removed.
+     * @throws NurseSchedException If the patient with the specified ID does not exist.
      */
-    public static void removePatient(int index) throws NurseSchedException{
-        assert index >= 0 : "Patient index number is invalid";
-        if (index >= patientsList.size()) {
-            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_NUMBER);
+    public static void removePatient(String id) throws NurseSchedException {
+        assert id != null : "Patient ID cannot be null";
+
+        boolean found = false;
+        for (Patient patient : patientsList) {
+            if (patient.getId().equals(id)) {
+                patientsList.remove(patient);
+                System.out.println("Patient information removed for ID: " + id);
+                found = true;
+                break;
+            }
         }
-        System.out.println("Patient information removed for " + patientsList.get(index).name + ".");
-        patientsList.remove(index);
+
+        if (!found) {
+            throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND); // You can replace this with the appropriate exception message
+        }
     }
+
 
     /**
      * Prints the information of all patients in the list.
@@ -143,19 +164,19 @@ public class Patient {
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
                 found = true;
-                if (!newName.isEmpty()) {
+                if (newName != null) {
                     patient.name = newName;
                 }
-                if (!newAge.isEmpty()) {
+                if (newAge != null) {
                     patient.age = newAge;
                 }
-                if (!newGender.isEmpty()) {
+                if (newGender != null) {
                     patient.gender = newGender.toUpperCase();
                 }
-                if (!newContact.isEmpty()) {
+                if (newContact != null) {
                     patient.contact = newContact;
                 }
-                if (!newNotes.isEmpty()) {
+                if (newNotes != null) {
                     patient.notes = newNotes;
                 }
                 System.out.println("Patient information updated for ID: " + id);
@@ -188,6 +209,6 @@ public class Patient {
                 "  Age: " + age + " years old\n" +
                 "  Gender: " + gender + "\n" +
                 "  Contact: " + contact + "\n" +
-                (notes.isEmpty() ? "" : "  Notes: " + notes + "\n");
+                (notes.isEmpty() ? "" : "  Notes: " + notes);
     }
 }

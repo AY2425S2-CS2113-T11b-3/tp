@@ -47,6 +47,8 @@ public enum ExceptionMessage {
     EMPTY_INPUT_DETAILS("Input details cannot be empty!"),
     MISSING_ID("Patient ID cannot be empty!"),
     EMPTY_PATIENT_FIELDS("Some patient fields are empty!"),
+    INVALID_GENDER("Gender must be either 'M' or 'F'!"),
+    PATIENT_ID_EXIST("Patient ID already exist!"),
     MISSING_EDIT_INPUT("Edit fields cannot be empty!");
 
 
