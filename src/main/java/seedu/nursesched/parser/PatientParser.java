@@ -353,8 +353,10 @@ public class PatientParser extends Parser {
             default -> throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
             }
         }
+        default -> {
+            return null;
         }
-        return null;
+        }
     }
 
     /**

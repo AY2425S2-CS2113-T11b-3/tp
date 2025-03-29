@@ -83,7 +83,7 @@ public class MedicalTest {
 
     /**
      * Returns a string representation of the medical test in the format:
-     * Patient ID: <patientId> - Test: <testName>, Result: <result>.
+     * Patient ID: {@code patientId} - Test: {@code testName}, Result: {@code result}.
      *
      * @return A string representation of the medical test.
      */
