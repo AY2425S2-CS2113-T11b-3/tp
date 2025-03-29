@@ -159,6 +159,78 @@ public class PatientParser extends Parser {
                 throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
             }
             return new PatientParser(command, id, name, age, gender, contact, notes, index);
+        } else if (command.equals("edit")) {
+            // Extract ID and check if it exists within the patients list
+            // If it does, change the necessary fields, else throw error that no such patient exists in the list
+            if (line.contains("id/")) {
+                int idStart = line.indexOf("id/") + 3;
+                int idEnd = findNextFieldIndex(line, idStart);
+                id = line.substring(idStart, idEnd).trim();
+                line = line.substring(idEnd);
+
+                // Validate ID format (4 digits)
+                if (id.trim().length() != 4) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
+                }
+
+                for (char c : id.toCharArray()) {
+                    if (!Character.isDigit(c)) {
+                        throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
+                    }
+                }
+
+            } else {
+                throw new NurseSchedException(ExceptionMessage.MISSING_ID);
+            }
+
+            if (line.isEmpty()) {
+                throw new NurseSchedException(ExceptionMessage.EMPTY_INPUT_DETAILS);
+            }
+
+            try {
+                if (line.contains("p/")) {
+                    int nameStart = line.indexOf("p/") + 2;
+                    int nameEnd = findNextFieldIndex(line, nameStart);
+                    name = line.substring(nameStart, nameEnd).trim();
+                } else {
+                    name = null;
+                }
+
+                if (line.contains("a/")) {
+                    int ageStart = line.indexOf("a/") + 2;
+                    int ageEnd = findNextFieldIndex(line, ageStart);
+                    age = line.substring(ageStart, ageEnd).trim();
+                } else {
+                    age = null;
+                }
+
+                if (line.contains("g/")) {
+                    int genderStart = line.indexOf("g/") + 2;
+                    int genderEnd = findNextFieldIndex(line, genderStart);
+                    gender = line.substring(genderStart, genderEnd).trim();
+                } else {
+                    gender = null;
+                }
+
+                if (line.contains("c/")) {
+                    int contactStart = line.indexOf("c/") + 2;
+                    int contactEnd = findNextFieldIndex(line, contactStart);
+                    contact = line.substring(contactStart, contactEnd).trim();
+                } else {
+                    contact = null;
+                }
+
+                if (line.contains("n/")) {
+                    int noteStart = line.indexOf("n/") + 2;
+                    notes = line.substring(noteStart).trim();
+                } else {
+                    notes = null;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                System.out.print(e.getMessage());
+            }
+
+            return new PatientParser(command, id, name, age, gender, contact, notes, index);
         }
         return null;
     }
@@ -176,6 +248,26 @@ public class PatientParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_NUMBER);
         }
         return index;
+    }
+
+    // Helper method to find where the next field starts
+    private static int findNextFieldIndex(String line, int startPos) {
+        int[] markers = {
+                line.indexOf("id/", startPos),
+                line.indexOf("p/", startPos),
+                line.indexOf("a/", startPos),
+                line.indexOf("g/", startPos),
+                line.indexOf("c/", startPos),
+                line.indexOf("n/", startPos)
+        };
+
+        int nextIndex = line.length();
+        for (int marker : markers) {
+            if (marker != -1 && marker < nextIndex) {
+                nextIndex = marker;
+            }
+        }
+        return nextIndex;
     }
 
     public String getCommand() {

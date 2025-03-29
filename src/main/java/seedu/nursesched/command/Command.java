@@ -105,6 +105,15 @@ public class Command {
                     if (input.equals("search")) {
                         Patient.printProfileWithID(patientParser.getId());
                     }
+                    if (input.equals("edit")) {
+                        Patient.editPatientDetails(
+                                patientParser.getId(),
+                                patientParser.getName(),
+                                patientParser.getAge(),
+                                patientParser.getGender(),
+                                patientParser.getContact(),
+                                patientParser.getNotes());
+                    }
                     break;
                 case "shift":
                     ShiftParser shiftParser = ShiftParser.extractInputs(line);
