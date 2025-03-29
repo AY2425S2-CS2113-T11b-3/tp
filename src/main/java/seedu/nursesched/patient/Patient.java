@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 public class Patient {
     protected static ArrayList<Patient> patientsList = new ArrayList<>();
 
-    private final String id;
-    private final String name;
-    private final String age;
-    private final String gender;
-    private final String contact;
-    private final String notes;
+    private String id;
+    private String name;
+    private String age;
+    private String gender;
+    private String contact;
+    private String notes;
 
     /**
      * Constructs a new Patient object with the specified name, age, and notes.
@@ -41,10 +41,6 @@ public class Patient {
         this.notes = notes;
         this.gender = gender;
         this.contact = contact;
-    }
-
-    public String getId() {
-        return id;
     }
 
     /**
@@ -116,6 +112,36 @@ public class Patient {
         }
     }
 
+    public static void editPatientDetails(String id, String newName, String newAge,
+                                          String newGender, String newContact, String newNotes) {
+        boolean found = false;
+        for (Patient patient : patientsList) {
+            if (patient.getId().equals(id)) {
+                found = true;
+                if (newName != null) {
+                    patient.name = newName;
+                }
+                if (newAge != null) {
+                    patient.age = newAge;
+                }
+                if (newGender != null) {
+                    patient.gender = newGender.toUpperCase();
+                }
+                if (newContact != null) {
+                    patient.contact = newContact;
+                }
+                if (newNotes != null) {
+                    patient.notes = newNotes;
+                }
+                System.out.println("Patient information updated for ID: " + id);
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("No patient found with ID: " + id);
+        }
+    }
+
     /**
      * Returns the number of patients in the list.
      *
@@ -123,6 +149,10 @@ public class Patient {
      */
     public static int getSizeOfList() {
         return patientsList.size();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public static ArrayList<Patient> getPatientsList() {
