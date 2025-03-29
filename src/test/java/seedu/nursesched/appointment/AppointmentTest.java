@@ -1,13 +1,18 @@
 package seedu.nursesched.appointment;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.parser.ApptParser;
-
+import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class AppointmentTest {
+    @BeforeEach
+    void setUp() {
+        Appointment.apptList = new ArrayList<>();  // Reset appointment list
+    }
 
     @Test
     void testAddAppt_apptAddedToList() throws NurseSchedException {
@@ -24,7 +29,8 @@ public class AppointmentTest {
                 apptParser.getNotes()
         );
 
-        Appointment appointment = Appointment.apptList.get(0);
+
+        Appointment appointment = Appointment.apptList.get(Appointment.apptList.size()-1);
         assertEquals("jean doe", appointment.getName());
         assertEquals("13:00", appointment.getStartTime());
         assertEquals("14:00", appointment.getEndTime());
@@ -48,7 +54,7 @@ public class AppointmentTest {
         );
 
         String expected = "Name: jean doe, From: 15:00, To: 16:00, Date: 2026-02-15, Notes: needs a wheelchair";
-        assertEquals(expected, Appointment.apptList.get(1).toString());
+        assertEquals(expected, Appointment.apptList.get(Appointment.apptList.size()-1).toString());
     }
 
     @Test

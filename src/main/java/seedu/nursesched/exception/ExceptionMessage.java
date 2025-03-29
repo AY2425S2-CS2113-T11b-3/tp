@@ -36,7 +36,7 @@ public enum ExceptionMessage {
     EMPTY_PATIENT_INFO("Patient information cannot be empty!"),
     INVALID_PATIENT_INFO("Patient ID is invalid!"),
     MISSING_PATIENT_FIELDS("Some patient fields are missing!"),
-    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit [i/INDEX] [p/PATIENT_NAME] " +
+    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit [INDEX] [p/PATIENT_NAME] " +
             "[s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
     INVALID_TASK_INDEX("Invalid task index! Index should be an integer!");
 

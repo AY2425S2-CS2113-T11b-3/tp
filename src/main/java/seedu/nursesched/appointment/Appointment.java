@@ -1,7 +1,5 @@
 package seedu.nursesched.appointment;
 
-import seedu.nursesched.exception.NurseSchedException;
-
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -112,7 +110,7 @@ public class Appointment {
      *
      * @param index The index of the appointment to be removed (1-based index).
      */
-    public static void deleteAppt(int index) throws NurseSchedException {
+    public static void deleteAppt(int index) {
         assert index >= 1 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
             Appointment appt = apptList.get(index);
@@ -131,7 +129,7 @@ public class Appointment {
      *
      * @param index The index of the appointment to be removed (1-based index).
      */
-    public static void markAppt(int index) throws NurseSchedException {
+    public static void markAppt(int index){
         assert index >= 0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
             apptList.get(index).setDone(true);
@@ -199,12 +197,40 @@ public class Appointment {
                                        LocalDate date, String notes) {
         assert index >= 0 && index < apptList.size() : "Index must be valid and within bounds!";
         try {
-            Appointment appt = apptList.get(index);
+            Appointment prevAppt = apptList.get(index);
+
+            // If optional fields are empty, keep previous fields
+            if (name == null){
+                name = prevAppt.name;
+            }
+            if (endTime == null) {
+                endTime = prevAppt.endTime;
+            }
+            if (date == null) {
+                date = prevAppt.date;
+            }
+            if (startTime == null) {
+                startTime = prevAppt.startTime;
+            }
+            if (notes == null) {
+                notes = prevAppt.notes;
+            }
+
+            if (startTime.isAfter(endTime)) {
+                System.out.println("Start time cannot be after end time. Defaulting back to previous timings!");
+                logr.warning("Edit failed. Start time (" + startTime + ") is after end time (" + endTime + ")");
+                return;
+            }
+
             Appointment updatedAppt = new Appointment(name, startTime, endTime, date, notes);
             apptList.set(index, updatedAppt);
+
             System.out.println("Appointment updated:");
             System.out.println(updatedAppt);
-            logr.info("Appointment edited at index " + index + ": " + updatedAppt.toString());
+            logr.info("Appointment edited at index " + index + ": " + updatedAppt);
+
+            AppointmentStorage.overwriteSaveFile(apptList);
+
         } catch (IndexOutOfBoundsException e) {
             System.out.println("There is no appointment with index: " + (index + 1));
             logr.warning("Edit failed. Invalid index: " + (index + 1));

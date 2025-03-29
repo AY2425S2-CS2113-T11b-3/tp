@@ -163,37 +163,63 @@ public class ApptParser extends Parser {
         }
 
         if (command.equals("edit")) {
-            if (!line.contains("i/") || !line.contains("p/") || !line.contains("s/")
-                    || !line.contains("e/") || !line.contains("d/") || !line.contains("n/")) {
-                logr.warning("Missing fields in edit command");
+            // Nothing written after command. i.e "edit "
+            if (line.isEmpty()) {
+                logr.warning("Missing index field in edit command");
                 throw new NurseSchedException(ExceptionMessage.INVALID_APPTEDIT_FORMAT);
             }
 
             try {
                 // Extract index
-                int indexStart = line.indexOf("i/") + 2;
-                int nameStart = line.indexOf("p/");
-                String indexStr = line.substring(indexStart, nameStart).trim();
-                apptIndex = Integer.parseInt(indexStr) - 1;
+                if (line.trim().contains(" ")) {
+                    String indexString = line.substring(0, line.indexOf(" "));
+                    apptIndex = parseIndex(indexString);
+                    line = line.substring(line.indexOf(" ") + 1);
+                } else{
+                    // Nothing written after index i.e "edit 1 "
+                    logr.warning("No fields given to edit");
+                    throw new NurseSchedException(ExceptionMessage.INVALID_APPTEDIT_FORMAT);
+                }
 
-                // Extract name
-                int sIndex = line.indexOf("s/");
-                name = line.substring(nameStart + 2, sIndex).trim();
+                // Extract optional fields
+                if (line.contains("p/")) {
+                    int nameStart = line.indexOf("p/") + 2;
+                    int nameEnd = findNextFieldIndex(line, nameStart);
+                    name = line.substring(nameStart, nameEnd).trim();
+                } else {
+                    name = null;
+                }
 
-                // Extract start time
-                int eIndex = line.indexOf("e/");
-                startTime = LocalTime.parse(line.substring(sIndex + 2, eIndex).trim());
+                if (line.contains("s/")) {
+                    int sIndex = line.indexOf("s/") + 2;
+                    int sEnd = findNextFieldIndex(line, sIndex);
+                    startTime = LocalTime.parse(line.substring(sIndex, sEnd).trim());
+                }else {
+                    startTime = null;
+                }
 
-                // Extract end time
-                int dIndex = line.indexOf("d/");
-                endTime = LocalTime.parse(line.substring(eIndex + 2, dIndex).trim());
+                if (line.contains("e/")) {
+                    int eIndex = line.indexOf("e/") + 2;
+                    int eEnd = findNextFieldIndex(line, eIndex);
+                    endTime = LocalTime.parse(line.substring(eIndex, eEnd).trim());
+                } else {
+                    endTime = null;
+                }
 
-                // Extract date
-                int nIndex = line.indexOf("n/");
-                date = LocalDate.parse(line.substring(dIndex + 2, nIndex).trim());
+                if (line.contains("d/")) {
+                    int dIndex = line.indexOf("d/") + 2;
+                    int dEnd = findNextFieldIndex(line, dIndex);
+                    date = LocalDate.parse(line.substring(dIndex, dEnd).trim());
+                } else {
+                    date = null;
+                }
 
-                // Extract notes
-                notes = line.substring(nIndex + 2).trim();
+                if (line.contains("n/")) {
+                    int nIndex = line.indexOf("n/") + 2;
+                    notes = line.substring(nIndex).trim();
+                } else {
+                    notes = null;
+                }
 
             } catch (NumberFormatException e) {
                 logr.warning("Invalid appointment index format in edit command");
@@ -222,6 +248,27 @@ public class ApptParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_APPT_NUMBER);
         }
         return index;
+    }
+
+    // Helper method to find where the next field starts
+    private static int findNextFieldIndex(String line, int startPos) {
+        // All possible next field markers
+        int[] markers = {
+                line.indexOf("p/", startPos),
+                line.indexOf("s/", startPos),
+                line.indexOf("e/", startPos),
+                line.indexOf("d/", startPos),
+                line.indexOf("n/", startPos)
+        };
+
+        // Find the closest marker that's not -1 (not found)
+        int nextIndex = line.length();
+        for (int marker : markers) {
+            if (marker != -1 && marker < nextIndex) {
+                nextIndex = marker;
+            }
+        }
+        return nextIndex;
     }
 
 
