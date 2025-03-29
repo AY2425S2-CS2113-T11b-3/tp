@@ -160,8 +160,6 @@ public class PatientParser extends Parser {
             }
             return new PatientParser(command, id, name, age, gender, contact, notes, index);
         } else if (command.equals("edit")) {
-            // Extract ID and check if it exists within the patients list
-            // If it does, change the necessary fields, else throw error that no such patient exists in the list
             if (line.contains("id/")) {
                 int idStart = line.indexOf("id/") + 3;
                 int idEnd = findNextFieldIndex(line, idStart);
