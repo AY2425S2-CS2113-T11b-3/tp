@@ -1,0 +1,32 @@
+@startuml
+
+participant ":Task" as Task
+participant ":NurseSchedException" as NurseSchedException
+participant "taskList:ArrayList" as taskList
+
+[-> Task : addTask(description, byDate, byTime, isDone)
+activate Task
+
+create taskList
+
+opt byDate and byTime is in the past
+    create NurseSchedException
+    Task -> NurseSchedException : NurseSchedException()
+    activate NurseSchedException
+
+    NurseSchedException -->[
+    deactivate NurseSchedException
+end
+
+Task -> taskList : add()
+activate taskList
+
+taskList -> Task : Create new Task object
+Task --> taskList : new Task to be added
+taskList --> Task
+deactivate taskList
+
+Task -->[
+deactivate Task
+
+@enduml
