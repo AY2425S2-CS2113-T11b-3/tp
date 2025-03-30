@@ -12,11 +12,17 @@ public class Medicine {
     private String medicineName;
 
     public Medicine(int quantity, String medicineName) {
+        assert quantity > 0 : "Quantity must be greater than 0";
+        assert medicineName != null && !medicineName.trim().isEmpty() : "Medicine name cannot be null or empty";
+
         this.quantity = quantity;
         this.medicineName = medicineName;
     }
 
     public static void addMedicine(int quantity, String medicineName) throws NurseSchedException {
+        assert medicineName != null : "Medicine name cannot be null";
+        assert quantity > 0 : "Quantity must be greater than 0";
+
         if (medicineName == null || medicineName.trim().isEmpty()) {
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEADD_FORMAT);
         }
@@ -38,6 +44,9 @@ public class Medicine {
     }
 
     public static void removeMedicine(int quantity, String medicineName) throws NurseSchedException {
+        assert medicineName != null : "Medicine name cannot be null";
+        assert quantity > 0 : "Quantity must be greater than 0";
+
         Medicine existingMedicine = findSpecificMedicine(medicineName);
 
         if (existingMedicine == null) {
@@ -55,6 +64,8 @@ public class Medicine {
     }
 
     public static void deleteMedicine(String medicineName) throws NurseSchedException {
+        assert medicineName != null : "Medicine name cannot be null";
+
         boolean removed = medicineList.removeIf(medicine ->
                 medicine.getMedicineName().equalsIgnoreCase(medicineName));
 
@@ -77,6 +88,8 @@ public class Medicine {
     }
 
     public static ArrayList<Medicine> findMedicine(String medicineName) throws NurseSchedException {
+        assert medicineName != null : "Medicine name cannot be null";
+
         ArrayList<Medicine> matchingMedicine = new ArrayList<>();
         for (Medicine medicine : medicineList) {
             if (medicine.getMedicineName().toLowerCase().contains(medicineName)) {
@@ -95,6 +108,8 @@ public class Medicine {
     }
 
     public static Medicine findSpecificMedicine(String medicineName) {
+        assert medicineName != null : "Medicine name cannot be null";
+
         for (Medicine medicine : medicineList) {
             if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
                 return medicine;
@@ -105,6 +120,10 @@ public class Medicine {
 
     public static void editMedicine(String medicineName, String updatedName, int updatedQuantity) throws
             NurseSchedException {
+        assert medicineName != null : "Medicine name cannot be null";
+        assert updatedName != null : "Updated name cannot be null";
+        assert updatedQuantity > 0 : "Updated quantity must be greater than 0";
+
         for (Medicine medicine : medicineList) {
             if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
                 medicine.setMedicineName(updatedName);
@@ -130,10 +149,13 @@ public class Medicine {
     }
 
     public void addQuantity(int amount) {
+        assert amount > 0 : "Amount to add must be greater than 0";
         this.quantity += amount;
     }
 
     public void removeQuantity(int amount) {
+        assert amount > 0 : "Amount to remove must be greater than 0";
+        assert quantity >= amount : "Cannot remove more than available quantity";
         this.quantity -= amount;
     }
 
@@ -142,10 +164,12 @@ public class Medicine {
     }
 
     public void setQuantity(int quantity) {
+        assert quantity > 0 : "Quantity must be greater than 0";
         this.quantity = quantity;
     }
 
     public void setMedicineName(String medicineName) {
+        assert medicineName != null && !medicineName.trim().isEmpty() : "Medicine name cannot be null or empty";
         this.medicineName = medicineName;
     }
 }

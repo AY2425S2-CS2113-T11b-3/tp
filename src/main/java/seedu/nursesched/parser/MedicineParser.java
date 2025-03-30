@@ -10,6 +10,11 @@ public class MedicineParser extends Parser {
     private final String updatedName;
 
     public MedicineParser(String command, String medicineName, int quantity, String updatedName) {
+        assert command != null && !command.trim().isEmpty() : "Command cannot be null or empty";
+        assert medicineName != null : "Medicine name cannot be null";
+        assert quantity >= 0 : "Quantity cannot be negative";
+        assert updatedName != null : "Updated name cannot be null";
+
         this.command = command;
         this.medicineName = medicineName;
         this.quantity = quantity;
@@ -17,6 +22,8 @@ public class MedicineParser extends Parser {
     }
 
     public static MedicineParser extractInputs(String line) throws NurseSchedException {
+        assert line != null : "Input line cannot be null";
+
         if (line == null || line.trim().isEmpty()) {
             throw new NurseSchedException(ExceptionMessage.INPUT_EMPTY);
         }
@@ -35,24 +42,23 @@ public class MedicineParser extends Parser {
         command = commandParts[0];
         remaining = (commandParts.length > 1) ? commandParts[1] : "";
 
-        if (command.equals("add")) {
-            return getMedicineAddParser(remaining, command);
-        } else if (command.equals("list")) {
-            return new MedicineParser("list", "", 0, "");
-        } else if (command.equals("remove")) {
-            return getMedicineRemoveParser(remaining, command);
-        } else if (command.equals("find")) {
-            return getMedicineFindParser(remaining, command);
-        } else if (command.equals("delete")) {
-            return getMedicineDeleteParser(remaining, command);
-        } else if (command.equals("edit")) {
-            return getMedicineEditParser(remaining, command);
-        } else {
-            throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_FORMAT);
-        }
+        assert command != null && !command.trim().isEmpty() : "Command cannot be null or empty";
+
+        return switch (command) {
+            case "add" -> getMedicineAddParser(remaining, command);
+            case "list" -> new MedicineParser("list", "", 0, "");
+            case "remove" -> getMedicineRemoveParser(remaining, command);
+            case "find" -> getMedicineFindParser(remaining, command);
+            case "delete" -> getMedicineDeleteParser(remaining, command);
+            case "edit" -> getMedicineEditParser(remaining, command);
+            default -> throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_FORMAT);
+        };
     }
 
     private static MedicineParser getMedicineAddParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
+
         String medicineName;
         int quantity;
 
@@ -62,12 +68,14 @@ public class MedicineParser extends Parser {
 
         try {
             medicineName = extractValue(remaining, "mn/", "q/");
+            assert !medicineName.trim().isEmpty() : "Medicine name cannot be empty";
         } catch (RuntimeException e) {
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEADD_FORMAT);
         }
 
         try {
             quantity = Integer.parseInt(extractValue(remaining, "q/", null));
+            assert quantity > 0 : "Quantity must be greater than zero";
         } catch (RuntimeException e) {
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEADD_FORMAT);
         }
@@ -77,9 +85,11 @@ public class MedicineParser extends Parser {
     }
 
     private static MedicineParser getMedicineRemoveParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
+
         String medicineName;
         int quantity;
-
 
         if (!remaining.contains("mn/") || !remaining.contains("q/")) {
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
@@ -88,6 +98,7 @@ public class MedicineParser extends Parser {
 
         try {
             medicineName = extractValue(remaining, "mn/", "q/");
+            assert !medicineName.trim().isEmpty() : "Medicine name cannot be empty";
         } catch (RuntimeException e) {
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
         }
@@ -100,6 +111,7 @@ public class MedicineParser extends Parser {
                 throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
             }
             quantity = Integer.parseInt(quantityString);
+            assert quantity > 0 : "Quantity must be greater than zero";
         } catch (NumberFormatException e) {
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
         }
@@ -109,6 +121,8 @@ public class MedicineParser extends Parser {
     }
 
     private static MedicineParser getMedicineFindParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
         String medicineName;
 
         try {
@@ -121,6 +135,8 @@ public class MedicineParser extends Parser {
     }
 
     private static MedicineParser getMedicineDeleteParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
         String medicineName;
 
         try {
@@ -133,6 +149,8 @@ public class MedicineParser extends Parser {
     }
 
     private static MedicineParser getMedicineEditParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
         String medicineName;
         String updatedName;
         int updatedQuantity;
@@ -174,18 +192,22 @@ public class MedicineParser extends Parser {
     }
 
     public int getQuantity() {
+        assert quantity >= 0 : "Quantity cannot be negative";
         return quantity;
     }
 
     public String getMedicineName() {
+        assert medicineName != null : "Medicine name cannot be null";
         return medicineName;
     }
 
     public String getCommand() {
+        assert command != null : "Command cannot be null";
         return command;
     }
 
     public String getUpdatedName() {
+        assert updatedName != null : "Updated name cannot be null";
         return updatedName;
     }
 }
