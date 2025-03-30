@@ -155,6 +155,10 @@ public class PatientParser extends Parser {
             }
         }
         case "del" -> {
+            if (line.trim().equals("del")) {
+                throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_ID_FIELD);
+            }
+
             if (line.contains("id/")) {
                 if (line.length() == 7) {
                     id = line.substring(line.indexOf("id/") + 3);
@@ -170,7 +174,10 @@ public class PatientParser extends Parser {
             return new PatientParser(command, id, name, age, gender, contact, notes);
         }
         case "list" -> {
-            return new PatientParser(command, id, name, age, gender, contact, notes);
+            if (line.trim().equals("list")) {
+                return new PatientParser(command, id, name, age, gender, contact, notes);
+            }
+            throw new NurseSchedException(ExceptionMessage.INVALID_FORMAT);
         }
         case "search" -> {
             try {
