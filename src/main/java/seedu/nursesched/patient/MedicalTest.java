@@ -75,8 +75,9 @@ public class MedicalTest {
         }
         if (!found) {
             System.out.println("No medical tests found for patient ID: " + patientId);
+        } else {
+            System.out.println("All medical tests listed for patient ID " + patientId);
         }
-        System.out.println("All medical tests listed for patient ID " + patientId);
     }
 
     // Getter
