@@ -27,7 +27,6 @@ public class ParserTest {
         assertEquals("M", patientParser.getGender());
         assertEquals("12345678", patientParser.getContact());
         assertEquals("Allergic to penicillin", patientParser.getNotes());
-        assertEquals(0, patientParser.getIndex());
     }
 
     @Test
@@ -87,14 +86,14 @@ public class ParserTest {
     }
 
     @Test
-    public void testExtractInputs_patientMissingParameters() throws NurseSchedException {
+    public void testExtractInputs_patientMissingParameters() {
         String input = "pf add p/Jean Doe a/25";
 
         assertThrows(NurseSchedException.class, () -> PatientParser.extractInputs(input));
     }
 
     @Test
-    public void testExtractInputs_patientEmptyInput() throws NurseSchedException {
+    public void testExtractInputs_patientEmptyInput() {
         String input = "";
 
         assertThrows(NurseSchedException.class, () -> PatientParser.extractInputs(input));

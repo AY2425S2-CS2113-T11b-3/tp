@@ -44,8 +44,9 @@ public class MedicalTest {
      *
      * @param test The MedicalTest object to be added.
      */
-    public static void addMedicalTest(MedicalTest test) {
+    public static void addMedicalTest(MedicalTest test, String id) {
         medicalTestList.add(test);
+        System.out.println("Medical test added for patient with ID " + id + ".");
     }
 
     /**
@@ -55,6 +56,7 @@ public class MedicalTest {
      */
     public static void removeTestsForPatient(String patientId) {
         medicalTestList.removeIf(test -> test.getPatientId().equals(patientId));
+        System.out.println("All medical tests deleted for patient ID " + patientId);
     }
 
     /**
@@ -74,6 +76,7 @@ public class MedicalTest {
         if (!found) {
             System.out.println("No medical tests found for patient ID: " + patientId);
         }
+        System.out.println("All medical tests listed for patient ID " + patientId);
     }
 
     // Getter

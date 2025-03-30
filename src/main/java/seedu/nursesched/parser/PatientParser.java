@@ -25,7 +25,6 @@ public class PatientParser extends Parser {
     private final String gender;
     private final String contact;
     private final String notes;
-    private final int index;
 
     /**
      * Constructs a new {@code PatientParser} object with extracted input details.
@@ -37,12 +36,10 @@ public class PatientParser extends Parser {
      * @param gender The gender of the patient.
      * @param contact The contact information of the patient.
      * @param notes Additional notes about the patient.
-     * @param index The index of the patient in the list (if applicable).
      */
     public PatientParser(String command, String id, String name, String age, String gender,
-                         String contact, String notes, int index) {
+                         String contact, String notes) {
         assert command != null : "Command cannot be null";
-        assert index >= 0 : "Patient index cannot be negative";
 
         this.command = command;
         this.id = id;
@@ -51,7 +48,6 @@ public class PatientParser extends Parser {
         this.gender = gender;
         this.contact = contact;
         this.notes = notes;
-        this.index = index;
     }
 
     /**
@@ -98,7 +94,6 @@ public class PatientParser extends Parser {
         String gender = null;
         String contact = null;
         String notes = null;
-        int index = 0;
 
         // Handle cases where the line is just the command itself
         // If there are additional parameters, the command will be correctly parsed
@@ -118,7 +113,7 @@ public class PatientParser extends Parser {
 
         switch (command) {
         case "add" -> {
-            if (line.equals("add")) {
+            if (line.trim().equals("add")) {
                 throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_INFO);
             }
 
@@ -132,16 +127,7 @@ public class PatientParser extends Parser {
                 throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_INFO);
             }
 
-            // Validate ID format (4 digits)
-            if (id.trim().length() != 4) {
-                throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
-            }
-
-            for (char c : id.toCharArray()) {
-                if (!Character.isDigit(c)) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
-                }
-            }
+            validateID(id);
 
             try {
                 line = line.substring(line.indexOf("p/"));
@@ -160,7 +146,7 @@ public class PatientParser extends Parser {
                 line = line.substring(line.indexOf("n/"));
 
                 notes = line.substring(line.indexOf("n/") + 2);
-                return new PatientParser(command, id, name, age, gender, contact, notes, index);
+                return new PatientParser(command, id, name, age, gender, contact, notes);
             } catch (IndexOutOfBoundsException e) {
                 if (!line.contains("p/") || !line.contains("a/") || !line.contains("g/") || !line.contains("c/")) {
                     throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_ADD_FORMAT);
@@ -179,20 +165,12 @@ public class PatientParser extends Parser {
 
             // Validate ID format (4 digits)
             assert id != null;
-            if (id.trim().length() != 4) {
-                throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
-            }
+            validateID(id);
 
-            for (char c : id.toCharArray()) {
-                if (!Character.isDigit(c)) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
-                }
-            }
-
-            return new PatientParser(command, id, name, age, gender, contact, notes, index);
+            return new PatientParser(command, id, name, age, gender, contact, notes);
         }
         case "list" -> {
-            return new PatientParser(command, id, name, age, gender, contact, notes, index);
+            return new PatientParser(command, id, name, age, gender, contact, notes);
         }
         case "search" -> {
             try {
@@ -203,7 +181,7 @@ public class PatientParser extends Parser {
             } catch (StringIndexOutOfBoundsException e) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
             }
-            return new PatientParser(command, id, name, age, gender, contact, notes, index);
+            return new PatientParser(command, id, name, age, gender, contact, notes);
         }
         case "edit" -> {
             if (line.contains("id/")) {
@@ -213,15 +191,7 @@ public class PatientParser extends Parser {
                 line = line.substring(idEnd);
 
                 // Validate ID format (4 digits)
-                if (id.trim().length() != 4) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
-                }
-
-                for (char c : id.toCharArray()) {
-                    if (!Character.isDigit(c)) {
-                        throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
-                    }
-                }
+                validateID(id);
 
             } else {
                 throw new NurseSchedException(ExceptionMessage.MISSING_ID);
@@ -284,7 +254,7 @@ public class PatientParser extends Parser {
                 System.out.print(e.getMessage());
             }
 
-            return new PatientParser(command, id, name, age, gender, contact, notes, index);
+            return new PatientParser(command, id, name, age, gender, contact, notes);
         }
         case "result" -> {
             try {
@@ -302,8 +272,8 @@ public class PatientParser extends Parser {
                     // Extract patient ID
                     id = extractValue(line, "id/");
                     // Extract test details (test name, date, result)
-                    String testName = extractValue(line, "t/");
-                    String testResult = extractValue(line, "r/");
+                    String testName = line.substring(line.indexOf("t/") + 2, line.indexOf("r/") - 1);
+                    String testResult = line.substring(line.indexOf("r/"));
 
                     // Find the patient by ID and add the test
                     Patient patient = findPatientById(id);
@@ -315,10 +285,9 @@ public class PatientParser extends Parser {
                     // Validate and create the medical test
                     MedicalTest test = new MedicalTest(id, testName, testResult);
 
-                    MedicalTest.addMedicalTest(test);
+                    MedicalTest.addMedicalTest(test, id);
 
-                    System.out.println("Medical test added for patient with ID " + id + ".");
-                    return new PatientParser(command, id, name, age, gender, contact, notes, index);
+                    return new PatientParser(command, id, name, age, gender, contact, notes);
                 } catch (IndexOutOfBoundsException e) {
                     throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
                 }
@@ -338,9 +307,7 @@ public class PatientParser extends Parser {
 
                 MedicalTest.removeTestsForPatient(id);
 
-                System.out.println("All medical tests deleted for patient ID " + id);
-
-                return new PatientParser(command, id, name, age, gender, contact, notes, index);
+                return new PatientParser(command, id, name, age, gender, contact, notes);
             }
             case "list" -> {
                 command = "result list";
@@ -354,10 +321,9 @@ public class PatientParser extends Parser {
                     throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
                 }
 
-                System.out.println("All medical tests listed for patient ID " + id);
                 MedicalTest.listTestsForPatient(id);
 
-                return new PatientParser(command, id, name, age, gender, contact, notes, index);
+                return new PatientParser(command, id, name, age, gender, contact, notes);
             }
             default -> throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
             }
@@ -365,6 +331,19 @@ public class PatientParser extends Parser {
         default -> {
             return null;
         }
+        }
+    }
+
+    private static void validateID(String id) throws NurseSchedException {
+        // Validate ID format (4 digits)
+        if (id.trim().length() != 4) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
+        }
+
+        for (char c : id.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
+            }
         }
     }
 
@@ -436,9 +415,5 @@ public class PatientParser extends Parser {
 
     public String getNotes() {
         return notes;
-    }
-
-    public int getIndex() {
-        return index;
     }
 }
