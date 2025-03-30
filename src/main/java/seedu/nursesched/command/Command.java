@@ -207,12 +207,10 @@ public class Command {
                         );
                         break;
                     case "edit":
-                        Medicine.deleteMedicine(
-                                medicineParser.getMedicineName()
-                        );
-                        Medicine.addMedicine(
-                                medicineParser.getUpdatedQuantity(),
-                                medicineParser.getUpdatedName()
+                        Medicine.editMedicine(
+                                medicineParser.getMedicineName(),
+                                medicineParser.getUpdatedName(),
+                                medicineParser.getQuantity()
                         );
                         break;
 
