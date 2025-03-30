@@ -60,6 +60,9 @@ public class Command {
                     case "list":
                         Appointment.list();
                         break;
+                    case "sort":
+                        Appointment.sortByTime();
+                        break;
                     case "find":
                         Appointment.filterAppointment(apptParser.getSearchKeyword());
                         break;
