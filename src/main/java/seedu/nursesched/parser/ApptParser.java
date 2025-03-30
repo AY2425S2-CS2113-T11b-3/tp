@@ -154,6 +154,10 @@ public class ApptParser extends Parser {
             return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex,searchKeyword);
         }
 
+        if (command.equals("sort")) {
+            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex,searchKeyword);
+        }
+
         if (command.equals("find")) {
             if (line == null){
                 throw new NurseSchedException(ExceptionMessage.MISSING_SEARCH_TERM);

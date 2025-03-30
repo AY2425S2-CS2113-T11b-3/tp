@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -236,6 +237,27 @@ public class Appointment {
             logr.warning("Edit failed. Invalid index: " + (index + 1));
         }
     }
+
+    /**
+     * Sorts the appointment list in chronological order, first by date and then by start time.
+     * This method updates the apptList and saves the sorted list to the storage.
+     */
+    public static void sortByTime() {
+
+        if (apptList.isEmpty()){
+            System.out.println("Appointment list is empty Nothing to sort.");
+            logr.warning("Appointment list is empty Nothing to sort.");
+            return;
+        }
+
+        apptList.sort(Comparator.comparing((Appointment a) -> a.date) // First sort by dates
+                .thenComparing(a -> a.startTime));  //Then sort by time
+
+        AppointmentStorage.overwriteSaveFile(apptList);
+        System.out.println("Appointments sorted chronologically.");
+        logr.info("Appointment list sorted chronologically");
+    }
+
 
     /**
      * Displays all appointment currently stored in the appointment list.
