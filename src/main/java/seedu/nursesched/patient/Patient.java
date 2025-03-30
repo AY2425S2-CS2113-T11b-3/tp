@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 
 /**
  * The Patient class represents a patient in the healthcare system.
- * It stores patient information such as name, age, and notes (optional).
- * This class also provides methods to add, remove, and display patient information.
+ * It stores patient information such as ID, name, age, gender, contact, and notes (optional).
+ * This class provides methods to add, remove, edit, and display patient information.
  */
 public class Patient {
     protected static ArrayList<Patient> patientsList = new ArrayList<>();
 
-    private String id;
+    private final String id;
     private String name;
     private String age;
     private String gender;
@@ -22,18 +22,37 @@ public class Patient {
     private String notes;
 
     /**
-     * Constructs a new Patient object with the specified name, age, and notes.
+     * Constructs a new Patient object with the specified details.
      *
-     * @param name  The name of the patient.
-     * @param age   The age of the patient.
-     * @param notes Additional notes about the patient.
+     * @param id      The unique identifier for the patient.
+     * @param name    The name of the patient.
+     * @param age     The age of the patient.
+     * @param gender  The gender of the patient.
+     * @param contact The contact details of the patient.
+     * @param notes   Additional notes about the patient (optional).
+     * @throws NurseSchedException If any required field is empty.
      */
-    public Patient(String id, String name, String age, String gender, String contact, String notes) {
+    public Patient(String id, String name, String age, String gender, String contact, String notes)
+            throws NurseSchedException {
         assert id != null : "id cannot be null";
         assert name != null : "Name cannot be null";
         assert age != null : "Age cannot be null";
         assert gender != null : "Gender cannot be null";
         assert contact != null : "Contact cannot be null";
+
+        if (name.trim().isEmpty() || age.trim().isEmpty() || gender.trim().isEmpty() || contact.trim().isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_FIELDS);
+        }
+
+        if (!gender.equals("M") && !gender.equals("F")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_GENDER);
+        }
+
+        for (Patient patient : patientsList) {
+            if (patient.getId().equals(id)) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_ID_EXIST);
+            }
+        }
 
         this.id = id;
         this.name = name;
@@ -56,18 +75,29 @@ public class Patient {
     }
 
     /**
-     * Removes a patient from the list of patients based on the provided index.
+     * Removes a patient from the list of patients based on the provided ID.
      *
-     * @param index The index of the patient to be removed based on the patients list.
+     * @param id The unique identifier of the patient to be removed.
+     * @throws NurseSchedException If the patient with the specified ID does not exist.
      */
-    public static void removePatient(int index) throws NurseSchedException{
-        assert index >= 0 : "Patient index number is invalid";
-        if (index >= patientsList.size()) {
-            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_NUMBER);
+    public static void removePatient(String id) throws NurseSchedException {
+        assert id != null : "Patient ID cannot be null";
+
+        boolean found = false;
+        for (Patient patient : patientsList) {
+            if (patient.getId().equals(id)) {
+                patientsList.remove(patient);
+                System.out.println("Patient information removed for ID: " + id);
+                found = true;
+                break;
+            }
         }
-        System.out.println("Patient information removed for " + patientsList.get(index).name + ".");
-        patientsList.remove(index);
+
+        if (!found) {
+            throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
+        }
     }
+
 
     /**
      * Prints the information of all patients in the list.
@@ -83,6 +113,12 @@ public class Patient {
         }
     }
 
+    /**
+     * Prints the profile of a patient with the specified ID.
+     *
+     * @param id The unique identifier of the patient.
+     * @throws NurseSchedException If the ID is invalid or no patient is found.
+     */
     public static void printProfileWithID(String id) throws NurseSchedException {
         if (id.length() > 4 || id.length() < 3) {
             throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
@@ -112,8 +148,18 @@ public class Patient {
         }
     }
 
-    public static void editPatientDetails(String id, String newName, String newAge,
-                                          String newGender, String newContact, String newNotes) {
+    /**
+     * Edits the details of a patient based on the provided ID.
+     *
+     * @param id         The ID of the patient to update.
+     * @param newName    The new name (if provided).
+     * @param newAge     The new age (if provided).
+     * @param newGender  The new gender (if provided).
+     * @param newContact The new contact details (if provided).
+     * @param newNotes   The new notes (if provided).
+     */
+    public static void editPatientDetails(String id, String newName, String newAge, String newGender,
+                                          String newContact, String newNotes) {
         boolean found = false;
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
@@ -142,15 +188,6 @@ public class Patient {
         }
     }
 
-    /**
-     * Returns the number of patients in the list.
-     *
-     * @return The size of the patients list.
-     */
-    public static int getSizeOfList() {
-        return patientsList.size();
-    }
-
     public String getId() {
         return id;
     }
@@ -160,10 +197,9 @@ public class Patient {
     }
 
     /**
-     * Returns a string representation of the patient in the format:
-     * "name, age years old, notes".
+     * Returns a string representation of the patient's details.
      *
-     * @return A string representation of the patient.
+     * @return A formatted string containing patient details.
      */
     @Override
     public String toString() {
@@ -173,6 +209,6 @@ public class Patient {
                 "  Age: " + age + " years old\n" +
                 "  Gender: " + gender + "\n" +
                 "  Contact: " + contact + "\n" +
-                (notes.isEmpty() ? "" : "  Notes: " + notes + "\n");
+                (notes.isEmpty() ? "" : "  Notes: " + notes);
     }
 }

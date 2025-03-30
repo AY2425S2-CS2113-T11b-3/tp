@@ -7,8 +7,15 @@ import seedu.nursesched.patient.Patient;
 
 /**
  * The PatientParser class parses the input of the user to make sense of the command.
- * It stores a command, name, age, notes and index if successfully parsed.
- * The methods within this class will return null if it does not understand the input.
+ * It extracts commands and relevant parameters, validating them before processing.
+ * This class supports various patient-related commands, including add, del, list, search,
+ * edit, result.
+ *
+ * Each command follows a specific format and requires valid parameters. The parser extracts
+ * values from the input, verifies them, and encapsulates them in a {@code PatientParser} object
+ * for further processing.
+ *
+ * Exceptions are thrown if the input format is incorrect or required parameters are missing.
  */
 public class PatientParser extends Parser {
     private final String command;
@@ -18,21 +25,21 @@ public class PatientParser extends Parser {
     private final String gender;
     private final String contact;
     private final String notes;
-    private final int index;
 
     /**
-     * Constructs a new PatientParser object with the specified parameters.
+     * Constructs a new {@code PatientParser} object with extracted input details.
      *
-     * @param command The command associated with the input given.
+     * @param command The parsed command indicating the operation to perform.
+     * @param id The unique ID of the patient.
      * @param name The name of the patient.
      * @param age The age of the patient.
+     * @param gender The gender of the patient.
+     * @param contact The contact information of the patient.
      * @param notes Additional notes about the patient.
-     * @param index Chosen index within the patient list.
      */
     public PatientParser(String command, String id, String name, String age, String gender,
-                         String contact, String notes, int index) {
+                         String contact, String notes) {
         assert command != null : "Command cannot be null";
-        assert index >= 0 : "Patient index cannot be negative";
 
         this.command = command;
         this.id = id;
@@ -41,15 +48,13 @@ public class PatientParser extends Parser {
         this.gender = gender;
         this.contact = contact;
         this.notes = notes;
-        this.index = index;
     }
 
     /**
      * Extracts and parses the inputs from the given command line for patient-related operations.
-     * The method supports three commands: "add", "del", and "list".
-     *
+     * The method supports several commands: "add", "del", "list", "search", "edit", "result".
      * For the "add" command, the input line should follow the format:
-     * {@code pf add p/<name> a/<age> n/<notes>}
+     * {@code pf add id/<ID> p/<name> a/<age> g/<gender> c/<contact> n/<notes>}
      *
      * For the "del" command, the input line should follow the format:
      * {@code pf del <index>}
@@ -57,12 +62,21 @@ public class PatientParser extends Parser {
      * For the "list" command, the input line should follow the format:
      * {@code pf list}
      *
+     * For the "search" command, the input line should follow the format:
+     * {@code pf search <id>}
+     *
+     * For the "edit" command, the input line should follow the format:
+     * {@code pf edit <id>} followed by any necessary fields that they would like to change.
+     *
+     * For the "result" command, the input line supports 3 other cases and should follow the following format::
+     * {@code pf result add id/<ID> t/<test> r/<results>}
+     *
      * @param line The input command line to be parsed. It should start with "pf" followed by the command.
      * @return A {@link PatientParser} object containing the parsed command and its associated parameters.
      *         Returns {@code null} if the input line is invalid or if required parameters are missing.
      *
+     * @throws NurseSchedException If input is invalid or missing required fields.
      * @throws IndexOutOfBoundsException If the input line does not contain the expected parameters.
-     * @throws NumberFormatException If the index provided for the "del" command is invalid or out of bounds.
      */
     public static PatientParser extractInputs(String line) throws NurseSchedException {
         assert line != null : "Input line cannot be null";
@@ -73,14 +87,13 @@ public class PatientParser extends Parser {
 
         line = line.trim();
         line = line.substring(line.indexOf(" ") + 1);
-        String command = "";
-        String id = "";
-        String name = "";
-        String age = "";
-        String gender = "";
-        String contact = "";
-        String notes = "";
-        int index = 0;
+        String command;
+        String id = null;
+        String name = null;
+        String age = null;
+        String gender = null;
+        String contact = null;
+        String notes = null;
 
         // Handle cases where the line is just the command itself
         // If there are additional parameters, the command will be correctly parsed
@@ -98,8 +111,9 @@ public class PatientParser extends Parser {
             return null;
         }
 
-        if (command.equals("add")) {
-            if (line.equals("add")) {
+        switch (command) {
+        case "add" -> {
+            if (line.trim().equals("add")) {
                 throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_INFO);
             }
 
@@ -113,16 +127,7 @@ public class PatientParser extends Parser {
                 throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_INFO);
             }
 
-            // Validate ID format (4 digits)
-            if (id.trim().length() != 4) {
-                throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
-            }
-
-            for (char c : id.toCharArray()) {
-                if (!Character.isDigit(c)) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
-                }
-            }
+            validateID(id);
 
             try {
                 line = line.substring(line.indexOf("p/"));
@@ -141,17 +146,40 @@ public class PatientParser extends Parser {
                 line = line.substring(line.indexOf("n/"));
 
                 notes = line.substring(line.indexOf("n/") + 2);
-                return new PatientParser(command, id, name, age, gender, contact, notes, index);
+                return new PatientParser(command, id, name, age, gender, contact, notes);
             } catch (IndexOutOfBoundsException e) {
+                if (!line.contains("p/") || !line.contains("a/") || !line.contains("g/") || !line.contains("c/")) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_ADD_FORMAT);
+                }
+                throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
+            }
+        }
+        case "del" -> {
+            if (line.trim().equals("del")) {
+                throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_ID_FIELD);
+            }
+
+            if (line.contains("id/")) {
+                if (line.length() == 7) {
+                    id = line.substring(line.indexOf("id/") + 3);
+                }
+            } else {
                 throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
             }
 
-        } else if (command.equals("del")) {
-            index = parseIndex(line);
-            return new PatientParser(command, id, name, age, gender, contact, notes, index);
-        } else if (command.equals("list")) {
-            return new PatientParser(command, id, name, age, gender, contact, notes, index);
-        } else if (command.equals("search")) {
+            // Validate ID format (4 digits)
+            assert id != null;
+            validateID(id);
+
+            return new PatientParser(command, id, name, age, gender, contact, notes);
+        }
+        case "list" -> {
+            if (line.trim().equals("list")) {
+                return new PatientParser(command, id, name, age, gender, contact, notes);
+            }
+            throw new NurseSchedException(ExceptionMessage.INVALID_FORMAT);
+        }
+        case "search" -> {
             try {
                 if (line.length() != 7) {
                     throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
@@ -160,8 +188,9 @@ public class PatientParser extends Parser {
             } catch (StringIndexOutOfBoundsException e) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
             }
-            return new PatientParser(command, id, name, age, gender, contact, notes, index);
-        } else if (command.equals("edit")) {
+            return new PatientParser(command, id, name, age, gender, contact, notes);
+        }
+        case "edit" -> {
             if (line.contains("id/")) {
                 int idStart = line.indexOf("id/") + 3;
                 int idEnd = findNextFieldIndex(line, idStart);
@@ -169,15 +198,7 @@ public class PatientParser extends Parser {
                 line = line.substring(idEnd);
 
                 // Validate ID format (4 digits)
-                if (id.trim().length() != 4) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
-                }
-
-                for (char c : id.toCharArray()) {
-                    if (!Character.isDigit(c)) {
-                        throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
-                    }
-                }
+                validateID(id);
 
             } else {
                 throw new NurseSchedException(ExceptionMessage.MISSING_ID);
@@ -192,62 +213,74 @@ public class PatientParser extends Parser {
                     int nameStart = line.indexOf("p/") + 2;
                     int nameEnd = findNextFieldIndex(line, nameStart);
                     name = line.substring(nameStart, nameEnd).trim();
-                } else {
-                    name = null;
+
+                    if (name.isEmpty()) {
+                        throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
+                    }
                 }
 
                 if (line.contains("a/")) {
                     int ageStart = line.indexOf("a/") + 2;
                     int ageEnd = findNextFieldIndex(line, ageStart);
                     age = line.substring(ageStart, ageEnd).trim();
-                } else {
-                    age = null;
+
+                    if (age.isEmpty()) {
+                        throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
+                    }
                 }
 
                 if (line.contains("g/")) {
                     int genderStart = line.indexOf("g/") + 2;
                     int genderEnd = findNextFieldIndex(line, genderStart);
                     gender = line.substring(genderStart, genderEnd).trim();
-                } else {
-                    gender = null;
+
+                    if (gender.isEmpty()) {
+                        throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
+                    }
                 }
 
                 if (line.contains("c/")) {
                     int contactStart = line.indexOf("c/") + 2;
                     int contactEnd = findNextFieldIndex(line, contactStart);
                     contact = line.substring(contactStart, contactEnd).trim();
-                } else {
-                    contact = null;
+
+                    if (contact.isEmpty()) {
+                        throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
+                    }
                 }
 
                 if (line.contains("n/")) {
                     int noteStart = line.indexOf("n/") + 2;
                     notes = line.substring(noteStart).trim();
-                } else {
-                    notes = null;
+
+                    if (notes.isEmpty()) {
+                        throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
+                    }
                 }
             } catch (IndexOutOfBoundsException e) {
                 System.out.print(e.getMessage());
             }
 
-            return new PatientParser(command, id, name, age, gender, contact, notes, index);
-        } else if (command.equals("result")) {
+            return new PatientParser(command, id, name, age, gender, contact, notes);
+        }
+        case "result" -> {
             try {
                 command = line.substring(0, line.indexOf(" "));
                 line = line.substring(line.indexOf(" ") + 1);
             } catch (StringIndexOutOfBoundsException e) {
-                throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
+                throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
             }
 
-            if (command.equals("add")) {
+            switch (command) {
+            case "add" -> {
                 try {
                     command = "result add";
 
                     // Extract patient ID
                     id = extractValue(line, "id/");
                     // Extract test details (test name, date, result)
-                    String testName = extractValue(line, "t/");
-                    String testResult = extractValue(line, "r/");
+                    String testName = line.substring(line.indexOf("t/") + 2, line.indexOf("r/") - 1);
+                    String testResult = line.substring(line.indexOf("r/"));
 
                     // Find the patient by ID and add the test
                     Patient patient = findPatientById(id);
@@ -259,15 +292,15 @@ public class PatientParser extends Parser {
                     // Validate and create the medical test
                     MedicalTest test = new MedicalTest(id, testName, testResult);
 
-                    MedicalTest.addMedicalTest(test);
+                    MedicalTest.addMedicalTest(test, id);
 
-                    System.out.println("Medical test added for patient with ID " + id + ".");
-                    return new PatientParser(command, id, name, age, gender, contact, notes, index);
+                    return new PatientParser(command, id, name, age, gender, contact, notes);
                 } catch (IndexOutOfBoundsException e) {
                     throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
                 }
-
-            } else if (command.equals("del")) {// Extract patient ID to delete all medical tests
+            }
+            case "del" -> {
+                // Extract patient ID to delete all medical tests
                 command = "result del";
 
                 id = extractValue(line, "id/");
@@ -281,10 +314,9 @@ public class PatientParser extends Parser {
 
                 MedicalTest.removeTestsForPatient(id);
 
-                System.out.println("All medical tests deleted for patient ID " + id);
-
-                return new PatientParser(command, id, name, age, gender, contact, notes, index);
-            } else if (command.equals("list")) {
+                return new PatientParser(command, id, name, age, gender, contact, notes);
+            }
+            case "list" -> {
                 command = "result list";
 
                 id = extractValue(line, "id/");
@@ -296,28 +328,30 @@ public class PatientParser extends Parser {
                     throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
                 }
 
-                System.out.println("All medical tests listed for patient ID " + id);
                 MedicalTest.listTestsForPatient(id);
 
-                return new PatientParser(command, id, name, age, gender, contact, notes, index);
+                return new PatientParser(command, id, name, age, gender, contact, notes);
+            }
+            default -> throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
             }
         }
-        return null;
+        default -> {
+            return null;
+        }
+        }
     }
 
-    public static int parseIndex (String line) throws NurseSchedException {
-        int index = 0;
-        try {
-            index = Integer.parseInt(line) - 1;
-            if (index == -1) {
-                throw new NurseSchedException(ExceptionMessage.ZERO_INDEX);
-            } else if (index < 0) {
-                throw new NurseSchedException((ExceptionMessage.NEGATIVE_INDEX));
-            }
-        } catch (NumberFormatException e) {
-            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_NUMBER);
+    private static void validateID(String id) throws NurseSchedException {
+        // Validate ID format (4 digits)
+        if (id.trim().length() != 4) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
         }
-        return index;
+
+        for (char c : id.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
+            }
+        }
     }
 
     // Helper method to find where the next field starts
@@ -388,9 +422,5 @@ public class PatientParser extends Parser {
 
     public String getNotes() {
         return notes;
-    }
-
-    public int getIndex() {
-        return index;
     }
 }
