@@ -197,10 +197,9 @@ public class Command {
                         Medicine.listMedicine();
                         break;
                     case "find":
-                        Medicine matchingMedicine = Medicine.findMedicine(
+                        Medicine.findMedicine(
                                 medicineParser.getMedicineName()
                         );
-                        System.out.println(matchingMedicine);
                         break;
                     case "delete":
                         Medicine.deleteMedicine(

@@ -27,9 +27,19 @@ public enum ExceptionMessage {
     TASK_INDEX_OUT_OF_BOUNDS("Task index is not within 1 and the total number of tasks in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
     PARSING_ERROR("Error parsing command!"),
+    INVALID_MEDICINEEDIT_FORMAT("Invalid medicine edit format! Input as: medicine edit mn/[MEDICINE_NAME] " +
+            "un/[UPDATE_NAME] uq/[UPDATED_QUANTITY]"),
+    INVALID_MEDICINEDELETE_FORMAT("Invalid medicine delete format! Input as: medicine delete mn/[MEDICINE_NAME]"),
+    INVALID_MEDICINEFIND_FORMAT("Invalid medicine find format! Input as: medicine find mn/[MEDICINE_NAME]"),
+    INVALID_MEDICINE_FORMAT("Try adding add, remove, edit, list, find or delete!"),
     INVALID_MEDICINEADD_FORMAT("Invalid medicine add format! Input as: medicine add mn/[MEDICINE_NAME] q/[QUANTITY]"),
-    INVALID_MEDICINE_QUANTITY("Medicine quantity must be a positive integer!"),
-    MEDICINE_INPUT_NOT_FOUND("Medicine not found!"),
+    INVALID_MEDICINEREMOVE_FORMAT("Invalid medicine remove format! Input as: medicine remove mn/[MEDICINE_NAME]" +
+            " q/[QUANTITY]"),
+    NEGATIVE_MEDICINE_QUANTITY("Medicine quantity must be a positive integer!"),
+    INVALID_MEDICINE_QUANTITY("Medicine quantity is too big! Should be lesser than existing quantity."),
+    MISSING_MEDICINE_QUANTITY("No medicine quantity input"),
+    MISSING_MEDICINE_NAME("No Medicine name input"),
+    MEDICINE_NONEXISTENT("Medicine does not exist!"),
     MISSING_SEARCH_TERM("Missing search term after 'find'!"),
     INVALID_ID_LENGTH("Patient ID must be 4 digits long."),
     INVALID_ID_INPUT("Patient ID must contain only digits."),
@@ -51,7 +61,6 @@ public enum ExceptionMessage {
     PATIENT_ID_EXIST("Patient ID already exist!"),
     EMPTY_PATIENT_ID_FIELD("Patient ID field cannot be empty!"),
     MISSING_EDIT_INPUT("Edit fields cannot be empty!");
-
 
 
     private final String message;

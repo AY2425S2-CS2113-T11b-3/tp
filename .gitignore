@@ -11,6 +11,9 @@ src/main/resources/docs/
 # Logging files
 /logs/
 
+#Data files
+/data/
+
 # MacOS custom attributes files created by Finder
 .DS_Store
 *.iml

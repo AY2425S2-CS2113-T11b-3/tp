@@ -37,7 +37,7 @@ public class TaskTest {
                         LocalDate.of(2025, 3, 14),
                         LocalTime.of(13, 0),
                         false
-                        )
+                )
         );
     }
 
@@ -60,10 +60,10 @@ public class TaskTest {
     public void markTask_validIndex_taskMarked() throws NurseSchedException {
         Task.taskList.clear();
         Task.addTask(
-            "Prepare medication for Jean",
-            LocalDate.of(2026, 2, 14),
-            LocalTime.of(13, 0),
-            false
+                "Prepare medication for Jean",
+                LocalDate.of(2026, 2, 14),
+                LocalTime.of(13, 0),
+                false
         );
         Task.markTask(1);
         assertTrue(Task.taskList.get(0).getIsDone());
@@ -102,10 +102,10 @@ public class TaskTest {
     public void unmarkTask_validIndex_taskMarked() throws NurseSchedException {
         Task.taskList.clear();
         Task.addTask(
-            "Prepare medication for Jean",
-            LocalDate.of(2026, 2, 14),
-            LocalTime.of(13, 0),
-            true
+                "Prepare medication for Jean",
+                LocalDate.of(2026, 2, 14),
+                LocalTime.of(13, 0),
+                true
         );
         Task.unmarkTask(1);
         assertFalse(Task.taskList.get(0).getIsDone());
