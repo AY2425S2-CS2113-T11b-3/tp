@@ -7,14 +7,12 @@ public class MedicineParser extends Parser {
     private final String command;
     private final String medicineName;
     private final int quantity;
-    private final int updatedQuantity;
     private final String updatedName;
 
-    public MedicineParser(String command, String medicineName, int quantity, String updatedName, int updatedQuantity) {
+    public MedicineParser(String command, String medicineName, int quantity, String updatedName) {
         this.command = command;
         this.medicineName = medicineName;
         this.quantity = quantity;
-        this.updatedQuantity = updatedQuantity;
         this.updatedName = updatedName;
     }
 
@@ -40,8 +38,7 @@ public class MedicineParser extends Parser {
         if (command.equals("add")) {
             return getMedicineAddParser(remaining, command);
         } else if (command.equals("list")) {
-            return new MedicineParser("list", "", 0, "",
-                    0);
+            return new MedicineParser("list", "", 0, "");
         } else if (command.equals("remove")) {
             return getMedicineRemoveParser(remaining, command);
         } else if (command.equals("find")) {
@@ -54,7 +51,6 @@ public class MedicineParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_FORMAT);
         }
     }
-
 
     private static MedicineParser getMedicineAddParser(String remaining, String command) throws NurseSchedException {
         String medicineName;
@@ -77,9 +73,8 @@ public class MedicineParser extends Parser {
         }
 
 
-        return new MedicineParser(command, medicineName, quantity, "", 0);
+        return new MedicineParser(command, medicineName, quantity, "");
     }
-
 
     private static MedicineParser getMedicineRemoveParser(String remaining, String command) throws NurseSchedException {
         String medicineName;
@@ -99,7 +94,8 @@ public class MedicineParser extends Parser {
 
 
         try {
-            String quantityString = String.valueOf(Integer.parseInt(extractValue(remaining, "q/", null)));
+            String quantityString = String.valueOf(Integer.parseInt(extractValue(remaining, "q/",
+                    null)));
             if (quantityString.trim().isEmpty()) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
             }
@@ -109,9 +105,8 @@ public class MedicineParser extends Parser {
         }
 
 
-        return new MedicineParser(command, medicineName, quantity, "", 0);
+        return new MedicineParser(command, medicineName, quantity, "");
     }
-
 
     private static MedicineParser getMedicineFindParser(String remaining, String command) throws NurseSchedException {
         String medicineName;
@@ -122,9 +117,8 @@ public class MedicineParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEFIND_FORMAT);
         }
 
-        return new MedicineParser(command, medicineName, 0, "", 0);
+        return new MedicineParser(command, medicineName, 0, "");
     }
-
 
     private static MedicineParser getMedicineDeleteParser(String remaining, String command) throws NurseSchedException {
         String medicineName;
@@ -135,9 +129,8 @@ public class MedicineParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEDELETE_FORMAT);
         }
 
-        return new MedicineParser(command, medicineName, 0, "", 0);
+        return new MedicineParser(command, medicineName, 0, "");
     }
-
 
     private static MedicineParser getMedicineEditParser(String remaining, String command) throws NurseSchedException {
         String medicineName;
@@ -162,9 +155,8 @@ public class MedicineParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEEDIT_FORMAT);
         }
 
-        return new MedicineParser(command, medicineName, 0, updatedName, updatedQuantity);
+        return new MedicineParser(command, medicineName, updatedQuantity, updatedName);
     }
-
 
     private static String extractValue(String input, String startMarker, String endMarker) {
         assert input != null : "Input string must not be null";
@@ -181,26 +173,17 @@ public class MedicineParser extends Parser {
         return (end == -1) ? input.substring(start).trim() : input.substring(start, end).trim();
     }
 
-
     public int getQuantity() {
         return quantity;
     }
-
 
     public String getMedicineName() {
         return medicineName;
     }
 
-
     public String getCommand() {
         return command;
     }
-
-
-    public int getUpdatedQuantity() {
-        return updatedQuantity;
-    }
-
 
     public String getUpdatedName() {
         return updatedName;

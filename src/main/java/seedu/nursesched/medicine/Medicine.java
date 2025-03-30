@@ -1,24 +1,20 @@
 package seedu.nursesched.medicine;
 
-
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 
 
 import java.util.ArrayList;
 
-
 public class Medicine {
     protected static ArrayList<Medicine> medicineList = new ArrayList<>();
     private int quantity;
-    private final String medicineName;
-
+    private String medicineName;
 
     public Medicine(int quantity, String medicineName) {
         this.quantity = quantity;
         this.medicineName = medicineName;
     }
-
 
     public static void addMedicine(int quantity, String medicineName) throws NurseSchedException {
         if (medicineName == null || medicineName.trim().isEmpty()) {
@@ -41,7 +37,6 @@ public class Medicine {
         }
     }
 
-
     public static void removeMedicine(int quantity, String medicineName) throws NurseSchedException {
         Medicine existingMedicine = findSpecificMedicine(medicineName);
 
@@ -58,7 +53,6 @@ public class Medicine {
         System.out.println(quantity + " more of " + medicineName + " removed. New quantity: " +
                 existingMedicine.getQuantity());
     }
-
 
     public static void deleteMedicine(String medicineName) throws NurseSchedException {
         boolean removed = medicineList.removeIf(medicine ->
@@ -81,7 +75,6 @@ public class Medicine {
             System.out.printf("%d. %s%n", i + 1, medicine);
         }
     }
-
 
     public static ArrayList<Medicine> findMedicine(String medicineName) throws NurseSchedException {
         ArrayList<Medicine> matchingMedicine = new ArrayList<>();
@@ -110,34 +103,49 @@ public class Medicine {
         return null;
     }
 
+    public static void editMedicine(String medicineName, String updatedName, int updatedQuantity) throws
+            NurseSchedException {
+        for (Medicine medicine : medicineList) {
+            if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
+                medicine.setMedicineName(updatedName);
+                medicine.setQuantity(updatedQuantity);
+                System.out.println("Medicine " + medicine.getMedicineName() + " updated.");
+                return;
+            }
+        }
+        System.out.println("Medicine " + medicineName + " not found.");
+    }
 
     @Override
     public String toString() {
         return "[" + quantity + "] " + medicineName;
     }
 
-
     public int getQuantity() {
         return quantity;
     }
-
 
     public String getMedicineName() {
         return medicineName;
     }
 
-
     public void addQuantity(int amount) {
         this.quantity += amount;
     }
-
 
     public void removeQuantity(int amount) {
         this.quantity -= amount;
     }
 
-
     public static ArrayList<Medicine> getMedicineList() {
         return medicineList;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setMedicineName(String medicineName) {
+        this.medicineName = medicineName;
     }
 }

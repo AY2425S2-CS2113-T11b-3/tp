@@ -155,6 +155,7 @@ class MedicineTest {
                 exception.getMessage());
     }
 
+    // getters
     @Test
     void getQuantity_validMedicine_returnsCorrectQuantity() throws NurseSchedException {
         Medicine.getMedicineList().clear();
@@ -166,7 +167,6 @@ class MedicineTest {
         assertEquals(medicineParser.getQuantity(), medicine.getQuantity());
     }
 
-
     @Test
     void getMedicineName_validMedicine_returnsCorrectMedicineName() throws NurseSchedException {
         Medicine.getMedicineList().clear();
@@ -177,7 +177,6 @@ class MedicineTest {
         Medicine medicine = Medicine.getMedicineList().get(0);
         assertEquals(medicineParser.getMedicineName(), medicine.getMedicineName());
     }
-
 
     @Test
     void addQuantity_increasesQuantity_correctly() throws NurseSchedException {
@@ -231,5 +230,34 @@ class MedicineTest {
         assertEquals(2, Medicine.getMedicineList().size());
         assertEquals(medicineParser1.getMedicineName(), Medicine.getMedicineList().get(0).getMedicineName());
         assertEquals(medicineParser2.getMedicineName(), Medicine.getMedicineList().get(1).getMedicineName());
+    }
+
+    @Test
+    void editMedicine_existingMedicine_updatesSuccessfully() throws NurseSchedException {
+        Medicine.getMedicineList().clear();
+        Medicine.addMedicine(10, "paracetamo");
+
+        String inputString = "medicine edit mn/paracetamo un/paracetamol uq/4";
+        MedicineParser medicineParser = MedicineParser.extractInputs(inputString);
+        assertNotNull(medicineParser);
+        assertEquals("paracetamo", medicineParser.getMedicineName());
+
+        Medicine.editMedicine(medicineParser.getMedicineName(), medicineParser.getUpdatedName(),
+                medicineParser.getQuantity());
+
+        Medicine updatedMedicine = Medicine.getMedicineList().get(0);
+        assertEquals("paracetamol", updatedMedicine.getMedicineName());
+        assertEquals(4, updatedMedicine.getQuantity());
+    }
+
+    @Test
+    void editMedicine_nonExistentMedicine_doesNotUpdate() throws NurseSchedException {
+        Medicine.getMedicineList().clear();
+
+        Medicine.addMedicine(10, "paracetamo");
+        Medicine.editMedicine("aspirin", "ibuprofen", 5);
+
+        assertEquals(1, Medicine.getMedicineList().size());
+        assertEquals("paracetamo", Medicine.getMedicineList().get(0).getMedicineName());
     }
 }
