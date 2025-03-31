@@ -2,6 +2,7 @@ package seedu.nursesched.medicine;
 
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.storage.MedicineStorage;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
@@ -13,7 +14,7 @@ import java.util.logging.SimpleFormatter;
 import java.util.ArrayList;
 
 public class Medicine {
-    protected static ArrayList<Medicine> medicineList = new ArrayList<>();
+    protected static ArrayList<Medicine> medicineList;
     private static final Logger logr = Logger.getLogger("Medicine");
 
     private int quantity;
@@ -29,6 +30,7 @@ public class Medicine {
         } catch (IOException e) {
             logr.log(Level.SEVERE, "File logger not working", e);
         }
+        medicineList = MedicineStorage.readFile();
     }
 
     public Medicine(int quantity, String medicineName) {
@@ -47,21 +49,15 @@ public class Medicine {
         logr.log(Level.INFO, "Attempting to add medicine: {0}, Quantity: {1}",
                 new Object[]{medicineName, quantity});
 
-
-        if (medicineName == null || medicineName.trim().isEmpty()) {
+        if (medicineName.trim().isEmpty()) {
             logr.log(Level.WARNING, "Invalid medicine name: {0}", medicineName);
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEADD_FORMAT);
         }
-        if (quantity <= 0) {
-            logr.log(Level.WARNING, "Invalid quantity: {0} for medicine: {1}",
-                    new Object[]{quantity, medicineName});
-            throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
-        }
-
 
         Medicine existingMedicine = findSpecificMedicine(medicineName);
         if (existingMedicine != null) {
             existingMedicine.addQuantity(quantity);
+            MedicineStorage.overwriteSaveFile(medicineList);
             logr.log(Level.INFO, "Added {0} more of {1}. New quantity: {2}",
                     new Object[]{quantity, medicineName, existingMedicine.getQuantity()});
             System.out.println(quantity + " more of " + medicineName + " added. New quantity: " +
@@ -69,6 +65,7 @@ public class Medicine {
         } else {
             Medicine medicine = new Medicine(quantity, medicineName);
             medicineList.add(medicine);
+            MedicineStorage.overwriteSaveFile(medicineList);
             logr.log(Level.INFO, "Added new medicine: {0}, Quantity: {1}", new Object[]{medicineName, quantity});
             System.out.println(quantity + " " + medicineName + " added to the list");
         }
@@ -87,17 +84,14 @@ public class Medicine {
             logr.log(Level.WARNING, "Medicine not found: {0}", medicineName);
             throw new NurseSchedException(ExceptionMessage.MEDICINE_NONEXISTENT);
         }
-        if (quantity <= 0) {
-            logr.log(Level.WARNING, "Invalid quantity: {0} for medicine: {1}",
-                    new Object[]{quantity, medicineName});
-            throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
-        } else if (quantity > existingMedicine.getQuantity()) {
+        if (quantity > existingMedicine.getQuantity()) {
             logr.log(Level.WARNING, "Not enough stock to remove: {0} of {1}, Available: {2}",
                     new Object[]{quantity, medicineName, existingMedicine.getQuantity()});
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_QUANTITY);
         }
 
         existingMedicine.removeQuantity(quantity);
+        MedicineStorage.overwriteSaveFile(medicineList);
         logr.log(Level.INFO, "Removed {0} of {1}. New quantity: {2}",
                 new Object[]{quantity, medicineName, existingMedicine.getQuantity()});
         System.out.println(quantity + " more of " + medicineName + " removed. New quantity: " +
@@ -113,6 +107,7 @@ public class Medicine {
                 medicine.getMedicineName().equalsIgnoreCase(medicineName));
 
         if (removed) {
+            MedicineStorage.overwriteSaveFile(medicineList);
             logr.log(Level.INFO, "Medicine deleted: {0}", medicineName);
             System.out.println("Medicine deleted: " + medicineName);
         } else {
@@ -185,6 +180,7 @@ public class Medicine {
             if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
                 medicine.setMedicineName(updatedName);
                 medicine.setQuantity(updatedQuantity);
+                MedicineStorage.overwriteSaveFile(medicineList);
                 logr.log(Level.INFO, "Updated medicine: {0} to new name: {1}, new quantity: {2}",
                         new Object[]{medicineName, updatedName, updatedQuantity});
                 System.out.println("Medicine " + medicine.getMedicineName() + " updated.");
