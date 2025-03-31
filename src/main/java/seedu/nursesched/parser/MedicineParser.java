@@ -104,10 +104,9 @@ public class MedicineParser extends Parser {
             logr.log(Level.WARNING, "Invalid add format: {0}", remaining);
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEADD_FORMAT);
         }
-      
+
         try {
             medicineName = extractValue(remaining, "mn/", "q/");
-            assert !medicineName.trim().isEmpty() : "Medicine name cannot be empty";
             quantity = Integer.parseInt(extractValue(remaining, "q/", null));
             assert quantity > 0 : "Quantity must be greater than zero";
             quantity = Integer.parseInt(extractValue(remaining, "q/", null));
@@ -134,7 +133,7 @@ public class MedicineParser extends Parser {
             logr.log(Level.WARNING, "Invalid add format: {0}", remaining);
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
         }
-      
+
         try {
             medicineName = extractValue(remaining, "mn/", "q/");
             assert !medicineName.trim().isEmpty() : "Medicine name cannot be empty";
@@ -154,7 +153,7 @@ public class MedicineParser extends Parser {
         }
     }
 
-  
+
     private static MedicineParser getMedicineFindParser(String remaining, String command) throws NurseSchedException {
         assert remaining != null : "Remaining string cannot be null";
         assert command != null : "Command cannot be null";
