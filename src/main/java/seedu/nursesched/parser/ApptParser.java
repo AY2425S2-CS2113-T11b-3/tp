@@ -173,16 +173,19 @@ public class ApptParser extends Parser {
                 throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
             }
 
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex, searchKeyword, importance, sortBy);
+            return new ApptParser(command, name, startTime, endTime, date, notes,
+                    apptIndex, searchKeyword, importance, sortBy);
         }
 
         case "del", "mark", "unmark" -> {
             apptIndex = parseIndex(line);
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex, searchKeyword, importance, sortBy);
+            return new ApptParser(command, name, startTime, endTime, date, notes,
+                    apptIndex, searchKeyword, importance, sortBy);
         }
 
         case "list" -> {
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex, searchKeyword, importance, sortBy);
+            return new ApptParser(command, name, startTime, endTime, date, notes,
+                    apptIndex, searchKeyword, importance, sortBy);
         }
 
         case "sort" -> {
@@ -198,7 +201,8 @@ public class ApptParser extends Parser {
                 // Default to sorting by time if no parameter specified
                 sortBy = "time";
             }
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex, searchKeyword, importance, sortBy);
+            return new ApptParser(command, name, startTime, endTime, date, notes,
+                    apptIndex, searchKeyword, importance, sortBy);
         }
 
         case "find" -> {
@@ -206,7 +210,8 @@ public class ApptParser extends Parser {
                 throw new NurseSchedException(ExceptionMessage.MISSING_SEARCH_TERM);
             }
             searchKeyword = line;
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex, searchKeyword, importance, sortBy);
+            return new ApptParser(command, name, startTime, endTime, date, notes,
+                    apptIndex, searchKeyword, importance, sortBy);
         }
 
         case "edit" -> {
@@ -278,7 +283,8 @@ public class ApptParser extends Parser {
                 throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
             }
 
-            return new ApptParser(command, name, startTime, endTime, date, notes, apptIndex, searchKeyword, importance, sortBy);
+            return new ApptParser(command, name, startTime, endTime, date, notes,
+                    apptIndex, searchKeyword, importance, sortBy);
         }
         default -> {
             logr.warning("Unrecognized command: " + command);
