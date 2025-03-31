@@ -24,6 +24,7 @@ public class Shift {
     private final LocalTime endTime;
     private final LocalDate date;
     private final String shiftTask;
+    private boolean isDone = false;
 
     static {
         try {
@@ -111,6 +112,49 @@ public class Shift {
     }
 
     /**
+     * Marks a shift from the shift list as done based on the given index.
+     *
+     * @param index The index of the shift to be marked as done (0-based index).
+     */
+    public static void markShift(int index) {
+        assert index >= 0 && index < shiftList.size() : "Index must be valid and within bounds!";
+        try {
+            shiftList.get(index).setDone(true);
+            System.out.println("Marked shift as done!");
+            System.out.println(shiftList.get(index));
+            logr.info("Shift marked: " + shiftList.get(index).toString());
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("There is no shift with index: " + (index + 1));
+            logr.warning("There is no shift with index: " + (index + 1));
+        }
+    }
+
+    /**
+     * Unmarks a shift from the shift list (sets it as not done) based on the given index.
+     *
+     * @param index The index of the shift to be unmarked (0-based index).
+     */
+    public static void unmarkShift(int index) {
+        assert index >= 0 && index < shiftList.size() : "Index must be valid and within bounds!";
+        try {
+            shiftList.get(index).setDone(false);
+            System.out.println("Marked shift as undone!");
+            logr.info("Shift unmarked: " + shiftList.get(index).toString());
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("There is no shift with index: " + (index + 1));
+            logr.warning("There is no shift with index: " + (index + 1));
+        }
+    }
+
+    public void setDone(boolean done) {
+        this.isDone = done;
+    }
+
+    public boolean getStatus() {
+        return this.isDone;
+    }
+
+    /**
      * Returns a formatted string representation of the shift details.
      *
      * @return A string describing the shift including start and end times, date, and task.
@@ -120,8 +164,9 @@ public class Shift {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         String formattedStartTime = startTime.format(formatter);
         String formattedEndTime = endTime.format(formatter);
+        String markStatus = isDone ? "[X]" : "[ ]";
 
-        return "From: " + formattedStartTime + ", " +
+        return markStatus + " From: " + formattedStartTime + ", " +
                 "To: " + formattedEndTime + ", " +
                 "Date: " + date + ", " +
                 "shiftTask: " + shiftTask;

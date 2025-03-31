@@ -19,6 +19,8 @@ public enum ExceptionMessage {
     INVALID_DUE_DATE_TIME("Due date must be after current date and time."),
     INVALID_SHIFTDEL_FORMAT("Invalid shift del format! Input as:" +
             " shift del [sn/SHIFT_NUMBER]"),
+    INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark [sn/SHIFT_NUMBER]"),
+    INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark [sn/SHIFT_NUMBER]"),
     INVALID_SHIFT_NUMBER("Shift index must be a positive integer!"),
     NEGATIVE_INDEX("Index must be a positive integer!"),
     ZERO_INDEX("Index cannot be zero!"),

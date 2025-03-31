@@ -71,7 +71,7 @@ class ShiftTest {
         shiftList.add(new Shift(shiftParserAdd.getStartTime(), shiftParserAdd.getEndTime(), shiftParserAdd.getDate(),
                 shiftParserAdd.getShiftTask()));
 
-        String expected = "From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test";
+        String expected = "[ ] From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test";
 
         assertEquals(expected, shiftList.get(0).toString(), "Shift toString output is incorrect!");
     }
