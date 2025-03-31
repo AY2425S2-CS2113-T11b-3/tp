@@ -49,7 +49,7 @@ public class MedicineParser extends Parser {
 
         logr.log(Level.INFO, "Extracting inputs from line: {0}", line);
 
-        if (line == null || line.trim().isEmpty()) {
+        if (line.trim().isEmpty()) {
             logr.log(Level.WARNING, "Input line is empty");
             throw new NurseSchedException(ExceptionMessage.INPUT_EMPTY);
         }
