@@ -105,20 +105,62 @@ public class ShiftParser extends Parser {
 
             if (command.equals("add")) {
                 return getShiftAddParser(remaining, command, shiftIndex);
+
             } else if (command.equals("del")) {
                 return getShiftDelParser(remaining, command, startTime, endTime, date, shiftTask);
-            } else if (command.equals("list")) {
+
+            }  else if (command.equals("mark") || command.equals("unmark")) {
+                return getShiftMarkParser(remaining, command);
+
+            }  else if (command.equals("list")) {
                 return new ShiftParser("list", null, null, null, "", 0);
+
             } else {
                 logr.warning("Invalid command: " + command);
                 throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
             }
 
+
         } catch (NurseSchedException e) {
             logr.severe("Parsing error: " + e.getMessage());
-            throw new NurseSchedException(ExceptionMessage.PARSING_ERROR);
+            throw e;
         }
     }
+
+    /**
+     * Parses a mark or unmark shift command and extracts the shift index.
+     *
+     * @param remaining The remaining command string.
+     * @param command   The command type (either "mark" or "unmark").
+     * @return A ShiftParser object containing the shift index.
+     * @throws NurseSchedException If the format is incorrect or shift index is invalid.
+     */
+    private static ShiftParser getShiftMarkParser(String remaining, String command)
+            throws NurseSchedException {
+        assert remaining != null : "Remaining command should not be null";
+        logr.info("Parsing mark/unmark command: " + remaining);
+        int shiftIndex;
+
+        if (!remaining.contains("sn/")) {
+            if (command.equals("mark")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTMARK_FORMAT);
+            } else {
+                throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTUNMARK_FORMAT);
+            }
+        }
+
+        try {
+            shiftIndex = Integer.parseInt(extractValue(remaining, "sn/", null)) - 1;
+            if (shiftIndex < 0) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
+            }
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
+        }
+
+        return new ShiftParser(command, null, null, null, "", shiftIndex);
+    }
+
 
     /**
      * Parses a delete shift command and extracts the shift index.

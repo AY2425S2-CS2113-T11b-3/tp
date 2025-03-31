@@ -136,6 +136,16 @@ public class Command {
                         );
                         Shift.listShifts();
                     }
+                    if (shift.equals("mark")) {
+                        Shift.markShift(
+                                shiftParser.getIndex()
+                        );
+                    }
+                    if (shift.equals("unmark")) {
+                        Shift.unmarkShift(
+                                shiftParser.getIndex()
+                        );
+                    }
                     if (shift.equals("list")) {
                         Shift.listShifts();
                     }
