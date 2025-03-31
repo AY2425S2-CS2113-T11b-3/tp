@@ -1,7 +1,5 @@
 package seedu.nursesched.parser;
 
-import java.util.logging.Level;
-
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 
