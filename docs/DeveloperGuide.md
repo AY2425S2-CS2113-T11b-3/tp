@@ -115,6 +115,7 @@ This is so that they can retrieve information quickly, especially with how hecti
 | v2.0    | Nurse    | Delete my tasks                                | I can remove irrelevant tasks                                       |
 | v2.0    | Nurse    | Edit my to-do list                             | I can fill it with updated information that I need to keep track of |
 | v2.0    | Nurse    | Search for a task                              | I can locate a specific task with a keyword                         |
+| v2.0    | Nurse    | Save my task list                              | I can load and save my existing task list                           |
 | v2.0    | Nurse    | add in an amount of medicine to the list       | update my medicine supply                                           |
 | v2.0    | Nurse    | remove an amount of medicine from the list     | update my medicine supply                                           |
 | v2.0    | Nurse    | search for a specific medicine from the list   | see how much of the medicine I have left                            |
