@@ -1,5 +1,7 @@
 package seedu.nursesched.parser;
 
+import java.util.logging.Level;
+
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 
@@ -44,15 +46,21 @@ public class MedicineParser extends Parser {
 
         assert command != null && !command.trim().isEmpty() : "Command cannot be null or empty";
 
-        return switch (command) {
-            case "add" -> getMedicineAddParser(remaining, command);
-            case "list" -> new MedicineParser("list", "", 0, "");
-            case "remove" -> getMedicineRemoveParser(remaining, command);
-            case "find" -> getMedicineFindParser(remaining, command);
-            case "delete" -> getMedicineDeleteParser(remaining, command);
-            case "edit" -> getMedicineEditParser(remaining, command);
-            default -> throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_FORMAT);
-        };
+        if (command.equals("add")) {
+            return getMedicineAddParser(remaining, command);
+        } else if (command.equals("list")) {
+            return new MedicineParser("list", "", 0, "");
+        } else if (command.equals("remove")) {
+            return getMedicineRemoveParser(remaining, command);
+        } else if (command.equals("find")) {
+            return getMedicineFindParser(remaining, command);
+        } else if (command.equals("delete")) {
+            return getMedicineDeleteParser(remaining, command);
+        } else if (command.equals("edit")) {
+            return getMedicineEditParser(remaining, command);
+        } else {
+            throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_FORMAT);
+        }
     }
 
     private static MedicineParser getMedicineAddParser(String remaining, String command) throws NurseSchedException {
