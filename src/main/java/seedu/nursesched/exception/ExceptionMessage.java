@@ -47,7 +47,7 @@ public enum ExceptionMessage {
     INVALID_PATIENT_INFO("Patient ID is invalid!"),
     MISSING_PATIENT_FIELDS("Some patient fields are missing!"),
     INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit [INDEX] [p/PATIENT_NAME] " +
-            "[s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
+            "[s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPORTANCE] [n/NOTES]"),
     INVALID_TASK_INDEX("Invalid task index! Index should be an integer!"),
     PATIENT_NOT_FOUND("Patient not found!"),
     EMPTY_PATIENT_TEST_NAME("Patient test name cannot be empty!"),
@@ -60,7 +60,10 @@ public enum ExceptionMessage {
     INVALID_GENDER("Gender must be either 'M' or 'F'!"),
     PATIENT_ID_EXIST("Patient ID already exist!"),
     EMPTY_PATIENT_ID_FIELD("Patient ID field cannot be empty!"),
-    MISSING_EDIT_INPUT("Edit fields cannot be empty!");
+    MISSING_EDIT_INPUT("Edit fields cannot be empty!"),
+    INVALID_IMPORTANCE_FORMAT("Importance should be an integer from 1 to 3. \n" +
+            "1:LOW, 2:MEDIUM, 3:HIGH"),
+    INVALID_SORT_PARAMETER("Can only be sorted by time or importance!");
 
 
     private final String message;

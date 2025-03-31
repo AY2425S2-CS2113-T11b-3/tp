@@ -38,7 +38,8 @@ public class Command {
                                 apptParser.getStartTime(),
                                 apptParser.getEndTime(),
                                 apptParser.getDate(),
-                                apptParser.getNotes()
+                                apptParser.getNotes(),
+                                apptParser.getImportance()
                         );
                         break;
                     case "del":
@@ -61,7 +62,12 @@ public class Command {
                         Appointment.list();
                         break;
                     case "sort":
-                        Appointment.sortByTime();
+                        if (apptParser.getSortBy().equals("importance")){
+                            Appointment.sortByImportance();
+                        }else{
+                            Appointment.sortByTime();
+                        }
+
                         break;
                     case "find":
                         Appointment.filterAppointment(apptParser.getSearchKeyword());
@@ -73,7 +79,8 @@ public class Command {
                                 apptParser.getStartTime(),
                                 apptParser.getEndTime(),
                                 apptParser.getDate(),
-                                apptParser.getNotes()
+                                apptParser.getNotes(),
+                                apptParser.getImportance()
                         );
                         break;
                     default:
