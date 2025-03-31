@@ -116,13 +116,14 @@ public class Shift {
      *
      * @param index The index of the shift to be marked as done (0-based index).
      */
-    public static void markShift(int index){
+    public static void markShift(int index) {
         assert index >= 0 && index < shiftList.size() : "Index must be valid and within bounds!";
-        try{
+        try {
             shiftList.get(index).setDone(true);
             System.out.println("Marked shift as done!");
+            System.out.println(shiftList.get(index));
             logr.info("Shift marked: " + shiftList.get(index).toString());
-        }catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             System.out.println("There is no shift with index: " + (index + 1));
             logr.warning("There is no shift with index: " + (index + 1));
         }
@@ -133,13 +134,13 @@ public class Shift {
      *
      * @param index The index of the shift to be unmarked (0-based index).
      */
-    public static void unmarkShift(int index){
+    public static void unmarkShift(int index) {
         assert index >= 0 && index < shiftList.size() : "Index must be valid and within bounds!";
-        try{
+        try {
             shiftList.get(index).setDone(false);
             System.out.println("Marked shift as undone!");
             logr.info("Shift unmarked: " + shiftList.get(index).toString());
-        }catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             System.out.println("There is no shift with index: " + (index + 1));
             logr.warning("There is no shift with index: " + (index + 1));
         }
