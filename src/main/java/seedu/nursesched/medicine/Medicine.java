@@ -197,6 +197,35 @@ public class Medicine {
     }
 
     /**
+     * Finds all medicines that needs to be restocked (lesser than restockQuantity provided).
+     * <p>
+     *
+     * @param restockQuantity Medicines which are below this specified quantity needs to be restocked.
+     * @throws NurseSchedException If no medicine needs to be restocked.
+     */
+    public static void restockMedicine(int restockQuantity) throws NurseSchedException {
+        assert restockQuantity > 0 : "Quantity must be greater than 0";
+
+        ArrayList<Medicine> restockMedicine = new ArrayList<>();
+        for (Medicine medicine : medicineList) {
+            if (medicine.getQuantity() < restockQuantity) {
+                restockMedicine.add(medicine);
+            }
+        }
+        if (restockMedicine.isEmpty()) {
+            logr.log(Level.INFO, "No medicines to restock: {0}", restockQuantity);
+            throw new NurseSchedException(ExceptionMessage.NO_RESTOCK_REQUIRED);
+        } else {
+            System.out.println("Here's the list of medicines below " + restockQuantity + " :");
+            for (int i = 0; i < restockMedicine.size(); i++) {
+                Medicine medicine = restockMedicine.get(i);
+                System.out.printf("%d. %s%n", i + 1, medicine);
+            }
+            System.out.println("Remember to restock these medicines!");
+        }
+    }
+
+    /**
      * Finds a specific medicine based on its name.
      *
      * @param medicineName The name of the medicine.

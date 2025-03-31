@@ -31,10 +31,12 @@ public enum ExceptionMessage {
             "un/[UPDATE_NAME] uq/[UPDATED_QUANTITY]"),
     INVALID_MEDICINEDELETE_FORMAT("Invalid medicine delete format! Input as: medicine delete mn/[MEDICINE_NAME]"),
     INVALID_MEDICINEFIND_FORMAT("Invalid medicine find format! Input as: medicine find mn/[MEDICINE_NAME]"),
-    INVALID_MEDICINE_FORMAT("Try adding add, remove, edit, list, find or delete!"),
+    INVALID_MEDICINE_FORMAT("Try adding add, remove, edit, list, find, restock or delete!"),
     INVALID_MEDICINEADD_FORMAT("Invalid medicine add format! Input as: medicine add mn/[MEDICINE_NAME] q/[QUANTITY]"),
+    INVALID_MEDICINERESTOCK_FORMAT("Invalid medicine restock format! Input as: medicine restock q/[QUANTITY]"),
     INVALID_MEDICINEREMOVE_FORMAT("Invalid medicine remove format! Input as: medicine remove mn/[MEDICINE_NAME]" +
             " q/[QUANTITY]"),
+    NO_RESTOCK_REQUIRED("No restock required!"),
     NEGATIVE_MEDICINE_QUANTITY("Medicine quantity must be a positive integer!"),
     INVALID_MEDICINE_QUANTITY("Medicine quantity is too big! Should be lesser than existing quantity."),
     MISSING_MEDICINE_QUANTITY("No medicine quantity input"),

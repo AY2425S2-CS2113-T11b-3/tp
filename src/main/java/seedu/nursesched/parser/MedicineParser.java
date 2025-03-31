@@ -103,6 +103,8 @@ public class MedicineParser extends Parser {
             return getMedicineDeleteParser(remaining, command);
         } else if (command.equals("edit")) {
             return getMedicineEditParser(remaining, command);
+        } else if (command.equals("restock")) {
+            return getMedicineRestockParser(remaining, command);
         } else {
             logr.log(Level.WARNING, "Unknown command received: {0}", command);
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_FORMAT);
@@ -266,6 +268,33 @@ public class MedicineParser extends Parser {
         } catch (RuntimeException e) {
             logr.log(Level.SEVERE, "Failed to parse edit command: {0}", remaining);
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEEDIT_FORMAT);
+        }
+    }
+
+    /**
+     * Parses a command for restocking an existing medicine.
+     *
+     * @param remaining The remaining part of the input after the command.
+     * @param command   The command to execute (in this case, "restock").
+     * @return A new instance of MedicineParser initialized with extracted values.
+     * @throws NurseSchedException If the input format is incorrect or missing required information.
+     */
+    private static MedicineParser getMedicineRestockParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
+
+        logr.log(Level.INFO, "Parsing restock command with remaining: {0}", remaining);
+
+        int restockQuantity;
+
+        try {
+            restockQuantity = Integer.parseInt(extractValue(remaining, "q/", null));
+            logr.log(Level.INFO, "Extracted restockQuantity: {0}",
+                    new Object[]{restockQuantity});
+            return new MedicineParser(command, "", restockQuantity, "");
+        } catch (RuntimeException e) {
+            logr.log(Level.SEVERE, "Failed to parse restock command: {0}", remaining);
+            throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINERESTOCK_FORMAT);
         }
     }
 

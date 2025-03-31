@@ -62,9 +62,9 @@ public class Command {
                         Appointment.list();
                         break;
                     case "sort":
-                        if (apptParser.getSortBy().equals("importance")){
+                        if (apptParser.getSortBy().equals("importance")) {
                             Appointment.sortByImportance();
-                        }else{
+                        } else {
                             Appointment.sortByTime();
                         }
 
@@ -220,6 +220,11 @@ public class Command {
                         Medicine.editMedicine(
                                 medicineParser.getMedicineName(),
                                 medicineParser.getUpdatedName(),
+                                medicineParser.getQuantity()
+                        );
+                        break;
+                    case "restock":
+                        Medicine.restockMedicine(
                                 medicineParser.getQuantity()
                         );
                         break;
