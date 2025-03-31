@@ -32,14 +32,21 @@ public class Medicine {
     }
 
     public Medicine(int quantity, String medicineName) {
+        assert quantity > 0 : "Quantity must be greater than 0";
+        assert medicineName != null && !medicineName.trim().isEmpty() : "Medicine name cannot be null or empty";
+
         this.quantity = quantity;
         this.medicineName = medicineName;
         logr.log(Level.INFO, "Created new medicine: {0}, Quantity: {1}", new Object[]{medicineName, quantity});
     }
 
     public static void addMedicine(int quantity, String medicineName) throws NurseSchedException {
+        assert medicineName != null : "Medicine name cannot be null";
+        assert quantity > 0 : "Quantity must be greater than 0";
+
         logr.log(Level.INFO, "Attempting to add medicine: {0}, Quantity: {1}",
                 new Object[]{medicineName, quantity});
+
 
         if (medicineName == null || medicineName.trim().isEmpty()) {
             logr.log(Level.WARNING, "Invalid medicine name: {0}", medicineName);
@@ -68,8 +75,12 @@ public class Medicine {
     }
 
     public static void removeMedicine(int quantity, String medicineName) throws NurseSchedException {
+        assert medicineName != null : "Medicine name cannot be null";
+        assert quantity > 0 : "Quantity must be greater than 0";
+
         logr.log(Level.INFO, "Attempting to remove medicine: {0}, Quantity: {1}",
                 new Object[]{medicineName, quantity});
+
         Medicine existingMedicine = findSpecificMedicine(medicineName);
 
         if (existingMedicine == null) {
@@ -94,6 +105,8 @@ public class Medicine {
     }
 
     public static void deleteMedicine(String medicineName) throws NurseSchedException {
+        assert medicineName != null : "Medicine name cannot be null";
+
         logr.log(Level.INFO, "Attempting to delete medicine: {0}", medicineName);
 
         boolean removed = medicineList.removeIf(medicine ->
@@ -123,6 +136,8 @@ public class Medicine {
     }
 
     public static ArrayList<Medicine> findMedicine(String medicineName) throws NurseSchedException {
+        assert medicineName != null : "Medicine name cannot be null";
+
         logr.log(Level.INFO, "Searching for medicine containing: {0}", medicineName);
 
         ArrayList<Medicine> matchingMedicine = new ArrayList<>();
@@ -144,6 +159,8 @@ public class Medicine {
     }
 
     public static Medicine findSpecificMedicine(String medicineName) {
+        assert medicineName != null : "Medicine name cannot be null";
+
         logr.log(Level.INFO, "Finding specific medicine: {0}", medicineName);
 
         for (Medicine medicine : medicineList) {
@@ -158,6 +175,10 @@ public class Medicine {
 
     public static void editMedicine(String medicineName, String updatedName, int updatedQuantity) throws
             NurseSchedException {
+        assert medicineName != null : "Medicine name cannot be null";
+        assert updatedName != null : "Updated name cannot be null";
+        assert updatedQuantity > 0 : "Updated quantity must be greater than 0";
+
         logr.log(Level.INFO, "Attempting to edit medicine: {0}", medicineName);
 
         for (Medicine medicine : medicineList) {
@@ -188,10 +209,13 @@ public class Medicine {
     }
 
     public void addQuantity(int amount) {
+        assert amount > 0 : "Amount to add must be greater than 0";
         this.quantity += amount;
     }
 
     public void removeQuantity(int amount) {
+        assert amount > 0 : "Amount to remove must be greater than 0";
+        assert quantity >= amount : "Cannot remove more than available quantity";
         this.quantity -= amount;
     }
 
@@ -200,10 +224,12 @@ public class Medicine {
     }
 
     public void setQuantity(int quantity) {
+        assert quantity > 0 : "Quantity must be greater than 0";
         this.quantity = quantity;
     }
 
     public void setMedicineName(String medicineName) {
+        assert medicineName != null && !medicineName.trim().isEmpty() : "Medicine name cannot be null or empty";
         this.medicineName = medicineName;
     }
 }

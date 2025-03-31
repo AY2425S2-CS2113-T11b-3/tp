@@ -30,6 +30,11 @@ public class MedicineParser extends Parser {
     }
 
     public MedicineParser(String command, String medicineName, int quantity, String updatedName) {
+        assert command != null && !command.trim().isEmpty() : "Command cannot be null or empty";
+        assert medicineName != null : "Medicine name cannot be null";
+        assert quantity >= 0 : "Quantity cannot be negative";
+        assert updatedName != null : "Updated name cannot be null";
+
         this.command = command;
         this.medicineName = medicineName;
         this.quantity = quantity;
@@ -40,7 +45,10 @@ public class MedicineParser extends Parser {
     }
 
     public static MedicineParser extractInputs(String line) throws NurseSchedException {
+        assert line != null : "Input line cannot be null";
+
         logr.log(Level.INFO, "Extracting inputs from line: {0}", line);
+
         if (line == null || line.trim().isEmpty()) {
             logr.log(Level.WARNING, "Input line is empty");
             throw new NurseSchedException(ExceptionMessage.INPUT_EMPTY);
@@ -60,6 +68,8 @@ public class MedicineParser extends Parser {
         String[] commandParts = remaining.split(" ", 2);
         command = commandParts[0];
         remaining = (commandParts.length > 1) ? commandParts[1] : "";
+
+        assert command != null && !command.trim().isEmpty() : "Command cannot be null or empty";
 
         logr.log(Level.INFO, "Command extracted: {0}, Remaining: {1}", new Object[]{command, remaining});
 
@@ -82,6 +92,9 @@ public class MedicineParser extends Parser {
     }
 
     private static MedicineParser getMedicineAddParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
+
         logr.log(Level.INFO, "Parsing add command with remaining: {0}", remaining);
 
         String medicineName;
@@ -95,6 +108,8 @@ public class MedicineParser extends Parser {
         try {
             medicineName = extractValue(remaining, "mn/", "q/");
             quantity = Integer.parseInt(extractValue(remaining, "q/", null));
+            assert quantity > 0 : "Quantity must be greater than zero";
+            quantity = Integer.parseInt(extractValue(remaining, "q/", null));
             logr.log(Level.INFO, "Extracted medicineName: {0}, quantity: {1}",
                     new Object[]{medicineName, quantity});
             return new MedicineParser(command, medicineName, quantity, "");
@@ -106,10 +121,13 @@ public class MedicineParser extends Parser {
 
 
     private static MedicineParser getMedicineRemoveParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
+
         logr.log(Level.INFO, "Parsing remove command with remaining: {0}", remaining);
+
         String medicineName;
         int quantity;
-
 
         if (!remaining.contains("mn/") || !remaining.contains("q/")) {
             logr.log(Level.WARNING, "Invalid add format: {0}", remaining);
@@ -118,12 +136,14 @@ public class MedicineParser extends Parser {
 
         try {
             medicineName = extractValue(remaining, "mn/", "q/");
+            assert !medicineName.trim().isEmpty() : "Medicine name cannot be empty";
             String quantityString = String.valueOf(Integer.parseInt(extractValue(remaining, "q/",
                     null)));
             if (quantityString.trim().isEmpty()) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
             }
             quantity = Integer.parseInt(quantityString);
+            assert quantity > 0 : "Quantity must be greater than zero";
             logr.log(Level.INFO, "Extracted medicineName: {0}, quantity: {1}",
                     new Object[]{medicineName, quantity});
             return new MedicineParser(command, medicineName, quantity, "");
@@ -133,8 +153,13 @@ public class MedicineParser extends Parser {
         }
     }
 
+
     private static MedicineParser getMedicineFindParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
+
         logr.log(Level.INFO, "Parsing find command with remaining: {0}", remaining);
+
         String medicineName;
 
         try {
@@ -148,7 +173,11 @@ public class MedicineParser extends Parser {
     }
 
     private static MedicineParser getMedicineDeleteParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
+
         logr.log(Level.INFO, "Parsing delete command with remaining: {0}", remaining);
+
         String medicineName;
 
         try {
@@ -162,7 +191,11 @@ public class MedicineParser extends Parser {
     }
 
     private static MedicineParser getMedicineEditParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining string cannot be null";
+        assert command != null : "Command cannot be null";
+
         logr.log(Level.INFO, "Parsing edit command with remaining: {0}", remaining);
+
         String medicineName;
         String updatedName;
         int updatedQuantity;
@@ -201,18 +234,22 @@ public class MedicineParser extends Parser {
     }
 
     public int getQuantity() {
+        assert quantity >= 0 : "Quantity cannot be negative";
         return quantity;
     }
 
     public String getMedicineName() {
+        assert medicineName != null : "Medicine name cannot be null";
         return medicineName;
     }
 
     public String getCommand() {
+        assert command != null : "Command cannot be null";
         return command;
     }
 
     public String getUpdatedName() {
+        assert updatedName != null : "Updated name cannot be null";
         return updatedName;
     }
 }
