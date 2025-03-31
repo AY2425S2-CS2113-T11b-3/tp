@@ -291,7 +291,8 @@ public class Medicine {
      * Removes a specified amount from the current quantity of the medicine.
      *
      * @param amount The amount to remove.
-     * @throws IllegalArgumentException If the amount is less than or equal to 0 or if trying to remove more than the available quantity.
+     * @throws IllegalArgumentException If the amount is less than or equal to 0 or if trying to remove more than
+     * the available quantity.
      */
     public void removeQuantity(int amount) {
         assert amount > 0 : "Amount to remove must be greater than 0";
