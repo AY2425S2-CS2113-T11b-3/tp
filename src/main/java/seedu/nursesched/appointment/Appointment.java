@@ -30,6 +30,7 @@ public class Appointment {
     private final LocalTime endTime;
     private final LocalDate date;
     private final String notes;
+    private final int importance;
     private boolean isDone = false;
 
     static {
@@ -64,12 +65,14 @@ public class Appointment {
      * @param notes     The notes for the specified appointment.
      */
 
-    public Appointment(String name, LocalTime startTime, LocalTime endTime, LocalDate date, String notes) {
+    public Appointment(String name, LocalTime startTime, LocalTime endTime,
+                       LocalDate date, String notes, int importance) {
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;
         this.notes = notes;
+        this.importance = importance;
         logr.info("Appointment object created");
     }
 
@@ -83,11 +86,12 @@ public class Appointment {
      * @param notes     The notes for the appointment.
      */
     public static void addAppt(String name,
-                               LocalTime startTime, LocalTime endTime, LocalDate date, String notes) {
+                               LocalTime startTime, LocalTime endTime, LocalDate date, String notes, int importance) {
         LocalDate today = LocalDate.now();
         assert !name.isEmpty() : "Name should not be empty!";
         assert startTime.isBefore(endTime) : "Appointment's start time cannot be after its end time!";
         assert date.isEqual(today) || date.isAfter(today) : "Appointment date cannot be in the past!";
+        assert importance <=3 && importance >= 1 : "Importance has to be between 0 and 3!";
 
         Appointment possibleClash = findAppointment(startTime, date);
         if (possibleClash != null) {
@@ -98,7 +102,7 @@ public class Appointment {
             return;
         }
 
-        Appointment appt = new Appointment(name, startTime, endTime, date, notes);
+        Appointment appt = new Appointment(name, startTime, endTime, date, notes, importance);
         apptList.add(appt);
         AppointmentStorage.appendToFile(appt);
         System.out.println("Appointment added:");
@@ -195,7 +199,7 @@ public class Appointment {
 
     public static void editApptByIndex(int index, String name,
                                        LocalTime startTime, LocalTime endTime,
-                                       LocalDate date, String notes) {
+                                       LocalDate date, String notes, int importance) {
         assert index >= 0 && index < apptList.size() : "Index must be valid and within bounds!";
         try {
             Appointment prevAppt = apptList.get(index);
@@ -216,6 +220,9 @@ public class Appointment {
             if (notes == null) {
                 notes = prevAppt.notes;
             }
+            if (importance == -1) {
+                importance = prevAppt.importance;
+            }
 
             if (startTime.isAfter(endTime)) {
                 System.out.println("Start time cannot be after end time. Defaulting back to previous timings!");
@@ -223,7 +230,7 @@ public class Appointment {
                 return;
             }
 
-            Appointment updatedAppt = new Appointment(name, startTime, endTime, date, notes);
+            Appointment updatedAppt = new Appointment(name, startTime, endTime, date, notes, importance);
             apptList.set(index, updatedAppt);
 
             System.out.println("Appointment updated:");
@@ -236,6 +243,27 @@ public class Appointment {
             System.out.println("There is no appointment with index: " + (index + 1));
             logr.warning("Edit failed. Invalid index: " + (index + 1));
         }
+    }
+
+    /**
+     * Sorts the appointment list by importance level (HIGH to LOW).
+     * For appointments with the same importance, they are sorted chronologically.
+     * This method updates the apptList and saves the sorted list to the storage.
+     */
+    public static void sortByImportance() {
+        if (apptList.isEmpty()) {
+            System.out.println("Appointment list is empty. Nothing to sort.");
+            logr.warning("Appointment list is empty. Nothing to sort.");
+            return;
+        }
+
+        apptList.sort(Comparator.comparing(Appointment::getImportance).reversed() // Sort by importance (HIGH to LOW)
+                .thenComparing(a -> a.date)                                      // Then by date
+                .thenComparing(a -> a.startTime));                               // Then by start time
+
+        AppointmentStorage.overwriteSaveFile(apptList);
+        System.out.println("Appointments sorted by importance level (HIGH to LOW).");
+        logr.info("Appointment list sorted by importance level");
     }
 
     /**
@@ -281,15 +309,27 @@ public class Appointment {
         String formattedStartTime = startTime.format(formatter);
         String formattedEndTime = endTime.format(formatter);
 
+        String importanceString = switch (importance) {
+        case 1 -> "LOW";
+        case 2 -> "MEDIUM";
+        case 3 -> "HIGH";
+        default -> "";
+        };
+
         return "Name: " + name + ", " +
                 "From: " + formattedStartTime + ", " +
                 "To: " + formattedEndTime + ", " +
                 "Date: " + date + ", " +
+                "Importance: " + importanceString + ", " +
                 "Notes: " + notes;
     }
 
     public String getName() {
         return name;
+    }
+
+    public int getImportance() {
+        return importance;
     }
 
     public String getStartTime() {
