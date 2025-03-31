@@ -10,6 +10,9 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+/**
+ * Parses medicine-related commands and extracts relevant information.
+ */
 public class MedicineParser extends Parser {
     private static final Logger logr = Logger.getLogger("MedicineParser");
     private final String command;
@@ -29,6 +32,14 @@ public class MedicineParser extends Parser {
         }
     }
 
+    /**
+     * Constructs a MedicineParser instance.
+     *
+     * @param command      The command type.
+     * @param medicineName The name of the medicine.
+     * @param quantity     The quantity of the medicine.
+     * @param updatedName  The updated name (for edit operations).
+     */
     public MedicineParser(String command, String medicineName, int quantity, String updatedName) {
         assert command != null && !command.trim().isEmpty() : "Command cannot be null or empty";
         assert medicineName != null : "Medicine name cannot be null";
@@ -44,6 +55,13 @@ public class MedicineParser extends Parser {
                 new Object[]{command, medicineName, quantity, updatedName});
     }
 
+    /**
+     * Extracts inputs from a command line string.
+     *
+     * @param line The input command string.
+     * @return A MedicineParser instance.
+     * @throws NurseSchedException If parsing fails.
+     */
     public static MedicineParser extractInputs(String line) throws NurseSchedException {
         assert line != null : "Input line cannot be null";
 
@@ -91,6 +109,14 @@ public class MedicineParser extends Parser {
         }
     }
 
+    /**
+     * Parses a command for adding an amount of medicine.
+     *
+     * @param remaining The remaining part of the input after the command.
+     * @param command   The command to execute (in this case, "add").
+     * @return A new instance of MedicineParser initialized with extracted values.
+     * @throws NurseSchedException If the input format is incorrect or missing required information.
+     */
     private static MedicineParser getMedicineAddParser(String remaining, String command) throws NurseSchedException {
         assert remaining != null : "Remaining string cannot be null";
         assert command != null : "Command cannot be null";
@@ -119,7 +145,14 @@ public class MedicineParser extends Parser {
         }
     }
 
-
+    /**
+     * Parses a command for removing an amount of medicine.
+     *
+     * @param remaining The remaining part of the input after the command.
+     * @param command   The command to execute (in this case, "remove").
+     * @return A new instance of MedicineParser initialized with extracted values.
+     * @throws NurseSchedException If the input format is incorrect or missing required information.
+     */
     private static MedicineParser getMedicineRemoveParser(String remaining, String command) throws NurseSchedException {
         assert remaining != null : "Remaining string cannot be null";
         assert command != null : "Command cannot be null";
@@ -153,7 +186,14 @@ public class MedicineParser extends Parser {
         }
     }
 
-
+    /**
+     * Parses a command for finding a medicine.
+     *
+     * @param remaining The remaining part of the input after the command.
+     * @param command   The command to execute (in this case, "find").
+     * @return A new instance of MedicineParser initialized with extracted values.
+     * @throws NurseSchedException If the input format is incorrect or missing required information.
+     */
     private static MedicineParser getMedicineFindParser(String remaining, String command) throws NurseSchedException {
         assert remaining != null : "Remaining string cannot be null";
         assert command != null : "Command cannot be null";
@@ -172,6 +212,14 @@ public class MedicineParser extends Parser {
         }
     }
 
+    /**
+     * Parses a command for deleting an existing medicine from the list.
+     *
+     * @param remaining The remaining part of the input after the command.
+     * @param command   The command to execute (in this case, "delete").
+     * @return A new instance of MedicineParser initialized with extracted values.
+     * @throws NurseSchedException If the input format is incorrect or missing required information.
+     */
     private static MedicineParser getMedicineDeleteParser(String remaining, String command) throws NurseSchedException {
         assert remaining != null : "Remaining string cannot be null";
         assert command != null : "Command cannot be null";
@@ -190,6 +238,14 @@ public class MedicineParser extends Parser {
         }
     }
 
+    /**
+     * Parses a command for editing an existing medicine.
+     *
+     * @param remaining The remaining part of the input after the command.
+     * @param command   The command to execute (in this case, "edit").
+     * @return A new instance of MedicineParser initialized with extracted values.
+     * @throws NurseSchedException If the input format is incorrect or missing required information.
+     */
     private static MedicineParser getMedicineEditParser(String remaining, String command) throws NurseSchedException {
         assert remaining != null : "Remaining string cannot be null";
         assert command != null : "Command cannot be null";
@@ -213,6 +269,14 @@ public class MedicineParser extends Parser {
         }
     }
 
+    /**
+     * Extracts a value from an input string given a start and optional end marker.
+     *
+     * @param input       The input string.
+     * @param startMarker The start marker.
+     * @param endMarker   The optional end marker.
+     * @return The extracted value.
+     */
     private static String extractValue(String input, String startMarker, String endMarker) {
         logr.log(Level.INFO, "Extracting value from input: {0}, startMarker: {1}, endMarker: {2}",
                 new Object[]{input, startMarker, endMarker});
@@ -233,21 +297,41 @@ public class MedicineParser extends Parser {
         return (end == -1) ? input.substring(start).trim() : input.substring(start, end).trim();
     }
 
+    /**
+     * Gets the quantity of the medicine.
+     *
+     * @return The quantity.
+     */
     public int getQuantity() {
         assert quantity >= 0 : "Quantity cannot be negative";
         return quantity;
     }
 
+    /**
+     * Gets the name of the medicine.
+     *
+     * @return The medicine name.
+     */
     public String getMedicineName() {
         assert medicineName != null : "Medicine name cannot be null";
         return medicineName;
     }
 
+    /**
+     * Gets the command type.
+     *
+     * @return The command.
+     */
     public String getCommand() {
         assert command != null : "Command cannot be null";
         return command;
     }
 
+    /**
+     * Gets the updated name of the medicine.
+     *
+     * @return The updated name.
+     */
     public String getUpdatedName() {
         assert updatedName != null : "Updated name cannot be null";
         return updatedName;

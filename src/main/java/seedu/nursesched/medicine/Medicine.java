@@ -13,6 +13,10 @@ import java.util.logging.SimpleFormatter;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a medicine in the inventory system.
+ * Provides methods for managing the quantity, searching, adding, removing, and editing medicines.
+ */
 public class Medicine {
     protected static ArrayList<Medicine> medicineList;
     private static final Logger logr = Logger.getLogger("Medicine");
@@ -33,6 +37,13 @@ public class Medicine {
         medicineList = MedicineStorage.readFile();
     }
 
+    /**
+     * Constructs a new Medicine object with the specified quantity and name.
+     *
+     * @param quantity     The quantity of the medicine.
+     * @param medicineName The name of the medicine.
+     * @throws IllegalArgumentException if quantity is less than or equal to 0 or if the medicine name is null or empty.
+     */
     public Medicine(int quantity, String medicineName) {
         assert quantity > 0 : "Quantity must be greater than 0";
         assert medicineName != null && !medicineName.trim().isEmpty() : "Medicine name cannot be null or empty";
@@ -42,6 +53,14 @@ public class Medicine {
         logr.log(Level.INFO, "Created new medicine: {0}, Quantity: {1}", new Object[]{medicineName, quantity});
     }
 
+    /**
+     * Adds a specified quantity of medicine to the inventory.
+     * If the medicine already exists, its quantity is updated; otherwise, a new medicine is added.
+     *
+     * @param quantity     The quantity to add.
+     * @param medicineName The name of the medicine.
+     * @throws NurseSchedException If the medicine name is invalid or the quantity is not valid.
+     */
     public static void addMedicine(int quantity, String medicineName) throws NurseSchedException {
         assert medicineName != null : "Medicine name cannot be null";
         assert quantity > 0 : "Quantity must be greater than 0";
@@ -71,6 +90,13 @@ public class Medicine {
         }
     }
 
+    /**
+     * Removes a specified quantity of medicine from the inventory.
+     *
+     * @param quantity     The quantity to remove.
+     * @param medicineName The name of the medicine.
+     * @throws NurseSchedException If the medicine does not exist or if there is not enough quantity to remove.
+     */
     public static void removeMedicine(int quantity, String medicineName) throws NurseSchedException {
         assert medicineName != null : "Medicine name cannot be null";
         assert quantity > 0 : "Quantity must be greater than 0";
@@ -98,6 +124,12 @@ public class Medicine {
                 existingMedicine.getQuantity());
     }
 
+    /**
+     * Deletes a medicine from the inventory based on its name.
+     *
+     * @param medicineName The name of the medicine to delete.
+     * @throws NurseSchedException If the medicine does not exist.
+     */
     public static void deleteMedicine(String medicineName) throws NurseSchedException {
         assert medicineName != null : "Medicine name cannot be null";
 
@@ -116,6 +148,10 @@ public class Medicine {
         }
     }
 
+    /**
+     * Lists all medicines in the inventory.
+     * If the list is empty, prints a message indicating no medicines are available.
+     */
     public static void listMedicine() {
         logr.log(Level.INFO, "Listing all medicines");
 
@@ -130,6 +166,13 @@ public class Medicine {
         }
     }
 
+    /**
+     * Finds all medicines that match the given name (case-insensitive).
+     *
+     * @param medicineName The name or partial name of the medicine to search for.
+     * @return A list of matching medicines.
+     * @throws NurseSchedException If no matching medicines are found.
+     */
     public static ArrayList<Medicine> findMedicine(String medicineName) throws NurseSchedException {
         assert medicineName != null : "Medicine name cannot be null";
 
@@ -153,6 +196,12 @@ public class Medicine {
         return matchingMedicine;
     }
 
+    /**
+     * Finds a specific medicine based on its name.
+     *
+     * @param medicineName The name of the medicine.
+     * @return The Medicine object if found, otherwise null.
+     */
     public static Medicine findSpecificMedicine(String medicineName) {
         assert medicineName != null : "Medicine name cannot be null";
 
@@ -168,6 +217,14 @@ public class Medicine {
         return null;
     }
 
+    /**
+     * Edits the name and/or quantity of a specific medicine.
+     *
+     * @param medicineName    The name of the medicine to edit.
+     * @param updatedName     The new name for the medicine.
+     * @param updatedQuantity The new quantity for the medicine.
+     * @throws NurseSchedException If the medicine cannot be found or the new quantity is invalid.
+     */
     public static void editMedicine(String medicineName, String updatedName, int updatedQuantity) throws
             NurseSchedException {
         assert medicineName != null : "Medicine name cannot be null";
@@ -191,39 +248,82 @@ public class Medicine {
         System.out.println("Medicine " + medicineName + " not found.");
     }
 
+    /**
+     * Returns a string representation of the medicine object, including its quantity and name.
+     *
+     * @return A string representation of the medicine.
+     */
     @Override
     public String toString() {
         return "[" + quantity + "] " + medicineName;
     }
 
+    /**
+     * Returns the current quantity of the medicine.
+     *
+     * @return The quantity of the medicine.
+     */
     public int getQuantity() {
         return quantity;
     }
 
+    /**
+     * Returns the name of the medicine.
+     *
+     * @return The name of the medicine.
+     */
     public String getMedicineName() {
         return medicineName;
     }
 
+    /**
+     * Adds a specified amount to the current quantity of the medicine.
+     *
+     * @param amount The amount to add.
+     * @throws IllegalArgumentException If the amount is less than or equal to 0.
+     */
     public void addQuantity(int amount) {
         assert amount > 0 : "Amount to add must be greater than 0";
         this.quantity += amount;
     }
 
+    /**
+     * Removes a specified amount from the current quantity of the medicine.
+     *
+     * @param amount The amount to remove.
+     * @throws IllegalArgumentException If the amount is less than or equal to 0 or if trying to remove more than
+     *                                  the available quantity.
+     */
     public void removeQuantity(int amount) {
         assert amount > 0 : "Amount to remove must be greater than 0";
         assert quantity >= amount : "Cannot remove more than available quantity";
         this.quantity -= amount;
     }
 
+    /**
+     * Returns the list of all medicines.
+     *
+     * @return The list of all the medicines.
+     */
     public static ArrayList<Medicine> getMedicineList() {
         return medicineList;
     }
 
+    /**
+     * Sets a specified amount as the current quantity of the medicine.
+     *
+     * @param quantity The new quantity to be set as the quantity.
+     */
     public void setQuantity(int quantity) {
         assert quantity > 0 : "Quantity must be greater than 0";
         this.quantity = quantity;
     }
 
+    /**
+     * Sets a specified medicine name as the current medicine name.
+     *
+     * @param medicineName The new medicine name to be set as the current medicine name.
+     */
     public void setMedicineName(String medicineName) {
         assert medicineName != null && !medicineName.trim().isEmpty() : "Medicine name cannot be null or empty";
         this.medicineName = medicineName;
