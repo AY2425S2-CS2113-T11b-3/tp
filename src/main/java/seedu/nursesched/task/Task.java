@@ -161,28 +161,46 @@ public class Task {
                                 LocalDate byDate, LocalTime byTime) throws NurseSchedException {
         assert index > 0
                 : "Task index should not be negative.";
+        logr.info("Attempting to edit task " + index);
+
         if (index > taskList.size()) {
             logr.warning("Task index out of range.");
             System.out.println("Task could not be edited!");
             throw new NurseSchedException(ExceptionMessage.TASK_INDEX_OUT_OF_BOUNDS);
         }
+
         Task task = taskList.get(index - 1);
-        System.out.println("Before edit: " + task.toString());
-        if (!description.isEmpty()) {
-            task.setDescription(description);
-        }
-        if (byDate != null) {
-            task.setByDate(byDate);
-        }
-        if (byTime != null) {
-            task.setByTime(byTime);
-        }
+
+        LocalDate originalDate = task.getByDate();
+        LocalTime originalTime = task.getByTime();
         LocalDate dateNow = LocalDate.now();
         LocalTime timeNow = LocalTime.now();
-        if (task.byDate.isBefore(dateNow) || (task.byDate.isEqual(dateNow) && task.byTime.isBefore(timeNow))) {
-            logr.warning("Due date and time cannot be in the past!");
-            System.out.println("Task could not be edited!");
-            throw new NurseSchedException(ExceptionMessage.INVALID_DUE_DATE_TIME);
+        System.out.println("Before edit: " + task.toString());
+
+        if (byDate != null && byTime != null) {
+            task.setByDate(byDate);
+            task.setByTime(byTime);
+        } else if (byDate != null) {
+            //Check validity if only due date and not due time needs to be edited
+            if (byDate.isAfter(dateNow) || (byDate.isEqual(dateNow) && originalTime.isAfter(timeNow))) {
+                task.setByDate(byDate);
+            } else {
+                logr.warning("Due date and time cannot be in the past!");
+                System.out.println("Task could not be edited!");
+                throw new NurseSchedException(ExceptionMessage.INVALID_DUE_DATE_TIME);
+            }
+        } else if (byTime != null) {
+            //Check validity if only due time and not due date needs to be edited
+            if (originalDate.isAfter(dateNow) || (originalDate.isEqual(dateNow) && byTime.isAfter(timeNow))) {
+                task.setByTime(byTime);
+            } else {
+                logr.warning("Due date and time cannot be in the past!");
+                System.out.println("Task could not be edited!");
+                throw new NurseSchedException(ExceptionMessage.INVALID_DUE_DATE_TIME);
+            }
+        }
+        if (!description.isEmpty()) {
+            task.setDescription(description);
         }
         System.out.println("After edit: " + task.toString());
         logr.info("Task edited successfully!");
