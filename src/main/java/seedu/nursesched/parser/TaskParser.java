@@ -154,9 +154,10 @@ public class TaskParser extends Parser {
                 if (!byTimeString.isEmpty()) {
                     byTime = LocalTime.parse(byTimeString);
                 }
-                if ((byDate != null && byTime != null)
-                        && byDate.isEqual(LocalDate.now())
-                        && byTime.isBefore(LocalTime.now())) {
+                LocalDate dateNow = LocalDate.now();
+                LocalTime timeNow = LocalTime.now();
+                if ((byDate != null && byTime != null) && ((byDate.isBefore(dateNow))
+                        || (byDate.isEqual(dateNow) && byTime.isBefore(timeNow)))) {
                     logr.warning("Due date and time cannot be before current date and time.");
                     throw new NurseSchedException(ExceptionMessage.INVALID_DUE_DATE_TIME);
                 }

@@ -88,6 +88,51 @@ Aspect: How delete medicine executes:
     - Pros: Ensure precise deletion, particularly if multiple medicines share similar names.
     - Cons: Requires the medicine to have a unique identifier in the system, adding complexity
 
+### Task edit feature
+
+#### Implementation
+
+The `editTask` method is responsible for editing a specific task from the task list. The implementation
+follows these steps:
+
+1. Assertion and Logging: The method first checks if the `index` is greater than 0, throwing an assertion error if it
+   is. It then logs an informational message about the attempt to edit the task with the specified index.
+2. Error Handling: It throws a `NurseSchedException` with the appropriate error message if any of the following occur:
+   - `index` is not within 1 and the total number of tasks in the list of tasks
+   - The updated due `byDate` and `byTime` is before the current date and time
+3. Editing the task: It makes use of the appropriate setter methods to update the task with its new details. Task 
+   details that are empty or null are ignored as they do not need to be edited.
+   Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
+
+[//]: # (todo: add diagrams, save and load into file method)
+Step 1. The user launches the application for the first time. The `taskList` will be initialized with the task
+data stored (if exists).
+
+Step 2. The user then adds a task using the `addTask` operation. If successful, the system logs the addition
+and updates the saved file to reflect the change.
+
+Step 3. The user then realised that some task details were incorrect, thus she needs to edit it from the task list.
+The user initiates the editing of a task by calling the `editTask` function with the index of the task to be edited.
+
+Step 4. The system attempts to edit the specified task from the list. If unsuccessful, the system logs a warning and 
+throws a custom exception, `NurseSchedException`, with a relevant message indicating the specific error.
+
+Step 5. If successful, the system logs the edit and updates the saved file to reflect the changes.
+
+Step 6. The system outputs a confirmation message or an error based on whether the task was successfully edited or
+not.
+
+#### Design considerations
+
+Aspect: How edit task executes:
+
+- Alternative 1 (current choice): Edits the task details based on the given inputs.
+    - Pros: Gives the user flexibility as they can choose to edit only certain details of the task.
+    - Cons: More error checks required.
+- Alternative 2: Edits every detail of the task.
+    - Pros: Easier to implement, less error checks needed.
+    - Cons: Inconvenient for users as they have to re-enter every task detail regardless of the need to edit it.
+
 ## Product scope
 
 ### Target user profile:
