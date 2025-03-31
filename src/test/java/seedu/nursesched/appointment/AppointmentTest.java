@@ -56,7 +56,8 @@ public class AppointmentTest {
                 apptParser.getImportance()
         );
 
-        String expected = "Name: jean doe, From: 15:00, To: 16:00, Date: 2026-02-15, Importance: MEDIUM, Notes: needs a wheelchair";
+        String expected = "Name: jean doe, From: 15:00, To: 16:00, Date: 2026-02-15, " +
+                "Importance: MEDIUM, Notes: needs a wheelchair";
         assertEquals(expected, Appointment.apptList.get(Appointment.apptList.size()-1).toString());
     }
 

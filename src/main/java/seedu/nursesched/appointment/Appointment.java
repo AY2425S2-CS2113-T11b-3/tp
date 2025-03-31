@@ -65,7 +65,8 @@ public class Appointment {
      * @param notes     The notes for the specified appointment.
      */
 
-    public Appointment(String name, LocalTime startTime, LocalTime endTime, LocalDate date, String notes, int importance) {
+    public Appointment(String name, LocalTime startTime, LocalTime endTime,
+                       LocalDate date, String notes, int importance) {
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -309,10 +310,10 @@ public class Appointment {
         String formattedEndTime = endTime.format(formatter);
 
         String importanceString = switch (importance) {
-            case 1 -> "LOW";
-            case 2 -> "MEDIUM";
-            case 3 -> "HIGH";
-            default -> "";
+        case 1 -> "LOW";
+        case 2 -> "MEDIUM";
+        case 3 -> "HIGH";
+        default -> "";
         };
 
         return "Name: " + name + ", " +
