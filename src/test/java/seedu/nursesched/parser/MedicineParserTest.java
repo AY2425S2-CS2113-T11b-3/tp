@@ -57,7 +57,7 @@ class MedicineParserTest {
             MedicineParser.extractInputs(inputString);
         });
 
-        assertEquals("Try adding add, remove, edit, list, find or delete!", exception.getMessage());
+        assertEquals("Try adding add, remove, edit, list, find, restock or delete!", exception.getMessage());
     }
 
     @Test

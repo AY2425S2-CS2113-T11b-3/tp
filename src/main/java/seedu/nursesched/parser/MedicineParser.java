@@ -279,7 +279,8 @@ public class MedicineParser extends Parser {
      * @return A new instance of MedicineParser initialized with extracted values.
      * @throws NurseSchedException If the input format is incorrect or missing required information.
      */
-    private static MedicineParser getMedicineRestockParser(String remaining, String command) throws NurseSchedException {
+    private static MedicineParser getMedicineRestockParser(String remaining, String command)
+            throws NurseSchedException {
         assert remaining != null : "Remaining string cannot be null";
         assert command != null : "Command cannot be null";
 
