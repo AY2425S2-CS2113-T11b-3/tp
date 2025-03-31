@@ -15,19 +15,69 @@ With NurseSched, users are able to manage patients’ appointments, nurses’ sc
 
 ## Features 
 
-### Adding a todo: `todo`
-Adds a new item to the list of todo items.
+### Adding a task: `task add`
+Adds user’s task, due date and time to the user’s to-do list.
 
-Format: `todo n/TODO_NAME d/DEADLINE`
+Format: `task add [td/TASK_DESCRIPTION] [d/DUE_DATE] [t/DUE_TIME]`
 
-* The `DEADLINE` can be in a natural language format.
-* The `TODO_NAME` cannot contain punctuation.  
+* Adds a task to be done by the due date and time set by the user.
+* `DUE_TIME` must be in HH:mm format
+* `DUE_DATE` must be in YYYY-MM-DD format
 
 Example of usage: 
 
-`todo n/Write the rest of the User Guide d/next week`
+`task add td/Prepare injection tools for patient Jean d/2025-07-15 t/13:00`
 
-`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
+### Marking a task: `task mark`
+Marks a task to show its completion.
+
+Format: `task mark [TASK_INDEX]`
+
+* Marks task with index `[TASK_INDEX]` as completed
+* `TASK_INDEX` must be a number between 1 to the total number of tasks in the list.
+
+Example of usage: 
+
+`task mark 3`
+
+### Unmarking a task: `task unmark`
+Unmarks a task to show that it is uncompleted.
+
+Format: `task unmark [TASK_INDEX]`
+
+* Unmarked a task with index `TASK_INDEX` as uncompleted
+* `TASK_INDEX` must be a number between 1 to the total number of tasks in the list.
+
+Example of usage: 
+
+`task unmark 3`
+
+### Editing a task: `task edit`
+Searches for a specific keyword/phrase in the to-do list
+and lists out all tasks containing the keyword/phrase
+
+Format: `task edit [id/TASK_INDEX] [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]`
+
+* Not all but at least one parameter, `NEW_DESCRIPTION`, `NEW_DUE_DATE`, `NEW_DUE_TIME` 
+  needs to be input depending on what is to be edited
+* `TASK_INDEX` must be a number between 1 to the total number of tasks in the list
+
+Example of usage: 
+
+`task edit id/1 td/Update medicine supply d/ t/13:00`
+
+`task edit id/3 td/ d/2025-07-01 t/15:00`
+
+`task edit id/5 td/ d/ t/23:59`
+
+### List all tasks: `task list`
+Lists all tasks, completion status, due date and time.
+
+Format: `task list`
+
+Example of usage: 
+
+`task list`
 
 ### Add a patient profile : `pf add`
 Creates a profile for a patient.
