@@ -11,12 +11,11 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class MedicineParser extends Parser {
+    private static final Logger logr = Logger.getLogger("MedicineParser");
     private final String command;
     private final String medicineName;
     private final int quantity;
     private final String updatedName;
-
-    private static final Logger logr = Logger.getLogger("MedicineParser");
 
     static {
         try {
@@ -35,7 +34,8 @@ public class MedicineParser extends Parser {
         this.medicineName = medicineName;
         this.quantity = quantity;
         this.updatedName = updatedName;
-        logr.log(Level.INFO, "Initialized MedicineParser with command: {0}, medicineName: {1}, quantity: {2}, updatedName: {3}",
+        logr.log(Level.INFO, "Initialized MedicineParser with command: {0}, medicineName: {1}, quantity: {2}," +
+                        " updatedName: {3}",
                 new Object[]{command, medicineName, quantity, updatedName});
     }
 
@@ -95,7 +95,8 @@ public class MedicineParser extends Parser {
         try {
             medicineName = extractValue(remaining, "mn/", "q/");
             quantity = Integer.parseInt(extractValue(remaining, "q/", null));
-            logr.log(Level.INFO, "Extracted medicineName: {0}, quantity: {1}", new Object[]{medicineName, quantity});
+            logr.log(Level.INFO, "Extracted medicineName: {0}, quantity: {1}",
+                    new Object[]{medicineName, quantity});
             return new MedicineParser(command, medicineName, quantity, "");
         } catch (RuntimeException e) {
             logr.log(Level.SEVERE, "Failed to parse add command: {0}", remaining);
@@ -123,7 +124,8 @@ public class MedicineParser extends Parser {
                 throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
             }
             quantity = Integer.parseInt(quantityString);
-            logr.log(Level.INFO, "Extracted medicineName: {0}, quantity: {1}", new Object[]{medicineName, quantity});
+            logr.log(Level.INFO, "Extracted medicineName: {0}, quantity: {1}",
+                    new Object[]{medicineName, quantity});
             return new MedicineParser(command, medicineName, quantity, "");
         } catch (RuntimeException e) {
             logr.log(Level.SEVERE, "Failed to parse remove command: {0}", remaining);
@@ -169,7 +171,8 @@ public class MedicineParser extends Parser {
             medicineName = extractValue(remaining, "mn/", "un/");
             updatedName = extractValue(remaining, "un/", "uq/");
             updatedQuantity = Integer.parseInt(extractValue(remaining, "uq/", null));
-            logr.log(Level.INFO, "Extracted medicineName: {0}, updatedQuantity: {1}, updatedName: {2}", new Object[]{medicineName, updatedQuantity, updatedQuantity});
+            logr.log(Level.INFO, "Extracted medicineName: {0}, updatedQuantity: {1}, updatedName: {2}",
+                    new Object[]{medicineName, updatedQuantity, updatedQuantity});
             return new MedicineParser(command, medicineName, updatedQuantity, updatedName);
         } catch (RuntimeException e) {
             logr.log(Level.SEVERE, "Failed to parse edit command: {0}", remaining);
@@ -186,7 +189,8 @@ public class MedicineParser extends Parser {
 
         int start = input.indexOf(startMarker);
         if (start == -1) {
-            logr.log(Level.WARNING, "Missing required marker: {0} in input: {1}", new Object[]{startMarker, input});
+            logr.log(Level.WARNING, "Missing required marker: {0} in input: {1}",
+                    new Object[]{startMarker, input});
             throw new RuntimeException("Missing required marker: " + startMarker);
         }
 

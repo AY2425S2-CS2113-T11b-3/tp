@@ -38,14 +38,16 @@ public class Medicine {
     }
 
     public static void addMedicine(int quantity, String medicineName) throws NurseSchedException {
-        logr.log(Level.INFO, "Attempting to add medicine: {0}, Quantity: {1}", new Object[]{medicineName, quantity});
+        logr.log(Level.INFO, "Attempting to add medicine: {0}, Quantity: {1}",
+                new Object[]{medicineName, quantity});
 
         if (medicineName == null || medicineName.trim().isEmpty()) {
             logr.log(Level.WARNING, "Invalid medicine name: {0}", medicineName);
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEADD_FORMAT);
         }
         if (quantity <= 0) {
-            logr.log(Level.WARNING, "Invalid quantity: {0} for medicine: {1}", new Object[]{quantity, medicineName});
+            logr.log(Level.WARNING, "Invalid quantity: {0} for medicine: {1}",
+                    new Object[]{quantity, medicineName});
             throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
         }
 
@@ -53,7 +55,8 @@ public class Medicine {
         Medicine existingMedicine = findSpecificMedicine(medicineName);
         if (existingMedicine != null) {
             existingMedicine.addQuantity(quantity);
-            logr.log(Level.INFO, "Added {0} more of {1}. New quantity: {2}", new Object[]{quantity, medicineName, existingMedicine.getQuantity()});
+            logr.log(Level.INFO, "Added {0} more of {1}. New quantity: {2}",
+                    new Object[]{quantity, medicineName, existingMedicine.getQuantity()});
             System.out.println(quantity + " more of " + medicineName + " added. New quantity: " +
                     existingMedicine.getQuantity());
         } else {
@@ -65,7 +68,8 @@ public class Medicine {
     }
 
     public static void removeMedicine(int quantity, String medicineName) throws NurseSchedException {
-        logr.log(Level.INFO, "Attempting to remove medicine: {0}, Quantity: {1}", new Object[]{medicineName, quantity});
+        logr.log(Level.INFO, "Attempting to remove medicine: {0}, Quantity: {1}",
+                new Object[]{medicineName, quantity});
         Medicine existingMedicine = findSpecificMedicine(medicineName);
 
         if (existingMedicine == null) {
@@ -73,15 +77,18 @@ public class Medicine {
             throw new NurseSchedException(ExceptionMessage.MEDICINE_NONEXISTENT);
         }
         if (quantity <= 0) {
-            logr.log(Level.WARNING, "Invalid quantity: {0} for medicine: {1}", new Object[]{quantity, medicineName});
+            logr.log(Level.WARNING, "Invalid quantity: {0} for medicine: {1}",
+                    new Object[]{quantity, medicineName});
             throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
         } else if (quantity > existingMedicine.getQuantity()) {
-            logr.log(Level.WARNING, "Not enough stock to remove: {0} of {1}, Available: {2}", new Object[]{quantity, medicineName, existingMedicine.getQuantity()});
+            logr.log(Level.WARNING, "Not enough stock to remove: {0} of {1}, Available: {2}",
+                    new Object[]{quantity, medicineName, existingMedicine.getQuantity()});
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_QUANTITY);
         }
 
         existingMedicine.removeQuantity(quantity);
-        logr.log(Level.INFO, "Removed {0} of {1}. New quantity: {2}", new Object[]{quantity, medicineName, existingMedicine.getQuantity()});
+        logr.log(Level.INFO, "Removed {0} of {1}. New quantity: {2}",
+                new Object[]{quantity, medicineName, existingMedicine.getQuantity()});
         System.out.println(quantity + " more of " + medicineName + " removed. New quantity: " +
                 existingMedicine.getQuantity());
     }
@@ -157,7 +164,8 @@ public class Medicine {
             if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
                 medicine.setMedicineName(updatedName);
                 medicine.setQuantity(updatedQuantity);
-                logr.log(Level.INFO, "Updated medicine: {0} to new name: {1}, new quantity: {2}", new Object[]{medicineName, updatedName, updatedQuantity});
+                logr.log(Level.INFO, "Updated medicine: {0} to new name: {1}, new quantity: {2}",
+                        new Object[]{medicineName, updatedName, updatedQuantity});
                 System.out.println("Medicine " + medicine.getMedicineName() + " updated.");
                 return;
             }
