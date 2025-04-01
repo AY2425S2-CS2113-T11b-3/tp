@@ -67,7 +67,8 @@ public enum ExceptionMessage {
     MISSING_EDIT_INPUT("Edit fields cannot be empty!"),
     INVALID_IMPORTANCE_FORMAT("Importance should be an integer from 1 to 3. \n" +
             "1:LOW, 2:MEDIUM, 3:HIGH"),
-    INVALID_SORT_PARAMETER("Can only be sorted by time or importance!");
+    INVALID_SORT_PARAMETER("Can only be sorted by time or importance!"),
+    INVALID_SORTING_LIST("List is empty. Nothing to sort.");
 
 
     private final String message;

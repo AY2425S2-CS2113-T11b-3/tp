@@ -255,11 +255,12 @@ public class Appointment {
      * For appointments with the same importance, they are sorted chronologically.
      * This method updates the apptList and saves the sorted list to the storage.
      */
-    public static void sortByImportance() {
-        if (apptList.isEmpty()) {
-            System.out.println("Appointment list is empty. Nothing to sort.");
-            logr.warning("Appointment list is empty. Nothing to sort.");
-            return;
+    public static void sortByImportance() throws NurseSchedException {
+        if (apptList.isEmpty()){
+            String message = "Appointment list is empty. Nothing to sort.";
+            System.out.println(message);
+            logr.warning(message);
+            throw new NurseSchedException(ExceptionMessage.INVALID_SORTING_LIST);
         }
 
         apptList.sort(Comparator.comparing(Appointment::getImportance).reversed() // Sort by importance (HIGH to LOW)
@@ -275,12 +276,13 @@ public class Appointment {
      * Sorts the appointment list in chronological order, first by date and then by start time.
      * This method updates the apptList and saves the sorted list to the storage.
      */
-    public static void sortByTime() {
+    public static void sortByTime() throws NurseSchedException {
 
         if (apptList.isEmpty()){
-            System.out.println("Appointment list is empty Nothing to sort.");
-            logr.warning("Appointment list is empty Nothing to sort.");
-            return;
+            String message = "Appointment list is empty. Nothing to sort.";
+            System.out.println(message);
+            logr.warning(message);
+            throw new NurseSchedException(ExceptionMessage.INVALID_SORTING_LIST);
         }
 
         apptList.sort(Comparator.comparing((Appointment a) -> a.date) // First sort by dates

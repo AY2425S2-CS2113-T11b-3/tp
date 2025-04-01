@@ -1,6 +1,5 @@
 package seedu.nursesched.parser;
 
-import seedu.nursesched.appointment.Appointment;
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 
