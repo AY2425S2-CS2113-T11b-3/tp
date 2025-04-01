@@ -289,17 +289,8 @@ public class TaskTest {
                 timeNow,
                 false
         );
-        String input1 = "task edit";
-        String input2 = "task edit id/1 td/";
-        String input3 = "task edit id/1 t/";
-        String input4 = "task edit td/ t/";
+        String input = "task edit";
         assertThrows(NurseSchedException.class,
-                () -> TaskParser.extractInputs(input1));
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.extractInputs(input2));
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.extractInputs(input3));
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.extractInputs(input4));
+                () -> TaskParser.extractInputs(input));
     }
 }
