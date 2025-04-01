@@ -163,7 +163,6 @@ public class TaskParser extends Parser {
     public static TaskParser getMarkUnmarkTaskParser(String line, String command) throws NurseSchedException {
         int taskIndex;
         try {
-            System.out.println(line);
             taskIndex = Integer.parseInt(line);
             if (taskIndex <= 0) {
                 throw new NurseSchedException(ExceptionMessage.NEGATIVE_INDEX);
@@ -180,7 +179,6 @@ public class TaskParser extends Parser {
     }
 
     public static TaskParser getAddTaskParser(String line, String command) throws NurseSchedException {
-        System.out.println(line);
         StringBuilder description;
         LocalTime byTime;
         LocalDate byDate;
