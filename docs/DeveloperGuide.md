@@ -133,6 +133,64 @@ Aspect: How edit task executes:
     - Pros: Easier to implement, less error checks needed.
     - Cons: Inconvenient for users as they have to re-enter every task detail regardless of the need to edit it.
 
+
+### Appointment sort by importance feature
+
+#### Implementation
+
+The `sortAppointmentByImportance` method is responsible for sorting all appointments in the appointment list. The implementation
+follows these steps:
+
+1. Validation and Logging: The method first checks if the apptList is empty. If it is, a warning message is logged, 
+    and a NurseSchedException is thrown to indicate that there are no appointments to sort.
+2. Sorting Mechanism: The list is sorted using a comparator that prioritizes: 
+   1. Importance level (HIGH to LOW)
+   2. Date (earliest to latest)
+   3. Start time (earliest to latest)
+3. Saving Updated List: After sorting, the method overwrites the save file to ensure the changes persist. 
+4. Logging Completion: An informational log entry is created to confirm that the sorting was successful.
+
+Given below is an example usage scenario and how the sorting mechanism behaves at each step.
+
+[//]: # (todo: add diagrams)
+Step 1. The user launches the application for the first time. The `apptList` will be initialized
+with stored appointment data (if exists).
+
+Step 2. The user adds multiple appointments using the addAppointment operation. If successful, 
+the system logs the addition and updates the saved file.
+
+Step 3. The user decides to sort the appointments by importance to prioritize critical tasks. 
+The user initiates sorting by calling the sortByImportance function.
+
+Step 4. The system checks if the apptList is empty. If it is, a warning is logged, and an exception is thrown.
+
+Step 5. If appointments exist, the system sorts them based on importance (HIGH to LOW), followed by date and start time.
+
+Step 6. The system overwrites the saved file to reflect the sorted list.
+
+Step 7. The system outputs a confirmation message indicating that appointments have been successfully sorted.
+
+#### Design considerations
+
+Aspect: How appointment sorting by importance executes:
+
+- Alternative 1 (current choice): Appointment list is only sorted when method is called manually by user.
+    - Pros: 
+      - Better performance for large lists
+      - More predictable behavior for users
+    - Cons: 
+      - Requires users to remember to resort after changes
+      - List may become unsorted without user awareness
+- Alternative 2: Automatically resort list after appointments are added, deleted or edited.
+    - Pros: 
+      - Always maintains the sorted order
+      - User doesn't need to manually resort
+    - Cons:
+      - Performance impact for large lists
+      - May be confusing for the user if appointments keep changing position
+
+
+
 ## Product scope
 
 ### Target user profile:
