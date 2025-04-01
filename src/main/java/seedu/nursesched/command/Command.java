@@ -73,7 +73,7 @@ public class Command {
                         Appointment.filterAppointment(apptParser.getSearchKeyword());
                         break;
                     case "edit":
-                        Appointment.editApptByIndex(
+                        Appointment.editAppt(
                                 apptParser.getIndex(),
                                 apptParser.getName(),
                                 apptParser.getStartTime(),

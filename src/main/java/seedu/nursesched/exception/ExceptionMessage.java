@@ -24,7 +24,7 @@ public enum ExceptionMessage {
     INVALID_SHIFT_NUMBER("Shift index must be a positive integer!"),
     NEGATIVE_INDEX("Index must be a positive integer!"),
     ZERO_INDEX("Index cannot be zero!"),
-    INVALID_APPT_NUMBER("Index is greater than number of appointments in the list!"),
+    INVALID_APPT_NUMBER("There is no appointment with that specified index!"),
     INVALID_PATIENT_NUMBER("Index is greater than number of patients in the list!"),
     TASK_INDEX_OUT_OF_BOUNDS("Task index is not within 1 and the total number of tasks in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),

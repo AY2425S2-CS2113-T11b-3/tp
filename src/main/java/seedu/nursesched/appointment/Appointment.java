@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
 
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.storage.AppointmentStorage;
 import seedu.nursesched.ui.Ui;
 
@@ -197,9 +199,12 @@ public class Appointment {
         Ui.printSearchResults(searchResults, patientName);
     }
 
-    public static void editApptByIndex(int index, String name,
+    public static void editAppt(int index, String name,
                                        LocalTime startTime, LocalTime endTime,
-                                       LocalDate date, String notes, int importance) {
+                                       LocalDate date, String notes, int importance) throws NurseSchedException {
+        if (index < 0 || index >= apptList.size()) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_APPT_NUMBER);
+        }
         assert index >= 0 && index < apptList.size() : "Index must be valid and within bounds!";
         try {
             Appointment prevAppt = apptList.get(index);

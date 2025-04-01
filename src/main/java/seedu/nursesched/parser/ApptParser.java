@@ -1,5 +1,6 @@
 package seedu.nursesched.parser;
 
+import seedu.nursesched.appointment.Appointment;
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 
@@ -216,11 +217,12 @@ public class ApptParser extends Parser {
 
         case "edit" -> {
             // Nothing written after command. i.e "edit "
-            assert line != null;
-            if (line.isEmpty()) {
+            //assert line != null;
+            if (line == null || line.isEmpty() ) {
                 logr.warning("Missing index field in edit command");
                 throw new NurseSchedException(ExceptionMessage.INVALID_APPTEDIT_FORMAT);
             }
+
 
             try {
                 // Extract index
