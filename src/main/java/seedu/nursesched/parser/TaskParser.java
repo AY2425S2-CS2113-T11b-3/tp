@@ -105,7 +105,7 @@ public class TaskParser extends Parser {
         return null;
     }
 
-    private static TaskParser getEditTaskParser(String line, String command) throws NurseSchedException {
+    public static TaskParser getEditTaskParser(String line, String command) throws NurseSchedException {
         StringBuilder description = new StringBuilder();
         LocalDate byDate = null;
         LocalTime byTime = null;
@@ -160,10 +160,9 @@ public class TaskParser extends Parser {
         return new TaskParser(command, description.toString(), byDate, byTime, false, taskIndex);
     }
 
-    private static TaskParser getMarkUnmarkTaskParser(String line, String command) throws NurseSchedException {
+    public static TaskParser getMarkUnmarkTaskParser(String line, String command) throws NurseSchedException {
         int taskIndex;
         try {
-            System.out.println(line);
             taskIndex = Integer.parseInt(line);
             if (taskIndex <= 0) {
                 throw new NurseSchedException(ExceptionMessage.NEGATIVE_INDEX);
@@ -179,7 +178,7 @@ public class TaskParser extends Parser {
         return new TaskParser(command, "", null, null, false, taskIndex);
     }
 
-    private static TaskParser getAddTaskParser(String line, String command) throws NurseSchedException {
+    public static TaskParser getAddTaskParser(String line, String command) throws NurseSchedException {
         StringBuilder description;
         LocalTime byTime;
         LocalDate byDate;
