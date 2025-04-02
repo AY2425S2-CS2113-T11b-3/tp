@@ -1,0 +1,57 @@
+@startuml
+
+package "Patient Information" {
+  class Patient {
+    -id: String
+    -name: String
+    -age: String
+    -gender: String
+    -contact: String
+    -notes: String
+    #patientsList: ArrayList<Patient>
+    +Patient(id, name, age, gender, contact, notes)
+    +addPatient(Patient)
+    +removePatient(String)
+    +listPatientInformation()
+    +editPatientDetails(...)
+    +printProfileWithID(String)
+  }
+
+  class MedicalTest {
+    -id: String
+    -testName: String
+    -result: String
+    #medicalTestList: ArrayList<>
+    +addMedicalTest(...)
+    +removeTestsForPatient(String)
+    +listTestsForPatient(String)
+  }
+}
+
+package "Command Process" {
+  class Command {
+    +executeCommands(boolean, Scanner, Ui)
+  }
+
+  class PatientParser {
+    -command: String
+    -id: String
+    -name: String
+    -age: String
+    -gender: String
+    -contact: String
+    -notes: String
+    +extractInputs(String): PatientParser
+    +getCommand(): String
+    +getId(): String
+    +validateID(String)
+  }
+}
+
+Command -right-> PatientParser : "1. parses input"
+Command -right-> Patient : "2. executes commands"
+
+Patient *-- "0..*" MedicalTest : contains
+PatientParser ..> Patient : creates
+
+@enduml

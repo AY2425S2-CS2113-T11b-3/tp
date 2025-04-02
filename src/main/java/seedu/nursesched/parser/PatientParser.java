@@ -280,7 +280,7 @@ public class PatientParser extends Parser {
                     id = extractValue(line, "id/");
                     // Extract test details (test name, date, result)
                     String testName = line.substring(line.indexOf("t/") + 2, line.indexOf("r/") - 1);
-                    String testResult = line.substring(line.indexOf("r/"));
+                    String testResult = line.substring(line.indexOf("r/") + 2);
 
                     // Find the patient by ID and add the test
                     Patient patient = findPatientById(id);

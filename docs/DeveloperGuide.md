@@ -26,6 +26,20 @@ The `Storage` component,
 - depends on some classes in the `Appointment` and `Medicine` component (because the `Storage` components' job is to
   save/retrieve objects that belong to `Appointment` and `Medicine`)
 
+### Patient component
+
+API: `Patient.java`
+
+![patientInformation.png](assets/patientInformation.png)
+
+The `Patient` component,
+
+- Manages patient information including ID, name, age, gender, contact information, and medical notes.
+- Enforces data integrity through validation rules (4-digit numeric ID, M/F gender restriction).
+- Handles deletion by automatically removing associated medical tests.
+- Maintains a static list (patientsList) as the single source of truth for all patient records.
+- Throws custom exceptions (NurseSchedException) for error handling.
+
 ### Common classes
 
 Classes used by multiple components are in:
@@ -36,9 +50,66 @@ Classes used by multiple components are in:
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### [Proposed] PatientInfo feature
+### Patient delete feature
 
-#### Proposed Implementation
+#### Implementation
+
+The `removePatient` method is responsible for deleting a specific patient from the patient list based on their unique 
+ID. The implementation follows these steps:
+
+1. Assertion Check: The method first verifies that the provided id is not null using an assertion. This ensures the 
+method fails fast if invalid input is provided.
+
+2. Patient Search & Removal: The method iterates through the patientsList to find a patient with a matching ID. If 
+found:
+   - The patient is removed from the list. 
+   - A confirmation message is printed. 
+   - The loop breaks after removal to optimize performance. 
+
+3. Failure Handling: If no patient is found with the specified ID, a `NurseSchedException` is thrown with the 
+appropriate error message.
+
+Given below is an example usage scenario and how the removal mechanism behaves at each step.
+
+Step 1. The user launches the application. The patientsList is initialized, either empty or populated from saved data.
+
+Step 2. The user adds patients using the addPatient method. For example:
+
+```Patient("1234", "John Doe", "30", "M", "91234567", "Allergic to penicillin")```
+
+Step 3. The user decides to remove a patient by calling removePatient("1234").
+
+Step 4. The system:
+
+- Validates the ID is not null. 
+- Searches for a patient with ID "1234". 
+- Removes the patient if found and prints:
+  - ```Patient information removed for ID: 1234```
+
+Step 5. If the ID does not exist (e.g., "9999"), the system throws:
+
+```NurseSchedException: Patient not found.```
+
+Step 6. The CLI displays the outcome (success or error) to the user.
+
+The following sequence diagram shows how the delete patient information goes:
+
+![removePatientSequenceDiagram.png](assets/removePatientSequenceDiagram.png)
+
+#### Design Considerations
+
+Aspect: How patient removal executes:
+
+- Alternative 1 (Current Choice): Remove by iterating through the list and comparing IDs. 
+  - Pros: Simple to implement and understand. Works well for small to medium-sized lists. 
+  - Cons: Inefficient for very large lists.
+- Alternative 2: Use a HashMap<String, Patient>. 
+  - Pros: Faster deletion for large datasets. 
+  - Cons: Adds memory overhead and requires maintaining both a list and a map for other operations (e.g., listing 
+  patients).
+
+Justification: The current choice (iterative removal) balances simplicity and performance for the expected scale of the 
+application. If the patient list grows significantly, other alternatives should be reconsidered.
 
 ### Medicine delete feature
 
@@ -211,36 +282,45 @@ This is so that they can retrieve information quickly, especially with how hecti
 
 ## User Stories
 
-| Version | As a ... | I want to ...                                  | So that I can ...                                                   |
-|---------|----------|------------------------------------------------|---------------------------------------------------------------------|
-| v2.0    | Nurse    | Add tasks to my todo list                      | keep track of my things to do                                       |
-| v2.0    | Nurse    | List out my tasks                              | I can view all the things to be completed                           |
-| v2.0    | Nurse    | Check off things from my to-do list            | I know which tasks have been completed                              |
-| v2.0    | Nurse    | Delete my tasks                                | I can remove irrelevant tasks                                       |
-| v2.0    | Nurse    | Edit my to-do list                             | I can fill it with updated information that I need to keep track of |
-| v2.0    | Nurse    | Search for a task                              | I can locate a specific task with a keyword                         |
-| v2.0    | Nurse    | Save my task list                              | I can load and save my existing task list                           |
-| v2.0    | Nurse    | add in an amount of medicine to the list       | update my medicine supply                                           |
-| v2.0    | Nurse    | remove an amount of medicine from the list     | update my medicine supply                                           |
-| v2.0    | Nurse    | search for a specific medicine from the list   | see how much of the medicine I have left                            |
-| v2.0    | Nurse    | edit the information of the medicine           | ensure that my medicine supply is up-to-date                        |
-| v2.0    | Nurse    | delete a specific medicine                     | entirely remove a medicine from the list                            |
-| v2.0    | Nurse    | view the total supply of medicine left         | know what needs to be restocked                                     |
-| v2.0    | Nurse    | save the medicine supply list                  | keep track of the supply                                            |
-| v2.0    | Nurse    | search for an appointment                      | filter the list of appointments                                     |
-| v2.0    | Nurse    | edit appointment dates and time                | update my schedule                                                  |
-| v2.0    | Nurse    | arrange appointments in chronological order    | view my upcoming appointments first                                 | 
-| v2.0    | Nurse    | save appointment information                   | retrieve previously stored appointment information                  | 
-| v2.0    | Nurse    | rank importance of appointments                | arrange my appointments based off priority                          |
-| v2.0    | Nurse    | list medicine that is below a certain quantity | know which medicine to restock                                      |
+| Version | As a ... | I want to ...                                                       | So that I can ...                                                      |
+|---------|----------|---------------------------------------------------------------------|------------------------------------------------------------------------|
+| v2.0    | Nurse    | Search for a patient's profile                                      | I can locate the patient's details easily                              |
+| v2.0    | Nurse    | Edit patient's information                                          | I can fix any incorrect information                                    |
+| v2.0    | Nurse    | Add more fields for patient information like patient ID, gender etc | I can keep track of additional information relating to the patient     |
+| v2.0    | Nurse    | Input medical test results                                          | I am aware of the conditions of my patients                            |
+| v2.0    | Nurse    | Delete medical test results                                         | I am able to fix any errors in the test results                        |
+| v2.0    | Nurse    | Check patient's medical tests                                       | I can quickly retrieve test results for my patients                    |
+| v2.0    | Nurse    | Save patients information                                           | I can keep track and load patient information after exiting NurseSched |
+| v2.0    | Nurse    | Add tasks to my todo list                                           | keep track of my things to do                                          |
+| v2.0    | Nurse    | List out my tasks                                                   | I can view all the things to be completed                              |
+| v2.0    | Nurse    | Check off things from my to-do list                                 | I know which tasks have been completed                                 |
+| v2.0    | Nurse    | Delete my tasks                                                     | I can remove irrelevant tasks                                          |
+| v2.0    | Nurse    | Edit my to-do list                                                  | I can fill it with updated information that I need to keep track of    |
+| v2.0    | Nurse    | Search for a task                                                   | I can locate a specific task with a keyword                            |
+| v2.0    | Nurse    | Save my task list                                                   | I can load and save my existing task list                              |
+| v2.0    | Nurse    | add in an amount of medicine to the list                            | update my medicine supply                                              |
+| v2.0    | Nurse    | remove an amount of medicine from the list                          | update my medicine supply                                              |
+| v2.0    | Nurse    | search for a specific medicine from the list                        | see how much of the medicine I have left                               |
+| v2.0    | Nurse    | edit the information of the medicine                                | ensure that my medicine supply is up-to-date                           |
+| v2.0    | Nurse    | delete a specific medicine                                          | entirely remove a medicine from the list                               |
+| v2.0    | Nurse    | view the total supply of medicine left                              | know what needs to be restocked                                        |
+| v2.0    | Nurse    | save the medicine supply list                                       | keep track of the supply                                               |
+| v2.0    | Nurse    | search for an appointment                                           | filter the list of appointments                                        |
+| v2.0    | Nurse    | edit appointment dates and time                                     | update my schedule                                                     |
+| v2.0    | Nurse    | arrange appointments in chronological order                         | view my upcoming appointments first                                    | 
+| v2.0    | Nurse    | save appointment information                                        | retrieve previously stored appointment information                     | 
+| v2.0    | Nurse    | rank importance of appointments                                     | arrange my appointments based off priority                             |
+| v2.0    | Nurse    | list medicine that is below a certain quantity                      | know which medicine to restock                                         |
 
 ## Non-Functional Requirements
 
-{Give non-functional requirements}
+1. Should work on any *mainstream* OS as long as it has Java `17` installed.
+2. A user with above average typing speed for regular English text should be able to accomplish most of the tasks faster
+using commands than using the mouse.
 
 ## Glossary
 
-* *glossary item* - Definition
+* **Mainstream OS** - Windows, Linux, macOS
 
 ## Instructions for manual testing
 
