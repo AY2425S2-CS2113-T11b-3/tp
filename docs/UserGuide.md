@@ -14,6 +14,13 @@ supply.
     * [Unmarking a task](#unmarking-a-task-task-unmark)
     * [Editing a task](#editing-a-task-task-edit)
     * [Listing all tasks](#list-all-tasks-task-list)
+* [Shift List](#shift-list)
+  * [Adding a shift](#adding-a-shift-shift-add)
+  * [Editing a shift](#editing-a-shift-shift-edit)
+  * [Marking a shift](#marking-a-shift-shift-mark)
+  * [Unmarking a shift](#unmarking-a-shift-shift-unmark)
+  * [Deleting a shift](#deleting-a-shift-shift-del)
+  * [Listing all shifts](#listing-all-shifts-shift-list)
 * [Patient List](#patient-list)
     * [Adding a patient profile](#adding-a-patient-profile--pf-add)
     * [Deleting a patient profile](#deleting-a-patient-profile--pf-del)
@@ -120,6 +127,86 @@ Format: `task list`
 Example of usage:
 
 `task list`
+
+### Shift List
+
+### Adding a shift: `shift add`
+
+Adds a shift, including the date, start time, end time and assigned task.
+
+Format: `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`
+
+* Adds a shift with a time range and task for a specific date
+* `START_TIME` and `END_TIME` must be in HH:mm format
+* `DATE` must be in YYYY-MM-DD format
+
+Example:
+
+`shift add s/08:00 e/12:00 d/2025-04-10 st/Morning ward round`
+
+### Editing a shift: `shift edit`
+
+Edits an existing shift in the shift list.
+
+Format: `shift edit sn/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`
+
+* Edits the shift at the specified `SHIFT_INDEX`. The `SHIFT_INDEX` refers to the index number shown in the displayed shift list.
+* All fields must be provided to perform the edit.
+* `START_TIME` and `END_TIME` must be in HH:mm format
+* `DATE` must be in YYYY-MM-DD format
+
+Example:
+
+`shift edit sn/2 s/14:00 e/18:00 d/2025-04-12 st/Afternoon ER duty`
+
+### Marking a shift: `shift mark`
+
+Marks a shift to show its completion.
+
+Format: `shift mark sn/[SHIFT_INDEX]`
+
+* Marks the shift with index `SHIFT_INDEX` as completed
+* `SHIFT_INDEX` must be a number between 1 to the total number of shifts in the list.
+
+Example:
+
+`shift mark sn/1`
+
+### Unmarking a shift: `shift unmark`
+
+Unmarks a shift to show that it is uncompleted.
+
+Format: `shift unmark sn/[SHIFT_INDEX]`
+
+* Unmarks the shift with index `SHIFT_INDEX` as uncompleted
+* `SHIFT_INDEX` must be a number between 1 to the total number of shifts in the list.
+
+Example:
+
+`shift unmark sn/1`
+
+### Deleting a shift: `shift del`
+
+Deletes a shift from the list.
+
+Format: `shift del sn/[SHIFT_INDEX]`
+
+* Deletes a shift with the specified index
+* `SHIFT_INDEX` must be a number between 1 to the total number of shifts in the list.
+
+Example:
+
+`shift del sn/3`
+
+### Listing all shifts: `shift list`
+
+Lists all shifts, completion status, date, time, and task.
+
+Format: `shift list`
+
+Example:
+
+`shift list`
 
 ### Patient List
 
@@ -240,7 +327,7 @@ Format: `appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPO
 * `DATE` must be in YYYY-MM-DD format
 * `IMPORTANCE_RANKING` must be an integer between 1 and 3. (LOW, MEDIUM, HIGH)
 
-Example of usage:
+Example:
 
 `appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`
 
