@@ -2,8 +2,10 @@
 
 ## Acknowledgements
 
-{list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the
-original source as well}
+NurseSched makes use of these tools:
+1. Gradle: For build automation and code formatting checks.
+2. JUnit 5: For unit testing.
+3. Java Standard Library: For date time handling and file operations.
 
 ## Design
 
@@ -177,12 +179,16 @@ follows these steps:
    details that are empty or null are ignored as they do not need to be edited.
    Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
 
-[//]: # (todo: add diagrams, save and load into file method)
+Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
+
+[//]: # (todo: add SeqDiag for editTask, add save and load into file method)
 Step 1. The user launches the application for the first time. The `taskList` will be initialized with the task
 data stored (if exists).
 
 Step 2. The user then adds a task using the `addTask` operation. If successful, the system logs the addition
 and updates the saved file to reflect the change.
+
+![AddTaskSequenceDiagram](assets/taskImages/AddTaskSequenceDiagram.png)
 
 Step 3. The user then realised that some task details were incorrect, thus she needs to edit it from the task list.
 The user initiates the editing of a task by calling the `editTask` function with the index of the task to be edited.
@@ -225,7 +231,6 @@ follows these steps:
 
 Given below is an example usage scenario and how the sorting mechanism behaves at each step.
 
-![Sort By Importance Sequence Diagram](./taskSequenceDiagrams/ApptSortSequenceDiagram.png)
 
 Step 1. The user launches the application for the first time. The `apptList` will be initialized
 with stored appointment data (if exists).
@@ -233,8 +238,12 @@ with stored appointment data (if exists).
 Step 2. The user adds multiple appointments using the addAppointment operation. If successful, 
 the system logs the addition and updates the saved file.
 
+![Add appointment Sequence Diagram](./assets/appointmentImages/AddApptSequenceDiagram.png)
+
 Step 3. The user decides to sort the appointments by importance to prioritize critical tasks. 
 The user initiates sorting by calling the sortByImportance function.
+
+![Sort By Importance Sequence Diagram](./assets/appointmentImages/SortApptSequenceDiagram.png)
 
 Step 4. The system checks if the apptList is empty. If it is, a warning is logged, and an exception is thrown.
 
@@ -326,4 +335,4 @@ using commands than using the mouse.
 
 ## Instructions for manual testing
 
-{Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}
+View the [User Guide](./UserGuide.md) for the full list of commands to test.

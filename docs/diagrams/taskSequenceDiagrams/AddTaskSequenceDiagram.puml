@@ -1,32 +1,39 @@
 @startuml
 
+hide footbox
+actor User
+participant ":Command" as Command
+participant ":Parser" as Parser
+participant ":TaskParser" as TaskParser
 participant ":Task" as Task
 participant ":NurseSchedException" as NurseSchedException
 participant "taskList:ArrayList" as taskList
 
-[-> Task : addTask(description, byDate, byTime, isDone)
+User -> Command : add a task
+activate Command
+
+Command -> Parser : extractType(user input)
+activate Parser
+Parser --> Command : task type
+deactivate Parser
+
+Command -> TaskParser : extractInputs(user input parameters)
+activate TaskParser
+TaskParser --> Command : TaskParser object with parameters
+deactivate TaskParser
+
+Command-> Task : addTask(task details)
 activate Task
-
-create taskList
-
-opt byDate and byTime is in the past
-    create NurseSchedException
-    Task -> NurseSchedException : NurseSchedException()
-    activate NurseSchedException
-
-    NurseSchedException -->[
-    deactivate NurseSchedException
-end
 
 Task -> taskList : add()
 activate taskList
 
-taskList -> Task : Create new Task object
-Task --> taskList : new Task to be added
+taskList -> Task : create new task
+Task --> taskList : new task
 taskList --> Task
 deactivate taskList
 
-Task -->[
+Task --> User : task added
 deactivate Task
 
 @enduml

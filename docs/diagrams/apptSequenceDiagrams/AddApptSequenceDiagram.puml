@@ -1,0 +1,69 @@
+@startuml
+
+actor User
+participant ":Appointment" as Appointment
+participant "apptList:ArrayList<Appointment>" as apptList
+participant ":AppointmentStorage" as AppointmentStorage
+participant "logr:Logger" as Logger
+
+User -> Appointment : addAppt(name, startTime, endTime, date, notes, importance)
+activate Appointment
+
+
+Appointment -> Appointment : findAppointment(startTime, date)
+activate Appointment
+
+loop for each appointment in apptList
+    Appointment -> apptList : check for time conflict
+    activate apptList
+    apptList --> Appointment : matching appointment or null
+    deactivate apptList
+end
+
+Appointment --> Appointment : possibleClash
+deactivate Appointment
+
+alt time conflict exists
+    Appointment -> System.out : print conflict message
+    System.out --> User : display conflict message
+
+    Appointment -> Logger : log(INFO, "Appointment already exists")
+    activate Logger
+    Logger --> Appointment
+    deactivate Logger
+
+    Appointment --> User : return without adding
+else no conflict
+    create "newAppt:Appointment" as newAppt
+    Appointment -> newAppt : new Appointment(name, startTime, endTime, date, notes, importance)
+    activate newAppt
+    newAppt --> Appointment
+    deactivate newAppt
+
+    Appointment -> apptList : add(newAppt)
+    activate apptList
+    apptList --> Appointment
+    deactivate apptList
+
+    Appointment -> AppointmentStorage : appendToFile(newAppt)
+    activate AppointmentStorage
+    AppointmentStorage -> FileWriter : write(formattedString)
+    activate FileWriter
+    FileWriter --> AppointmentStorage
+    deactivate FileWriter
+    AppointmentStorage --> Appointment
+    deactivate AppointmentStorage
+
+    Appointment -> System.out : print confirmation
+    System.out --> User : display confirmation
+
+    Appointment -> Logger : log(INFO, "Appointment added")
+    activate Logger
+    Logger --> Appointment
+    deactivate Logger
+end
+
+Appointment --> User : return
+deactivate Appointment
+
+@enduml

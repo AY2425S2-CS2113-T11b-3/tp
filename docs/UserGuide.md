@@ -23,6 +23,15 @@ supply.
     * [Adding a medical test result](#adding-a-medical-test-result--pf-result-add)
     * [Deleting a medical test result](#deleting-a-medical-test-result--pf-result-delete)
     * [Listing all medical test results](#listing-all-medical-test-results--pf-result-list)
+* [Appointment List](#appointment-list)
+    * [Adding an appointment](#adding-an-appointment-appt-add)
+    * [Deleting an appointment](#deleting-an-appointment-appt-del)
+    * [Marking an appointment](#marking-an-appointment-appt-mark)
+    * [Unmarking an appointment](#unmarking-an-appointment-appt-unmark)
+    * [Editing an appointment](#editing-an-appointment-appt-edit)
+    * [Listing all appointments](#listing-all-appointments-appt-list)
+    * [Searching for an appointment](#searching-for-an-appointment-appt-search)
+    * [Sorting appointments](#sorting-appointments-appt-sort)
 * [Medicine List](#medicine-list)
     * [Adding a medicine quantity](#adding-a-medicine-quantity-medicine-add)
     * [Removing a medicine quantity](#removing-a-medicine-quantity-medicine-remove)
@@ -30,6 +39,8 @@ supply.
     * [Finding a medicine name](#finding-a-medicine-name-medicine-find)
     * [Deleting a medicine](#deleting-a-medicine-medicine-delete)
     * [Editing a medicine](#editing-a-medicine-medicine-edit)
+* [FAQ](#faq)
+* [Command summary](#command-summary)
 
 ## Quick Start
 
@@ -55,7 +66,7 @@ Format: `task add td/[TASK_DESCRIPTION] d/[DUE_DATE] t/[DUE_TIME]`
 
 Example of usage:
 
-`task add td/Prepare injection tools for patient Jean d/2025-07-15 t/13:00`
+`task add td/Prepare tools d/2025-07-15 t/13:00`
 
 ### Marking a task: `task mark`
 
@@ -63,7 +74,7 @@ Marks a task to show its completion.
 
 Format: `task mark [TASK_INDEX]`
 
-* Marks task with index `[TASK_INDEX]` as completed
+* Marks task with index `TASK_INDEX` as completed
 * `TASK_INDEX` must be a number between 1 to the total number of tasks in the list.
 
 Example of usage:
@@ -76,7 +87,7 @@ Unmarks a task to show that it is uncompleted.
 
 Format: `task unmark [TASK_INDEX]`
 
-* Unmarked a task with index `TASK_INDEX` as uncompleted
+* Unmarks a task with index `TASK_INDEX` as uncompleted
 * `TASK_INDEX` must be a number between 1 to the total number of tasks in the list.
 
 Example of usage:
@@ -85,24 +96,22 @@ Example of usage:
 
 ### Editing a task: `task edit`
 
-Searches for a specific keyword/phrase in the to-do list
-and lists out all tasks containing the keyword/phrase
+Edits an existing task in the task list.
 
 Format: `task edit id/[TASK_INDEX] td/[NEW_DESCRIPTION] d/[NEW_DUE_DATE] t/[NEW_DUE_TIME]`
 
-* Not all but at least one parameter, `NEW_DESCRIPTION`, `NEW_DUE_DATE`, `NEW_DUE_TIME`
-  needs to be input depending on what is to be edited
-* `TASK_INDEX` must be a number between 1 to the total number of tasks in the list
+* Edits the task at the specified `TASK_INDEX`. The `TASK_INDEX` refers to the index number shown in the displayed task
+  list. The index must be a positive integer 1, 2, 3, ...
+* At least one of the optional fields must be provided.
+* Existing values will be updated to the input values.
 
 Example of usage:
 
-`task edit id/1 td/Update medicine supply d/ t/13:00`
+* `task edit id/1 td/Update medicine supply t/13:00` Edits the task description and due time of the 1st task in the
+   task list.
+* `task edit id/3 d/2025-07-01 t/15:00` Edits the due date and time of the 3rd task in the task list.
 
-`task edit id/3 td/ d/2025-07-01 t/15:00`
-
-`task edit id/5 td/ d/ t/23:59`
-
-### List all tasks: `task list`
+### Listing all tasks: `task list`
 
 Lists all tasks, completion status, due date and time.
 
@@ -218,6 +227,117 @@ Example:
 
 * `pf result list id/1000`
 
+
+### Appointment list
+
+### Adding an appointment: `appt add`
+Adds user’s appointments, date and time to the user’s appointment list.
+
+Format: `appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPORTANCE_RANKING] [n/NOTES]`
+
+* Adds a task to be done by the due date and time set by the user.
+* `START_TIME` and `END_TIME` must be in HH:mm format
+* `DATE` must be in YYYY-MM-DD format
+* `IMPORTANCE_RANKING` must be an integer between 1 and 3. (LOW, MEDIUM, HIGH)
+
+Example of usage:
+
+`appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`
+
+### Deleting an appointment: `appt del`
+Delete an appointment profile.
+
+Format: `appt del [APPT_INDEX]`
+
+* Deletes an appointment with the specified index.
+* The `APPT_INDEX` refers to the index number shown in the displayed appointment
+  list. The index must be a positive integer 1, 2, 3, ...
+
+Example: `appt del 1000`
+
+
+### Marking an appointment: `appt mark`
+Marks an appointment to show its completion.
+
+Format: `appt mark [APPT_INDEX]`
+
+* Marks task with index `APPT_INDEX` as completed
+* `APPT_INDEX` must be a number between 1 to the total number of appointments in the list.
+
+Example of usage:
+
+`appt mark 3`
+
+### Unmarking an appointment: `appt unmark`
+Unmarks an appointment to show that it is uncompleted.
+
+Format: `appt unmark [APPT_INDEX]`
+
+* Unmarks a task with index `APPT_INDEX` as uncompleted
+* `APPT_INDEX` must be a number between 1 to the total number of appointments in the list.
+
+Example of usage:
+
+`appt unmark 3`
+
+### Editing an appointment: `appt edit`
+Edits an existing task in the task list.
+
+Format: `appt edit [APPT_INDEX] [p/NEW_PATIENT_NAME] [s/NEW_START_TIME] [e/NEW_END_TIME] [d/NEW_DATE] [n/NEW_NOTES] [im/NEW_IMPORTANCE]`
+
+* Edits the task at the specified `APPT_INDEX`. The `APPT_INDEX` refers to the index number shown in the displayed appointment
+  list. The index must be a positive integer 1, 2, 3, ...
+* At least one of the optional fields must be provided.
+* Existing values will be updated to the input values.
+
+Example of usage:
+
+* `appt edit 1 p/ edited name s/13:00 e/15:00` Edits the appointment patient name, start time and end time of the 1st appointment in the
+  appointment list.
+* `appt edit 3 im/1` Edits the importance ranking of the 3rd appointment in the appointment list.
+
+
+### Listing all appointments: `appt list`
+Lists all appointments, completion status, date, start time, end time, importance and notes.
+
+Format: `appt list`
+
+Example of usage:
+
+`appt list`
+
+
+### Searching for an appointment: `appt search`
+Search for an appointment using patient's name.
+
+Format: `appt search [PATIENT_NAME]`
+
+* Displays all appointments under `PATIEN_NAME` found within the current list.
+
+Example: `appt search Jean Doe`
+
+
+### Sorting appointments: `appt sort`
+Sorts appointments based off importance or time.
+
+#### Sorting by Time
+Sorts appointments in chronological order.
+
+Format: `appt sort by/ time`
+
+Example of usage:
+
+`appt sort by/ time`
+
+#### Sorting by Importance
+Sorts appointments based on their priority level.
+
+Format: `appt sort by/ importance`
+
+Example of usage:
+
+`appt sort by/ importance`
+
 ### Medicine List
 
 ### Adding a medicine quantity: `medicine add`
@@ -278,6 +398,7 @@ Example:
 
 * `medicine edit mn/paracetamo un/paracetamol uq/4` Updates the medicine name from paracetamo to paracetamol and its
   quantity to 4
+
 
 ## FAQ
 
