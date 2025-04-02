@@ -399,6 +399,19 @@ Example:
 * `medicine edit mn/paracetamo un/paracetamol uq/4` Updates the medicine name from paracetamo to paracetamol and its
   quantity to 4
 
+### Restocking a medicine: `medicine restock`
+
+Checks which medicine needs restocking based on the input quantity.
+
+Format: `medicine restock q/[QUANTITY]`
+
+* Lists all medicines which have quantity lesser than `QUANTITY`.
+
+Example:
+
+* `medicine restock q/30` Lists all the medicine name and their respective quantity, for medicines which have quantity
+  lesser than `QUANTITY`
+
 
 ## FAQ
 
