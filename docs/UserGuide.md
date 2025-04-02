@@ -39,6 +39,7 @@ supply.
     * [Finding a medicine name](#finding-a-medicine-name-medicine-find)
     * [Deleting a medicine](#deleting-a-medicine-medicine-delete)
     * [Editing a medicine](#editing-a-medicine-medicine-edit)
+    * [Restocking a medicine](#restocking-a-medicine-medicine-restock)
 * [FAQ](#faq)
 * [Command summary](#command-summary)
 
