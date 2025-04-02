@@ -145,6 +145,15 @@ public class Command {
                         );
                         Shift.listShifts();
                     }
+                    if (shift.equals("edit")) {
+                        Shift.editShift(
+                                shiftParser.getIndex(),
+                                shiftParser.getStartTime(),
+                                shiftParser.getEndTime(),
+                                shiftParser.getDate(),
+                                shiftParser.getNotes()
+                        );
+                    }
                     if (shift.equals("mark")) {
                         Shift.markShift(
                                 shiftParser.getIndex()
