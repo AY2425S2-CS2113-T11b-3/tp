@@ -1,0 +1,29 @@
+@startuml
+
+hide footbox
+actor User
+participant "Command" as Command
+participant "Parser" as Parser
+participant "PatientParser" as PatientParser
+participant "Patient" as Patient
+
+User -> Command : "pf del id/1234"
+activate Command
+  Command -> Parser : extractType("pf del id/1234")
+  activate Parser
+  Parser --> Command : Return "pf"
+  deactivate Parser
+  Command -> PatientParser : extractInputs("del id/1234")
+  activate PatientParser
+    PatientParser -> PatientParser : validateID(id="1234")
+    activate PatientParser
+    deactivate PatientParser
+    PatientParser --> Command : Return PatientParser(id="1234")
+  deactivate PatientParser
+  Command -> Patient : removePatient("1234")
+  activate Patient
+  Patient --> Command
+  deactivate Patient
+  Command --> User
+deactivate Command
+@enduml
