@@ -177,12 +177,16 @@ follows these steps:
    details that are empty or null are ignored as they do not need to be edited.
    Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
 
-[//]: # (todo: add diagrams, save and load into file method)
+Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
+
+[//]: # (todo: add SeqDiag for editTask, add save and load into file method)
 Step 1. The user launches the application for the first time. The `taskList` will be initialized with the task
 data stored (if exists).
 
 Step 2. The user then adds a task using the `addTask` operation. If successful, the system logs the addition
 and updates the saved file to reflect the change.
+
+![AddTaskSequenceDiagram](assets/taskImages/AddTaskSequenceDiagram.png)
 
 Step 3. The user then realised that some task details were incorrect, thus she needs to edit it from the task list.
 The user initiates the editing of a task by calling the `editTask` function with the index of the task to be edited.
