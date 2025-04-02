@@ -12,6 +12,16 @@ With NurseSched, users are able to manage patients’ appointments, nurses’ sc
     * [Unmarking a task](#unmarking-a-task-task-unmark)
     * [Editing a task](#editing-a-task-task-edit)
     * [Listing all tasks](#listing-all-tasks-task-list)
+    * [Adding an appointment](#adding-an-appointment-appt-add)
+    * [Deleting an appointment](#deleting-an-appointment-appt-del)
+    * [Marking an appointment](#marking-an-appointment-appt-mark)
+    * [Unmarking an appointment](#unmarking-an-appointment-appt-unmark)
+    * [Editing an appointment](#editing-an-appointment-appt-edit)
+    * [Listing all appointments](#listing-all-appointments-appt-list)
+    * [Searching for an appointment](#searching-for-an-appointment-appt-search)
+    * [Sorting appointments](#sorting-appointments-appt-sort)
+        * [Sorting by Time](#sorting-by-time)
+        * [Sorting by Importance](#sorting-by-importance)
 
 * [FAQ](#faq)
 * [Command summary](#command-summary)
@@ -183,6 +193,115 @@ Example:
 
 * `pf result list id/1000`
 
+
+### Adding an appointment: `appt add`
+Adds user’s appointments, date and time to the user’s appointment list.
+
+Format: `appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPORTANCE_RANKING] [n/NOTES]`
+
+* Adds a task to be done by the due date and time set by the user.
+* `START_TIME` and `END_TIME` must be in HH:mm format
+* `DATE` must be in YYYY-MM-DD format
+* `IMPORTANCE_RANKING` must be an integer between 1 and 3. (LOW, MEDIUM, HIGH)
+
+Example of usage:
+
+`appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`
+
+### Deleting an appointment: `appt del`
+Delete an appointment profile.
+
+Format: `appt del [APPT_INDEX]`
+
+* Deletes an appointment with the specified index.
+* The `APPT_INDEX` refers to the index number shown in the displayed appointment
+  list. The index must be a positive integer 1, 2, 3, ...
+
+Example: `appt del 1000`
+
+
+### Marking an appointment: `appt mark`
+Marks an appointment to show its completion.
+
+Format: `appt mark [APPT_INDEX]`
+
+* Marks task with index `APPT_INDEX` as completed
+* `APPT_INDEX` must be a number between 1 to the total number of appointments in the list.
+
+Example of usage:
+
+`appt mark 3`
+
+### Unmarking an appointment: `appt unmark`
+Unmarks an appointment to show that it is uncompleted.
+
+Format: `appt unmark [APPT_INDEX]`
+
+* Unmarks a task with index `APPT_INDEX` as uncompleted
+* `APPT_INDEX` must be a number between 1 to the total number of appointments in the list.
+
+Example of usage:
+
+`appt unmark 3`
+
+### Editing an appointment: `appt edit`
+Edits an existing task in the task list.
+
+Format: `appt edit [APPT_INDEX] [p/NEW_PATIENT_NAME] [s/NEW_START_TIME] [e/NEW_END_TIME] [d/NEW_DATE] [n/NEW_NOTES] [im/NEW_IMPORTANCE]`
+
+* Edits the task at the specified `APPT_INDEX`. The `APPT_INDEX` refers to the index number shown in the displayed appointment
+  list. The index must be a positive integer 1, 2, 3, ...
+* At least one of the optional fields must be provided.
+* Existing values will be updated to the input values.
+
+Example of usage:
+
+* `appt edit 1 p/ edited name s/13:00 e/15:00` Edits the appointment patient name, start time and end time of the 1st appointment in the
+  appointment list.
+* `appt edit 3 im/1` Edits the importance ranking of the 3rd appointment in the appointment list.
+
+
+### Listing all appointments: `appt list`
+Lists all appointments, completion status, date, start time, end time, importance and notes.
+
+Format: `appt list`
+
+Example of usage:
+
+`appt list`
+
+
+### Searching for an appointment: `appt search`
+Search for an appointment using patient's name.
+
+Format: `appt search [PATIENT_NAME]`
+
+* Displays all appointments under `PATIEN_NAME` found within the current list.
+
+Example: `appt search Jean Doe`
+
+
+### Sorting appointments: `appt sort`
+Sorts appointments based off importance or time.
+
+#### Sorting by Time
+Sorts appointments in chronological order.
+
+Format: `appt sort by/ time`
+
+Example of usage:
+
+`appt sort by/ time`
+
+#### Sorting by Importance
+Sorts appointments based on their priority level.
+
+Format: `appt sort by/ importance`
+
+Example of usage:
+
+`appt sort by/ importance`
+
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
@@ -194,3 +313,5 @@ Example:
 {Give a 'cheat sheet' of commands here}
 
 * Add todo `todo n/TODO_NAME d/DEADLINE`
+
+
