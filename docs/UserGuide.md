@@ -31,6 +31,17 @@ supply.
     * [Deleting a medicine](#deleting-a-medicine-medicine-delete)
     * [Editing a medicine](#editing-a-medicine-medicine-edit)
 
+* [Quick Start](#quick-start)
+* [Features](#features-)
+    * [Adding a task](#adding-a-task-task-add)
+    * [Marking a task](#marking-a-task-task-mark)
+    * [Unmarking a task](#unmarking-a-task-task-unmark)
+    * [Editing a task](#editing-a-task-task-edit)
+    * [Listing all tasks](#listing-all-tasks-task-list)
+
+* [FAQ](#faq)
+* [Command summary](#command-summary)
+
 ## Quick Start
 
 1. Ensure that you have Java 17 or above installed.
@@ -55,7 +66,7 @@ Format: `task add td/[TASK_DESCRIPTION] d/[DUE_DATE] t/[DUE_TIME]`
 
 Example of usage:
 
-`task add td/Prepare injection tools for patient Jean d/2025-07-15 t/13:00`
+`task add td/Prepare tools d/2025-07-15 t/13:00`
 
 ### Marking a task: `task mark`
 
@@ -63,7 +74,7 @@ Marks a task to show its completion.
 
 Format: `task mark [TASK_INDEX]`
 
-* Marks task with index `[TASK_INDEX]` as completed
+* Marks task with index `TASK_INDEX` as completed
 * `TASK_INDEX` must be a number between 1 to the total number of tasks in the list.
 
 Example of usage:
@@ -76,7 +87,7 @@ Unmarks a task to show that it is uncompleted.
 
 Format: `task unmark [TASK_INDEX]`
 
-* Unmarked a task with index `TASK_INDEX` as uncompleted
+* Unmarks a task with index `TASK_INDEX` as uncompleted
 * `TASK_INDEX` must be a number between 1 to the total number of tasks in the list.
 
 Example of usage:
@@ -85,24 +96,22 @@ Example of usage:
 
 ### Editing a task: `task edit`
 
-Searches for a specific keyword/phrase in the to-do list
-and lists out all tasks containing the keyword/phrase
+Edits an existing task in the task list.
 
 Format: `task edit id/[TASK_INDEX] td/[NEW_DESCRIPTION] d/[NEW_DUE_DATE] t/[NEW_DUE_TIME]`
 
-* Not all but at least one parameter, `NEW_DESCRIPTION`, `NEW_DUE_DATE`, `NEW_DUE_TIME`
-  needs to be input depending on what is to be edited
-* `TASK_INDEX` must be a number between 1 to the total number of tasks in the list
+* Edits the task at the specified `TASK_INDEX`. The `TASK_INDEX` refers to the index number shown in the displayed task
+  list. The index must be a positive integer 1, 2, 3, ...
+* At least one of the optional fields must be provided.
+* Existing values will be updated to the input values.
 
 Example of usage:
 
-`task edit id/1 td/Update medicine supply d/ t/13:00`
+* `task edit id/1 td/Update medicine supply t/13:00` Edits the task description and due time of the 1st task in the
+   task list.
+* `task edit id/3 d/2025-07-01 t/15:00` Edits the due date and time of the 3rd task in the task list.
 
-`task edit id/3 td/ d/2025-07-01 t/15:00`
-
-`task edit id/5 td/ d/ t/23:59`
-
-### List all tasks: `task list`
+### Listing all tasks: `task list`
 
 Lists all tasks, completion status, due date and time.
 

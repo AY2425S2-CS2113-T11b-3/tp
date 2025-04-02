@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
 
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.storage.AppointmentStorage;
 import seedu.nursesched.ui.Ui;
 
@@ -197,9 +199,12 @@ public class Appointment {
         Ui.printSearchResults(searchResults, patientName);
     }
 
-    public static void editApptByIndex(int index, String name,
+    public static void editAppt(int index, String name,
                                        LocalTime startTime, LocalTime endTime,
-                                       LocalDate date, String notes, int importance) {
+                                       LocalDate date, String notes, int importance) throws NurseSchedException {
+        if (index < 0 || index >= apptList.size()) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_APPT_NUMBER);
+        }
         assert index >= 0 && index < apptList.size() : "Index must be valid and within bounds!";
         try {
             Appointment prevAppt = apptList.get(index);
@@ -250,11 +255,12 @@ public class Appointment {
      * For appointments with the same importance, they are sorted chronologically.
      * This method updates the apptList and saves the sorted list to the storage.
      */
-    public static void sortByImportance() {
-        if (apptList.isEmpty()) {
-            System.out.println("Appointment list is empty. Nothing to sort.");
-            logr.warning("Appointment list is empty. Nothing to sort.");
-            return;
+    public static void sortByImportance() throws NurseSchedException {
+        if (apptList.isEmpty()){
+            String message = "Appointment list is empty. Nothing to sort.";
+            System.out.println(message);
+            logr.warning(message);
+            throw new NurseSchedException(ExceptionMessage.INVALID_SORTING_LIST);
         }
 
         apptList.sort(Comparator.comparing(Appointment::getImportance).reversed() // Sort by importance (HIGH to LOW)
@@ -270,12 +276,13 @@ public class Appointment {
      * Sorts the appointment list in chronological order, first by date and then by start time.
      * This method updates the apptList and saves the sorted list to the storage.
      */
-    public static void sortByTime() {
+    public static void sortByTime() throws NurseSchedException {
 
         if (apptList.isEmpty()){
-            System.out.println("Appointment list is empty Nothing to sort.");
-            logr.warning("Appointment list is empty Nothing to sort.");
-            return;
+            String message = "Appointment list is empty. Nothing to sort.";
+            System.out.println(message);
+            logr.warning(message);
+            throw new NurseSchedException(ExceptionMessage.INVALID_SORTING_LIST);
         }
 
         apptList.sort(Comparator.comparing((Appointment a) -> a.date) // First sort by dates

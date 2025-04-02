@@ -9,6 +9,7 @@ import seedu.nursesched.parser.PatientParser;
 import seedu.nursesched.parser.ShiftParser;
 import seedu.nursesched.parser.TaskParser;
 import seedu.nursesched.parser.Parser;
+import seedu.nursesched.patient.MedicalTest;
 import seedu.nursesched.patient.Patient;
 import seedu.nursesched.shift.Shift;
 import seedu.nursesched.task.Task;
@@ -73,7 +74,7 @@ public class Command {
                         Appointment.filterAppointment(apptParser.getSearchKeyword());
                         break;
                     case "edit":
-                        Appointment.editApptByIndex(
+                        Appointment.editAppt(
                                 apptParser.getIndex(),
                                 apptParser.getName(),
                                 apptParser.getStartTime(),
@@ -107,6 +108,7 @@ public class Command {
                         Patient.addPatient(newPatient);
                     }
                     if (input.equals("del")) {
+                        MedicalTest.removeTestsForPatient(patientParser.getId());
                         Patient.removePatient(patientParser.getId());
                     }
                     if (input.equals("list")) {
