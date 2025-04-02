@@ -1,4 +1,4 @@
-# Developer Guide
+git# Developer Guide
 
 ## Acknowledgements
 
@@ -30,7 +30,7 @@ The `Storage` component,
 
 API: `Patient.java`
 
-![patientInformation.png](assets/patientInformation.png)
+![patientInformation.png](assets/patientImages/patientInformation.png)
 
 The `Patient` component,
 
@@ -94,7 +94,7 @@ Step 6. The CLI displays the outcome (success or error) to the user.
 
 The following sequence diagram shows how the delete patient information goes:
 
-![removePatientSequenceDiagram.png](assets/removePatientSequenceDiagram.png)
+![removePatientSequenceDiagram.png](assets/patientImages/removePatientSequenceDiagram.png)
 
 #### Design Considerations
 
@@ -128,10 +128,11 @@ follows these steps:
 
 Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
 
-[//]: # (todo: add diagrams)
+
 Step 1. The user launches the application for the first time. The `medicineList` will be initialized with the medicine
 data stored (if exists).
 
+![AddMedicineSequenceDiagram.png](assets/medicineImages/AddMedicineSequenceDiagram.png)
 Step 2. The user then adds a medicine using the `addMedicine` operation. If successful, the system logs the addition
 and updates the saved file to reflect the change.
 
@@ -139,6 +140,7 @@ Step 3. The user then realised that the medicine has expired, thus she needs to 
 The user initiates the deletion of a medicine by calling the `deleteMedicine` function with the name of the medicine
 to be deleted.
 
+![DeleteMedicineSequenceDiagram.png](assets/medicineImages/DeleteMedicineSequenceDiagram.png)
 Step 4. The system attempts to find and remove the specified medicine from the list. If successful, the system logs the
 deletion and updates the saved file to reflect the change.
 

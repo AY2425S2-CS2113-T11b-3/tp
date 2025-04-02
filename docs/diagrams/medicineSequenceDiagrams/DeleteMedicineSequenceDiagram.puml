@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant ":Medicine" as Medicine
+participant ":NurseSchedException" as NurseSchedException
+participant ":medicineList:ArrayList<Medicine>" as medicineList
+participant ":MedicineStorage" as medicineStorage
+
+[-> Medicine: deleteMedicine(medicineName)
+activate Medicine
+
+loop for all medicine in medicineList
+Medicine -> medicineList: medicine.getMedicineName()
+activate medicineList
+alt equalsIgnoreCase(medicineName)
+medicineList -> medicineList : remove(medicineName)
+activate medicineList
+medicineList --> medicineList
+deactivate medicineList
+medicineList --> Medicine: removed = true
+else !equalsIgnoreCase(medicineName)
+medicineList --> Medicine: removed = false
+deactivate medicineList
+end
+
+alt removed
+medicineList -> medicineStorage : overwriteSaveFile(medicineList)
+activate medicineList
+activate medicineStorage
+medicineStorage --> medicineList
+deactivate medicineStorage
+deactivate medicineList
+Medicine -->[ : System.out.println()
+
+else !removed
+
+Medicine -> NurseSchedException : NurseSchedException()
+activate NurseSchedException
+NurseSchedException -->[
+end
+
+@enduml
