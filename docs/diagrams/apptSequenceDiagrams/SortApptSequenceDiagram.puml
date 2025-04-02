@@ -3,7 +3,7 @@
 actor User
 participant ":Appointment" as Appointment
 participant ":NurseSchedException" as NurseSchedException
-participant "apptList:ArrayList" as apptList
+participant "apptList:ArrayList<Appointment>" as apptList
 participant ":AppointmentStorage" as AppointmentStorage
 participant "logr:Logger" as Logger
 

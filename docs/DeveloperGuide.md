@@ -225,7 +225,6 @@ follows these steps:
 
 Given below is an example usage scenario and how the sorting mechanism behaves at each step.
 
-![Sort By Importance Sequence Diagram](./taskSequenceDiagrams/ApptSortSequenceDiagram.png)
 
 Step 1. The user launches the application for the first time. The `apptList` will be initialized
 with stored appointment data (if exists).
@@ -233,8 +232,12 @@ with stored appointment data (if exists).
 Step 2. The user adds multiple appointments using the addAppointment operation. If successful, 
 the system logs the addition and updates the saved file.
 
+![Add appointment Sequence Diagram](./assets/appointmentImages/AddApptSequenceDiagram.png)
+
 Step 3. The user decides to sort the appointments by importance to prioritize critical tasks. 
 The user initiates sorting by calling the sortByImportance function.
+
+![Sort By Importance Sequence Diagram](./assets/appointmentImages/SortApptSequenceDiagram.png)
 
 Step 4. The system checks if the apptList is empty. If it is, a warning is logged, and an exception is thrown.
 
