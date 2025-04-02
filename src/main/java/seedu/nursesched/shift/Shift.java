@@ -146,6 +146,38 @@ public class Shift {
         }
     }
 
+    /**
+     * Edits the details of an existing shift based on the given index.
+     *
+     * @param index        The index of the shift to be edited (0-based index).
+     * @param newStartTime The new start time for the shift.
+     * @param newEndTime   The new end time for the shift.
+     * @param newDate      The new date for the shift.
+     * @param newTask      The new task description for the shift.
+     */
+    public static void editShift(int index, LocalTime newStartTime, LocalTime newEndTime,
+                                 LocalDate newDate, String newTask) {
+        assert index >= 0 && index < shiftList.size() : "Invalid shift index!";
+        assert newStartTime != null
+                && newEndTime != null
+                && newDate != null
+                && newTask != null : "New shift details cannot be null!";
+        assert newStartTime.isBefore(newEndTime) : "Start time must be before end time";
+
+        try {
+            Shift shift = shiftList.get(index);
+            Shift updatedShift = new Shift(newStartTime, newEndTime, newDate, newTask);
+            updatedShift.setDone(shift.getStatus());
+            shiftList.set(index, updatedShift);
+            System.out.println("Shift updated:");
+            System.out.println(updatedShift);
+            logr.info("Shift updated at index " + index + ": " + updatedShift);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("There is no shift with index: " + (index + 1));
+            logr.warning("Attempted to edit shift with invalid index: " + (index + 1));
+        }
+    }
+
     public void setDone(boolean done) {
         this.isDone = done;
     }

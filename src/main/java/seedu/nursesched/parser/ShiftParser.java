@@ -115,6 +115,9 @@ public class ShiftParser extends Parser {
             }  else if (command.equals("list")) {
                 return new ShiftParser("list", null, null, null, "", 0);
 
+            } else if (command.equals("edit")) {
+                return getShiftEditParser(remaining, command);
+
             } else {
                 logr.warning("Invalid command: " + command);
                 throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
@@ -125,6 +128,64 @@ public class ShiftParser extends Parser {
             logr.severe("Parsing error: " + e.getMessage());
             throw e;
         }
+    }
+
+    /**
+     * Parses an edit shift command and extracts updated shift details.
+     *
+     * @param remaining The remaining command string.
+     * @param command   The command type.
+     * @return A ShiftParser object containing updated shift details.
+     * @throws NurseSchedException If the format is incorrect or values are invalid.
+     */
+    private static ShiftParser getShiftEditParser(String remaining, String command) throws NurseSchedException {
+        assert remaining != null : "Remaining command should not be null";
+        logr.info("Parsing edit command: " + remaining);
+
+        int shiftIndex;
+        LocalDate date;
+        LocalTime startTime;
+        LocalTime endTime;
+        String shiftTask;
+
+        if (!remaining.contains("sn/") || !remaining.contains("s/") || !remaining.contains("e/")
+                || !remaining.contains("d/") || !remaining.contains("st/")) {
+            logr.warning("Invalid edit format.");
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTEDIT_FORMAT);
+        }
+
+        try {
+            shiftIndex = Integer.parseInt(extractValue(remaining, "sn/", "s/")) - 1;
+            if (shiftIndex < 0) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
+            }
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
+        }
+
+        try {
+            startTime = LocalTime.parse(extractValue(remaining, "s/", "e/"));
+            endTime = LocalTime.parse(extractValue(remaining, "e/", "d/"));
+        } catch (DateTimeParseException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_TIME_FORMAT);
+        }
+
+        try {
+            date = LocalDate.parse(extractValue(remaining, "d/", "st/"));
+        } catch (DateTimeParseException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_DATE_FORMAT);
+        }
+
+        shiftTask = extractValue(remaining, "st/", null);
+        if (shiftTask.isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.SHIFT_TASK_EMPTY);
+        }
+
+        if (!startTime.isBefore(endTime)) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_START_TIME);
+        }
+
+        return new ShiftParser(command, startTime, endTime, date, shiftTask, shiftIndex);
     }
 
     /**
