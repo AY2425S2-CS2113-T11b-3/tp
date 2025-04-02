@@ -1,4 +1,4 @@
-git# Developer Guide
+# Developer Guide
 
 ## Acknowledgements
 
