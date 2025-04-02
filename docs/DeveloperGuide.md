@@ -152,7 +152,8 @@ follows these steps:
 
 Given below is an example usage scenario and how the sorting mechanism behaves at each step.
 
-[//]: # (todo: add diagrams)
+![Sort By Importance Sequence Diagram](./taskSequenceDiagrams/ApptSortSequenceDiagram.png)
+
 Step 1. The user launches the application for the first time. The `apptList` will be initialized
 with stored appointment data (if exists).
 
