@@ -1,5 +1,8 @@
 package seedu.nursesched.shift;
 
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -156,7 +159,7 @@ public class Shift {
      * @param newTask      The new task description for the shift.
      */
     public static void editShift(int index, LocalTime newStartTime, LocalTime newEndTime,
-                                 LocalDate newDate, String newTask) {
+                                 LocalDate newDate, String newTask) throws NurseSchedException {
         assert index >= 0 && index < shiftList.size() : "Invalid shift index!";
         assert newStartTime != null
                 && newEndTime != null
@@ -164,18 +167,18 @@ public class Shift {
                 && newTask != null : "New shift details cannot be null!";
         assert newStartTime.isBefore(newEndTime) : "Start time must be before end time";
 
-        try {
-            Shift shift = shiftList.get(index);
-            Shift updatedShift = new Shift(newStartTime, newEndTime, newDate, newTask);
-            updatedShift.setDone(shift.getStatus());
-            shiftList.set(index, updatedShift);
-            System.out.println("Shift updated:");
-            System.out.println(updatedShift);
-            logr.info("Shift updated at index " + index + ": " + updatedShift);
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("There is no shift with index: " + (index + 1));
-            logr.warning("Attempted to edit shift with invalid index: " + (index + 1));
+        if (index < 0 || index >= shiftList.size()) {
+            logr.warning("Attempted to edit shift with invalid index: " + index);
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
         }
+
+        Shift shift = shiftList.get(index);
+        Shift updatedShift = new Shift(newStartTime, newEndTime, newDate, newTask);
+        updatedShift.setDone(shift.getStatus());
+        shiftList.set(index, updatedShift);
+        System.out.println("Shift updated:");
+        System.out.println(updatedShift);
+        logr.info("Shift updated at index " + index + ": " + updatedShift);
     }
 
     public void setDone(boolean done) {

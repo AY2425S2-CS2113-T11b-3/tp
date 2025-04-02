@@ -23,7 +23,7 @@ public enum ExceptionMessage {
             "shift edit [sn/SHIFT_NUMBER] [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
     INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark [sn/SHIFT_NUMBER]"),
     INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark [sn/SHIFT_NUMBER]"),
-    INVALID_SHIFT_NUMBER("Shift index must be a positive integer!"),
+    INVALID_SHIFT_NUMBER("There is no shift with that specified index!"),
     NEGATIVE_INDEX("Index must be a positive integer!"),
     ZERO_INDEX("Index cannot be zero!"),
     INVALID_APPT_NUMBER("There is no appointment with that specified index!"),
