@@ -2,6 +2,7 @@ package seedu.nursesched.patient;
 
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.storage.PatientStorage;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -20,6 +21,10 @@ public class Patient {
     private String gender;
     private String contact;
     private String notes;
+
+    static {
+        patientsList = PatientStorage.readFile();
+    }
 
     /**
      * Constructs a new Patient object with the specified details.
@@ -72,6 +77,7 @@ public class Patient {
 
         patientsList.add(patient);
         System.out.println("Patient information added for " + patient.name + ".");
+        PatientStorage.overwriteSaveFile(patientsList);
     }
 
     /**
@@ -92,6 +98,8 @@ public class Patient {
                 break;
             }
         }
+
+        PatientStorage.overwriteSaveFile(patientsList);
 
         if (!found) {
             throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
@@ -183,6 +191,9 @@ public class Patient {
                 break;
             }
         }
+
+        PatientStorage.overwriteSaveFile(patientsList);
+
         if (!found) {
             System.out.println("No patient found with ID: " + id);
         }
@@ -190,6 +201,26 @@ public class Patient {
 
     public String getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public String getNotes() {
+        return notes;
     }
 
     public static ArrayList<Patient> getPatientsList() {
