@@ -2,7 +2,6 @@ package seedu.nursesched.storage;
 
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.patient.MedicalTest;
-import seedu.nursesched.patient.Patient;
 
 import java.io.File;
 import java.io.FileNotFoundException;
