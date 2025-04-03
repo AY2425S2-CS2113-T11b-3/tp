@@ -176,13 +176,12 @@ follows these steps:
 2. Error Handling: It throws a `NurseSchedException` with the appropriate error message if any of the following occur:
    - `index` is not within 1 and the total number of tasks in the list of tasks
    - The updated due `byDate` and `byTime` is before the current date and time
-3. Editing the task: It makes use of the appropriate setter methods to update the task with its new details. Task 
-   details that are empty or null are ignored as they do not need to be edited.
-   Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
+3. Editing the task: It makes use of the appropriate setter methods to update the task with its new details. At least
+   one of the optional fields must be provided.
+   Given below is an example usage scenario and how the edit task mechanism behaves at each step.
 
 Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
 
-[//]: # (todo: add SeqDiag for editTask, add save and load into file method)
 Step 1. The user launches the application for the first time. The `taskList` will be initialized with the task
 data stored (if exists).
 
@@ -202,17 +201,18 @@ Step 5. If successful, the system logs the edit and updates the saved file to re
 Step 6. The system outputs a confirmation message or an error based on whether the task was successfully edited or
 not.
 
+![EditTaskSequenceDiagram](assets/taskImages/EditTaskSequenceDiagram.png)
+
 #### Design considerations
 
 Aspect: How edit task executes:
 
-- Alternative 1 (current choice): Edits the task details based on the given inputs.
+- Alternative 1 (current choice): Only 1 field is required to be edited, the rest are optional.
     - Pros: Gives the user flexibility as they can choose to edit only certain details of the task.
     - Cons: More error checks required.
 - Alternative 2: Edits every detail of the task.
-    - Pros: Easier to implement, less error checks needed.
-    - Cons: Inconvenient for users as they have to re-enter every task detail regardless of the need to edit it.
-
+    - Pros: Standardized command that users can follow strictly.
+    - Cons: Redundant fields still needed although the user does not need to edit those details of the task.
 
 ### Appointment sort by importance feature
 
