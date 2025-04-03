@@ -53,7 +53,7 @@ supply.
 ## Quick Start
 
 1. Ensure that you have Java `17` or above installed.
-2. Download the latest version of `NurseSched` from [here](http://link.to/duke).
+2. Download the latest version of `NurseSched` from [here](https://github.com/AY2425S2-CS2113-T11b-3/tp/releases).
 3. Open a command terminal, cd into the folder you put the `.jar` file in, and use the `java -jar nursesched.jar`
    command to run the application.
 4. Type the command in the command box and press Enter to execute it.
