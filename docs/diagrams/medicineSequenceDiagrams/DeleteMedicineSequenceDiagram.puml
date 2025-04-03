@@ -1,12 +1,14 @@
 @startuml
 'https://plantuml.com/sequence-diagram
+skinparam ParticipantPadding 20
 
+Actor User
 participant ":Medicine" as Medicine
 participant ":NurseSchedException" as NurseSchedException
 participant ":medicineList:ArrayList<Medicine>" as medicineList
 participant ":MedicineStorage" as medicineStorage
 
-[-> Medicine: deleteMedicine(medicineName)
+User-> Medicine: deleteMedicine(medicineName)
 activate Medicine
 
 loop for all medicine in medicineList
@@ -18,7 +20,7 @@ activate medicineList
 medicineList --> medicineList
 deactivate medicineList
 medicineList --> Medicine: removed = true
-else !equalsIgnoreCase(medicineName)
+else !equals\nIgnore\nCase\n(medicine\nName)
 medicineList --> Medicine: removed = false
 deactivate medicineList
 end
@@ -30,13 +32,13 @@ activate medicineStorage
 medicineStorage --> medicineList
 deactivate medicineStorage
 deactivate medicineList
-Medicine -->[ : System.out.println()
+Medicine --> User : System.out.println()
 
 else !removed
 
 Medicine -> NurseSchedException : NurseSchedException()
 activate NurseSchedException
-NurseSchedException -->[
+NurseSchedException --> User : NurseSchedException
 end
 
 @enduml

@@ -71,7 +71,10 @@ public class AppointmentStorage {
         String endTimeString = parts[3];
         String dateString = parts[4];
         int importance = Integer.parseInt(parts[5]);
-        String notes = parts[6];
+        String notes = "";
+        if (parts.length>6) {
+            notes = parts[6];
+        }
         LocalTime startTime = LocalTime.parse(startTimeString);
         LocalTime endTime = LocalTime.parse(endTimeString);
         LocalDate date = LocalDate.parse(dateString);

@@ -1,6 +1,8 @@
 @startuml
 'https://plantuml.com/sequence-diagram
+skinparam ParticipantPadding 30
 
+Actor User
 participant ":Medicine" as Medicine
 participant ":NurseSchedException" as NurseSchedException
 participant ":medicineList:ArrayList<Medicine>" as medicineList
@@ -9,15 +11,15 @@ participant ":medicine:Medicine" as medicine
 participant " existingMedicine:Medicine" as existingMedicine
 
 
-[-> Medicine: addMedicine(quantity, medicineName)
+User -> Medicine: addMedicine(quantity, medicineName)
 activate Medicine
 'if medicine name empty
-opt medicineName.trim().isEmpty())
+opt medicineName.trim().isEmpty()
 create NurseSchedException
 Medicine -> NurseSchedException : NurseSchedException()
 activate NurseSchedException
 
-NurseSchedException -->[
+NurseSchedException --> User : NurseSchedException
     deactivate NurseSchedException
 end
 
@@ -29,11 +31,12 @@ loop for each medicine in medicineList
 existingMedicine -> medicineList : getMedicineName()
 deactivate existingMedicine
 activate medicineList
-alt equalsIgnoreCase(existingMedicine)
+alt equalsIgnore\nCase(existing\nMedicine)
+
 medicineList --> existingMedicine: medicine
 activate existingMedicine
 
-else !equalsIgnoreCase(existingMedicine)
+else !equalsIgnoreCase\n(existingMedicine)
 medicineList --> existingMedicine: null
 deactivate medicineList
 end
@@ -59,7 +62,7 @@ medicineStorage --> medicineList
 'dk if need or not
 deactivate medicineStorage
 deactivate medicineList
-Medicine -->[ : System.out.println()
+Medicine -->User : System.out.println()
 
 'else statement
 else existingMedicine == null
@@ -81,11 +84,9 @@ medicineStorage --> medicineList
 deactivate medicineStorage
 deactivate medicineList
 
-Medicine -->[ : System.out.println()
+Medicine -->User : System.out.println()
 'dk if need or not
 deactivate Medicine
 end
-
-
 
 @enduml

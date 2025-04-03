@@ -24,7 +24,7 @@ public enum ExceptionMessage {
     INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark [sn/SHIFT_NUMBER]"),
     INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark [sn/SHIFT_NUMBER]"),
     INVALID_SHIFT_NUMBER("There is no shift with that specified index!"),
-    NEGATIVE_INDEX("Index must be a positive integer!"),
+    NEGATIVE_INDEX("Index must be a positive integer greater than 0!"),
     ZERO_INDEX("Index cannot be zero!"),
     INVALID_APPT_NUMBER("There is no appointment with that specified index!"),
     INVALID_PATIENT_NUMBER("Index is greater than number of patients in the list!"),
@@ -52,8 +52,8 @@ public enum ExceptionMessage {
     EMPTY_PATIENT_INFO("Patient information cannot be empty!"),
     INVALID_PATIENT_INFO("Patient ID is invalid!"),
     MISSING_PATIENT_FIELDS("Some patient fields are missing!"),
-    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit [INDEX] [p/PATIENT_NAME] " +
-            "[s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPORTANCE] [n/NOTES]"),
+    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit id/[INDEX] p/[PATIENT_NAME] " +
+            "s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE] n/[NOTES]"),
     INVALID_TASK_INDEX("Invalid task index! Index should be an integer!"),
     PATIENT_NOT_FOUND("Patient not found!"),
     EMPTY_PATIENT_TEST_NAME("Patient test name cannot be empty!"),
@@ -70,7 +70,11 @@ public enum ExceptionMessage {
     INVALID_IMPORTANCE_FORMAT("Importance should be an integer from 1 to 3. \n" +
             "1:LOW, 2:MEDIUM, 3:HIGH"),
     INVALID_SORT_PARAMETER("Can only be sorted by time or importance!"),
-    INVALID_SORTING_LIST("List is empty. Nothing to sort.");
+    INVALID_SORTING_LIST("List is empty. Nothing to sort."),
+    MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
+    INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
+    INVALID_PATIENT_APPT_ADD("Patient name not found in patient list! Add patient to " +
+            "patient list before adding appointment!");
 
 
     private final String message;
