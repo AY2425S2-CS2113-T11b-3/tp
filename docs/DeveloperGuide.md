@@ -405,6 +405,7 @@ This section provides instructions for testing the various features of NurseSche
 - `task add d/2025-07-15` (missing description and time)
 - `task add td/Prepare tools d/2025-07-15` (missing time)
 - `task add td/Prepare tools t/13:00` (missing date)
+- `task add td/Prepare tools d/ 2021-02-02 t/13:00` (date in the past)
 
 **Expected**: Similar to previous error behavior.
 
@@ -418,6 +419,9 @@ This section provides instructions for testing the various features of NurseSche
 **Expected**: No task is marked. Error details shown in the status message. Task status remains unchanged.
 
 **Test case**: `task mark 100` (assuming there are fewer than 100 tasks)  
+**Expected**: No task is marked. Error details**Test case**: `task mark 100` (assuming there are fewer than 100 tasks)  
+
+**Test case**: `task mark -1`
 **Expected**: No task is marked. Error details shown in the status message. Task status remains unchanged.
 
 ### Unmarking a task
@@ -427,6 +431,9 @@ This section provides instructions for testing the various features of NurseSche
 **Expected**: First task is unmarked. Status message indicates successful unmarking. Task list shows the task with uncompleted status.
 
 **Test case**: `task unmark 0`  
+**Expected**: No task is unmarked. Error details shown in the status message. Task status remains unchanged.
+
+**Test case**: `task unmark -1`
 **Expected**: No task is unmarked. Error details shown in the status message. Task status remains unchanged.
 
 ### Editing a task
@@ -440,7 +447,7 @@ This section provides instructions for testing the various features of NurseSche
 
 **Other incorrect edit commands to try**:
 - `task edit` (missing all parameters)
-- `task edit id/1` (missing update fields)
+- `task edit id/0` (invalid task index)
 
 **Expected**: Similar to previous error behavior.
 
@@ -449,7 +456,7 @@ This section provides instructions for testing the various features of NurseSche
 **Expected**: Message indicating that the task list is empty.
 
 **Test case**: `task list` (after adding multiple tasks)  
-**Expected**: List displays all tasks with their completion status, due date, and time.
+**Expected**: List displays all tasks with their completion status, due date, and time, as well as total number of tasks in the list currently.
 
 ## Shift List
 
