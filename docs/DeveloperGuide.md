@@ -1,11 +1,52 @@
 # Developer Guide
 
+* [Acknowledgements](#acknowledgements)
+* [Setting up, getting started](#setting-up-getting-started)
+* [Design](#design)
+  * [UI component](#ui-component)
+  * [Storage component](#storage-component)
+  * [Patient component](#patient-component)
+  * [Common classes](#common-classes)
+* [Implementation](#implementation)
+  * [Patient delete feature](#patient-delete-feature)
+  * [Medicine delete feature](#medicine-delete-feature)
+  * [Task edit feature](#task-edit-feature)
+  * [Appointment sort by importance feature](#appointment-sort-by-importance-feature)
+* [Appendix: Requirements](#appendix-requirements)
+  * [Product scope](#product-scope)
+  * [User stories](#user-stories)
+  * [Non-Functional Requirements](#non-functional-requirements)
+  * [Glossary](#glossary)
+* [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
+  * [Task List](#task-list)
+  * [Shift List](#shift-list)
+  * [Patient List](#patient-list)
+  * [Appointment List](#appointment-list)
+  * [Medicine List](#medicine-list)
+  * [Handling missing/corrupted data files](#handling-missingcorrupted-data-files)
+  * [Data Persistence](#data-persistence)
+* [FAQ](#faq)
+
 ## Acknowledgements
 
 NurseSched makes use of these tools:
 1. [Gradle](https://gradle.org/): For build automation and code formatting checks.
 2. [JUnit 5](https://junit.org/junit5/docs/current/user-guide/): For unit testing.
 3. [Java Standard Library](https://docs.oracle.com/javase/8/docs/api/): For date time handling and file operations.
+
+## Setting up, getting started
+First, fork this repo, and clone the fork into your computer.
+
+If you plan to use Intellij IDEA (highly recommended):
+
+1. **Configure the JDK:** Follow the guide
+[se-edu/guides IDEA: Configuring the JDK](https://se-education.org/guides/tutorials/intellijJdk.html) to ensure Intellij is configured to use JDK 17.
+2. **Import the project as a Gradle project:** Follow the guide [se-edu/guides IDEA: Importing a Gradle project](https://se-education.org/guides/tutorials/intellijImportGradleProject.html)
+to import the project into IDEA.
+Note: Importing a Gradle project is slightly different from importing a normal Java project.
+3. **Verify the setup:**
+   1. Run the seedu.NurseSched.Main and try a few commands.
+   2. Run the tests to ensure they all pass.
 
 ## Design
 
@@ -275,6 +316,7 @@ Aspect: How appointment sorting by importance executes:
       - Performance impact for large lists
       - May be confusing for the user if appointments keep changing position
 
+# Appendix: Requirements
 
 ## Product scope
 
@@ -335,6 +377,8 @@ using commands than using the mouse.
 
 * **Mainstream OS** - Windows, Linux, macOS
 
+# Appendix: Instructions for manual testing
+
 ## Manual Testing
 
 ### Introduction
@@ -361,6 +405,7 @@ This section provides instructions for testing the various features of NurseSche
 - `task add d/2025-07-15` (missing description and time)
 - `task add td/Prepare tools d/2025-07-15` (missing time)
 - `task add td/Prepare tools t/13:00` (missing date)
+- `task add td/Prepare tools d/ 2021-02-02 t/13:00` (date in the past)
 
 **Expected**: Similar to previous error behavior.
 
@@ -374,6 +419,9 @@ This section provides instructions for testing the various features of NurseSche
 **Expected**: No task is marked. Error details shown in the status message. Task status remains unchanged.
 
 **Test case**: `task mark 100` (assuming there are fewer than 100 tasks)  
+**Expected**: No task is marked. Error details**Test case**: `task mark 100` (assuming there are fewer than 100 tasks)  
+
+**Test case**: `task mark -1`
 **Expected**: No task is marked. Error details shown in the status message. Task status remains unchanged.
 
 ### Unmarking a task
@@ -383,6 +431,9 @@ This section provides instructions for testing the various features of NurseSche
 **Expected**: First task is unmarked. Status message indicates successful unmarking. Task list shows the task with uncompleted status.
 
 **Test case**: `task unmark 0`  
+**Expected**: No task is unmarked. Error details shown in the status message. Task status remains unchanged.
+
+**Test case**: `task unmark -1`
 **Expected**: No task is unmarked. Error details shown in the status message. Task status remains unchanged.
 
 ### Editing a task
@@ -396,7 +447,7 @@ This section provides instructions for testing the various features of NurseSche
 
 **Other incorrect edit commands to try**:
 - `task edit` (missing all parameters)
-- `task edit id/1` (missing update fields)
+- `task edit id/0` (invalid task index)
 
 **Expected**: Similar to previous error behavior.
 
@@ -405,7 +456,7 @@ This section provides instructions for testing the various features of NurseSche
 **Expected**: Message indicating that the task list is empty.
 
 **Test case**: `task list` (after adding multiple tasks)  
-**Expected**: List displays all tasks with their completion status, due date, and time.
+**Expected**: List displays all tasks with their completion status, due date, and time, as well as total number of tasks in the list currently.
 
 ## Shift List
 
