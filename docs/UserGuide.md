@@ -13,7 +13,7 @@ supply.
     * [Marking a task](#marking-a-task-task-mark)
     * [Unmarking a task](#unmarking-a-task-task-unmark)
     * [Editing a task](#editing-a-task-task-edit)
-    * [Listing all tasks](#list-all-tasks-task-list)
+    * [Listing all tasks](#listing-all-tasks-task-list)
 * [Shift List](#shift-list)
     * [Adding a shift](#adding-a-shift-shift-add)
     * [Editing a shift](#editing-a-shift-shift-edit)

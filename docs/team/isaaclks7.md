@@ -51,3 +51,6 @@ Code can be found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?sea
 - PRs reviewed (with non-trivial review comments): [#90](https://github.com/AY2425S2-CS2113-T11b-3/tp/pull/90),
   [#94](https://github.com/AY2425S2-CS2113-T11b-3/tp/pull/94),
   [#96](https://github.com/AY2425S2-CS2113-T11b-3/tp/pull/96), [#120](https://github.com/AY2425S2-CS2113-T11b-3/tp/pull/120)
+
+#### Contributions beyond the project team
+* [EventSync DG Review](https://github.com/nus-cs2113-AY2425S2/tp/pull/8)
