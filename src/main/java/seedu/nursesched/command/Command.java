@@ -106,16 +106,20 @@ public class Command {
                                 patientParser.getContact(),
                                 patientParser.getNotes());
                         Patient.addPatient(newPatient);
+                        break;
                     }
                     if (input.equals("del")) {
                         MedicalTest.removeTestsForPatient(patientParser.getId());
                         Patient.removePatient(patientParser.getId());
+                        break;
                     }
                     if (input.equals("list")) {
                         Patient.listPatientInformation();
+                        break;
                     }
-                    if (input.equals("search")) {
+                    if (input.equals("find")) {
                         Patient.printProfileWithID(patientParser.getId());
+                        break;
                     }
                     if (input.equals("edit")) {
                         Patient.editPatientDetails(
@@ -125,7 +129,9 @@ public class Command {
                                 patientParser.getGender(),
                                 patientParser.getContact(),
                                 patientParser.getNotes());
+                        break;
                     }
+                    System.out.println("Invalid patient based command!");
                     break;
                 case "shift":
                     ShiftParser shiftParser = ShiftParser.extractInputs(line);

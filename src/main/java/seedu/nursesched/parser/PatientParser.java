@@ -8,7 +8,7 @@ import seedu.nursesched.patient.Patient;
 /**
  * The PatientParser class parses the input of the user to make sense of the command.
  * It extracts commands and relevant parameters, validating them before processing.
- * This class supports various patient-related commands, including add, del, list, search,
+ * This class supports various patient-related commands, including add, del, list, find,
  * edit, result.
  *
  * Each command follows a specific format and requires valid parameters. The parser extracts
@@ -52,7 +52,7 @@ public class PatientParser extends Parser {
 
     /**
      * Extracts and parses the inputs from the given command line for patient-related operations.
-     * The method supports several commands: "add", "del", "list", "search", "edit", "result".
+     * The method supports several commands: "add", "del", "list", "find", "edit", "result".
      * For the "add" command, the input line should follow the format:
      * {@code pf add id/<ID> p/<name> a/<age> g/<gender> c/<contact> n/<notes>}
      *
@@ -62,8 +62,8 @@ public class PatientParser extends Parser {
      * For the "list" command, the input line should follow the format:
      * {@code pf list}
      *
-     * For the "search" command, the input line should follow the format:
-     * {@code pf search <id>}
+     * For the "find" command, the input line should follow the format:
+     * {@code pf find <id>}
      *
      * For the "edit" command, the input line should follow the format:
      * {@code pf edit <id>} followed by any necessary fields that they would like to change.
@@ -179,7 +179,7 @@ public class PatientParser extends Parser {
             }
             throw new NurseSchedException(ExceptionMessage.INVALID_FORMAT);
         }
-        case "search" -> {
+        case "find" -> {
             try {
                 if (line.length() != 7) {
                     throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
