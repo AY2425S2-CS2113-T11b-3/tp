@@ -38,9 +38,10 @@ public class ApptParser extends Parser {
     static {
         try {
             File logDir = new File("logs/parser");
+            /*
             if (!logDir.exists()) {
                 logDir.mkdirs();  // Creates the directory and any missing parent directories
-            }
+            }*/
 
             LogManager.getLogManager().reset();
             FileHandler fh = new FileHandler("logs/parser/apptParser.log", true);
