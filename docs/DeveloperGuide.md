@@ -335,6 +335,365 @@ using commands than using the mouse.
 
 * **Mainstream OS** - Windows, Linux, macOS
 
-## Instructions for manual testing
+## Manual Testing
 
-View the [User Guide](./UserGuide.md) for the full list of commands to test.
+### Introduction
+This section provides instructions for testing the various features of NurseSched manually. The tests are organized by feature and include both valid and invalid test cases to verify correct behavior.
+
+### Initial Launch
+1. Download the NurseSched JAR file and copy it into an empty folder.
+2. Start the application by using `java -jar nursesched.jar` in the terminal.
+3. Verify that the welcome message is displayed and the application is ready to accept commands.
+
+## Task List
+
+### Adding a task
+**Prerequisites**: List all tasks using the `task list` command. Initially, no tasks in the list.
+
+**Test case**: `task add td/Prepare tools d/2025-07-15 t/13:00`  
+**Expected**: Task is added to the list. Details of the added task shown in the status message. Task list now contains 1 task.
+
+**Test case**: `task add` (without description, date and time)  
+**Expected**: No task is added. Error details shown in the status message. Task list remains empty.
+
+**Other incorrect add commands to try**:
+- `task add td/Prepare tools` (missing date and time)
+- `task add d/2025-07-15` (missing description and time)
+- `task add td/Prepare tools d/2025-07-15` (missing time)
+- `task add td/Prepare tools t/13:00` (missing date)
+
+**Expected**: Similar to previous error behavior.
+
+### Marking a task
+**Prerequisites**: List all tasks using the `task list` command. At least one task in the list.
+
+**Test case**: `task mark 1`  
+**Expected**: First task is marked as completed. Status message indicates successful marking. Task list shows the task with completed status.
+
+**Test case**: `task mark 0`  
+**Expected**: No task is marked. Error details shown in the status message. Task status remains unchanged.
+
+**Test case**: `task mark 100` (assuming there are fewer than 100 tasks)  
+**Expected**: No task is marked. Error details shown in the status message. Task status remains unchanged.
+
+### Unmarking a task
+**Prerequisites**: List all tasks using the `task list` command. At least one task marked as completed in the list.
+
+**Test case**: `task unmark 1` (assuming first task is marked as completed)  
+**Expected**: First task is unmarked. Status message indicates successful unmarking. Task list shows the task with uncompleted status.
+
+**Test case**: `task unmark 0`  
+**Expected**: No task is unmarked. Error details shown in the status message. Task status remains unchanged.
+
+### Editing a task
+**Prerequisites**: List all tasks using the `task list` command. At least one task in the list.
+
+**Test case**: `task edit id/1 td/Update medicine supply t/13:00`  
+**Expected**: First task's description and time are updated. Status message shows successful update. Task list reflects the changes.
+
+**Test case**: `task edit id/0 td/New description`  
+**Expected**: No task is edited. Error details shown in the status message. Task list remains unchanged.
+
+**Other incorrect edit commands to try**:
+- `task edit` (missing all parameters)
+- `task edit id/1` (missing update fields)
+
+**Expected**: Similar to previous error behavior.
+
+### Listing all tasks
+**Test case**: `task list` (with no tasks)  
+**Expected**: Message indicating that the task list is empty.
+
+**Test case**: `task list` (after adding multiple tasks)  
+**Expected**: List displays all tasks with their completion status, due date, and time.
+
+## Shift List
+
+### Adding a shift
+**Prerequisites**: List all shifts using the `shift list` command. Initially, no shifts in the list.
+
+**Test case**: `shift add s/08:00 e/12:00 d/2025-04-10 st/Morning ward round`  
+**Expected**: Shift is added to the list. Details of the added shift shown in the status message. Shift list now contains 1 shift.
+
+**Test case**: `shift add` (without all required parameters)  
+**Expected**: No shift is added. Error details shown in the status message. Shift list remains empty.
+
+**Other incorrect add commands to try**:
+- `shift add s/08:00` (missing end time, date, and task)
+- `shift add s/08:00 e/12:00` (missing date and task)
+- `shift add s/08:00 e/12:00 d/2025-04-10` (missing task)
+
+**Expected**: Similar to previous error behavior.
+
+### Editing a shift
+**Prerequisites**: List all shifts using the `shift list` command. At least one shift in the list.
+
+**Test case**: `shift edit sn/1 s/14:00 e/18:00 d/2025-04-12 st/Afternoon ER duty`  
+**Expected**: First shift is updated with new details. Status message indicates successful update. Shift list reflects the changes.
+
+**Test case**: `shift edit sn/0 s/14:00 e/18:00 d/2025-04-12 st/Afternoon ER duty`  
+**Expected**: No shift is edited. Error details shown in the status message. Shift list remains unchanged.
+
+### Marking a shift
+**Prerequisites**: List all shifts using the `shift list` command. At least one shift in the list that is not completed.
+
+**Test case**: `shift mark sn/1`  
+**Expected**: First shift is marked as completed. Status message indicates successful marking. Shift list shows the shift with completed status.
+
+**Test case**: `shift mark sn/0`  
+**Expected**: No shift is marked. Error details shown in the status message. Shift status remains unchanged.
+
+### Unmarking a shift
+**Prerequisites**: List all shifts using the `shift list` command. At least one shift marked as completed in the list.
+
+**Test case**: `shift unmark sn/1` (assuming first shift is marked as completed)  
+**Expected**: First shift is unmarked. Status message indicates successful unmarking. Shift list shows the shift with uncompleted status.
+
+**Test case**: `shift unmark sn/0`  
+**Expected**: No shift is unmarked. Error details shown in the status message. Shift status remains unchanged.
+
+### Deleting a shift
+**Prerequisites**: List all shifts using the `shift list` command. At least one shift in the list.
+
+**Test case**: `shift del sn/1`  
+**Expected**: First shift is deleted from the list. Details of the deleted shift shown in the status message. Shift list now contains one fewer shift.
+
+**Test case**: `shift del sn/0`  
+**Expected**: No shift is deleted. Error details shown in the status message. Shift list remains unchanged.
+
+### Listing all shifts
+**Test case**: `shift list` (with no shifts)  
+**Expected**: Message indicating that the shift list is empty.
+
+**Test case**: `shift list` (after adding multiple shifts)  
+**Expected**: List displays all shifts with their completion status, date, time range, and task.
+
+## Patient List
+
+### Adding a patient profile
+**Prerequisites**: List all patient profiles using the `pf list` command. Initially, no patient profiles in the list.
+
+**Test case**: `pf add id/1001 p/Jean a/25 g/F c/66887799 n/requires constant supervision`  
+**Expected**: Patient profile is added to the list. Details of the added profile shown in the status message. Patient list now contains 1 profile.
+
+**Test case**: `pf add` (without all required parameters)  
+**Expected**: No patient profile is added. Error details shown in the status message. Patient list remains empty.
+
+**Other incorrect add commands to try**:
+- `pf add id/1001` (missing other required fields)
+- `pf add id/1001 p/Jean` (missing age, gender, contact and notes)
+- `pf add id/10011 p/Jean a/25 g/F c/66887799 n/requires constant supervision` (ID number more than 4 digits)
+
+**Expected**: Similar to previous error behavior.
+
+### Deleting a patient profile
+**Prerequisites**: List all patient profiles using the `pf list` command. At least one patient profile in the list.
+
+**Test case**: `pf del id/1001` (assuming this ID exists)  
+**Expected**: Patient profile with ID 1001 is deleted from the list. Details of the deleted profile shown in the status message. Patient list now contains one fewer profile.
+
+**Test case**: `pf del id/9999` (assuming this ID doesn't exist)  
+**Expected**: No patient profile is deleted. Error details shown in the status message. Patient list remains unchanged.
+
+### Searching for a patient profile
+**Prerequisites**: List all patient profiles using the `pf list` command. At least one patient profile in the list.
+
+**Test case**: `pf find id/1001` (assuming this ID exists)  
+**Expected**: Displays the patient profile with ID 1001.
+
+**Test case**: `pf find id/9999` (assuming this ID doesn't exist)  
+**Expected**: Message indicating that no patient profile with the specified ID was found.
+
+### Listing all patient profiles
+**Test case**: `pf list` (with no patient profiles)  
+**Expected**: Message indicating that the patient list is empty.
+
+**Test case**: `pf list` (after adding multiple patient profiles)  
+**Expected**: List displays all patient profiles with their details.
+
+### Editing a patient profile
+**Prerequisites**: List all patient profiles using the `pf list` command. At least one patient profile in the list.
+
+**Test case**: `pf edit id/1001 p/Jean a/22 g/F c/12345678 n/Allergic to peanuts` (assuming ID 1001 exists)  
+**Expected**: Patient profile with ID 1001 is updated with new details. Status message indicates successful update. Patient list reflects the changes.
+
+**Test case**: `pf edit id/9999 p/Jean` (assuming ID 9999 doesn't exist)  
+**Expected**: No patient profile is edited. Error details shown in the status message. Patient list remains unchanged.
+
+### Medical Test Results
+
+**Test case**: `pf result add id/1001 t/X-Ray r/Fractures found.` (assuming ID 1001 exists)  
+**Expected**: Medical test result is added to the patient profile. Status message indicates successful addition.
+
+**Test case**: `pf result add id/9999 t/X-Ray r/Fractures found.` (assuming ID 9999 doesn't exist)  
+**Expected**: No medical test result is added. Error details shown in the status message.
+
+**Test case**: `pf result del id/1001` (assuming ID 1001 exists and has test results)  
+**Expected**: All medical test results for patient with ID 1001 are deleted. Status message indicates successful deletion.
+
+**Test case**: `pf result list id/1001` (assuming ID 1001 exists and has test results)  
+**Expected**: Displays all medical test results for patient with ID 1001.
+
+## Appointment List
+
+### Adding an appointment
+**Prerequisites**: List all appointments using the `appt list` command. Initially, no appointments in the list.
+
+**Test case**: `appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`  
+**Expected**: Appointment is added to the list. Details of the added appointment shown in the status message. Appointment list now contains 1 appointment.
+
+**Test case**: `appt add` (without all required parameters)  
+**Expected**: No appointment is added. Error details shown in the status message. Appointment list remains empty.
+
+**Other incorrect add commands to try**:
+- `appt add p/Jean Doe` (missing start time, end time, date, importance, and notes)
+- `appt add p/Jean Doe s/13:00 e/14:00` (missing date, importance, and notes)
+- `appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/5 n/super healthy` (importance value out of range)
+
+**Expected**: Similar to previous error behavior.
+
+### Deleting an appointment
+**Prerequisites**: List all appointments using the `appt list` command. At least one appointment in the list.
+
+**Test case**: `appt del id/1`  
+**Expected**: First appointment is deleted from the list. Details of the deleted appointment shown in the status message. Appointment list now contains one fewer appointment.
+
+**Test case**: `appt del id/0`  
+**Expected**: No appointment is deleted. Error details shown in the status message. Appointment list remains unchanged.
+
+### Marking an appointment
+**Prerequisites**: List all appointments using the `appt list` command. At least one appointment in the list that is not completed.
+
+**Test case**: `appt mark id/1`  
+**Expected**: First appointment is marked as completed. Status message indicates successful marking. Appointment list shows the appointment with completed status.
+
+**Test case**: `appt mark id/0`  
+**Expected**: No appointment is marked. Error details shown in the status message. Appointment status remains unchanged.
+
+### Unmarking an appointment
+**Prerequisites**: List all appointments using the `appt list` command. At least one appointment marked as completed in the list.
+
+**Test case**: `appt unmark id/1` (assuming first appointment is marked as completed)  
+**Expected**: First appointment is unmarked. Status message indicates successful unmarking. Appointment list shows the appointment with uncompleted status.
+
+**Test case**: `appt unmark id/0`  
+**Expected**: No appointment is unmarked. Error details shown in the status message. Appointment status remains unchanged.
+
+### Editing an appointment
+**Prerequisites**: List all appointments using the `appt list` command. At least one appointment in the list.
+
+**Test case**: `appt edit id/1 p/edited name s/13:00 e/15:00`  
+**Expected**: First appointment's patient name, start time, and end time are updated. Status message shows successful update. Appointment list reflects the changes.
+
+**Test case**: `appt edit id/0 im/1`  
+**Expected**: No appointment is edited. Error details shown in the status message. Appointment list remains unchanged.
+
+### Searching for an appointment
+**Prerequisites**: List all appointments using the `appt list` command. Multiple appointments in the list.
+
+**Test case**: `appt find Jean Doe` (assuming there's an appointment with this patient name)  
+**Expected**: Displays all appointments for patient "Jean Doe".
+
+**Test case**: `appt find Unknown Patient` (assuming there's no appointment with this patient name)  
+**Expected**: Message indicating that no appointments were found for the specified patient.
+
+### Sorting appointments
+**Prerequisites**: List all appointments using the `appt list` command. Multiple appointments in the list with different importance levels and times.
+
+**Test case**: `appt sort by/ time`  
+**Expected**: Appointments are sorted chronologically. Status message indicates successful sorting.
+
+**Test case**: `appt sort by/ importance`  
+**Expected**: Appointments are sorted by importance level (high to low). Status message indicates successful sorting.
+
+## Medicine List
+
+### Adding a medicine quantity
+**Prerequisites**: List all medicines using the `medicine list` command. Initially, no medicines in the list or paracetamol doesn't exist.
+
+**Test case**: `medicine add mn/paracetamol q/2`  
+**Expected**: Medicine is added to the list or quantity is increased by 2. Status message indicates successful addition.
+
+**Test case**: `medicine add` (without all required parameters)  
+**Expected**: No medicine is added. Error details shown in the status message. Medicine list remains unchanged.
+
+### Removing a medicine quantity
+**Prerequisites**: List all medicines using the `medicine list` command. At least one medicine with sufficient quantity in the list.
+
+**Test case**: `medicine remove mn/paracetamol q/2` (assuming paracetamol exists with quantity ≥ 2)  
+**Expected**: Quantity of paracetamol is decreased by 2. Status message indicates successful removal.
+
+**Test case**: `medicine remove mn/unknown q/2` (assuming this medicine doesn't exist)  
+**Expected**: No medicine quantity is removed. Error details shown in the status message. Medicine list remains unchanged.
+
+### Finding a medicine
+**Prerequisites**: List all medicines using the `medicine list` command. At least one medicine in the list.
+
+**Test case**: `medicine find mn/paracetamol` (assuming paracetamol exists)  
+**Expected**: Displays paracetamol with its quantity.
+
+**Test case**: `medicine find mn/unknown` (assuming this medicine doesn't exist)  
+**Expected**: Message indicating that the specified medicine was not found.
+
+### Deleting a medicine
+**Prerequisites**: List all medicines using the `medicine list` command. At least one medicine in the list.
+
+**Test case**: `medicine delete mn/paracetamol` (assuming paracetamol exists)  
+**Expected**: Paracetamol is deleted from the list. Status message indicates successful deletion.
+
+**Test case**: `medicine delete mn/unknown` (assuming this medicine doesn't exist)  
+**Expected**: No medicine is deleted. Error details shown in the status message. Medicine list remains unchanged.
+
+### Editing a medicine
+**Prerequisites**: List all medicines using the `medicine list` command. At least one medicine in the list.
+
+**Test case**: `medicine edit mn/paracetamo un/paracetamol uq/4` (assuming "paracetamo" exists)  
+**Expected**: Medicine name is updated from "paracetamo" to "paracetamol" and quantity is updated to 4. Status message indicates successful update.
+
+**Test case**: `medicine edit mn/unknown un/new_name uq/10` (assuming this medicine doesn't exist)  
+**Expected**: No medicine is edited. Error details shown in the status message. Medicine list remains unchanged.
+
+### Restocking a medicine
+**Prerequisites**: List all medicines using the `medicine list` command. Multiple medicines in the list with different quantities.
+
+**Test case**: `medicine restock q/30`  
+**Expected**: Displays all medicines with quantity less than 30. Status message indicates successful operation.
+
+## Handling missing/corrupted data files
+To simulate a missing or corrupted data file:
+
+1. Delete or rename the data files used by NurseSched (in the `/data/` folder).
+2. Run NurseSched and attempt to perform operations.
+
+**Expected behavior**:
+- NurseSched should handle the absence or corruption of the data files gracefully.
+- It should either create new data files or display an error message indicating the problem.
+
+## Data Persistence
+To test data persistence:
+
+1. Add several tasks, shifts, patient profiles, appointments, and medicines.
+2. Exit the application using a proper exit command.
+3. Restart the application.
+
+**Expected behavior**:
+- All previously added data should be loaded and displayed correctly.
+
+## FAQ
+
+**Q**: How do I transfer my data to another computer?
+**A**: All the data is stored in the `/data/` folder. Simply transfer this folder to the other computer.
+
+## Additional Test Cases
+
+### Invalid Commands
+Test various invalid commands to ensure that the application responds correctly with error messages:
+- Commands with incorrect syntax
+- Commands with missing required parameters
+- Commands with invalid parameter values
+
+### Edge Cases
+Test edge cases such as:
+- Adding, editing, marking, or deleting tasks, shifts, appointments when the respective list is empty
+- Adding a patient profile with an ID that already exists
+- Removing a medicine quantity that exceeds the available quantity
