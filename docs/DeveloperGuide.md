@@ -3,9 +3,9 @@
 ## Acknowledgements
 
 NurseSched makes use of these tools:
-1. Gradle: For build automation and code formatting checks.
-2. JUnit 5: For unit testing.
-3. Java Standard Library: For date time handling and file operations.
+1. [Gradle](https://gradle.org/): For build automation and code formatting checks.
+2. [JUnit 5](https://junit.org/junit5/docs/current/user-guide/): For unit testing.
+3. [Java Standard Library](https://docs.oracle.com/javase/8/docs/api/): For date time handling and file operations.
 
 ## Design
 
@@ -13,13 +13,13 @@ NurseSched makes use of these tools:
 
 API: `Ui.java`
 
-[//]: # (todo: insert Ui diagram)
+[//]: # (todo: insert Ui diagram & add details)
 
 ### Storage component
 
 API: `Storage.java`
 
-[//]: # (todo: insert Storage diagram)
+[//]: # (todo: add storage class & insert Storage diagram)
 
 The `Storage` component,
 
@@ -130,11 +130,11 @@ follows these steps:
 
 Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
 
-
 Step 1. The user launches the application for the first time. The `medicineList` will be initialized with the medicine
 data stored (if exists).
 
 ![AddMedicineSequenceDiagram.png](assets/medicineImages/AddMedicineSequenceDiagram.png)
+
 Step 2. The user then adds a medicine using the `addMedicine` operation. If successful, the system logs the addition
 and updates the saved file to reflect the change.
 
@@ -143,6 +143,7 @@ The user initiates the deletion of a medicine by calling the `deleteMedicine` fu
 to be deleted.
 
 ![DeleteMedicineSequenceDiagram.png](assets/medicineImages/DeleteMedicineSequenceDiagram.png)
+
 Step 4. The system attempts to find and remove the specified medicine from the list. If successful, the system logs the
 deletion and updates the saved file to reflect the change.
 
@@ -271,7 +272,6 @@ Aspect: How appointment sorting by importance executes:
     - Cons:
       - Performance impact for large lists
       - May be confusing for the user if appointments keep changing position
-
 
 
 ## Product scope
