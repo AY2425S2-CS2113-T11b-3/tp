@@ -46,6 +46,7 @@ supply.
     * [Finding a medicine name](#finding-a-medicine-name-medicine-find)
     * [Deleting a medicine](#deleting-a-medicine-medicine-delete)
     * [Editing a medicine](#editing-a-medicine-medicine-edit)
+    * [Restocking a medicine](#restocking-a-medicine-medicine-restock)
 * [FAQ](#faq)
 * [Command summary](#command-summary)
 
@@ -485,6 +486,19 @@ Example:
 
 * `medicine edit mn/paracetamo un/paracetamol uq/4` Updates the medicine name from paracetamo to paracetamol and its
   quantity to 4
+
+### Restocking a medicine: `medicine restock`
+
+Checks which medicine needs restocking based on the input quantity.
+
+Format: `medicine restock q/[QUANTITY]`
+
+* Lists all medicines which have quantity lesser than `QUANTITY`.
+
+Example:
+
+* `medicine restock q/30` Lists all the medicine name and their respective quantity, for medicines which have quantity
+  lesser than `QUANTITY`
 
 
 ## FAQ
