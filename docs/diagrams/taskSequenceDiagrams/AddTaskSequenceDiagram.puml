@@ -6,7 +6,6 @@ participant ":Command" as Command
 participant ":Parser" as Parser
 participant ":TaskParser" as TaskParser
 participant ":Task" as Task
-participant ":NurseSchedException" as NurseSchedException
 participant "taskList:ArrayList" as taskList
 
 User -> Command : add a task
@@ -33,7 +32,10 @@ Task --> taskList : new task
 taskList --> Task
 deactivate taskList
 
-Task --> User : task added
+Task --> Command : task added
+deactivate Task
+Command --> User
+deactivate Command
 deactivate Task
 
 @enduml
