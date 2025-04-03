@@ -1,5 +1,8 @@
 @startuml
 
+hide circle
+skinparam classAttributeIconSize 0
+
 package "Patient Information" {
   class Patient {
     -id: String

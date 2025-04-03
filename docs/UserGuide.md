@@ -53,7 +53,7 @@ supply.
 ## Quick Start
 
 1. Ensure that you have Java `17` or above installed.
-2. Download the latest version of `NurseSched` from [here](http://link.to/duke).
+2. Download the latest version of `NurseSched` from [here](https://github.com/AY2425S2-CS2113-T11b-3/tp/releases).
 3. Open a command terminal, cd into the folder you put the `.jar` file in, and use the `java -jar nursesched.jar`
    command to run the application.
 4. Type the command in the command box and press Enter to execute it.
@@ -523,44 +523,43 @@ Example:
 [//]: # (todo)
 **Q**: How do I transfer my data to another computer?
 
-**A**: {your answer here}
+**A**: All the data is stored in the /data/ folder. Simply transfer this folder to the other computer. 
 
 ## Command Summary
 
-| List     | Action  | Format                                                                     |
-|----------|---------|----------------------------------------------------------------------------|
-| Task     | Add     | `task add td/[TASK_DESCRIPTION] d/[DUE_DATE] t/[DUE_TIME]`                 |
-| Task     | Mark    | `task mark [TASK_INDEX]`                                                   |
-| Task     | Unmark  | `task unmark [TASK_INDEX]`                                                 |
-| Task     | Edit    | `task edit id/[TASK_INDEX] td/[NEW_DESCRIPTION] d/[NEW_DUE_DATE] t/[NEW_DUE_TIME]` |
-| Task     | List    | `task list`                                                                |
-| Shift    | Add     | `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`     |
+| List     | Action  | Format                                                                                |
+|----------|---------|---------------------------------------------------------------------------------------|
+| Task     | Add     | `task add td/[TASK_DESCRIPTION] d/[DUE_DATE] t/[DUE_TIME]`                            |
+| Task     | Mark    | `task mark [TASK_INDEX]`                                                              |
+| Task     | Unmark  | `task unmark [TASK_INDEX]`                                                            |
+| Task     | Edit    | `task edit id/[TASK_INDEX] td/[NEW_DESCRIPTION] d/[NEW_DUE_DATE] t/[NEW_DUE_TIME]`    |
+| Task     | List    | `task list`                                                                           |
+| Shift    | Add     | `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`                |
 | Shift    | Edit    | `shift edit sn/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]` |
-| Shift    | Mark    | `shift mark sn/[SHIFT_INDEX]`                                              |
-| Shift    | Unmark  | `shift unmark sn/[SHIFT_INDEX]`                                            |
-| Shift    | Delete  | `shift del sn/[SHIFT_INDEX]`                                               |
-| Shift    | List    | `shift list`                                                               |
-| Patient  | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]` |
-| Patient  | Delete  | `pf del id/[ID_NUMBER]`                                                    |
-| Patient  | Search  | `pf search id/[ID_NUMBER]`                                                 |
-| Patient  | List    | `pf list`                                                                  |
-| Patient  | Edit    | `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]` |
-| Patient  | Result Add | `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`                |
-| Patient  | Result Del | `pf result del id/[ID_NUMBER]`                                          |
-| Patient  | Result List| `pf result list id/[ID_NUMBER]`                                         |
+| Shift    | Mark    | `shift mark sn/[SHIFT_INDEX]`                                                         |
+| Shift    | Unmark  | `shift unmark sn/[SHIFT_INDEX]`                                                       |
+| Shift    | Delete  | `shift del sn/[SHIFT_INDEX]`                                                          |
+| Shift    | List    | `shift list`                                                                          |
 | Appointment | Add   | `appt add p/[PATIENT_NAME] s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE_RANKING] n/[NOTES]` |
-| Appointment | Delete | `appt del id/[APPT_INDEX]`                                               |
-| Appointment | Mark  | `appt mark id/[APPT_INDEX]`                                               |
-| Appointment | Unmark | `appt unmark id/[APPT_INDEX]`                                            |
+| Appointment | Delete | `appt del id/[APPT_INDEX]`                                                          |
+| Appointment | Mark  | `appt mark id/[APPT_INDEX]`                                                          |
+| Appointment | Unmark | `appt unmark id/[APPT_INDEX]`                                                       |
 | Appointment | Edit  | `appt edit id/[APPT_INDEX] p/[NEW_PATIENT_NAME] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] n/[NEW_NOTES] im/[NEW_IMPORTANCE]` |
-| Appointment | List  | `appt list`                                                               |
-| Appointment | Find  | `appt find [PATIENT_NAME]`                                                |
-| Appointment | Sort  | `appt sort by/ time` or `appt sort by/ importance`                        |
-| Medicine | Add     | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                             |
-| Medicine | Remove  | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                          |
-| Medicine | List    | `medicine list`                                                            |
-| Medicine | Find    | `medicine find mn/[MEDICINE_NAME]`                                         |
-| Medicine | Delete  | `medicine delete mn[MEDICINE_NAME]`                                        |
-| Medicine | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]` |
-| Medicine | Restock | `medicine restock q/[QUANTITY]`                                            |
-
+| Appointment | List  | `appt list`                                                                          |
+| Appointment | Find  | `appt find [PATIENT_NAME]`                                                           |
+| Appointment | Sort  | `appt sort by/ time` or `appt sort by/ importance`                                   |
+| Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`  |
+| Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                            |
+| Patient     | Search  | `pf search id/[ID_NUMBER]`                                                         |
+| Patient     | List    | `pf list`                                                                          |
+| Patient     | Edit    | `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]` |
+| MedicalTest | Add     | `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`                           |
+| MedicalTest | Delete  | `pf result del id/[ID_NUMBER]`                                                     |
+| MedicalTest | List    | `pf result list id/[ID_NUMBER]`                                                    |
+| Medicine    | Add     | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                                     |
+| Medicine    | Remove  | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                                  |
+| Medicine    | List    | `medicine list`                                                                    |
+| Medicine    | Find    | `medicine find mn/[MEDICINE_NAME]`                                                 |
+| Medicine    | Delete  | `medicine delete mn[MEDICINE_NAME]`                                                |
+| Medicine    | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]`         |
+| Medicine    | Restock | `medicine restock q/[QUANTITY]`                                                    |
