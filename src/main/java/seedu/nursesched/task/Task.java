@@ -2,6 +2,7 @@ package seedu.nursesched.task;
 
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.storage.TaskStorage;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,9 +44,11 @@ public class Task {
             fh.setFormatter(new SimpleFormatter());
             logr.addHandler(fh);
             logr.setLevel(Level.ALL);
+
         } catch (IOException e) {
             logr.log(Level.SEVERE, "File logger not working", e);
         }
+        taskList = TaskStorage.readFile();
     }
 
     /**
@@ -60,7 +63,7 @@ public class Task {
         this.description = description;
         this.byDate = byDate;
         this.byTime = byTime;
-        this.isDone = false;
+        this.isDone = isDone;
         logr.info("Task object created");
     }
 
@@ -83,6 +86,7 @@ public class Task {
             throw new NurseSchedException(ExceptionMessage.INVALID_DUE_DATE_TIME);
         }
         taskList.add(new Task(description, byDate, byTime, isDone));
+        TaskStorage.overwriteSaveFile(taskList);
         System.out.println("Task added: " + description);
         logr.info("Task added: " + description);
     }
@@ -103,6 +107,7 @@ public class Task {
         try {
             Task task = taskList.get(index - 1);
             task.setIsDone(true);
+            TaskStorage.overwriteSaveFile(taskList);
             System.out.println("Task marked: " + taskList.get(index - 1).toString());
             logr.info("Task marked: " + taskList.get(index - 1).description);
         } catch (IndexOutOfBoundsException e) {
@@ -127,6 +132,7 @@ public class Task {
         try {
             Task task = taskList.get(index - 1);
             task.setIsDone(false);
+            TaskStorage.overwriteSaveFile(taskList);
             System.out.println("Task unmarked: " + taskList.get(index - 1).toString());
             logr.info("Task unmarked: " + taskList.get(index - 1).description);
         } catch (IndexOutOfBoundsException e) {
@@ -202,6 +208,7 @@ public class Task {
         if (!description.isEmpty()) {
             task.setDescription(description);
         }
+        TaskStorage.overwriteSaveFile(taskList);
         System.out.println("After edit: " + task.toString());
         logr.info("Task edited successfully!");
     }
