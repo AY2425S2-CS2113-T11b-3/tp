@@ -8,7 +8,7 @@ public enum ExceptionMessage {
     INVALID_APPTADD_FORMAT("Invalid appointment add format! Input as:" +
             " appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
     INVALID_PATIENT_ADD_FORMAT("Invalid patient add format! Input as:\n" +
-            "pf add [id/ID] [p/PATIENT_NAME] [a/AGE] [g/GENDER] [c/CONTACT] [n/NOTES]"),
+            "pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]"),
     INVALID_TASKADD_FORMAT("Invalid task add format! Input as: "
             + "task add [td/TASK_DESCRIPTION] [d/DUE_DATE] [t/DUE_TIME]"),
     INVALID_TIME_FORMAT("Invalid time format! Input as HH:mm"),
