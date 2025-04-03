@@ -251,11 +251,11 @@ Example:
 
 * `pf del id/1000`
 
-### Searching for a patient profile : `pf search`
+### Searching for a patient profile : `pf find`
 
 Search for a patient profile.
 
-Format: `pf search id/[ID_NUMBER]`
+Format: `pf find id/[ID_NUMBER]`
 
 * Search the patient profile by the patient's ID.
 * Displays the patient information if the ID is found within the current list.
@@ -263,7 +263,7 @@ Format: `pf search id/[ID_NUMBER]`
 
 Example:
 
-* `pf search id/1000`
+* `pf find id/1000`
 
 ### Listing all patient profiles : `pf list`
 
@@ -531,7 +531,7 @@ Example:
 |-------------|---------|------------------------------------------------------------------------------------|
 | Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`  |
 | Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                            |
-| Patient     | Search  | `pf search id/[ID_NUMBER]`                                                         |
+| Patient     | find    | `pf find id/[ID_NUMBER]`                                                           |
 | Patient     | List    | `pf list`                                                                          |
 | Patient     | Edit    | `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]` |
 | MedicalTest | Add     | `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`                           |
