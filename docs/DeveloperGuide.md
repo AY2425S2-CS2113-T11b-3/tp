@@ -1,11 +1,28 @@
 # Developer Guide
 
+* [Acknowledgements](#acknowledgements)
+* [Setting up, getting started]
+
 ## Acknowledgements
 
 NurseSched makes use of these tools:
 1. [Gradle](https://gradle.org/): For build automation and code formatting checks.
 2. [JUnit 5](https://junit.org/junit5/docs/current/user-guide/): For unit testing.
 3. [Java Standard Library](https://docs.oracle.com/javase/8/docs/api/): For date time handling and file operations.
+
+## Setting up, getting started
+First, fork this repo, and clone the fork into your computer.
+
+If you plan to use Intellij IDEA (highly recommended):
+
+Configure the JDK: Follow the guide
+[se-edu/guides IDEA: Configuring the JDK](https://se-education.org/guides/tutorials/intellijJdk.html) to ensure Intellij
+is configured to use JDK 17. Import the project as a Gradle project: Follow the guide
+[se-edu/guides IDEA: Importing a Gradle project](https://se-education.org/guides/tutorials/intellijImportGradleProject.html) to import the project into IDEA.
+:exclamation: Note: Importing a Gradle project is slightly different from importing a normal Java project.
+Verify the setup:
+Run the seedu.address.Main and try a few commands.
+Run the tests to ensure they all pass.
 
 ## Design
 
