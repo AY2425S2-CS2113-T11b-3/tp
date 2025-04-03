@@ -527,8 +527,27 @@ Example:
 
 ## Command Summary
 
-| List        | Action  | Format                                                                             |
-|-------------|---------|------------------------------------------------------------------------------------|
+| List     | Action  | Format                                                                                |
+|----------|---------|---------------------------------------------------------------------------------------|
+| Task     | Add     | `task add td/[TASK_DESCRIPTION] d/[DUE_DATE] t/[DUE_TIME]`                            |
+| Task     | Mark    | `task mark [TASK_INDEX]`                                                              |
+| Task     | Unmark  | `task unmark [TASK_INDEX]`                                                            |
+| Task     | Edit    | `task edit id/[TASK_INDEX] td/[NEW_DESCRIPTION] d/[NEW_DUE_DATE] t/[NEW_DUE_TIME]`    |
+| Task     | List    | `task list`                                                                           |
+| Shift    | Add     | `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`                |
+| Shift    | Edit    | `shift edit sn/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]` |
+| Shift    | Mark    | `shift mark sn/[SHIFT_INDEX]`                                                         |
+| Shift    | Unmark  | `shift unmark sn/[SHIFT_INDEX]`                                                       |
+| Shift    | Delete  | `shift del sn/[SHIFT_INDEX]`                                                          |
+| Shift    | List    | `shift list`                                                                          |
+| Appointment | Add   | `appt add p/[PATIENT_NAME] s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE_RANKING] n/[NOTES]` |
+| Appointment | Delete | `appt del id/[APPT_INDEX]`                                                          |
+| Appointment | Mark  | `appt mark id/[APPT_INDEX]`                                                          |
+| Appointment | Unmark | `appt unmark id/[APPT_INDEX]`                                                       |
+| Appointment | Edit  | `appt edit id/[APPT_INDEX] p/[NEW_PATIENT_NAME] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] n/[NEW_NOTES] im/[NEW_IMPORTANCE]` |
+| Appointment | List  | `appt list`                                                                          |
+| Appointment | Find  | `appt find [PATIENT_NAME]`                                                           |
+| Appointment | Sort  | `appt sort by/ time` or `appt sort by/ importance`                                   |
 | Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`  |
 | Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                            |
 | Patient     | Search  | `pf search id/[ID_NUMBER]`                                                         |
