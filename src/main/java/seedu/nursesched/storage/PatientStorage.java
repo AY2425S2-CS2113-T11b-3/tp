@@ -37,23 +37,24 @@ public class PatientStorage {
     private static Patient parsePatient(String currentLine) throws NurseSchedException {
         String[] parts = currentLine.split(" \\| ");
 
-        if (parts.length != 6) {
-            throw new IllegalArgumentException("Invalid patient format in storage file: " + currentLine);
-        }
-
         String id = parts[0];
         String name = parts[1];
         String age = parts[2];
         String gender = parts[3];
         String contact = parts[4];
-        String notes = parts[5];
+        String notes = "";
+        try {
+            notes = parts[5];
+        } catch (IndexOutOfBoundsException exception) {
+            notes = "";
+        }
 
         return new Patient(id, name, age, gender, contact, notes);
     }
 
     public static String formatString(Patient patient) {
         return patient.getId() + " | " + patient.getName() + " | " + patient.getAge() + " | "
-                + patient.getGender() + " | " + patient.getContact() + " | " + patient.getNotes();
+                + patient.getGender() + " | " + patient.getContact() + " | " + patient.getNotes() + " | ";
     }
 
     public static void overwriteSaveFile(ArrayList<Patient> patientList) {
