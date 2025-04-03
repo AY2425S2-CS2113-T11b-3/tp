@@ -148,14 +148,14 @@ public class ShiftParser extends Parser {
         LocalTime endTime;
         String shiftTask;
 
-        if (!remaining.contains("sn/") || !remaining.contains("s/") || !remaining.contains("e/")
+        if (!remaining.contains("id/") || !remaining.contains("s/") || !remaining.contains("e/")
                 || !remaining.contains("d/") || !remaining.contains("st/")) {
             logr.warning("Invalid edit format.");
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTEDIT_FORMAT);
         }
 
         try {
-            shiftIndex = Integer.parseInt(extractValue(remaining, "sn/", "s/")) - 1;
+            shiftIndex = Integer.parseInt(extractValue(remaining, "id/", "s/")) - 1;
             if (shiftIndex < 0) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
             }
@@ -202,7 +202,7 @@ public class ShiftParser extends Parser {
         logr.info("Parsing mark/unmark command: " + remaining);
         int shiftIndex;
 
-        if (!remaining.contains("sn/")) {
+        if (!remaining.contains("id/")) {
             if (command.equals("mark")) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTMARK_FORMAT);
             } else {
@@ -211,7 +211,7 @@ public class ShiftParser extends Parser {
         }
 
         try {
-            shiftIndex = Integer.parseInt(extractValue(remaining, "sn/", null)) - 1;
+            shiftIndex = Integer.parseInt(extractValue(remaining, "id/", null)) - 1;
             if (shiftIndex < 0) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
             }
@@ -242,12 +242,12 @@ public class ShiftParser extends Parser {
         logr.info("Parsing delete command: " + remaining);
         int shiftIndex;
 
-        if (!remaining.contains("sn/")) {
+        if (!remaining.contains("id/")) {
             logr.warning("Invalid delete format.");
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTDEL_FORMAT);
         }
         try {
-            shiftIndex = Integer.parseInt(extractValue(remaining, "sn/", null)) - 1;
+            shiftIndex = Integer.parseInt(extractValue(remaining, "id/", null)) - 1;
             if (shiftIndex < 0) {
                 logr.warning("Invalid shift index: " + shiftIndex);
                 throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
