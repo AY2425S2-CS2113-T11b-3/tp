@@ -120,7 +120,7 @@ public class Medicine {
         MedicineStorage.overwriteSaveFile(medicineList);
         logr.log(Level.INFO, "Removed {0} of {1}. New quantity: {2}",
                 new Object[]{quantity, medicineName, existingMedicine.getQuantity()});
-        System.out.println(quantity + " more of " + medicineName + " removed. New quantity: " +
+        System.out.println(quantity + " " + medicineName + " removed. New quantity: " +
                 existingMedicine.getQuantity());
     }
 
@@ -158,11 +158,12 @@ public class Medicine {
         if (medicineList.isEmpty()) {
             System.out.println("There is no medicine in the list");
             logr.log(Level.INFO, "No medicines found in the list");
-        }
-        System.out.println("List of medicine supply:");
-        for (int i = 0; i < medicineList.size(); i++) {
-            Medicine medicine = medicineList.get(i);
-            System.out.printf("%d. %s%n", i + 1, medicine);
+        } else {
+            System.out.println("List of medicine supply:");
+            for (int i = 0; i < medicineList.size(); i++) {
+                Medicine medicine = medicineList.get(i);
+                System.out.printf("%d. %s%n", i + 1, medicine);
+            }
         }
     }
 

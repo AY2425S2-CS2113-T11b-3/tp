@@ -1,3 +1,62 @@
 @startuml
 
+hide footbox
+actor User
+participant ":Command" as Command
+participant ":Parser" as Parser
+participant ":TaskParser" as TaskParser
+participant ":Task" as Task
+participant "taskList:ArrayList" as taskList
+participant ":TaskStorage" as TaskStorage
+
+User -> Command : edit task
+activate Command
+
+Command -> Parser : extractType(user input)
+activate Parser
+Parser --> Command : task type
+deactivate Parser
+
+Command -> TaskParser : extractInputs(user input parameters)
+activate TaskParser
+TaskParser --> Command : TaskParser object with parameters
+deactivate TaskParser
+
+Command-> Task : editTask(task details)
+
+activate Task
+
+Task -> taskList : get task by index
+activate taskList
+taskList --> Task : return task to be edited
+deactivate taskList
+
+opt due date field not empty
+    Task -> Task : setByDate(updated date)
+
+end
+
+opt due time field not empty
+    Task -> Task : setByTime(updated time)
+
+end
+
+opt description field not empty
+    Task -> Task : setDescription(updated description)
+
+end
+
+Task -> TaskStorage : overwriteFile()
+activate TaskStorage
+TaskStorage --> Task : File saved
+deactivate TaskStorage
+
+deactivate taskList
+
+Task --> Command : task edited successfully
+Command --> User
+deactivate Command
+
+deactivate Task
+
 @enduml

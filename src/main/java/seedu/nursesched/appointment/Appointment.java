@@ -302,7 +302,7 @@ public class Appointment {
     public static boolean isInPatientList(String name){
         ArrayList<Patient> pfList = Patient.getPatientsList();
         for (Patient p : pfList) {
-            if (p.getName().equals(name)){
+            if (p.getName().toLowerCase().equals(name.toLowerCase())){
                 return true;
             }
         }

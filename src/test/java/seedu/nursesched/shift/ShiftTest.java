@@ -40,7 +40,7 @@ class ShiftTest {
 
     @Test
     void deleteShiftByIndex() throws NurseSchedException {
-        String inputStringDelete = "shift del sn/1";
+        String inputStringDelete = "shift del id/1";
         String inputStringAdd = "shift add s/10:00 e/11:00 d/2004-01-01 st/test";
 
         ShiftParser shiftParserAdd = ShiftParser.extractInputs(inputStringAdd);

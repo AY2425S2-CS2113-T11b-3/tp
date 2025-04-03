@@ -31,6 +31,8 @@ public enum ExceptionMessage {
     TASK_INDEX_OUT_OF_BOUNDS("Task index is not within 1 and the total number of tasks in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
     PARSING_ERROR("Error parsing command!"),
+    INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: [MEDICINE_NAME] | [QUANTITY] in" +
+            " storage file."),
     INVALID_MEDICINEEDIT_FORMAT("Invalid medicine edit format! Input as: medicine edit mn/[MEDICINE_NAME] " +
             "un/[UPDATE_NAME] uq/[UPDATED_QUANTITY]"),
     INVALID_MEDICINEDELETE_FORMAT("Invalid medicine delete format! Input as: medicine delete mn/[MEDICINE_NAME]"),
