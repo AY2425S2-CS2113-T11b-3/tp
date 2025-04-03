@@ -15,12 +15,12 @@ supply.
     * [Editing a task](#editing-a-task-task-edit)
     * [Listing all tasks](#list-all-tasks-task-list)
 * [Shift List](#shift-list)
-  * [Adding a shift](#adding-a-shift-shift-add)
-  * [Editing a shift](#editing-a-shift-shift-edit)
-  * [Marking a shift](#marking-a-shift-shift-mark)
-  * [Unmarking a shift](#unmarking-a-shift-shift-unmark)
-  * [Deleting a shift](#deleting-a-shift-shift-del)
-  * [Listing all shifts](#listing-all-shifts-shift-list)
+    * [Adding a shift](#adding-a-shift-shift-add)
+    * [Editing a shift](#editing-a-shift-shift-edit)
+    * [Marking a shift](#marking-a-shift-shift-mark)
+    * [Unmarking a shift](#unmarking-a-shift-shift-unmark)
+    * [Deleting a shift](#deleting-a-shift-shift-del)
+    * [Listing all shifts](#listing-all-shifts-shift-list)
 * [Patient List](#patient-list)
     * [Adding a patient profile](#adding-a-patient-profile--pf-add)
     * [Deleting a patient profile](#deleting-a-patient-profile--pf-del)
@@ -52,13 +52,22 @@ supply.
 
 ## Quick Start
 
-1. Ensure that you have Java 17 or above installed.
+1. Ensure that you have Java `17` or above installed.
 2. Download the latest version of `NurseSched` from [here](http://link.to/duke).
-3. Open a command terminal, cd into the folder you put the jar file in, and use the java -jar tp
+3. Open a command terminal, cd into the folder you put the `.jar` file in, and use the `java -jar nursesched.jar`
    command to run the application.
 4. Type the command in the command box and press Enter to execute it.
+5. Refer to the [Features](#features) below for details of each command.
 
 ## Features
+
+> [!NOTE] Notes about the command format:
+> * Words in `UPPER_CASE` and in square brackets are the parameters to be supplied by the user.<br> e.g `medicine add
+    mn/[MEDICINE_NAME] q/[QUANTITY]`, `[MEDICINE_NANE]` and `[QUANTITY]` are parameters which can be used as `medicine add
+    mn/Paracetamol q/50`.
+> * Markers with `/` are compulsory. <br> e.g `medicine restock q/[QUANTITY]`, `q/` must be included in the command
+> * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple
+    lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 
 ### Task List
 
@@ -116,7 +125,7 @@ Format: `task edit id/[TASK_INDEX] td/[NEW_DESCRIPTION] d/[NEW_DUE_DATE] t/[NEW_
 Example of usage:
 
 * `task edit id/1 td/Update medicine supply t/13:00` Edits the task description and due time of the 1st task in the
-   task list.
+  task list.
 * `task edit id/3 d/2025-07-01 t/15:00` Edits the due date and time of the 3rd task in the task list.
 
 ### Listing all tasks: `task list`
@@ -151,7 +160,8 @@ Edits an existing shift in the shift list.
 
 Format: `shift edit sn/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`
 
-* Edits the shift at the specified `SHIFT_INDEX`. The `SHIFT_INDEX` refers to the index number shown in the displayed shift list.
+* Edits the shift at the specified `SHIFT_INDEX`. The `SHIFT_INDEX` refers to the index number shown in the displayed
+  shift list.
 * All fields must be provided to perform the edit.
 * `START_TIME` and `END_TIME` must be in HH:mm format
 * `DATE` must be in YYYY-MM-DD format
@@ -315,10 +325,10 @@ Example:
 
 * `pf result list id/1000`
 
-
 ### Appointment list
 
 ### Adding an appointment: `appt add`
+
 Adds user’s appointments, date and time to the user’s appointment list.
 
 Format: `appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPORTANCE_RANKING] [n/NOTES]`
@@ -333,6 +343,7 @@ Example:
 `appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`
 
 ### Deleting an appointment: `appt del`
+
 Delete an appointment profile.
 
 Format: `appt del id/[APPT_INDEX]`
@@ -343,8 +354,8 @@ Format: `appt del id/[APPT_INDEX]`
 
 Example: `appt del id/10`
 
-
 ### Marking an appointment: `appt mark`
+
 Marks an appointment to show its completion.
 
 Format: `appt mark id/[APPT_INDEX]`
@@ -357,6 +368,7 @@ Example of usage:
 `appt mark id/3`
 
 ### Unmarking an appointment: `appt unmark`
+
 Unmarks an appointment to show that it is uncompleted.
 
 Format: `appt unmark id/[APPT_INDEX]`
@@ -369,23 +381,27 @@ Example of usage:
 `appt unmark id/3`
 
 ### Editing an appointment: `appt edit`
+
 Edits an existing task in the task list.
 
-Format: `appt edit id/[APPT_INDEX] p/[NEW_PATIENT_NAME] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] n/[NEW_NOTES] [im/NEW_IMPORTANCE]`
+Format:
+`appt edit id/[APPT_INDEX] p/[NEW_PATIENT_NAME] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] n/[NEW_NOTES] [im/NEW_IMPORTANCE]`
 
-* Edits the task at the specified `APPT_INDEX`. The `APPT_INDEX` refers to the index number shown in the displayed appointment
+* Edits the task at the specified `APPT_INDEX`. The `APPT_INDEX` refers to the index number shown in the displayed
+  appointment
   list. The index must be a positive integer 1, 2, 3, ...
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 
 Example of usage:
 
-* `appt edit id/1 p/ edited name s/13:00 e/15:00` Edits the appointment patient name, start time and end time of the 1st appointment in the
+* `appt edit id/1 p/ edited name s/13:00 e/15:00` Edits the appointment patient name, start time and end time of the 1st
+  appointment in the
   appointment list.
 * `appt edit id/3 im/1` Edits the importance ranking of the 3rd appointment in the appointment list.
 
-
 ### Listing all appointments: `appt list`
+
 Lists all appointments, completion status, date, start time, end time, importance and notes.
 
 Format: `appt list`
@@ -394,8 +410,8 @@ Example of usage:
 
 `appt list`
 
-
 ### Searching for an appointment: `appt find`
+
 Search for an appointment using patient's name.
 
 Format: `appt find [PATIENT_NAME]`
@@ -404,11 +420,12 @@ Format: `appt find [PATIENT_NAME]`
 
 Example: `appt find Jean Doe`
 
-
 ### Sorting appointments: `appt sort`
+
 Sorts appointments based off importance or time.
 
 #### Sorting by Time
+
 Sorts appointments in chronological order.
 
 Format: `appt sort by/ time`
@@ -418,6 +435,7 @@ Example of usage:
 `appt sort by/ time`
 
 #### Sorting by Importance
+
 Sorts appointments based on their priority level.
 
 Format: `appt sort by/ importance`
@@ -430,53 +448,53 @@ Example of usage:
 
 ### Adding a medicine quantity: `medicine add`
 
-Adds a specific quantity of medicine to the current supply
+Adds a specific quantity of medicine to the current supply list.
 
 Format: `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`
 
 Example:
 
-* `medicine add mn/paracetamol q/2` Adds 2 quantity of paracetamol into the medicine supply list
+* `medicine add mn/paracetamol q/2` Adds 2 quantity of paracetamol into the medicine supply list.
 
 ### Removing a medicine quantity: `medicine remove`
 
-Removes a specific quantity of medicine from the current supply
+Removes a specific quantity of medicine from the current supply list.
 
 Format: `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`
 
 Example:
 
-* `medicine remove mn/paracetamol q/2` Removes 2 quantity of paracetamol from the medicine supply list
+* `medicine remove mn/paracetamol q/2` Removes 2 quantity of paracetamol from the medicine supply list.
 
 ### Listing all medicine supply: `medicine list`
 
-Lists name of medicines and their respective quantity in the medicine supply
+Lists name of medicines and their respective quantity in the medicine supply.
 
 Format: `medicine list`
 
 ### Finding a medicine name: `medicine find`
 
-Finds a specific medicine from the current supply
+Finds a specific medicine from the current supply.
 
 Format: `medicine find mn/[MEDICINE_NAME]`
 
 Example:
 
-* `medicine find mn/paracetamol` Finds paracetamol in the medicine supply list and displays it with its quantity
+* `medicine find mn/paracetamol` Finds paracetamol in the medicine supply list and displays it with its quantity.
 
 ### Deleting a medicine: `medicine delete`
 
-Deletes a specific medicine from the current supply
+Deletes a specific medicine from the current supply.
 
 Format: `medicine delete mn/[MEDICINE_NAME]`
 
 Example:
 
-* `medicine delete mn/paracetamol` Deletes paracetamol from the medicine supply list
+* `medicine delete mn/paracetamol` Deletes paracetamol from the medicine supply list.
 
 ### Editing a medicine: `medicine edit`
 
-Edits the information of a specific medicine from the current supply
+Edits the information of a specific medicine from the current supply.
 
 Format: `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]`
 
@@ -485,7 +503,7 @@ Format: `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY
 Example:
 
 * `medicine edit mn/paracetamo un/paracetamol uq/4` Updates the medicine name from paracetamo to paracetamol and its
-  quantity to 4
+  quantity to 4.
 
 ### Restocking a medicine: `medicine restock`
 
@@ -498,22 +516,23 @@ Format: `medicine restock q/[QUANTITY]`
 Example:
 
 * `medicine restock q/30` Lists all the medicine name and their respective quantity, for medicines which have quantity
-  lesser than `QUANTITY`
-
+  lesser than `QUANTITY`.
 
 ## FAQ
 
+[//]: # (todo)
 **Q**: How do I transfer my data to another computer?
 
 **A**: {your answer here}
 
 ## Command Summary
 
-| List     | Action | Format                                                                     |
-|----------|--------|----------------------------------------------------------------------------|
-| Medicine | Add    | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                             |
-| Medicine | Remove | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                          |
-| Medicine | List   | `medicine list`                                                            |
-| Medicine | Find   | `medicine find mn/[MEDICINE_NAME]`                                         |
-| Medicine | Delete | `medicine delete mn[MEDICINE_NAME]`                                        |
-| Medicine | Edit   | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]` |
+| List     | Action  | Format                                                                     |
+|----------|---------|----------------------------------------------------------------------------|
+| Medicine | Add     | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                             |
+| Medicine | Remove  | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                          |
+| Medicine | List    | `medicine list`                                                            |
+| Medicine | Find    | `medicine find mn/[MEDICINE_NAME]`                                         |
+| Medicine | Delete  | `medicine delete mn[MEDICINE_NAME]`                                        |
+| Medicine | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]` |
+| Medicine | Restock | `medicine restock q/[QUANTITY]`                                            |
