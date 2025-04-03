@@ -523,16 +523,24 @@ Example:
 [//]: # (todo)
 **Q**: How do I transfer my data to another computer?
 
-**A**: {your answer here}
+**A**: All the data is stored in the /data/ folder. Simply transfer this folder to the other computer. 
 
 ## Command Summary
 
-| List     | Action  | Format                                                                     |
-|----------|---------|----------------------------------------------------------------------------|
-| Medicine | Add     | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                             |
-| Medicine | Remove  | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                          |
-| Medicine | List    | `medicine list`                                                            |
-| Medicine | Find    | `medicine find mn/[MEDICINE_NAME]`                                         |
-| Medicine | Delete  | `medicine delete mn[MEDICINE_NAME]`                                        |
-| Medicine | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]` |
-| Medicine | Restock | `medicine restock q/[QUANTITY]`                                            |
+| List        | Action  | Format                                                                             |
+|-------------|---------|------------------------------------------------------------------------------------|
+| Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`  |
+| Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                            |
+| Patient     | Search  | `pf search id/[ID_NUMBER]`                                                         |
+| Patient     | List    | `pf list`                                                                          |
+| Patient     | Edit    | `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]` |
+| MedicalTest | Add     | `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`                           |
+| MedicalTest | Delete  | `pf result del id/[ID_NUMBER]`                                                     |
+| MedicalTest | List    | `pf result list id/[ID_NUMBER]`                                                    |
+| Medicine    | Add     | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                                     |
+| Medicine    | Remove  | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                                  |
+| Medicine    | List    | `medicine list`                                                                    |
+| Medicine    | Find    | `medicine find mn/[MEDICINE_NAME]`                                                 |
+| Medicine    | Delete  | `medicine delete mn[MEDICINE_NAME]`                                                |
+| Medicine    | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]`         |
+| Medicine    | Restock | `medicine restock q/[QUANTITY]`                                                    |
