@@ -34,8 +34,8 @@ Code can be found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?sea
 #### Contributions to the DG
 
 - Gave details on the `Task` component.
-- Describe the implementation of one of the features `task edit`.
-- Add UML diagrams of the task component and the sequence diagram of `addTask`.
+- Describe the implementation of one of the features `task edit`, including `addTask`.
+- Add sequence diagrams for `addTask` and `editTask`.
 
 #### Contributions to team-based tasks
 
