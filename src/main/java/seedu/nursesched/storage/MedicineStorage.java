@@ -34,7 +34,9 @@ public class MedicineStorage {
             while (fileScanner.hasNext()) {
                 String currentLine = fileScanner.nextLine();
                 Medicine medicine = parseMedicine(currentLine);
-                medicineList.add(medicine);
+                if (medicine != null) {
+                    medicineList.add(medicine);
+                }
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found at: " + FILE_PATH);
@@ -51,15 +53,39 @@ public class MedicineStorage {
      * @throws IllegalArgumentException If the format is invalid.
      */
     private static Medicine parseMedicine(String currentLine) {
-        String[] parts = currentLine.split(" \\| ");
-        if (parts.length != 2) {
-            throw new IllegalArgumentException("Invalid medicine format in storage file: " + currentLine);
-        }
+        try {
+            String[] parts = currentLine.split(" \\| ");
 
-        String medicineName = parts[0];
-        int quantity = Integer.parseInt(parts[1]);
-        return new Medicine(quantity, medicineName);
+            if (parts.length != 2) {
+                System.out.println("Warning: Invalid medicine format -> " + currentLine);
+                System.out.println("Input saved medicine as [MEDICINE_NAME] | [QUANTITY]");
+                return null;
+            }
+
+            String medicineName = parts[0].trim();
+            if (medicineName.isEmpty()) {
+                System.out.println("Warning: Medicine name cannot be empty -> " + currentLine);
+                System.out.println("Input saved medicine as [MEDICINE_NAME] | [QUANTITY]");
+                return null;
+            }
+
+            int quantity;
+            try {
+                quantity = Integer.parseInt(parts[1].trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Warning: Invalid quantity format -> " + currentLine);
+                System.out.println("Input saved medicine as [MEDICINE_NAME] | [QUANTITY]");
+                return null;
+            }
+
+            return new Medicine(quantity, medicineName);
+
+        } catch (Exception e) {
+            System.out.println("Unexpected error while parsing medicine -> " + currentLine);
+            return null;
+        }
     }
+
 
     /**
      * Formats a Medicine object into a string representation suitable for saving.

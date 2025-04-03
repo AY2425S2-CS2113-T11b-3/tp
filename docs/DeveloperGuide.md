@@ -14,12 +14,14 @@ NurseSched makes use of these tools:
 API: `Ui.java`
 
 [//]: # (todo: insert Ui diagram & add details)
+[//]: # (to be implemented in v2.1)
 
 ### Storage component
 
 API: `Storage.java`
 
 [//]: # (todo: add storage class & insert Storage diagram)
+[//]: # (to be implemented in v2.1)
 
 The `Storage` component,
 

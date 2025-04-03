@@ -14,6 +14,8 @@ src/main/resources/docs/
 #Data files
 /data/
 
+/META-INF/
+
 # MacOS custom attributes files created by Finder
 .DS_Store
 *.iml
