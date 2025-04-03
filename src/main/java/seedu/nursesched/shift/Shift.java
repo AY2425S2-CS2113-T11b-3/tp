@@ -2,7 +2,9 @@ package seedu.nursesched.shift;
 
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.storage.ShiftStorage;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,7 +13,6 @@ import java.util.ArrayList;
 
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -30,14 +31,21 @@ public class Shift {
     private boolean isDone = false;
 
     static {
+        shiftList = ShiftStorage.readFile();
+
         try {
-            LogManager.getLogManager().reset();
+            // Ensure the log directory exists before creating log file
+            File logDir = new File("logs/shift");
+            if (!logDir.exists()) {
+                logDir.mkdirs();
+            }
+
             FileHandler fh = new FileHandler("logs/shift/shift.log", true);
             fh.setFormatter(new SimpleFormatter());
             logr.addHandler(fh);
             logr.setLevel(Level.ALL);
         } catch (IOException e) {
-            logr.log(Level.SEVERE, "File logger not working", e);
+            System.out.println("Logger setup failed: " + e.getMessage());
         }
     }
 
@@ -76,6 +84,7 @@ public class Shift {
         assert startTime != null && endTime != null && date != null && shiftTask != null : "Invalid shift details";
         Shift shift = new Shift(startTime, endTime, date, shiftTask);
         shiftList.add(shift);
+        ShiftStorage.overwriteSaveFile(shiftList);
         logr.info("Shift added: " + shift);
         System.out.println("Shift added");
     }
@@ -93,6 +102,7 @@ public class Shift {
             return;
         }
         Shift removedShift = shiftList.remove(index);
+        ShiftStorage.overwriteSaveFile(shiftList);
         logr.info("Shift deleted: " + removedShift);
         System.out.println("Shift deleted.");
     }
@@ -126,6 +136,7 @@ public class Shift {
             System.out.println("Marked shift as done!");
             System.out.println(shiftList.get(index));
             logr.info("Shift marked: " + shiftList.get(index).toString());
+            ShiftStorage.overwriteSaveFile(shiftList);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("There is no shift with index: " + (index + 1));
             logr.warning("There is no shift with index: " + (index + 1));
@@ -143,6 +154,7 @@ public class Shift {
             shiftList.get(index).setDone(false);
             System.out.println("Marked shift as undone!");
             logr.info("Shift unmarked: " + shiftList.get(index).toString());
+            ShiftStorage.overwriteSaveFile(shiftList);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("There is no shift with index: " + (index + 1));
             logr.warning("There is no shift with index: " + (index + 1));
@@ -176,6 +188,7 @@ public class Shift {
         Shift updatedShift = new Shift(newStartTime, newEndTime, newDate, newTask);
         updatedShift.setDone(shift.getStatus());
         shiftList.set(index, updatedShift);
+        ShiftStorage.overwriteSaveFile(shiftList);
         System.out.println("Shift updated:");
         System.out.println(updatedShift);
         logr.info("Shift updated at index " + index + ": " + updatedShift);
