@@ -24,7 +24,7 @@ supply.
 * [Patient List](#patient-list)
     * [Adding a patient profile](#adding-a-patient-profile--pf-add)
     * [Deleting a patient profile](#deleting-a-patient-profile--pf-del)
-    * [Searching for a patient profile](#searching-for-a-patient-profile--pf-search)
+    * [Searching for a patient profile](#finding-a-patient-profile--pf-find)
     * [Listing all patient profiles](#listing-all-patient-profiles--pf-list)
     * [Editing a patient information](#editing-a-patient-information--pf-edit)
     * [Adding a medical test result](#adding-a-medical-test-result--pf-result-add)
@@ -37,7 +37,7 @@ supply.
     * [Unmarking an appointment](#unmarking-an-appointment-appt-unmark)
     * [Editing an appointment](#editing-an-appointment-appt-edit)
     * [Listing all appointments](#listing-all-appointments-appt-list)
-    * [Searching for an appointment](#searching-for-an-appointment-appt-search)
+    * [Find an appointment](#finding-an-appointment-appt-find)
     * [Sorting appointments](#sorting-appointments-appt-sort)
 * [Medicine List](#medicine-list)
     * [Adding a medicine quantity](#adding-a-medicine-quantity-medicine-add)
@@ -61,7 +61,7 @@ supply.
 
 ## Features
 
-> [!NOTE] Notes about the command format:
+> Notes about the command format:
 > * Words in `UPPER_CASE` and in square brackets are the parameters to be supplied by the user.<br> e.g `medicine add
     mn/[MEDICINE_NAME] q/[QUANTITY]`, `[MEDICINE_NANE]` and `[QUANTITY]` are parameters which can be used as `medicine add
     mn/Paracetamol q/50`.
@@ -251,7 +251,7 @@ Example:
 
 * `pf del id/1000`
 
-### Searching for a patient profile : `pf find`
+### Finding a patient profile : `pf find`
 
 Search for a patient profile.
 
@@ -410,7 +410,7 @@ Example of usage:
 
 `appt list`
 
-### Searching for an appointment: `appt find`
+### Finding an appointment: `appt find`
 
 Search for an appointment using patient's name.
 
