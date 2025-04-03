@@ -101,7 +101,7 @@ public class ParserTest {
 
     @Test
     public void testExtractInputs_appointmentUnmarkCommand() throws NurseSchedException {
-        String input = "appt unmark 1";
+        String input = "appt unmark id/1";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
         assertNotNull(apptParser);
@@ -141,7 +141,7 @@ public class ParserTest {
 
     @Test
     public void testExtractInputs_appointmentDeleteCommand() throws NurseSchedException {
-        String input = "appt del 1";
+        String input = "appt del id/1";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
         assertNotNull(apptParser);
@@ -151,7 +151,7 @@ public class ParserTest {
 
     @Test
     public void testExtractInputs_appointmentMarkCommand() throws NurseSchedException {
-        String input = "appt mark 1";
+        String input = "appt mark id/1";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
         assertNotNull(apptParser);

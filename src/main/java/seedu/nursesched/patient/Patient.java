@@ -192,6 +192,10 @@ public class Patient {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public static ArrayList<Patient> getPatientsList() {
         return patientsList;
     }

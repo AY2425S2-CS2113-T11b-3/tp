@@ -178,7 +178,18 @@ public class ApptParser extends Parser {
         }
 
         case "del", "mark", "unmark" -> {
-            apptIndex = parseIndex(line);
+            if (line == null || line.trim().isEmpty()) {
+                logr.warning("Missing index field in command");
+                throw new NurseSchedException(ExceptionMessage.INVALID_INDEX_PARAMETER);
+            }
+
+            String indexStr = line.trim();
+            if (!indexStr.toLowerCase().startsWith("id/") || indexStr.length() <= 3) {
+                logr.warning("Missing index field in command");
+                throw new NurseSchedException(ExceptionMessage.INVALID_INDEX_PARAMETER);
+            }
+
+            apptIndex = parseIndex(indexStr.substring(3));
             return new ApptParser(command, name, startTime, endTime, date, notes,
                     apptIndex, searchKeyword, importance, sortBy);
         }
@@ -215,78 +226,101 @@ public class ApptParser extends Parser {
         }
 
         case "edit" -> {
-            // Nothing written after command. i.e "edit "
-            //assert line != null;
-            if (line == null || line.isEmpty() ) {
+            if (line == null || line.trim().isEmpty() || !line.contains("id/")) {
                 logr.warning("Missing index field in edit command");
                 throw new NurseSchedException(ExceptionMessage.INVALID_APPTEDIT_FORMAT);
             }
 
-
             try {
                 // Extract index
-                if (line.trim().contains(" ")) {
-                    String indexString = line.substring(0, line.indexOf(" "));
-                    apptIndex = parseIndex(indexString);
-                    line = line.substring(line.indexOf(" ") + 1);
-                } else {
-                    // Nothing written after index i.e "edit 1 "
-                    logr.warning("No fields given to edit");
+                int idStart = line.indexOf("id/") + 3;
+                int idEnd = findNextFieldIndex(line, idStart);
+                String idStr = line.substring(idStart, idEnd).trim();
+
+                // Check if there's actually a number after id/
+                if (idStr.isEmpty()) {
+                    logr.warning("Missing index number after id/ prefix");
+                    throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
+                }
+
+                try {
+                    apptIndex = parseIndex(idStr);
+                } catch (NumberFormatException e) {
+                    // This is caught by parseIndex
+                    throw e;
+                }
+
+                line = line.substring(idEnd).trim();
+                if (line.isEmpty()){
+                    System.out.println("At least one optional field must be provided for an edit (see below).");
                     throw new NurseSchedException(ExceptionMessage.INVALID_APPTEDIT_FORMAT);
                 }
-                // Extract optional fields
-                if (line.contains("p/")) {
-                    int nameStart = line.indexOf("p/") + 2;
-                    int nameEnd = findNextFieldIndex(line, nameStart);
-                    name = line.substring(nameStart, nameEnd).trim();
-                } else {
-                    name = null;
-                }
 
-                if (line.contains("s/")) {
-                    int sIndex = line.indexOf("s/") + 2;
-                    int sEnd = findNextFieldIndex(line, sIndex);
-                    startTime = LocalTime.parse(line.substring(sIndex, sEnd).trim());
-                }
+                // Process optional fields
+                try {
+                    if (line.contains("p/")) {
+                        int nameStart = line.indexOf("p/") + 2;
+                        int nameEnd = findNextFieldIndex(line, nameStart);
+                        name = line.substring(nameStart, nameEnd).trim();
+                        if (name.isEmpty()) {
+                            System.out.println("No name found in name field. Defaulting to previous name.");
+                            name = null;
+                        }
+                    } else {
+                        name = null;
+                    }
 
-                if (line.contains("e/")) {
-                    int eIndex = line.indexOf("e/") + 2;
-                    int eEnd = findNextFieldIndex(line, eIndex);
-                    endTime = LocalTime.parse(line.substring(eIndex, eEnd).trim());
-                }
+                    if (line.contains("s/")) {
+                        int sIndex = line.indexOf("s/") + 2;
+                        int sEnd = findNextFieldIndex(line, sIndex);
+                        startTime = LocalTime.parse(line.substring(sIndex, sEnd).trim());
+                    }
 
-                if (line.contains("d/")) {
-                    int dIndex = line.indexOf("d/") + 2;
-                    int dEnd = findNextFieldIndex(line, dIndex);
-                    date = LocalDate.parse(line.substring(dIndex, dEnd).trim());
-                }
+                    if (line.contains("e/")) {
+                        int eIndex = line.indexOf("e/") + 2;
+                        int eEnd = findNextFieldIndex(line, eIndex);
+                        endTime = LocalTime.parse(line.substring(eIndex, eEnd).trim());
+                    }
 
-                if (line.contains("im/")) {
-                    int imIndex = line.indexOf("im/") + 3;
-                    int imEnd = findNextFieldIndex(line, imIndex);
-                    String importanceStr = line.substring(imIndex, imEnd).trim();
-                    importance = parseImportance(importanceStr);
-                } else {
-                    importance = -1;
-                }
+                    if (line.contains("d/")) {
+                        int dIndex = line.indexOf("d/") + 2;
+                        int dEnd = findNextFieldIndex(line, dIndex);
+                        date = LocalDate.parse(line.substring(dIndex, dEnd).trim());
+                    }
 
-                if (line.contains("n/")) {
-                    int nIndex = line.indexOf("n/") + 2;
-                    notes = line.substring(nIndex).trim();
-                } else {
-                    notes = null;
-                }
+                    if (line.contains("im/")) {
+                        int imIndex = line.indexOf("im/") + 3;
+                        int imEnd = findNextFieldIndex(line, imIndex);
+                        importance = parseImportance(line.substring(imIndex, imEnd).trim());
+                    }else{
+                        importance = -1;
+                    }
 
-            } catch (NumberFormatException e) {
-                logr.warning("Invalid appointment index format in edit command");
-                throw new NurseSchedException(ExceptionMessage.INVALID_APPT_NUMBER);
-            } catch (DateTimeParseException e) {
-                throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
+                    if (line.contains("n/")) {
+                        int nIndex = line.indexOf("n/") + 2;
+                        notes = line.substring(nIndex).trim();
+                        if (notes.isEmpty()){
+                            System.out.println("No notes found in notes field. Defaulting to previous note.");
+                            notes = null;
+                        }
+                    } else {
+                        notes = null;
+                    }
+                } catch (DateTimeParseException e) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
+                } catch (NurseSchedException e) {
+                    // Pass through exceptions from parseImportance
+                    throw e;
+                }
+            } catch (StringIndexOutOfBoundsException e) {
+                logr.warning("Missing index number after id/ prefix");
+                throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
             }
 
             return new ApptParser(command, name, startTime, endTime, date, notes,
                     apptIndex, searchKeyword, importance, sortBy);
         }
+
         default -> {
             logr.warning("Unrecognized command: " + command);
             return null;
@@ -310,6 +344,10 @@ public class ApptParser extends Parser {
     }
 
     public static int parseIndex (String line) throws NurseSchedException {
+        if (line.trim().isEmpty()){
+            throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
+        }
+
         int index = 0;
         try {
             index = Integer.parseInt(line) - 1;
@@ -318,8 +356,17 @@ public class ApptParser extends Parser {
                 throw new NurseSchedException(ExceptionMessage.NEGATIVE_INDEX);
             }
         } catch (NumberFormatException e) {
-            logr.warning("Invalid index: " + line);
-            throw new NurseSchedException(ExceptionMessage.INVALID_APPT_NUMBER);
+
+            boolean containsDigits = line.matches(".*\\d.*");
+            if (containsDigits) {
+                // It contains digits, but wasn't parseable as a whole int. Examples: "12a", "a12", "12 34", "1.5"
+                logr.warning("Invalid index format (contains digits but not purely an integer): " + line);
+                throw new NurseSchedException(ExceptionMessage.INVALID_INDEX_PARAMETER);
+            } else {
+                // It contains NO digits at all.
+                logr.warning("Invalid input: String contains no digits (only words): " + line);
+                throw new NurseSchedException(ExceptionMessage.INVALID_INDEX_PARAMETER);
+            }
         }
         return index;
     }

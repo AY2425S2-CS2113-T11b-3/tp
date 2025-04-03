@@ -335,43 +335,43 @@ Example:
 ### Deleting an appointment: `appt del`
 Delete an appointment profile.
 
-Format: `appt del [APPT_INDEX]`
+Format: `appt del id/[APPT_INDEX]`
 
 * Deletes an appointment with the specified index.
 * The `APPT_INDEX` refers to the index number shown in the displayed appointment
   list. The index must be a positive integer 1, 2, 3, ...
 
-Example: `appt del 1000`
+Example: `appt del id/10`
 
 
 ### Marking an appointment: `appt mark`
 Marks an appointment to show its completion.
 
-Format: `appt mark [APPT_INDEX]`
+Format: `appt mark id/[APPT_INDEX]`
 
 * Marks task with index `APPT_INDEX` as completed
 * `APPT_INDEX` must be a number between 1 to the total number of appointments in the list.
 
 Example of usage:
 
-`appt mark 3`
+`appt mark id/3`
 
 ### Unmarking an appointment: `appt unmark`
 Unmarks an appointment to show that it is uncompleted.
 
-Format: `appt unmark [APPT_INDEX]`
+Format: `appt unmark id/[APPT_INDEX]`
 
 * Unmarks a task with index `APPT_INDEX` as uncompleted
 * `APPT_INDEX` must be a number between 1 to the total number of appointments in the list.
 
 Example of usage:
 
-`appt unmark 3`
+`appt unmark id/3`
 
 ### Editing an appointment: `appt edit`
 Edits an existing task in the task list.
 
-Format: `appt edit [APPT_INDEX] [p/NEW_PATIENT_NAME] [s/NEW_START_TIME] [e/NEW_END_TIME] [d/NEW_DATE] [n/NEW_NOTES] [im/NEW_IMPORTANCE]`
+Format: `appt edit id/[APPT_INDEX] p/[NEW_PATIENT_NAME] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] n/[NEW_NOTES] [im/NEW_IMPORTANCE]`
 
 * Edits the task at the specified `APPT_INDEX`. The `APPT_INDEX` refers to the index number shown in the displayed appointment
   list. The index must be a positive integer 1, 2, 3, ...
@@ -380,9 +380,9 @@ Format: `appt edit [APPT_INDEX] [p/NEW_PATIENT_NAME] [s/NEW_START_TIME] [e/NEW_E
 
 Example of usage:
 
-* `appt edit 1 p/ edited name s/13:00 e/15:00` Edits the appointment patient name, start time and end time of the 1st appointment in the
+* `appt edit id/1 p/ edited name s/13:00 e/15:00` Edits the appointment patient name, start time and end time of the 1st appointment in the
   appointment list.
-* `appt edit 3 im/1` Edits the importance ranking of the 3rd appointment in the appointment list.
+* `appt edit id/3 im/1` Edits the importance ranking of the 3rd appointment in the appointment list.
 
 
 ### Listing all appointments: `appt list`
@@ -395,14 +395,14 @@ Example of usage:
 `appt list`
 
 
-### Searching for an appointment: `appt search`
+### Searching for an appointment: `appt find`
 Search for an appointment using patient's name.
 
-Format: `appt search [PATIENT_NAME]`
+Format: `appt find [PATIENT_NAME]`
 
-* Displays all appointments under `PATIEN_NAME` found within the current list.
+* Displays all appointments under `PATIENT_NAME` found within the current list.
 
-Example: `appt search Jean Doe`
+Example: `appt find Jean Doe`
 
 
 ### Sorting appointments: `appt sort`
