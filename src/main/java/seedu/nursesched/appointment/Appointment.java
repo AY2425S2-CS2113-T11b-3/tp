@@ -16,6 +16,7 @@ import java.util.logging.SimpleFormatter;
 
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.patient.Patient;
 import seedu.nursesched.storage.AppointmentStorage;
 import seedu.nursesched.ui.Ui;
 
@@ -88,7 +89,8 @@ public class Appointment {
      * @param notes     The notes for the appointment.
      */
     public static void addAppt(String name,
-                               LocalTime startTime, LocalTime endTime, LocalDate date, String notes, int importance) {
+                               LocalTime startTime, LocalTime endTime,
+                               LocalDate date, String notes, int importance) throws NurseSchedException {
         LocalDate today = LocalDate.now();
         assert !name.isEmpty() : "Name should not be empty!";
         assert startTime.isBefore(endTime) : "Appointment's start time cannot be after its end time!";
@@ -102,6 +104,10 @@ public class Appointment {
                     "Please enter a different time/date");
             logr.info("Appointment already exists, appointment not added");
             return;
+        }
+
+        if (!isInPatientList(name)){
+            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_APPT_ADD);
         }
 
         Appointment appt = new Appointment(name, startTime, endTime, date, notes, importance);
@@ -118,7 +124,7 @@ public class Appointment {
      * @param index The index of the appointment to be removed (1-based index).
      */
     public static void deleteAppt(int index) {
-        assert index >= 1 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
+        assert index >= 1 && index < apptList.size() : "Index must be between 1 and " + (apptList.size());
         try{
             Appointment appt = apptList.get(index);
             System.out.println("Appointment deleted: " + appt);
@@ -291,6 +297,16 @@ public class Appointment {
         AppointmentStorage.overwriteSaveFile(apptList);
         System.out.println("Appointments sorted chronologically.");
         logr.info("Appointment list sorted chronologically");
+    }
+
+    public static boolean isInPatientList(String name){
+        ArrayList<Patient> pfList = Patient.getPatientsList();
+        for (Patient p : pfList) {
+            if (p.getName().equals(name)){
+                return true;
+            }
+        }
+        return false;
     }
 
 
