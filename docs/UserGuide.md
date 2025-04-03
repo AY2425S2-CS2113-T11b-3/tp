@@ -53,7 +53,7 @@ supply.
 ## Quick Start
 
 1. Ensure that you have Java `17` or above installed.
-2. Download the latest version of `NurseSched` from [here](http://link.to/duke).
+2. Download the latest version of `NurseSched` from [here](https://github.com/AY2425S2-CS2113-T11b-3/tp/releases).
 3. Open a command terminal, cd into the folder you put the `.jar` file in, and use the `java -jar nursesched.jar`
    command to run the application.
 4. Type the command in the command box and press Enter to execute it.
@@ -523,16 +523,24 @@ Example:
 [//]: # (todo)
 **Q**: How do I transfer my data to another computer?
 
-**A**: {your answer here}
+**A**: All the data is stored in the /data/ folder. Simply transfer this folder to the other computer. 
 
 ## Command Summary
 
-| List     | Action  | Format                                                                     |
-|----------|---------|----------------------------------------------------------------------------|
-| Medicine | Add     | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                             |
-| Medicine | Remove  | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                          |
-| Medicine | List    | `medicine list`                                                            |
-| Medicine | Find    | `medicine find mn/[MEDICINE_NAME]`                                         |
-| Medicine | Delete  | `medicine delete mn[MEDICINE_NAME]`                                        |
-| Medicine | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]` |
-| Medicine | Restock | `medicine restock q/[QUANTITY]`                                            |
+| List        | Action  | Format                                                                             |
+|-------------|---------|------------------------------------------------------------------------------------|
+| Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`  |
+| Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                            |
+| Patient     | Search  | `pf search id/[ID_NUMBER]`                                                         |
+| Patient     | List    | `pf list`                                                                          |
+| Patient     | Edit    | `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]` |
+| MedicalTest | Add     | `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`                           |
+| MedicalTest | Delete  | `pf result del id/[ID_NUMBER]`                                                     |
+| MedicalTest | List    | `pf result list id/[ID_NUMBER]`                                                    |
+| Medicine    | Add     | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                                     |
+| Medicine    | Remove  | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                                  |
+| Medicine    | List    | `medicine list`                                                                    |
+| Medicine    | Find    | `medicine find mn/[MEDICINE_NAME]`                                                 |
+| Medicine    | Delete  | `medicine delete mn[MEDICINE_NAME]`                                                |
+| Medicine    | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]`         |
+| Medicine    | Restock | `medicine restock q/[QUANTITY]`                                                    |

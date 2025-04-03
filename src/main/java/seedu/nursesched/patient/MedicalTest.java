@@ -2,6 +2,7 @@ package seedu.nursesched.patient;
 
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.storage.PatientTestStorage;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,10 @@ public class MedicalTest {
     private final String patientId; // Patient ID associated with this medical test
     private final String testName;
     private final String result;
+
+    static {
+        medicalTestList = PatientTestStorage.readFile();
+    }
 
     /**
      * Constructs a new MedicalTest object with the specified patient ID, test name, and result.
@@ -47,6 +52,7 @@ public class MedicalTest {
     public static void addMedicalTest(MedicalTest test, String id) {
         medicalTestList.add(test);
         System.out.println("Medical test added for patient with ID " + id + ".");
+        PatientTestStorage.overwriteSaveFile(medicalTestList);
     }
 
     /**
@@ -57,6 +63,7 @@ public class MedicalTest {
     public static void removeTestsForPatient(String patientId) {
         medicalTestList.removeIf(test -> test.getPatientId().equals(patientId));
         System.out.println("All medical tests deleted for patient ID " + patientId);
+        PatientTestStorage.overwriteSaveFile(medicalTestList);
     }
 
     /**
@@ -83,6 +90,14 @@ public class MedicalTest {
     // Getter
     public String getPatientId() {
         return patientId;
+    }
+
+    public String getTestName() {
+        return testName;
+    }
+
+    public String getResult() {
+        return result;
     }
 
     /**
