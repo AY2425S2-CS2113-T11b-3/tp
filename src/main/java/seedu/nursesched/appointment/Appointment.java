@@ -40,9 +40,10 @@ public class Appointment {
         try {
 
             File logDir = new File("logs/appointment");
+            /*
             if (!logDir.exists()) {
                 logDir.mkdirs();  // Creates the directory and any missing parent directories
-            }
+            }*/
 
             LogManager.getLogManager().reset();
             FileHandler fh = new FileHandler("logs/appointment/appointment.log", true);
