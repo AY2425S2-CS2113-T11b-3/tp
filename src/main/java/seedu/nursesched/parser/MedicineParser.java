@@ -136,6 +136,9 @@ public class MedicineParser extends Parser {
         try {
             medicineName = extractValue(remaining, "mn/", "q/");
             quantity = Integer.parseInt(extractValue(remaining, "q/", null));
+            if (quantity <=0 ) {
+                throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
+            }
             assert quantity > 0 : "Quantity must be greater than zero";
             quantity = Integer.parseInt(extractValue(remaining, "q/", null));
             logr.log(Level.INFO, "Extracted medicineName: {0}, quantity: {1}",
@@ -178,6 +181,9 @@ public class MedicineParser extends Parser {
                 throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
             }
             quantity = Integer.parseInt(quantityString);
+            if (quantity <=0 ) {
+                throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
+            }
             assert quantity > 0 : "Quantity must be greater than zero";
             logr.log(Level.INFO, "Extracted medicineName: {0}, quantity: {1}",
                     new Object[]{medicineName, quantity});
@@ -262,6 +268,9 @@ public class MedicineParser extends Parser {
             medicineName = extractValue(remaining, "mn/", "un/");
             updatedName = extractValue(remaining, "un/", "uq/");
             updatedQuantity = Integer.parseInt(extractValue(remaining, "uq/", null));
+            if (updatedQuantity <=0 ) {
+                throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
+            }
             logr.log(Level.INFO, "Extracted medicineName: {0}, updatedQuantity: {1}, updatedName: {2}",
                     new Object[]{medicineName, updatedQuantity, updatedQuantity});
             return new MedicineParser(command, medicineName, updatedQuantity, updatedName);
@@ -290,6 +299,9 @@ public class MedicineParser extends Parser {
 
         try {
             restockQuantity = Integer.parseInt(extractValue(remaining, "q/", null));
+            if (restockQuantity <=0 ) {
+                throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
+            }
             logr.log(Level.INFO, "Extracted restockQuantity: {0}",
                     new Object[]{restockQuantity});
             return new MedicineParser(command, "", restockQuantity, "");
