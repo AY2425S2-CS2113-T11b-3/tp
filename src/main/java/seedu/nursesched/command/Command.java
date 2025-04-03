@@ -131,7 +131,6 @@ public class Command {
                                 patientParser.getNotes());
                         break;
                     }
-                    System.out.println("Invalid patient based command!");
                     break;
                 case "shift":
                     ShiftParser shiftParser = ShiftParser.extractInputs(line);
