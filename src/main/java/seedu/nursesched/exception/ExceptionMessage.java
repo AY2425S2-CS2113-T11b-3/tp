@@ -76,7 +76,8 @@ public enum ExceptionMessage {
     MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
     INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
     INVALID_PATIENT_APPT_ADD("Patient name not found in patient list! Add patient to " +
-            "patient list before adding appointment!");
+            "patient list before adding appointment!"),
+    INVALID_TASK_FIND_FIELDS("Invalid task find fields! Input as: task find td/[KEYWORD]");
 
 
     private final String message;

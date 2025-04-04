@@ -49,7 +49,7 @@ public class TaskTest {
     }
 
     @Test
-    public void addTask_missingParameters_throwsNurseSchedException() {
+    public void addTaskParser_missingParameters_throwsNurseSchedException() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
         String dateTomorrow = LocalDate.now().plusDays(1).format(dateFormatter);
@@ -60,11 +60,11 @@ public class TaskTest {
         String input3 = "task add td/Register new dr d/" + dateTomorrow;
 
         assertThrows(NurseSchedException.class,
-                () -> TaskParser.extractInputs(input1));
+                () -> TaskParser.getAddTaskParser(input1, "add"));
         assertThrows(NurseSchedException.class,
-                () -> TaskParser.extractInputs(input2));
+                () -> TaskParser.getAddTaskParser(input2, "add"));
         assertThrows(NurseSchedException.class,
-                () -> TaskParser.extractInputs(input3));
+                () -> TaskParser.getAddTaskParser(input3, "add"));
     }
 
     //Tests related to marking of tasks
@@ -119,7 +119,7 @@ public class TaskTest {
         );
         String input = "task mark one";
         assertThrows(NurseSchedException.class,
-                () -> TaskParser.extractInputs(input));
+                () -> TaskParser.getMarkUnmarkTaskParser(input, "mark"));
     }
 
     //Tests related to unmarking of tasks
@@ -174,7 +174,7 @@ public class TaskTest {
         );
         String input = "task unmark one";
         assertThrows(NurseSchedException.class,
-                () -> TaskParser.extractInputs(input));
+                () -> TaskParser.getMarkUnmarkTaskParser(input, "unmark"));
     }
 
     //Tests related to editing tasks
@@ -267,13 +267,14 @@ public class TaskTest {
                 timeNow,
                 false
         );
+        String input1 = "task edit id/-1 td/Prepare medication for John";
+        String input2 = "task edit id/0 td/Prepare medication for John";
+
         String newDescription = "Prepare medication for John";
         assertThrows(NurseSchedException.class,
-                () -> Task.editTask(2, newDescription, null, null));
-        assertThrows(AssertionError.class,
-                () -> Task.editTask(-1, newDescription, null, null));
-        assertThrows(AssertionError.class,
-                () -> Task.editTask(0, newDescription, null, null));
+                () -> TaskParser.getEditTaskParser(input1, "edit"));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getEditTaskParser(input2, "edit"));
     }
 
     @Test
@@ -291,6 +292,20 @@ public class TaskTest {
         );
         String input = "task edit";
         assertThrows(NurseSchedException.class,
-                () -> TaskParser.extractInputs(input));
+                () -> TaskParser.getEditTaskParser(input, "edit"));
+    }
+
+    @Test
+    public void findTaskParser_validInputs_keywordParsed() throws NurseSchedException {
+        String input = "task find td/Jean";
+        TaskParser taskParser = TaskParser.getFindTaskParser(input, "find");
+        assertEquals("Jean", taskParser.getDescription());
+    }
+
+    @Test
+    public void findTaskParser_missingFields_throwsNurseSchedException() throws NurseSchedException {
+        String input = "task find Jean";
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getFindTaskParser(input, "find"));
     }
 }

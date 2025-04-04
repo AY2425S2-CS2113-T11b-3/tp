@@ -213,6 +213,28 @@ public class Task {
         logr.info("Task edited successfully!");
     }
 
+    /**
+     * Displays all tasks which contain the keyword in its description.
+     *
+     * @param keyword The keyword or phrase to be searched for.
+     */
+    public static void findTask(String keyword) {
+        keyword = keyword.toLowerCase();
+        int totalFound = 0;
+        for (int i = 0; i < taskList.size(); i++) {
+            Task task = taskList.get(i);
+            if (task.getDescription().toLowerCase().contains(keyword)) {
+                totalFound++;
+                System.out.println((i + 1) + ". " + task.toString());
+            }
+        }
+        if (totalFound == 0) {
+            System.out.println("There are no tasks with the keyword \"" + keyword + "\"");
+        } else {
+            System.out.println("There are " + totalFound + " tasks with the keyword \"" + keyword + "\"");
+        }
+    }
+
     public String getDescription() {
         return description;
     }
