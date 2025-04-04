@@ -55,8 +55,8 @@ public class TaskParser extends Parser {
     }
 
     /**
-     * Extracts and parses the inputs from the given command for appointment-related operations.
-     * This method supports 5 commands "add", "mark", "unmark", "list" and "edit".
+     * Extracts and parses the inputs from the given command for task-related operations.
+     * This method supports 7 commands "add", "del", "mark", "unmark", "list", "edit" and "find".
      *
      * @param line The user's input command to be parsed.
      * @return An {@link TaskParser} object which contains the parsed commands and associated parameters.
@@ -107,6 +107,14 @@ public class TaskParser extends Parser {
         return null;
     }
 
+    /**
+     * Parses the parameters for editing a task.
+     *
+     * @param line The user input containing the parameters of the command.
+     * @param command Represents 1 of the 7 available commands. Add, del, mark, unmark, edit, find or list.
+     * @return A TaskParser object with parameters to edit the task.
+     * @throws NurseSchedException If the user input contains invalid parameters or has missing fields.
+     */
     public static TaskParser getEditTaskParser(String line, String command) throws NurseSchedException {
         StringBuilder description = new StringBuilder();
         LocalDate byDate = null;
@@ -180,6 +188,14 @@ public class TaskParser extends Parser {
         return new TaskParser(command, "", null, null, false, taskIndex);
     }
 
+    /**
+     * Parses the parameters for adding a task.
+     *
+     * @param line The user input containing the parameters of the command.
+     * @param command Represents 1 of the 7 available commands. Add, del, mark, unmark, edit, find or list.
+     * @return A TaskParser object with parameters to add a task.
+     * @throws NurseSchedException If the user input contains invalid parameters or has missing fields.
+     */
     public static TaskParser getAddTaskParser(String line, String command) throws NurseSchedException {
         StringBuilder description;
         LocalTime byTime;
@@ -212,6 +228,14 @@ public class TaskParser extends Parser {
         return new TaskParser(command, description.toString(), byDate, byTime, false, 0);
     }
 
+    /**
+     * Parses the parameters for finding a task.
+     *
+     * @param line The user input containing the parameters of the command.
+     * @param command Represents 1 of the 7 available commands. Add, del, mark, unmark, edit, find or list.
+     * @return A TaskParser object with parameters to find a task.
+     * @throws NurseSchedException If the user input contains invalid parameters or has missing fields.
+     */
     public static TaskParser getFindTaskParser(String line, String command) throws NurseSchedException {
         if (!line.contains("td/")) {
             logr.warning("Missing fields");
