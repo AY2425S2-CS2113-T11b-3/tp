@@ -31,10 +31,15 @@ public class Shift {
     private boolean isDone = false;
 
     static {
-        shiftList = ShiftStorage.readFile();
+        try {
+            shiftList = ShiftStorage.readFile();
+        } catch (Exception e) {
+            shiftList = new ArrayList<>();
+            System.out.println("Failed to load shifts. Starting with empty list.");
+            logr.warning("ShiftStorage.readFile failed: " + e.getMessage());
+        }
 
         try {
-            // Ensure the log directory exists before creating log file
             File logDir = new File("logs/shift");
             if (!logDir.exists()) {
                 logDir.mkdirs();
