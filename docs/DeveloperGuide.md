@@ -479,37 +479,37 @@ This section provides instructions for testing the various features of NurseSche
 ### Editing a shift
 **Prerequisites**: List all shifts using the `shift list` command. At least one shift in the list.
 
-**Test case**: `shift edit sn/1 s/14:00 e/18:00 d/2025-04-12 st/Afternoon ER duty`  
+**Test case**: `shift edit id/1 s/14:00 e/18:00 d/2025-04-12 st/Afternoon ER duty`  
 **Expected**: First shift is updated with new details. Status message indicates successful update. Shift list reflects the changes.
 
-**Test case**: `shift edit sn/0 s/14:00 e/18:00 d/2025-04-12 st/Afternoon ER duty`  
+**Test case**: `shift edit id/0 s/14:00 e/18:00 d/2025-04-12 st/Afternoon ER duty`  
 **Expected**: No shift is edited. Error details shown in the status message. Shift list remains unchanged.
 
 ### Marking a shift
 **Prerequisites**: List all shifts using the `shift list` command. At least one shift in the list that is not completed.
 
-**Test case**: `shift mark sn/1`  
+**Test case**: `shift mark id/1`  
 **Expected**: First shift is marked as completed. Status message indicates successful marking. Shift list shows the shift with completed status.
 
-**Test case**: `shift mark sn/0`  
+**Test case**: `shift mark id/0`  
 **Expected**: No shift is marked. Error details shown in the status message. Shift status remains unchanged.
 
 ### Unmarking a shift
 **Prerequisites**: List all shifts using the `shift list` command. At least one shift marked as completed in the list.
 
-**Test case**: `shift unmark sn/1` (assuming first shift is marked as completed)  
+**Test case**: `shift unmark id/1` (assuming first shift is marked as completed)  
 **Expected**: First shift is unmarked. Status message indicates successful unmarking. Shift list shows the shift with uncompleted status.
 
-**Test case**: `shift unmark sn/0`  
+**Test case**: `shift unmark id/0`  
 **Expected**: No shift is unmarked. Error details shown in the status message. Shift status remains unchanged.
 
 ### Deleting a shift
 **Prerequisites**: List all shifts using the `shift list` command. At least one shift in the list.
 
-**Test case**: `shift del sn/1`  
+**Test case**: `shift del id/1`  
 **Expected**: First shift is deleted from the list. Details of the deleted shift shown in the status message. Shift list now contains one fewer shift.
 
-**Test case**: `shift del sn/0`  
+**Test case**: `shift del id/0`  
 **Expected**: No shift is deleted. Error details shown in the status message. Shift list remains unchanged.
 
 ### Listing all shifts
