@@ -156,7 +156,7 @@ public class ShiftParser extends Parser {
         }
 
         try {
-            shiftIndex = Integer.parseInt(extractValue(remaining, "id/", "s/")) - 1;
+            shiftIndex = Integer.parseInt(extractEditValue(remaining, "id/")) - 1;
             if (shiftIndex < 0) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
             }
@@ -165,19 +165,19 @@ public class ShiftParser extends Parser {
         }
 
         try {
-            startTime = LocalTime.parse(extractValue(remaining, "s/", "e/"));
-            endTime = LocalTime.parse(extractValue(remaining, "e/", "d/"));
+            startTime = LocalTime.parse(extractEditValue(remaining, "s/"));
+            endTime = LocalTime.parse(extractEditValue(remaining, "e/"));
         } catch (DateTimeParseException e) {
             throw new NurseSchedException(ExceptionMessage.INVALID_TIME_FORMAT);
         }
 
         try {
-            date = LocalDate.parse(extractValue(remaining, "d/", "st/"));
+            date = LocalDate.parse(extractEditValue(remaining, "d/"));
         } catch (DateTimeParseException e) {
             throw new NurseSchedException(ExceptionMessage.INVALID_DATE_FORMAT);
         }
 
-        shiftTask = extractValue(remaining, "st/", null);
+        shiftTask = extractEditValue(remaining, "st/");
         if (shiftTask.isEmpty()) {
             throw new NurseSchedException(ExceptionMessage.SHIFT_TASK_EMPTY);
         }
@@ -336,6 +336,28 @@ public class ShiftParser extends Parser {
         int end = (endMarker != null) ? input.indexOf(endMarker, start) : -1;
 
         return (end == -1) ? input.substring(start).trim() : input.substring(start, end).trim();
+    }
+
+    /**
+     * Extracts a value from a command string using a specific prefix.
+     * Designed for parsing commands where each argument starts with a unique prefix (e.g., id/, s/, e/, d/, st/).
+     * This method is especially suited for commands with no strict ordering or with flexible spacing.
+     *
+     * @param input  The full command string (e.g., "id/1 s/09:00 e/11:00 d/2025-04-03 st/task").
+     * @param prefix The prefix to locate and extract the value for (e.g., "s/").
+     * @return The extracted value associated with the prefix, or an empty string if not found.
+     */
+    private static String extractEditValue(String input, String prefix) {
+        assert input != null : "Input string must not be null";
+        assert prefix != null : "Prefix must not be null";
+
+        String[] tokens = input.split(" (?=\\w+/)");
+        for (String token : tokens) {
+            if (token.startsWith(prefix)) {
+                return token.substring(prefix.length()).trim();
+            }
+        }
+        return "";
     }
 
     /**
