@@ -198,6 +198,7 @@ public class Command {
                         break;
                     case "del":
                         Task.deleteTask(taskParser.getTaskIndex());
+                        break;
                     case "mark":
                         Task.markTask(taskParser.getTaskIndex());
                         break;

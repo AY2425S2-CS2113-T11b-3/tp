@@ -2,11 +2,9 @@ package seedu.nursesched.task;
 
 import org.junit.jupiter.api.Test;
 import seedu.nursesched.exception.NurseSchedException;
-import seedu.nursesched.parser.TaskParser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
