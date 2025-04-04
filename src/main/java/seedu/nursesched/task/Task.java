@@ -21,7 +21,7 @@ import java.util.logging.Level;
  * It contains details such as the task description, completion status, due date and time.
  */
 public class Task {
-    protected static ArrayList<Task> taskList = new ArrayList<Task>();
+    private static ArrayList<Task> taskList = new ArrayList<Task>();
     private static final Logger logr = Logger.getLogger("Task");
 
     private String description;
@@ -92,10 +92,34 @@ public class Task {
     }
 
     /**
+     * Deletes a task from the task list.
+     *
+     * @param index The index of the task to be deleted from the list.
+     * @throws NurseSchedException If the task index is out of range.
+     */
+    public static void deleteTask(int index) throws NurseSchedException {
+        assert index > 0
+                : "Task index should not be negative.";
+        if (index > taskList.size()) {
+            logr.warning("Task index out of range.");
+            throw new NurseSchedException(ExceptionMessage.TASK_INDEX_OUT_OF_BOUNDS);
+        }
+        try {
+            taskList.remove(index - 1);
+            TaskStorage.overwriteSaveFile(taskList);
+            System.out.println("Task deleted successfully!");
+            logr.info("Task deleted.");
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("There is no index " + index + " in the task list!");
+            logr.warning("There is no index " + index + " in the task list!");
+        }
+    }
+
+    /**
      * Marks a task as done.
      *
      * @param index The index of the task according to the list of all tasks.
-     * @throws NurseSchedException If task index is out of range or not an integer.
+     * @throws NurseSchedException If task index is out of range.
      */
     public static void markTask(int index) throws NurseSchedException {
         assert index > 0
@@ -120,7 +144,7 @@ public class Task {
      * Unmarks a task as undone.
      *
      * @param index The index of the task according to the list of all tasks.
-     * @throws NurseSchedException If task index is out of range or not an integer.
+     * @throws NurseSchedException If task index is out of range.
      */
     public static void unmarkTask(int index) throws NurseSchedException {
         assert index > 0
@@ -265,6 +289,10 @@ public class Task {
 
     public void setIsDone(boolean isDone) {
         this.isDone = isDone;
+    }
+
+    public static ArrayList<Task> getTaskList() {
+        return taskList;
     }
 
     @Override

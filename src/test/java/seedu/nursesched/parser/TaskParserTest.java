@@ -2,6 +2,7 @@ package seedu.nursesched.parser;
 
 import org.junit.jupiter.api.Test;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.task.Task;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -26,11 +27,19 @@ public class TaskParserTest {
     }
 
     @Test
-    public void getAddTaskParser_missingInputs_throwsNurseSchedException() {
-        String dateTmr = LocalDate.now().plusDays(1).toString();
-        String input1 = "td/Prepare bed for Patient John t/13:00";
-        String input2 = "d/" + dateTmr + " t/13:00";
-        String input3 = "td/Update medicine supply" + dateTmr;
+    public void addTaskParser_missingParameters_throwsNurseSchedException() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        String dateTomorrow = LocalDate.now().plusDays(1).format(dateFormatter);
+        String timeNow = LocalTime.now().format(timeFormatter);
+        Task.getTaskList().clear();
+        //Missing description
+        String input1 = "task add d/" + dateTomorrow + " t/" + timeNow;
+        //Missing date
+        String input2 = "task add td/Register new dr t/" + timeNow;
+        //Missing time
+        String input3 = "task add td/Register new dr d/" + dateTomorrow;
+
         assertThrows(NurseSchedException.class,
                 () -> TaskParser.getAddTaskParser(input1, "add"));
         assertThrows(NurseSchedException.class,
@@ -67,25 +76,74 @@ public class TaskParserTest {
     }
 
     @Test
-    public void getMarkUnmarkTaskParser_validInputs_taskIndexParsed() throws NurseSchedException {
-        String index = "10";
-        TaskParser taskParser = TaskParser.getMarkUnmarkTaskParser(index, "mark");
-        assert taskParser != null;
-        assertEquals(10, taskParser.getTaskIndex());
+    public void getIndexParser_validInputs_returnsIndexParser() throws NurseSchedException {
+        String input1 = "task mark id/1";
+        String input2 = "task unmark id/1";
+        String input3 = "task del id/1";
+        TaskParser taskParser1 = TaskParser.getIndexParser(input1, "mark");
+        TaskParser taskParser2 = TaskParser.getIndexParser(input2, "unmark");
+        TaskParser taskParser3 = TaskParser.getIndexParser(input3, "del");
+        assert taskParser1 != null;
+        assert taskParser2 != null;
+        assert taskParser3 != null;
+        assertEquals(1, taskParser1.getTaskIndex());
+        assertEquals(1, taskParser2.getTaskIndex());
+        assertEquals(1, taskParser3.getTaskIndex());
     }
 
     @Test
-    public void getMarkUnmarkTaskParser_missingInputs_throwsNurseSchedException() {
-        String input = "";
+    public void getIndexParser_missingInputs_throwsIndexOutOfBoundsException() {
+        String input1 = "mark 1";
+        String input2 = "mark id/";
         assertThrows(NurseSchedException.class,
-                () -> TaskParser.getMarkUnmarkTaskParser(input, "mark"));
+                () -> TaskParser.getIndexParser(input1, "mark"));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getIndexParser(input2, "mark"));
     }
 
     @Test
-    public void getMarkUnmarkTaskParser_negativeIndex_throwsNurseSchedException() {
+    public void getIndexParser_negativeIndex_throwsNurseSchedException() {
         String input = "-1";
         assertThrows(NurseSchedException.class,
-                () -> TaskParser.getMarkUnmarkTaskParser(input, "mark"));
+                () -> TaskParser.getIndexParser(input, "mark"));
+    }
+
+    @Test
+    public void markTaskParser_invalidStringInput_throwsNumberFormatException()
+            throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+        Task.getTaskList().clear();
+
+        //Add a task which is due 24 hours later
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                false
+        );
+        String input = "task mark id/one";
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getIndexParser(input, "mark"));
+    }
+
+    @Test
+    public void unmarkTaskParser_invalidStringInput_throwsNumberFormatException()
+            throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+        Task.getTaskList().clear();
+
+        //Add a task which is due 24 hours later
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                false
+        );
+        String input = "task unmark id/one";
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getIndexParser(input, "unmark"));
     }
 
     @Test
@@ -97,6 +155,46 @@ public class TaskParserTest {
         assertEquals("Get ready to see Patient John", taskParser.getDescription());
         assertEquals(dateTmr, taskParser.getByDate().toString());
         assertEquals(timeNow, taskParser.getByTime().toString());
+    }
+
+    @Test
+    public void editTaskParser_invalidTaskIndex_throwsNurseSchedException() throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+        Task.getTaskList().clear();
+
+        //Add a task which is due 24 hours later
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                false
+        );
+        String input1 = "task edit id/-1 td/Prepare medication for John";
+        String input2 = "task edit id/0 td/Prepare medication for John";
+
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getEditTaskParser(input1, "edit"));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getEditTaskParser(input2, "edit"));
+    }
+
+    @Test
+    public void editTaskParser_missingInputs_throwsNurseSchedException() throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+        Task.getTaskList().clear();
+
+        //Add a task which is due 24 hours later
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                false
+        );
+        String input = "task edit";
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getEditTaskParser(input, "edit"));
     }
 
     @Test
@@ -124,5 +222,38 @@ public class TaskParserTest {
         String input = "td/Prepare bed for Patient John d/" + dateTmr + " t/" + timeNow;
         assertThrows(NurseSchedException.class,
                 () -> TaskParser.getEditTaskParser(input, "add"));
+    }
+
+    @Test
+    public void findTaskParser_validInputs_keywordParsed() throws NurseSchedException {
+        String input = "task find td/Jean";
+        TaskParser taskParser = TaskParser.getFindTaskParser(input, "find");
+        assertEquals("Jean", taskParser.getDescription());
+    }
+
+    @Test
+    public void findTaskParser_missingFields_throwsNurseSchedException() {
+        String input = "task find Jean";
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getFindTaskParser(input, "find"));
+    }
+
+    @Test
+    public void deleteTaskParser_invalidStringInput_throwsNumberFormatException()
+            throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+        Task.getTaskList().clear();
+
+        //Add a task which is due 24 hours later
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                false
+        );
+        String input = "task del id/one";
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getIndexParser(input, "del"));
     }
 }

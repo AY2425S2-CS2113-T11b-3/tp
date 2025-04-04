@@ -1,17 +1,17 @@
 package seedu.nursesched.parser;
 
 public class Parser {
-    protected String type;
-
-    public Parser() {
-        type = "";
-    }
-
-    //Extracts type of command - Appointments/Patient Profiles/Shifts/Tasks
+    /**
+     * Extracts the type of command from user input. There are 5 types, appt, pf, task, medicine and shift.
+     *
+     * @param line The users input.
+     * @return The command type.
+     */
     public static String extractType(String line) {
+        String type = "";
         if (line.contains(" ")) {
             return line.substring(0, line.indexOf(" "));
         }
-        return line;
+        return type;
     }
 }

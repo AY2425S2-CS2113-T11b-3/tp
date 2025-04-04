@@ -2,11 +2,9 @@ package seedu.nursesched.task;
 
 import org.junit.jupiter.api.Test;
 import seedu.nursesched.exception.NurseSchedException;
-import seedu.nursesched.parser.TaskParser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,7 +17,7 @@ public class TaskTest {
     public void addTask_validInputs_taskAdded() throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
+        Task.getTaskList().clear();
 
         //Add a task which is due 24 hours later
         Task.addTask(
@@ -29,7 +27,7 @@ public class TaskTest {
                 false
         );
 
-        Task task = Task.taskList.get(0);
+        Task task = Task.getTaskList().get(0);
         assertEquals("Prepare medication for Jean", task.getDescription());
         assertEquals(dateTomorrow, task.getByDate());
         assertEquals(timeNow, task.getByTime());
@@ -48,31 +46,12 @@ public class TaskTest {
         );
     }
 
-    @Test
-    public void addTaskParser_missingParameters_throwsNurseSchedException() {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
-        String dateTomorrow = LocalDate.now().plusDays(1).format(dateFormatter);
-        String timeNow = LocalTime.now().format(timeFormatter);
-        Task.taskList.clear();
-        String input1 = "task add d/" + dateTomorrow + " t/" + timeNow;
-        String input2 = "task add td/Register new dr t/" + timeNow;
-        String input3 = "task add td/Register new dr d/" + dateTomorrow;
-
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.getAddTaskParser(input1, "add"));
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.getAddTaskParser(input2, "add"));
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.getAddTaskParser(input3, "add"));
-    }
-
     //Tests related to marking of tasks
     @Test
     public void markTask_validIndex_taskMarked() throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
+        Task.getTaskList().clear();
 
         //Add a task which is due 24 hours later
         Task.addTask(
@@ -82,16 +61,34 @@ public class TaskTest {
                 false
         );
         Task.markTask(1);
-        assertTrue(Task.taskList.get(0).getIsDone());
+        assertTrue(Task.getTaskList().get(0).getIsDone());
     }
 
     @Test
-    public void markTask_invalidIndex_throwsIndexOutOfBoundsException()
+    public void markTask_zeroOrNegativeIndex_throwsAssertionError()
             throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
+        Task.getTaskList().clear();
+        //Add a task which is due 24 hours later
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                false
+        );
+        assertThrows(AssertionError.class,
+                () -> Task.markTask(0));
+        assertThrows(AssertionError.class,
+                () -> Task.markTask(-1));
+    }
 
+    @Test
+    public void markTask_indexOutOfBounds_throwsNurseSchedException()
+            throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+        Task.getTaskList().clear();
         //Add a task which is due 24 hours later
         Task.addTask(
                 "Prepare medication for Jean",
@@ -103,31 +100,12 @@ public class TaskTest {
                 () -> Task.markTask(2));
     }
 
-    @Test
-    public void markTaskParser_invalidStringInput_throwsNumberFormatException()
-            throws NurseSchedException {
-        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
-        LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
-
-        //Add a task which is due 24 hours later
-        Task.addTask(
-                "Prepare medication for Jean",
-                dateTomorrow,
-                timeNow,
-                false
-        );
-        String input = "task mark one";
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.getMarkUnmarkTaskParser(input, "mark"));
-    }
-
     //Tests related to unmarking of tasks
     @Test
     public void unmarkTask_validIndex_taskMarked() throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
+        Task.getTaskList().clear();
 
         //Add a task which is due 24 hours later
         Task.addTask(
@@ -137,15 +115,34 @@ public class TaskTest {
                 false
         );
         Task.unmarkTask(1);
-        assertFalse(Task.taskList.get(0).getIsDone());
+        assertFalse(Task.getTaskList().get(0).getIsDone());
     }
 
     @Test
-    public void unmarkTask_invalidIndex_throwsIndexOutOfBoundsException()
+    public void unmarkTask_zeroOrNegativeIndex_throwsAssertionError()
             throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
+        Task.getTaskList().clear();
+        //Add a task which is due 24 hours later
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                false
+        );
+        assertThrows(AssertionError.class,
+                () -> Task.unmarkTask(0));
+        assertThrows(AssertionError.class,
+                () -> Task.unmarkTask(-1));
+    }
+
+    @Test
+    public void unmarkTask_indexOutOfBounds_throwsNurseSchedException()
+            throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+        Task.getTaskList().clear();
 
         //Add a task which is due 24 hours later
         Task.addTask(
@@ -158,33 +155,14 @@ public class TaskTest {
                 () -> Task.markTask(2));
     }
 
-    @Test
-    public void unmarkTaskParser_invalidStringInput_throwsNumberFormatException()
-            throws NurseSchedException {
-        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
-        LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
-
-        //Add a task which is due 24 hours later
-        Task.addTask(
-                "Prepare medication for Jean",
-                dateTomorrow,
-                timeNow,
-                false
-        );
-        String input = "task unmark one";
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.getMarkUnmarkTaskParser(input, "unmark"));
-    }
-
-    //Tests related to editing tasks
+    //Tests for editing a task
     @Test
     public void editTask_validInputs_taskEdited() throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
         LocalDate dateAfterTomorrow = dateTomorrow.plusDays(1);
         LocalTime oneHourAfterTimeNow = LocalTime.now().plusHours(1);
-        Task.taskList.clear();
+        Task.getTaskList().clear();
         Task.addTask(
                 "Prepare medication for Jean",
                 dateTomorrow,
@@ -192,7 +170,7 @@ public class TaskTest {
                 false
         );
         Task.editTask(1, "Prepare medication for John", dateAfterTomorrow, oneHourAfterTimeNow);
-        Task task = Task.taskList.get(0);
+        Task task = Task.getTaskList().get(0);
         assertEquals("Prepare medication for John", task.getDescription());
         assertEquals(dateAfterTomorrow, task.getByDate());
         assertEquals(oneHourAfterTimeNow, task.getByTime());
@@ -202,7 +180,7 @@ public class TaskTest {
     public void editTask_onlyEditDescription_taskEdited() throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
+        Task.getTaskList().clear();
         Task.addTask(
                 "Prepare medication for Jean",
                 dateTomorrow,
@@ -210,7 +188,7 @@ public class TaskTest {
                 false
         );
         Task.editTask(1, "Prepare medication for John", null, null);
-        Task task = Task.taskList.get(0);
+        Task task = Task.getTaskList().get(0);
         assertEquals("Prepare medication for John", task.getDescription());
         assertEquals(dateTomorrow, task.getByDate());
         assertEquals(timeNow, task.getByTime());
@@ -221,7 +199,7 @@ public class TaskTest {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalDate dateAfterTomorrow = dateTomorrow.plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
+        Task.getTaskList().clear();
         Task.addTask(
                 "Prepare medication for Jean",
                 dateTomorrow,
@@ -229,7 +207,7 @@ public class TaskTest {
                 false
         );
         Task.editTask(1, "", dateAfterTomorrow, null);
-        Task task = Task.taskList.get(0);
+        Task task = Task.getTaskList().get(0);
         assertEquals("Prepare medication for Jean", task.getDescription());
         assertEquals(dateAfterTomorrow, task.getByDate());
         assertEquals(timeNow, task.getByTime());
@@ -240,7 +218,7 @@ public class TaskTest {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
         LocalTime oneHourAfterTimeNow = LocalTime.now().plusHours(1);
-        Task.taskList.clear();
+        Task.getTaskList().clear();
         Task.addTask(
                 "Prepare medication for Jean",
                 dateTomorrow,
@@ -248,64 +226,57 @@ public class TaskTest {
                 false
         );
         Task.editTask(1, "", null, oneHourAfterTimeNow);
-        Task task = Task.taskList.get(0);
+        Task task = Task.getTaskList().get(0);
         assertEquals("Prepare medication for Jean", task.getDescription());
         assertEquals(dateTomorrow, task.getByDate());
         assertEquals(oneHourAfterTimeNow, task.getByTime());
     }
 
+    //Tests for deleting a task
     @Test
-    public void editTaskParser_invalidTaskIndex_throwsNurseSchedException() throws NurseSchedException {
+    public void deleteTask_validIndex_taskDeleted() throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
-
-        //Add a task which is due 24 hours later
+        Task.getTaskList().clear();
         Task.addTask(
                 "Prepare medication for Jean",
                 dateTomorrow,
                 timeNow,
                 false
         );
-        String input1 = "task edit id/-1 td/Prepare medication for John";
-        String input2 = "task edit id/0 td/Prepare medication for John";
-
-        String newDescription = "Prepare medication for John";
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.getEditTaskParser(input1, "edit"));
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.getEditTaskParser(input2, "edit"));
+        Task.deleteTask(1);
+        assertEquals(0, Task.getTaskList().size());
     }
 
     @Test
-    public void editTaskParser_missingInputs_throwsNurseSchedException() throws NurseSchedException {
+    public void deleteTask_zeroOrNegativeIndex_throwsAssertionError() throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.taskList.clear();
-
-        //Add a task which is due 24 hours later
+        Task.getTaskList().clear();
         Task.addTask(
                 "Prepare medication for Jean",
                 dateTomorrow,
                 timeNow,
                 false
         );
-        String input = "task edit";
-        assertThrows(NurseSchedException.class,
-                () -> TaskParser.getEditTaskParser(input, "edit"));
+        assertThrows(AssertionError.class,
+                () -> Task.deleteTask(0));
+        assertThrows(AssertionError.class,
+                () -> Task.deleteTask(-1));
     }
 
     @Test
-    public void findTaskParser_validInputs_keywordParsed() throws NurseSchedException {
-        String input = "task find td/Jean";
-        TaskParser taskParser = TaskParser.getFindTaskParser(input, "find");
-        assertEquals("Jean", taskParser.getDescription());
-    }
-
-    @Test
-    public void findTaskParser_missingFields_throwsNurseSchedException() throws NurseSchedException {
-        String input = "task find Jean";
+    public void deleteTask_indexOutOfBounds_throwsNurseSchedException() throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+        Task.getTaskList().clear();
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                false
+        );
         assertThrows(NurseSchedException.class,
-                () -> TaskParser.getFindTaskParser(input, "find"));
+                () -> Task.deleteTask(10));
     }
 }
