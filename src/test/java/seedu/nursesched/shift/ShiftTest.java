@@ -75,4 +75,54 @@ class ShiftTest {
 
         assertEquals(expected, shiftList.get(0).toString(), "Shift toString output is incorrect!");
     }
+
+    @Test
+    void editShift_validIndex_shiftUpdatedCorrectly() throws NurseSchedException {
+        // Add original shift
+        ShiftParser parser = ShiftParser.extractInputs("shift add s/09:00 e/10:00 d/2004-01-01 st/original");
+        Shift shift = new Shift(parser.getStartTime(), parser.getEndTime(), parser.getDate(), parser.getShiftTask());
+        shiftList.add(shift);
+
+        // Perform edit (simulate)
+        ShiftParser editParser = ShiftParser.extractInputs("shift edit sn/1 s/11:00 e/12:00 d/2004-01-02 st/edited");
+        Shift editedShift = new Shift(
+                editParser.getStartTime(),
+                editParser.getEndTime(),
+                editParser.getDate(),
+                editParser.getShiftTask()
+        );
+        shiftList.set(editParser.getIndex(), editedShift);
+
+        // Assertions
+        Shift result = shiftList.get(0);
+        assertEquals(LocalTime.of(11, 0), result.getStartTime());
+        assertEquals(LocalTime.of(12, 0), result.getEndTime());
+        assertEquals(LocalDate.of(2004, 1, 2), result.getDate());
+        assertEquals("edited", result.getShiftTask());
+    }
+
+    @Test
+    void markAndUnmarkShift_statusChangesCorrectly() throws NurseSchedException {
+        ShiftParser parser = ShiftParser.extractInputs("shift add s/10:00 e/11:00 d/2004-01-01 st/test");
+        Shift shift = new Shift(parser.getStartTime(), parser.getEndTime(), parser.getDate(), parser.getShiftTask());
+        shiftList.add(shift);
+
+        shift.setDone(true);
+        assertEquals(true, shift.getStatus(), "Shift should be marked as done");
+
+        shift.setDone(false);
+        assertEquals(false, shift.getStatus(), "Shift should be unmarked (not done)");
+    }
+
+    @Test
+    void shiftGetters_returnCorrectValues() throws NurseSchedException {
+        ShiftParser parser = ShiftParser.extractInputs("shift add s/08:00 e/10:00 d/2004-01-01 st/rounds");
+        Shift shift = new Shift(parser.getStartTime(), parser.getEndTime(), parser.getDate(), parser.getShiftTask());
+
+        assertEquals(LocalTime.of(8, 0), shift.getStartTime());
+        assertEquals(LocalTime.of(10, 0), shift.getEndTime());
+        assertEquals(LocalDate.of(2004, 1, 1), shift.getDate());
+        assertEquals("rounds", shift.getShiftTask());
+        assertEquals(false, shift.getStatus());
+    }
 }
