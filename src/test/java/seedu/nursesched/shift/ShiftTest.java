@@ -78,16 +78,13 @@ class ShiftTest {
 
     @Test
     void editShift_validIndex_shiftUpdatedCorrectly() throws NurseSchedException {
-        // Add original shift
         ShiftParser parser = ShiftParser.extractInputs("shift add s/09:00 e/10:00 d/2004-01-01 st/original");
         Shift shift = new Shift(parser.getStartTime(), parser.getEndTime(), parser.getDate(), parser.getShiftTask());
         shiftList.add(shift);
 
-        // Perform edit (simulate)
         String inputStringEdit = "shift edit sn/1 s/11:00 e/12:00 d/2004-01-02 st/edited";
         ShiftParser editParser = ShiftParser.extractInputs(inputStringEdit);
 
-        // Apply edit manually for testing
         Shift editedShift = new Shift(
                 editParser.getStartTime(),
                 editParser.getEndTime(),

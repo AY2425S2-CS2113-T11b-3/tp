@@ -80,7 +80,8 @@ public class ShiftParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INPUT_EMPTY);
         }
 
-        line = line.trim().toLowerCase();
+        line = line.trim().replaceAll("\\s+", " ").toLowerCase();
+
         String[] parts = line.split(" ", 2);
         if (parts.length < 2) {
             logr.warning("Invalid input format: " + line);
