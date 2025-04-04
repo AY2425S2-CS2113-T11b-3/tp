@@ -77,31 +77,6 @@ class ShiftTest {
     }
 
     @Test
-    void editShift_validIndex_shiftUpdatedCorrectly() throws NurseSchedException {
-        ShiftParser parser = ShiftParser.extractInputs("shift add s/09:00 e/10:00 d/2004-01-01 st/original");
-        Shift shift = new Shift(parser.getStartTime(), parser.getEndTime(), parser.getDate(), parser.getShiftTask());
-        shiftList.add(shift);
-
-        String inputStringEdit = "shift edit sn/1 s/11:00 e/12:00 d/2004-01-02 st/edited";
-        ShiftParser editParser = ShiftParser.extractInputs(inputStringEdit);
-
-        Shift editedShift = new Shift(
-                editParser.getStartTime(),
-                editParser.getEndTime(),
-                editParser.getDate(),
-                editParser.getShiftTask()
-        );
-        shiftList.set(editParser.getIndex(), editedShift);
-
-        // Assertions
-        Shift result = shiftList.get(0);
-        assertEquals(LocalTime.of(11, 0), result.getStartTime());
-        assertEquals(LocalTime.of(12, 0), result.getEndTime());
-        assertEquals(LocalDate.of(2004, 1, 2), result.getDate());
-        assertEquals("edited", result.getShiftTask());
-    }
-
-    @Test
     void markAndUnmarkShift_statusChangesCorrectly() throws NurseSchedException {
         ShiftParser parser = ShiftParser.extractInputs("shift add s/10:00 e/11:00 d/2004-01-01 st/test");
         Shift shift = new Shift(parser.getStartTime(), parser.getEndTime(), parser.getDate(), parser.getShiftTask());
@@ -124,5 +99,29 @@ class ShiftTest {
         assertEquals(LocalDate.of(2004, 1, 1), shift.getDate());
         assertEquals("rounds", shift.getShiftTask());
         assertEquals(false, shift.getStatus());
+    }
+
+    @Test
+    void editShift_validIndex_shiftUpdatedCorrectly() throws NurseSchedException {
+        LocalTime originalStart = LocalTime.of(10, 0);
+        LocalTime originalEnd = LocalTime.of(11, 0);
+        LocalDate originalDate = LocalDate.of(2025, 4, 1);
+        String originalTask = "Initial shift";
+
+        Shift.addShift(originalStart, originalEnd, originalDate, originalTask);
+        assertEquals(1, Shift.getShiftList().size());
+
+        LocalTime newStart = LocalTime.of(12, 0);
+        LocalTime newEnd = LocalTime.of(13, 0);
+        LocalDate newDate = LocalDate.of(2025, 4, 2);
+        String newTask = "Updated shift";
+
+        Shift.editShift(0, newStart, newEnd, newDate, newTask);
+
+        Shift editedShift = Shift.getShiftList().get(0);
+        assertEquals(newStart, editedShift.getStartTime());
+        assertEquals(newEnd, editedShift.getEndTime());
+        assertEquals(newDate, editedShift.getDate());
+        assertEquals(newTask, editedShift.getShiftTask());
     }
 }
