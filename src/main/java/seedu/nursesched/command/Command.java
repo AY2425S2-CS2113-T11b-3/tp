@@ -23,6 +23,7 @@ public class Command {
         while (!isExit) {
             try {
                 String line = ui.readCommand(in);
+                ui.showResults();
                 String type = Parser.extractType(line);
                 switch (type) {
                 case "appt":

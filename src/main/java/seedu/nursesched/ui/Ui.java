@@ -7,8 +7,7 @@ import java.util.Scanner;
 public class Ui {
 
     public void greetingMessage() {
-        System.out.println("Welcome to Nurse Sched!");
-        System.out.println("Please enter your command: ");
+        System.out.println("Welcome to NurseSched!");
     }
 
     public static void printSearchResults(ArrayList searchResults, String keyword) {
@@ -42,7 +41,13 @@ public class Ui {
     }
 
     public String readCommand(Scanner in) {
+        System.out.println("----------------------------");
+        System.out.println("Please enter your command: ");
         return in.nextLine();
+    }
+
+    public void showResults(){
+        System.out.println("\nResult:");
     }
 
     public void showError(String message) {
