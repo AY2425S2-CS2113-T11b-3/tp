@@ -13,6 +13,7 @@ supply.
     * [Marking a task](#marking-a-task-task-mark)
     * [Unmarking a task](#unmarking-a-task-task-unmark)
     * [Editing a task](#editing-a-task-task-edit)
+    * [Finding a task](#finding-a-task-task-find)
     * [Listing all tasks](#listing-all-tasks-task-list)
 * [Shift List](#shift-list)
     * [Adding a shift](#adding-a-shift-shift-add)
@@ -127,6 +128,17 @@ Example of usage:
 * `task edit id/1 td/Update medicine supply t/13:00` Edits the task description and due time of the 1st task in the
   task list.
 * `task edit id/3 d/2025-07-01 t/15:00` Edits the due date and time of the 3rd task in the task list.
+
+### Finding a task: `task find`
+
+Lists all tasks with description containing the `KEYWORD`
+
+Format: `task find td/[KEYWORD]`
+
+* Only matches the `KEYWORD` to the task's description and displays it if it contains `KEYWORD`
+
+Example of usage:
+* `task find td/Jean` Displays all tasks with the `KEYWORD` "Jean" in its description.
 
 ### Listing all tasks: `task list`
 
@@ -533,6 +545,7 @@ Example:
 | Task     | Mark    | `task mark [TASK_INDEX]`                                                                                                            |
 | Task     | Unmark  | `task unmark [TASK_INDEX]`                                                                                                          |
 | Task     | Edit    | `task edit id/[TASK_INDEX] td/[NEW_DESCRIPTION] d/[NEW_DUE_DATE] t/[NEW_DUE_TIME]`                                                  |
+| Task     | Find    | `task find td/[KEYWORD]`                                                                                                            |
 | Task     | List    | `task list`                                                                                                                         |
 | Shift    | Add     | `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`                                                              |
 | Shift    | Edit    | `shift edit id/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`                                        |
@@ -540,14 +553,14 @@ Example:
 | Shift    | Unmark  | `shift unmark id/[SHIFT_INDEX]`                                                                                                     |
 | Shift    | Delete  | `shift del id/[SHIFT_INDEX]`                                                                                                        |
 | Shift    | List    | `shift list`                                                                                                                        |
-| Appointment | Add   | `appt add p/[PATIENT_NAME] s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE_RANKING] n/[NOTES]`                                  |
-| Appointment | Delete | `appt del id/[APPT_INDEX]`                                                                                                          |
-| Appointment | Mark  | `appt mark id/[APPT_INDEX]`                                                                                                         |
-| Appointment | Unmark | `appt unmark id/[APPT_INDEX]`                                                                                                       |
-| Appointment | Edit  | `appt edit id/[APPT_INDEX] p/[NEW_PATIENT_NAME] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] n/[NEW_NOTES] im/[NEW_IMPORTANCE]` |
-| Appointment | List  | `appt list`                                                                                                                         |
-| Appointment | Find  | `appt find [PATIENT_NAME]`                                                                                                          |
-| Appointment | Sort  | `appt sort by/ time` or `appt sort by/ importance`                                                                                  |
+| Appointment | Add     | `appt add p/[PATIENT_NAME] s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE_RANKING] n/[NOTES]`                                  |
+| Appointment | Delete  | `appt del id/[APPT_INDEX]`                                                                                                          |
+| Appointment | Mark    | `appt mark id/[APPT_INDEX]`                                                                                                         |
+| Appointment | Unmark  | `appt unmark id/[APPT_INDEX]`                                                                                                       |
+| Appointment | Edit    | `appt edit id/[APPT_INDEX] p/[NEW_PATIENT_NAME] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] n/[NEW_NOTES] im/[NEW_IMPORTANCE]` |
+| Appointment | List    | `appt list`                                                                                                                         |
+| Appointment | Find    | `appt find [PATIENT_NAME]`                                                                                                          |
+| Appointment | Sort    | `appt sort by/ time` or `appt sort by/ importance`                                                                                  |
 | Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                                   |
 | Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                                                                             |
 | Patient     | find    | `pf find id/[ID_NUMBER]`                                                                                                            |
