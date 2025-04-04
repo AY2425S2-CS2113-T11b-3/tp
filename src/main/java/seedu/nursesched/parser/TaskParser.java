@@ -91,8 +91,8 @@ public class TaskParser extends Parser {
         switch (command) {
         case "add":
             return getAddTaskParser(line, command);
-        case "mark", "unmark":
-            return getMarkUnmarkTaskParser(line, command);
+        case "mark", "unmark", "del":
+            return getIndexParser(line, command);
         case "list":
             return new TaskParser(command, "", null, null, isDone, taskIndex);
         case "edit":
@@ -162,10 +162,10 @@ public class TaskParser extends Parser {
         return new TaskParser(command, description.toString(), byDate, byTime, false, taskIndex);
     }
 
-    public static TaskParser getMarkUnmarkTaskParser(String line, String command) throws NurseSchedException {
+    public static TaskParser getIndexParser(String line, String command) throws NurseSchedException {
         int taskIndex;
         try {
-            taskIndex = Integer.parseInt(line);
+            taskIndex = Integer.parseInt(line.substring(line.indexOf("id/") + 3));
             if (taskIndex <= 0) {
                 throw new NurseSchedException(ExceptionMessage.NEGATIVE_INDEX);
             }

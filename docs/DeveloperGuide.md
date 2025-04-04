@@ -409,31 +409,46 @@ This section provides instructions for testing the various features of NurseSche
 
 **Expected**: Similar to previous error behavior.
 
+### Deleting a task
+**Prerequisites**: List all tasks using the `task list` command. At least one task in the list.
+
+**Test case**: `task del id/1`  
+**Expected**: First task is deleted. Status message indicates successful deletion. The task deleted does not exist in the list anymore.
+
+**Test case**: `task del id/0`  
+**Expected**: No task is deleted. Error details shown in the status message.
+
+**Test case**: `task del id/100` (assuming there are fewer than 100 tasks)  
+**Expected**: No task is deleted. Error details shown in the status message.
+
+**Test case**: `task del id/-1`
+**Expected**: No task is deleted. Error details shown in the status message.
+
 ### Marking a task
 **Prerequisites**: List all tasks using the `task list` command. At least one task in the list.
 
-**Test case**: `task mark 1`  
+**Test case**: `task mark id/1`  
 **Expected**: First task is marked as completed. Status message indicates successful marking. Task list shows the task with completed status.
 
-**Test case**: `task mark 0`  
+**Test case**: `task mark id/0`  
 **Expected**: No task is marked. Error details shown in the status message. Task status remains unchanged.
 
-**Test case**: `task mark 100` (assuming there are fewer than 100 tasks)  
-**Expected**: No task is marked. Error details**Test case**: `task mark 100` (assuming there are fewer than 100 tasks)  
+**Test case**: `task mark id/100` (assuming there are fewer than 100 tasks)  
+**Expected**: No task is marked. Error details shown in the status message. Task status remains unchanged.
 
-**Test case**: `task mark -1`
+**Test case**: `task mark id/-1`
 **Expected**: No task is marked. Error details shown in the status message. Task status remains unchanged.
 
 ### Unmarking a task
 **Prerequisites**: List all tasks using the `task list` command. At least one task marked as completed in the list.
 
-**Test case**: `task unmark 1` (assuming first task is marked as completed)  
+**Test case**: `task unmark id/1` (assuming first task is marked as completed)  
 **Expected**: First task is unmarked. Status message indicates successful unmarking. Task list shows the task with uncompleted status.
 
-**Test case**: `task unmark 0`  
+**Test case**: `task unmark id/0`  
 **Expected**: No task is unmarked. Error details shown in the status message. Task status remains unchanged.
 
-**Test case**: `task unmark -1`
+**Test case**: `task unmark id/-1`
 **Expected**: No task is unmarked. Error details shown in the status message. Task status remains unchanged.
 
 ### Editing a task

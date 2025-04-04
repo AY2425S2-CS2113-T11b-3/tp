@@ -18,6 +18,13 @@ import seedu.nursesched.ui.Ui;
 import java.util.Scanner;
 
 public class Command {
+    /**
+     * Performs the execution of commands after the input has been parsed.
+     *
+     * @param isExit A boolean which is true if the exit command is being executed.
+     * @param in The input command to be parsed.
+     * @param ui The user interface class for interacting with the user.
+     */
     public static void executeCommands(boolean isExit, Scanner in, Ui ui) {
         String input;
         while (!isExit) {
@@ -189,6 +196,8 @@ public class Command {
                                 taskParser.isDone()
                         );
                         break;
+                    case "del":
+                        Task.deleteTask(taskParser.getTaskIndex());
                     case "mark":
                         Task.markTask(taskParser.getTaskIndex());
                         break;
