@@ -451,6 +451,15 @@ This section provides instructions for testing the various features of NurseSche
 
 **Expected**: Similar to previous error behavior.
 
+### Finding a task
+**Prerequisites**: List all tasks using the `task list` command. At least one task has a description with the word "Jean".
+
+**Test case**: `task find td/Jean`  
+**Expected**: All tasks with "Jean" in the description is displayed. Total number of such tasks also shown.
+
+**Test case**: `task find Jean` (missing field)  
+**Expected**: Message indicating invalid command.
+
 ### Listing all tasks
 **Test case**: `task list` (with no tasks)  
 **Expected**: Message indicating that the task list is empty.
