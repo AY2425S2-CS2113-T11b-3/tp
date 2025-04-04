@@ -84,7 +84,10 @@ class ShiftTest {
         shiftList.add(shift);
 
         // Perform edit (simulate)
-        ShiftParser editParser = ShiftParser.extractInputs("shift edit sn/1 s/11:00 e/12:00 d/2004-01-02 st/edited");
+        String inputStringEdit = "shift edit sn/1 s/11:00 e/12:00 d/2004-01-02 st/edited";
+        ShiftParser editParser = ShiftParser.extractInputs(inputStringEdit);
+
+        // Apply edit manually for testing
         Shift editedShift = new Shift(
                 editParser.getStartTime(),
                 editParser.getEndTime(),
