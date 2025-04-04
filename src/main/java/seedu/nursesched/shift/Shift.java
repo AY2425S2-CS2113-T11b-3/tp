@@ -255,4 +255,8 @@ public class Shift {
     public String getShiftTask() {
         return shiftTask;
     }
+
+    public static ArrayList<Shift> getShiftList() {
+        return shiftList;
+    }
 }
