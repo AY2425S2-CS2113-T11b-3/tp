@@ -205,6 +205,9 @@ public class Command {
                                 taskParser.getByDate(),
                                 taskParser.getByTime());
                         break;
+                    case "find":
+                        Task.findTask(taskParser.getDescription());
+                        break;
                     default:
                         System.out.println("Invalid task based command!");
                         break;

@@ -97,6 +97,8 @@ public class TaskParser extends Parser {
             return new TaskParser(command, "", null, null, isDone, taskIndex);
         case "edit":
             return getEditTaskParser(line, command);
+        case "find":
+            return getFindTaskParser(line, command);
         default:
             System.out.println("Unknown command: " + command);
             break;
@@ -208,6 +210,15 @@ public class TaskParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_TASKADD_FORMAT);
         }
         return new TaskParser(command, description.toString(), byDate, byTime, false, 0);
+    }
+
+    public static TaskParser getFindTaskParser(String line, String command) throws NurseSchedException {
+        if (!line.contains("td/")) {
+            logr.warning("Missing fields");
+            throw new NurseSchedException(ExceptionMessage.INVALID_TASK_FIND_FIELDS);
+        }
+        String keyword = line.substring(line.indexOf("td/") + 3);
+        return new TaskParser(command, keyword, null, null, false, 0);
     }
 
     public String getCommand() {
