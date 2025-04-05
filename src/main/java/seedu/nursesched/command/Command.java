@@ -22,8 +22,8 @@ public class Command {
      * Performs the execution of commands after the input has been parsed.
      *
      * @param isExit A boolean which is true if the exit command is being executed.
-     * @param in The input command to be parsed.
-     * @param ui The user interface class for interacting with the user.
+     * @param in     The input command to be parsed.
+     * @param ui     The user interface class for interacting with the user.
      */
     public static void executeCommands(boolean isExit, Scanner in, Ui ui) {
         String input;
@@ -32,6 +32,7 @@ public class Command {
                 String line = ui.readCommand(in);
                 ui.showResults();
                 String type = Parser.extractType(line);
+
                 switch (type) {
                 case "appt":
                     ApptParser apptParser = ApptParser.extractInputs(line);
@@ -277,14 +278,23 @@ public class Command {
 
                 // Exit command "exit ns"
                 case "exit":
-                    in.close();
-                    ui.exitMessage();
-                    isExit = true;
+                    String exitCommand = line.trim().toLowerCase();
+                    if (exitCommand.equals("exit ns")) {
+                        in.close();
+                        ui.exitMessage();
+                        isExit = true;
+                    } else {
+                        System.out.println("Unknown command!");
+                        System.out.println("Command should start with \"appt\", \"pf\", \"shift\", \"task\", " +
+                                "\"medicine\" or \"exit ns\"");
+                    }
                     break;
+
 
                 default:
                     System.out.println("Unknown command!");
-                    System.out.println("Command should start with \"appt\", \"pf\", \"shift\" or \"task\"");
+                    System.out.println("Command should start with \"appt\", \"pf\", \"shift\", \"task\", \"medicine\" "
+                            + "or \"exit ns\"");
                     break;
                 }
             } catch (NurseSchedException e) {

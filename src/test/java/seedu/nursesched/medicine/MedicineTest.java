@@ -4,14 +4,34 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.parser.MedicineParser;
+import seedu.nursesched.storage.MedicineStorage;
 
 class MedicineTest {
+    static ArrayList<Medicine> initialMedicineList;
+
+    @BeforeAll
+    public static void saveInitialList() {
+        initialMedicineList = Medicine.medicineList;
+    }
+
+    @AfterAll
+    public static void restoreInitialList() {
+        MedicineStorage.overwriteSaveFile(initialMedicineList);
+    }
+
+    @BeforeEach
+    void setUp() {
+        Medicine.medicineList = new ArrayList<>();
+    }
 
     // tests for medicine add
     @Test
@@ -42,7 +62,7 @@ class MedicineTest {
             Medicine.addMedicine(medicineParser.getQuantity(), medicineParser.getMedicineName());
         });
 
-        assertEquals("Invalid medicine add format! Input as: medicine add mn/[MEDICINE_NAME] q/[QUANTITY]",
+        assertEquals("Invalid medicine add format! Input as: medicine add mn/MEDICINE_NAME q/QUANTITY",
                 exception.getMessage());
     }
 

@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Ui {
 
-    public void greetingMessage() {
+    public void showGreetingMessage() {
         System.out.println("Welcome to NurseSched!");
     }
 
@@ -53,10 +53,5 @@ public class Ui {
     public void showError(String message) {
         System.out.println(message);
     }
-
-    public void showMessage(String message) {
-        System.out.println(message);
-    }
-
 
 }
