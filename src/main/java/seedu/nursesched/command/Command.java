@@ -32,6 +32,7 @@ public class Command {
                 String line = ui.readCommand(in);
                 ui.showResults();
                 String type = Parser.extractType(line);
+
                 switch (type) {
                 case "appt":
                     ApptParser apptParser = ApptParser.extractInputs(line);
@@ -177,6 +178,15 @@ public class Command {
                                 shiftParser.getIndex()
                         );
                     }
+                    if (shift.equals("sort")) {
+                        Shift.sortShiftsChronologically();
+                        Shift.listShifts();
+                    }
+                    if (shift.equals("logot")) {
+                        double hours = Double.parseDouble(shiftParser.getShiftTask());
+                        int index = shiftParser.getIndex();
+                        Shift.logOvertime(index, hours);
+                    }
                     if (shift.equals("list")) {
                         Shift.listShifts();
                     }
@@ -277,15 +287,23 @@ public class Command {
 
                 // Exit command "exit ns"
                 case "exit":
-                    in.close();
-                    ui.exitMessage();
-                    isExit = true;
+                    String exitCommand = line.trim().toLowerCase();
+                    if (exitCommand.equals("exit ns")) {
+                        in.close();
+                        ui.exitMessage();
+                        isExit = true;
+                    } else {
+                        System.out.println("Unknown command!");
+                        System.out.println("Command should start with \"appt\", \"pf\", \"shift\", \"task\", " +
+                                "\"medicine\" or \"exit ns\"");
+                    }
                     break;
+
 
                 default:
                     System.out.println("Unknown command!");
                     System.out.println("Command should start with \"appt\", \"pf\", \"shift\", \"task\", \"medicine\" "
-                            + "or \"exit\"");
+                            + "or \"exit ns\"");
                     break;
                 }
             } catch (NurseSchedException e) {

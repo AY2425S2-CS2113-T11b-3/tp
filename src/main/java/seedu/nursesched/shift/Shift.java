@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import java.util.Comparator;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +30,7 @@ public class Shift {
     private final LocalDate date;
     private final String shiftTask;
     private boolean isDone = false;
+    private double overtimeHours = 0.0;
 
     static {
         try {
@@ -85,8 +87,14 @@ public class Shift {
      * @param shiftTask The task assigned during the shift.
      */
     public static void addShift(LocalTime startTime, LocalTime endTime, LocalDate date,
-                                String shiftTask) {
+                                String shiftTask) throws NurseSchedException {
         assert startTime != null && endTime != null && date != null && shiftTask != null : "Invalid shift details";
+
+        if (date.isBefore(LocalDate.now())) {
+            logr.warning("Attempted to add shift with past date: " + date);
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_DATE);
+        }
+
         Shift shift = new Shift(startTime, endTime, date, shiftTask);
         shiftList.add(shift);
         ShiftStorage.overwriteSaveFile(shiftList);
@@ -199,12 +207,72 @@ public class Shift {
         logr.info("Shift updated at index " + index + ": " + updatedShift);
     }
 
+    /**
+     * Logs the specified overtime hours for a shift at the given index.
+     *
+     * @param index The index of the shift to log overtime for (0-based).
+     * @param hours The number of overtime hours to log. Must be non-negative.
+     */
+    public static void logOvertime(int index, double hours) {
+        if (index < 0 || index >= shiftList.size()) {
+            System.out.println("Invalid shift index.");
+            return;
+        }
+        if (hours < 0) {
+            System.out.println("Overtime cannot be negative.");
+            return;
+        }
+        Shift shift = shiftList.get(index);
+        shift.setOvertimeHours(hours);
+        System.out.println("Logged overtime: " + hours + "h for shift:");
+        System.out.println(shift);
+        logr.info("Overtime logged for shift " + index + ": " + hours + "h");
+        ShiftStorage.overwriteSaveFile(shiftList);
+    }
+
+    /**
+     * Sorts the shift list in chronological order, first by date, then by start time.
+     * Updates the list in place and prints confirmation.
+     */
+    public static void sortShiftsChronologically() {
+        shiftList.sort(Comparator.comparing(Shift::getDate).thenComparing(Shift::getStartTime));
+        System.out.println("Shifts sorted by date and start time.");
+    }
+
+    /**
+     * Sets the done status of the shift.
+     *
+     * @param done True if the shift is marked as completed; false otherwise.
+     */
     public void setDone(boolean done) {
         this.isDone = done;
     }
 
+    /**
+     * Returns the completion status of the shift.
+     *
+     * @return {@code true} if the shift is marked as done; {@code false} otherwise.
+     */
     public boolean getStatus() {
         return this.isDone;
+    }
+
+    /**
+     * Returns the completion status of the shift.
+     *
+     * @return {@code true} if the shift is marked as done; {@code false} otherwise.
+     */
+    public double getOvertimeHours() {
+        return overtimeHours;
+    }
+
+    /**
+     * Sets the number of overtime hours for the shift.
+     *
+     * @param hours The number of overtime hours to set. Must be non-negative.
+     */
+    public void setOvertimeHours(double hours) {
+        this.overtimeHours = hours;
     }
 
     /**
@@ -219,10 +287,12 @@ public class Shift {
         String formattedEndTime = endTime.format(formatter);
         String markStatus = isDone ? "[X]" : "[ ]";
 
+        String overtimeDisplay = overtimeHours > 0 ? ", Overtime: " + overtimeHours + "h" : "";
+
         return markStatus + " From: " + formattedStartTime + ", " +
                 "To: " + formattedEndTime + ", " +
                 "Date: " + date + ", " +
-                "shiftTask: " + shiftTask;
+                "shiftTask: " + shiftTask + overtimeDisplay;
     }
 
     /**
@@ -261,6 +331,11 @@ public class Shift {
         return shiftTask;
     }
 
+    /**
+     * Retrieves the list of all stored shifts.
+     *
+     * @return An {@code ArrayList<Shift>} containing all shifts.
+     */
     public static ArrayList<Shift> getShiftList() {
         return shiftList;
     }

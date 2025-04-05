@@ -99,7 +99,7 @@ public class ShiftParser extends Parser {
         String shiftTask = "";
 
         try {
-            // Extract actual command ("add" or "del")
+            // Extract actual command
             String[] commandParts = remaining.split(" ", 2);
             command = commandParts[0];
             remaining = (commandParts.length > 1) ? commandParts[1] : "";
@@ -119,6 +119,12 @@ public class ShiftParser extends Parser {
             } else if (command.equals("edit")) {
                 return getShiftEditParser(remaining, command);
 
+            } else if (command.equals("sort")) {
+                return new ShiftParser("sort", null, null, null, "", 0);
+
+            } else if (command.equals("logot")) {
+                return getShiftOvertimeParser(remaining, command);
+
             } else {
                 logr.warning("Invalid command: " + command);
                 throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
@@ -129,6 +135,39 @@ public class ShiftParser extends Parser {
             logr.severe("Parsing error: " + e.getMessage());
             throw e;
         }
+    }
+
+    /**
+     * Parses a log overtime command and extracts the shift index and overtime hours.
+     *
+     * @param remaining The remaining command string containing the parameters.
+     * @param command   The command type, e.g., "logot".
+     * @return A {@code ShiftParser} object containing overtime details.
+     * @throws NurseSchedException If the format is invalid or values are improperly specified.
+     */
+    private static ShiftParser getShiftOvertimeParser(String remaining, String command) throws NurseSchedException {
+        logr.info("Parsing logot command: " + remaining);
+
+        if (!remaining.contains("id/") || !remaining.contains("h/")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTLOGOT_FORMAT);
+        }
+
+        int index;
+        double hours;
+
+        try {
+            index = Integer.parseInt(extractEditValue(remaining, "id/")) - 1;
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
+        }
+
+        try {
+            hours = Double.parseDouble(extractEditValue(remaining, "h/"));
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTLOGOT_FORMAT);
+        }
+
+        return new ShiftParser(command, null, null, null, String.valueOf(hours), index);
     }
 
     /**
@@ -414,6 +453,11 @@ public class ShiftParser extends Parser {
         return shiftIndex;
     }
 
+    /**
+     * Gets the shift task directly.
+     *
+     * @return The task string associated with the shift.
+     */
     public String getShiftTask() {
         return shiftTask;
     }

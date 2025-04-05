@@ -13,35 +13,20 @@ public enum ExceptionMessage {
     SHIFT_TASK_EMPTY("Shift task cannot be empty!"),
     INVALID_START_TIME("Start time must be before end time."),
     INVALID_DUE_DATE_TIME("Due date must be after current date and time."),
+    INVALID_SHIFT_DATE("Shift date must be after current date!"),
     INVALID_SHIFTDEL_FORMAT("Invalid shift del format! Input as:" +
-            " shift del [sn/SHIFT_NUMBER]"),
+            " shift del [id/SHIFT_NUMBER]"),
     INVALID_SHIFTEDIT_FORMAT("Invalid shift edit format! Input as: " +
-            "shift edit [sn/SHIFT_NUMBER] [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
-    INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark [sn/SHIFT_NUMBER]"),
-    INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark [sn/SHIFT_NUMBER]"),
+            "shift edit [id/SHIFT_NUMBER] [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
+    INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark [id/SHIFT_NUMBER]"),
+    INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark [id/SHIFT_NUMBER]"),
+    INVALID_SHIFTLOGOT_FORMAT("Invalid shift log format! Input as: shift logot [id/SHIFT_NUMBER] [h/HOURS]"),
     INVALID_SHIFT_NUMBER("There is no shift with that specified index!"),
     NEGATIVE_INDEX("Index must be a positive integer greater than 0!"),
     ZERO_INDEX("Index cannot be zero!"),
     INVALID_PATIENT_NUMBER("Index is greater than number of patients in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
     PARSING_ERROR("Error parsing command!"),
-    INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: [MEDICINE_NAME] | [QUANTITY] in" +
-            " storage file."),
-    INVALID_MEDICINEEDIT_FORMAT("Invalid medicine edit format! Input as: medicine edit mn/[MEDICINE_NAME] " +
-            "un/[UPDATE_NAME] uq/[UPDATED_QUANTITY]"),
-    INVALID_MEDICINEDELETE_FORMAT("Invalid medicine delete format! Input as: medicine delete mn/[MEDICINE_NAME]"),
-    INVALID_MEDICINEFIND_FORMAT("Invalid medicine find format! Input as: medicine find mn/[MEDICINE_NAME]"),
-    INVALID_MEDICINE_FORMAT("Try adding add, remove, edit, list, find, restock or delete!"),
-    INVALID_MEDICINEADD_FORMAT("Invalid medicine add format! Input as: medicine add mn/[MEDICINE_NAME] q/[QUANTITY]"),
-    INVALID_MEDICINERESTOCK_FORMAT("Invalid medicine restock format! Input as: medicine restock q/[QUANTITY]"),
-    INVALID_MEDICINEREMOVE_FORMAT("Invalid medicine remove format! Input as: medicine remove mn/[MEDICINE_NAME]" +
-            " q/[QUANTITY]"),
-    NO_RESTOCK_REQUIRED("No restock required!"),
-    NEGATIVE_MEDICINE_QUANTITY("Medicine quantity must be a positive integer!"),
-    INVALID_MEDICINE_QUANTITY("Medicine quantity is too big! Should be lesser than existing quantity."),
-    MISSING_MEDICINE_QUANTITY("No medicine quantity input"),
-    MISSING_MEDICINE_NAME("No Medicine name input"),
-    MEDICINE_NONEXISTENT("Medicine does not exist!"),
     MISSING_SEARCH_TERM("Missing search term after 'find'!"),
     INVALID_ID_LENGTH("Patient ID must be 4 digits long."),
     INVALID_ID_INPUT("Patient ID must contain only digits."),
@@ -61,6 +46,27 @@ public enum ExceptionMessage {
     INVALID_SORTING_LIST("List is empty. Nothing to sort."),
     MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
     INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
+    INDEX_PARAMETER_TOO_LARGE("The index provided is too large. Please use up to 4 digits only."),
+
+    // ====================Medicine Specific Exceptions====================
+    INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: MEDICINE_NAME | QUANTITY in" +
+            " storage file."),
+    INVALID_MEDICINEEDIT_FORMAT("Invalid medicine edit format! Input as: medicine edit mn/MEDICINE_NAME " +
+            "un/UPDATE_NAME uq/UPDATED_QUANTITY"),
+    INVALID_MEDICINEDELETE_FORMAT("Invalid medicine delete format! Input as: medicine delete mn/MEDICINE_NAME"),
+    INVALID_MEDICINEFIND_FORMAT("Invalid medicine find format! Input as: medicine find mn/MEDICINE_NAME"),
+    INVALID_MEDICINE_FORMAT("Try adding add, remove, edit, list, find, restock or delete!"),
+    INVALID_MEDICINEADD_FORMAT("Invalid medicine add format! Input as: medicine add mn/MEDICINE_NAME q/QUANTITY"),
+    INVALID_MEDICINERESTOCK_FORMAT("Invalid medicine restock format! Input as: medicine restock q/QUANTITY"),
+    INVALID_MEDICINEREMOVE_FORMAT("Invalid medicine remove format! Input as: medicine remove mn/MEDICINE_NAME" +
+            " q/QUANTITY"),
+    NO_RESTOCK_REQUIRED("No restock required!"),
+    NEGATIVE_MEDICINE_QUANTITY("Medicine quantity must be a positive integer!"),
+    INVALID_MEDICINE_QUANTITY("Medicine quantity is too big! Should be lesser than existing quantity."),
+    MISSING_MEDICINE_QUANTITY("No medicine quantity input"),
+    MISSING_MEDICINE_NAME("No Medicine name input"),
+    MEDICINE_NONEXISTENT("Medicine does not exist!"),
+
     // ====================Appointment Specific Exceptions====================
     INVALID_PATIENT_APPT_ADD("Patient name not found in patient list! Add patient to " +
                                      "patient list before adding appointment!"),
@@ -75,6 +81,7 @@ public enum ExceptionMessage {
     INVALID_APPT_DATE_TIME("Appointment date and time must be after current date and time."),
     UNMARKING_UNMARKED_APPT("Cant unmark an appointment that was already unmarked!"),
     MARKING_MARKED_APPT("Cant mark an appointment that was already marked!"),
+
     // ====================Task Specific Exceptions====================
     INVALID_TASK_FIND_FIELDS("Invalid task find fields! Input as: task find td/KEYWORD"),
     INVALID_TASK_EDIT_FORMAT("Invalid task edit format! Input as: "

@@ -68,11 +68,11 @@ public class AppointmentTest {
         addAppointment(input);
 
         Appointment appointment = Appointment.apptList.get(Appointment.apptList.size()-1);
-        assertEquals("jean doe", appointment.getName());
+        assertEquals("Jean doe", appointment.getName());
         assertEquals("13:00", appointment.getStartTime());
         assertEquals("14:00", appointment.getEndTime());
         assertEquals("2026-02-15", appointment.getDate());
-        assertEquals("needs a wheelchair", appointment.getNotes());
+        assertEquals("Needs a wheelchair", appointment.getNotes());
         assertEquals(2, appointment.getImportance());
 
     }
@@ -83,6 +83,7 @@ public class AppointmentTest {
                 "im/2 n/First appointment";
         ApptParser apptParser = ApptParser.extractInputs(input);
         assertNotNull(apptParser);
+
         assertThrows(NurseSchedException.class, () -> Appointment.addAppt(
                 apptParser.getName(),
                 apptParser.getStartTime(),
@@ -98,8 +99,8 @@ public class AppointmentTest {
         String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 im/2 n/Needs a wheelchair";
         addAppointment(input);
 
-        String expected = "Name: jean doe, From: 15:00, To: 16:00, Date: 2026-02-15, " +
-                "Importance: MEDIUM, Notes: needs a wheelchair";
+        String expected = "Name: Jean doe, From: 15:00, To: 16:00, Date: 2026-02-15, " +
+                "Importance: MEDIUM, Notes: Needs a wheelchair";
         assertEquals(expected, Appointment.apptList.get(Appointment.apptList.size()-1).toString());
     }
 
@@ -205,7 +206,7 @@ public class AppointmentTest {
         assertEquals("16:00", appt.getEndTime());
         assertEquals("2026-02-15", appt.getDate());
         assertEquals(2, appt.getImportance());
-        assertEquals("needs a wheelchair", appt.getNotes());
+        assertEquals("Needs a wheelchair", appt.getNotes());
     }
 
     @Test
@@ -220,12 +221,12 @@ public class AppointmentTest {
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("jean doe", appt.getName());
+        assertEquals("Jean doe", appt.getName());
         assertEquals("15:00", appt.getStartTime());
         assertEquals("16:00", appt.getEndTime());
         assertEquals("2026-03-15", appt.getDate());
         assertEquals(2, appt.getImportance());
-        assertEquals("needs a wheelchair", appt.getNotes());
+        assertEquals("Needs a wheelchair", appt.getNotes());
     }
 
     @Test
@@ -240,12 +241,12 @@ public class AppointmentTest {
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("jean doe", appt.getName());
+        assertEquals("Jean doe", appt.getName());
         assertEquals("14:00", appt.getStartTime());
         assertEquals("16:00", appt.getEndTime());
         assertEquals("2026-02-15", appt.getDate());
         assertEquals(2, appt.getImportance());
-        assertEquals("needs a wheelchair", appt.getNotes());
+        assertEquals("Needs a wheelchair", appt.getNotes());
 
     }
 
@@ -261,12 +262,12 @@ public class AppointmentTest {
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("jean doe", appt.getName());
+        assertEquals("Jean doe", appt.getName());
         assertEquals("15:00", appt.getStartTime());
         assertEquals("17:00", appt.getEndTime());
         assertEquals("2026-02-15", appt.getDate());
         assertEquals(2, appt.getImportance());
-        assertEquals("needs a wheelchair", appt.getNotes());
+        assertEquals("Needs a wheelchair", appt.getNotes());
 
     }
 
@@ -282,7 +283,7 @@ public class AppointmentTest {
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("jean doe", appt.getName());
+        assertEquals("Jean doe", appt.getName());
         assertEquals("15:00", appt.getStartTime());
         assertEquals("16:00", appt.getEndTime());
         assertEquals("2026-02-15", appt.getDate());
@@ -302,12 +303,12 @@ public class AppointmentTest {
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("jean doe", appt.getName());
+        assertEquals("Jean doe", appt.getName());
         assertEquals("15:00", appt.getStartTime());
         assertEquals("16:00", appt.getEndTime());
         assertEquals("2026-02-15", appt.getDate());
         assertEquals(1, appt.getImportance());
-        assertEquals("needs a wheelchair", appt.getNotes());
+        assertEquals("Needs a wheelchair", appt.getNotes());
     }
     @Test
     public void editAppt_invalidTaskIndex_throwsNurseSchedException() throws NurseSchedException {
