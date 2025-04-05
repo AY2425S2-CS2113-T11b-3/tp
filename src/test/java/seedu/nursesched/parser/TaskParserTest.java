@@ -2,6 +2,7 @@ package seedu.nursesched.parser;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.storage.TaskStorage;
@@ -27,6 +28,12 @@ public class TaskParserTest {
     public static void restoreOriginalList() {
         TaskStorage.overwriteSaveFile(originalList);
     }
+
+    @BeforeEach
+    public void setUp() {
+        Task.resetTaskList();
+    }
+
     @Test
     public void getAddTaskParser_validInputs_taskParametersParsed() throws NurseSchedException {
         String dateTmr = LocalDate.now().plusDays(1).toString();
@@ -48,7 +55,6 @@ public class TaskParserTest {
         String dateTomorrow = LocalDate.now().plusDays(1).format(dateFormatter);
         String timeNow = LocalTime.now().format(timeFormatter);
 
-        Task.getTaskList().clear();
         //Missing description
         String input1 = "task add td/ d/" + dateTomorrow + " t/" + timeNow;
         //Missing date
@@ -70,7 +76,6 @@ public class TaskParserTest {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
         String dateTomorrow = LocalDate.now().plusDays(1).format(dateFormatter);
         String timeNow = LocalTime.now().format(timeFormatter);
-        Task.getTaskList().clear();
         //Missing description
         String input1 = "task add d/" + dateTomorrow + " t/" + timeNow;
         //Missing date
@@ -151,7 +156,7 @@ public class TaskParserTest {
             throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.getTaskList().clear();
+
 
         //Add a task which is due 24 hours later
         Task.addTask(
@@ -170,7 +175,6 @@ public class TaskParserTest {
             throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.getTaskList().clear();
 
         //Add a task which is due 24 hours later
         Task.addTask(
@@ -199,7 +203,6 @@ public class TaskParserTest {
     public void editTaskParser_invalidTaskIndex_throwsNurseSchedException() throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.getTaskList().clear();
 
         //Add a task which is due 24 hours later
         Task.addTask(
@@ -221,7 +224,6 @@ public class TaskParserTest {
     public void editTaskParser_missingInputs_throwsNurseSchedException() throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.getTaskList().clear();
 
         //Add a task which is due 24 hours later
         Task.addTask(
@@ -281,7 +283,6 @@ public class TaskParserTest {
             throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
-        Task.getTaskList().clear();
 
         //Add a task which is due 24 hours later
         Task.addTask(

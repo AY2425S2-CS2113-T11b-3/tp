@@ -98,7 +98,8 @@ public enum ExceptionMessage {
     INVALID_DAY("Invalid day in due date (YYYY-MM-DDDD)! There are at most 31 days in a month!"),
     INVALID_HOUR("Invalid hour in due time (HH:mm)! Hours can only range from 00 to 23!"),
     INVALID_MINUTE("Invalid minutes in due time (HH:mm)! Minutes can only range from 00 to 59!"),
-    INVALID_DATE("Invalid date! Take note that some months have less than 31 days!");
+    INVALID_DATE("Invalid date! Take note that some months have less than 31 days!"),
+    MISSING_INDEX("Task index is missing!"),;
     // ============================================================
 
     private final String message;
