@@ -177,6 +177,10 @@ public class Command {
                                 shiftParser.getIndex()
                         );
                     }
+                    if (shift.equals("sort")) {
+                        Shift.sortShiftsChronologically();
+                        Shift.listShifts();
+                    }
                     if (shift.equals("list")) {
                         Shift.listShifts();
                     }
