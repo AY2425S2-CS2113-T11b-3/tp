@@ -64,14 +64,15 @@ class ShiftTest {
     }
 
     @Test
-    void getShiftList_containsAddedShift() throws NurseSchedException {
-
+    void getShiftList_containsAddedShift() {
         Shift.getShiftList().clear();
+
+        LocalDate futureDate = LocalDate.now().plusDays(1);
 
         Shift.addShift(
                 LocalTime.of(8, 0),
                 LocalTime.of(10, 0),
-                LocalDate.of(2025, 4, 1),
+                futureDate,
                 "Routine check"
         );
 
@@ -146,25 +147,28 @@ class ShiftTest {
     }
 
     @Test
-    void sortShiftsChronologically_shiftsSortedCorrectly() throws NurseSchedException {
+    void sortShiftsChronologically_shiftsSortedCorrectly() {
         Shift.getShiftList().clear();
+
+        LocalDate date1 = LocalDate.now().plusDays(1);
+        LocalDate date2 = LocalDate.now().plusDays(2);
 
         Shift.addShift(
                 LocalTime.of(10, 0),
                 LocalTime.of(12, 0),
-                LocalDate.of(2025, 4, 3),
+                date2,
                 "Late shift"
         );
         Shift.addShift(
                 LocalTime.of(8, 0),
                 LocalTime.of(10, 0),
-                LocalDate.of(2025, 4, 2),
+                date1,
                 "Early shift"
         );
         Shift.addShift(
                 LocalTime.of(9, 0),
                 LocalTime.of(11, 0),
-                LocalDate.of(2025, 4, 3),
+                date2,
                 "Mid shift"
         );
 
@@ -176,13 +180,15 @@ class ShiftTest {
     }
 
     @Test
-    void logOvertime_validInput_logsCorrectly() throws NurseSchedException {
+    void logOvertime_validInput_logsCorrectly() {
         Shift.getShiftList().clear();
+
+        LocalDate futureDate = LocalDate.now().plusDays(1);
 
         Shift.addShift(
                 LocalTime.of(10, 0),
                 LocalTime.of(12, 0),
-                LocalDate.of(2025, 4, 3),
+                futureDate,
                 "Shift with OT"
         );
         Shift.logOvertime(0, 2.5);
