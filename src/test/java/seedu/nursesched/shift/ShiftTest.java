@@ -8,13 +8,34 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.parser.ShiftParser;
+import seedu.nursesched.storage.ShiftStorage;
 
 class ShiftTest {
     private final List<Shift> shiftList = new ArrayList<>();
+
+    static ArrayList<Shift> initialShiftList;
+
+    @BeforeAll
+    public static void saveInitialList() {
+        initialShiftList = Shift.shiftList;
+    }
+
+    @AfterAll
+    public static void restoreInitialList() {
+        ShiftStorage.overwriteSaveFile(initialShiftList);
+    }
+
+    @BeforeEach
+    void setUp() {
+        Shift.shiftList = new ArrayList<>();
+    }
 
     @Test
     void addShift_shiftListAdd_expectCorrectOutput() throws NurseSchedException {
@@ -105,7 +126,7 @@ class ShiftTest {
     void editShift_validIndex_shiftUpdatedCorrectly() throws NurseSchedException {
         LocalTime originalStart = LocalTime.of(10, 0);
         LocalTime originalEnd = LocalTime.of(11, 0);
-        LocalDate originalDate = LocalDate.of(2025, 4, 1);
+        LocalDate originalDate = LocalDate.of(2025, 6, 10);
         String originalTask = "Initial shift";
 
         Shift.addShift(originalStart, originalEnd, originalDate, originalTask);
