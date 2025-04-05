@@ -332,7 +332,7 @@ public class ApptParser extends Parser {
     public static int parseImportance(String importanceStr) throws NurseSchedException {
         try {
             int newImportance = Integer.parseInt(importanceStr);
-            if (newImportance < 0 || newImportance > 3) {
+            if (newImportance <= 0 || newImportance > 3) {
                 logr.warning("Invalid importance (must be 0-3): " + newImportance);
                 throw new NurseSchedException(ExceptionMessage.INVALID_IMPORTANCE_FORMAT);
             }

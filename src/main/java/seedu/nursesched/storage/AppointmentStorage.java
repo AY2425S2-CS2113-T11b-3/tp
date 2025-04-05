@@ -40,11 +40,19 @@ public class AppointmentStorage {
         }
 
         try (Scanner fileScanner = new Scanner(taskFile)) {
+            int lineNumber = 0;
             while (fileScanner.hasNext()) {
+                lineNumber++;
                 String currentLine = fileScanner.nextLine();
-                Appointment appointment = getDetails(currentLine);
 
-                apptList.add(appointment);
+                try {
+                    Appointment appointment = getDetails(currentLine);
+                    apptList.add(appointment);
+                } catch (Exception e) {
+                    System.out.println("Error parsing line " + lineNumber + " of save file: " + currentLine);
+                    System.out.println("Consider removing that line from the save file. Bypassing line.");
+                    // Continue processing the rest of the file
+                }
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found at: " + FILE_PATH);
