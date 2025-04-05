@@ -77,7 +77,7 @@ supply.
 
 Adds user’s task, due date and time to the user’s to-do list.
 
-Format: `task add td/[TASK_DESCRIPTION] d/[DUE_DATE] t/[DUE_TIME]`
+Format: `task add td/TASK_DESCRIPTION d/DUE_DATE t/DUE_TIME`
 
 * Adds a task to be done by the due date and time set by the user.
 * `DUE_TIME` must be in HH:mm format
@@ -91,7 +91,7 @@ Example of usage:
 
 Deletes a task from the task list.
 
-Format: `task del id/[TASK_INDEX]`
+Format: `task del id/TASK_INDEX`
 
 * Deletes the task indexed with `TASK_INDEX` based on the task list.
 * `TASK_INDEX` must be a number between 1 to the total number of tasks in the list.
@@ -104,7 +104,7 @@ Example of usage:
 
 Marks a task to show its completion.
 
-Format: `task mark id/[TASK_INDEX]`
+Format: `task mark id/TASK_INDEX`
 
 * Marks task with index `TASK_INDEX` as completed
 * `TASK_INDEX` must be a number between 1 to the total number of tasks in the list.
@@ -117,7 +117,7 @@ Example of usage:
 
 Unmarks a task to show that it is uncompleted.
 
-Format: `task unmark id/[TASK_INDEX]`
+Format: `task unmark id/TASK_INDEX`
 
 * Unmarks a task with index `TASK_INDEX` as uncompleted
 * `TASK_INDEX` must be a number between 1 to the total number of tasks in the list.
@@ -130,7 +130,7 @@ Example of usage:
 
 Edits an existing task in the task list.
 
-Format: `task edit id/[TASK_INDEX] td/[NEW_DESCRIPTION] d/[NEW_DUE_DATE] t/[NEW_DUE_TIME]`
+Format: `task edit id/TASK_INDEX [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]`
 
 * Edits the task at the specified `TASK_INDEX`. The `TASK_INDEX` refers to the index number shown in the displayed task
   list. The index must be a positive integer 1, 2, 3, ...
@@ -139,15 +139,17 @@ Format: `task edit id/[TASK_INDEX] td/[NEW_DESCRIPTION] d/[NEW_DUE_DATE] t/[NEW_
 
 Example of usage:
 
+* `task edit id/1 td/Remind Jean about appointment` Edits only the task description leaving the date and time unedited.
 * `task edit id/1 td/Update medicine supply t/13:00` Edits the task description and due time of the 1st task in the
-  task list.
-* `task edit id/3 d/2025-07-01 t/15:00` Edits the due date and time of the 3rd task in the task list.
+  task list while leaving the date unedited.
+* `task edit id/3 d/2025-07-01 t/15:00` Edits the due date and time of the 3rd task in the task list while leaving the
+  description unedited.
 
 ### Finding a task: `task find`
 
 Lists all tasks with description containing the `KEYWORD`
 
-Format: `task find td/[KEYWORD]`
+Format: `task find td/KEYWORD`
 
 * Only matches the `KEYWORD` to the task's description and displays it if it contains `KEYWORD`
 
@@ -565,42 +567,42 @@ Format: `exit`
 
 ## Command Summary
 
-| List        | Action  | Format                                                                                                                              |
-|-------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
-| Task        | Add     | `task add td/[TASK_DESCRIPTION] d/[DUE_DATE] t/[DUE_TIME]`                                                                          |
-| Task        | Del     | `task del id/[TASK_INDEX]`                                                                                                          |
-| Task        | Mark    | `task mark id/[TASK_INDEX]`                                                                                                         |
-| Task        | Unmark  | `task unmark id/[TASK_INDEX]`                                                                                                       |
-| Task        | Edit    | `task edit id/[TASK_INDEX] td/[NEW_DESCRIPTION] d/[NEW_DUE_DATE] t/[NEW_DUE_TIME]`                                                  |
-| Task        | Find    | `task find td/[KEYWORD]`                                                                                                            |
-| Task        | List    | `task list`                                                                                                                         |
-| Shift       | Add     | `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`                                                              |
-| Shift       | Edit    | `shift edit id/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`                                        |
-| Shift       | Mark    | `shift mark id/[SHIFT_INDEX]`                                                                                                       |
-| Shift       | Unmark  | `shift unmark id/[SHIFT_INDEX]`                                                                                                     |
-| Shift       | Delete  | `shift del id/[SHIFT_INDEX]`                                                                                                        |
-| Shift       | List    | `shift list`                                                                                                                        |
-| Appointment | Add     | `appt add p/[PATIENT_NAME] s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE_RANKING] n/[NOTES]`                                  |
-| Appointment | Delete  | `appt del id/[APPT_INDEX]`                                                                                                          |
-| Appointment | Mark    | `appt mark id/[APPT_INDEX]`                                                                                                         |
-| Appointment | Unmark  | `appt unmark id/[APPT_INDEX]`                                                                                                       |
+| List        | Action  | Format                                                                                                                       |
+|-------------|---------|------------------------------------------------------------------------------------------------------------------------------|
+| Task        | Add     | `task add td/TASK_DESCRIPTION d/DUE_DATE t/DUE_TIME`                                                                         |
+| Task        | Delete  | `task del id/TASK_INDEX`                                                                                                     |
+| Task        | Mark    | `task mark id/TASK_INDEX`                                                                                                    |
+| Task        | Unmark  | `task unmark id/TASK_INDEX`                                                                                                  |
+| Task        | Edit    | `task edit id/TASK_INDEX [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]`                                             |
+| Task        | Find    | `task find td/KEYWORD`                                                                                                       |
+| Task        | List    | `task list`                                                                                                                  |
+| Shift       | Add     | `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`                                                       |
+| Shift       | Edit    | `shift edit id/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`                                 |
+| Shift       | Mark    | `shift mark id/[SHIFT_INDEX]`                                                                                                |
+| Shift       | Unmark  | `shift unmark id/[SHIFT_INDEX]`                                                                                              |
+| Shift       | Delete  | `shift del id/[SHIFT_INDEX]`                                                                                                 |
+| Shift       | List    | `shift list`                                                                                                                 |
+| Appointment | Add     | `appt add p/[PATIENT_NAME] s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE_RANKING] n/[NOTES]`                           |
+| Appointment | Delete  | `appt del id/[APPT_INDEX]`                                                                                                   |
+| Appointment | Mark    | `appt mark id/[APPT_INDEX]`                                                                                                  |
+| Appointment | Unmark  | `appt unmark id/[APPT_INDEX]`                                                                                                |
 | Appointment | Edit    | `appt edit id/[APPT_INDEX] p/[NEW_PATIENT_NAME] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] n/[NEW_NOTES] im/[NEW_IMPORTANCE]` |
-| Appointment | List    | `appt list`                                                                                                                         |
-| Appointment | Find    | `appt find [PATIENT_NAME]`                                                                                                          |
-| Appointment | Sort    | `appt sort by/ time` or `appt sort by/ importance`                                                                                  |
-| Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                                   |
-| Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                                                                             |
-| Patient     | find    | `pf find id/[ID_NUMBER]`                                                                                                            |
-| Patient     | List    | `pf list`                                                                                                                           |
-| Patient     | Edit    | `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                                  |
-| MedicalTest | Add     | `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`                                                                            |
-| MedicalTest | Delete  | `pf result del id/[ID_NUMBER]`                                                                                                      |
-| MedicalTest | List    | `pf result list id/[ID_NUMBER]`                                                                                                     |
-| Medicine    | Add     | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                                                                                      |
-| Medicine    | Remove  | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                                                                                   |
-| Medicine    | List    | `medicine list`                                                                                                                     |
-| Medicine    | Find    | `medicine find mn/[MEDICINE_NAME]`                                                                                                  |
-| Medicine    | Delete  | `medicine delete mn/[MEDICINE_NAME]`                                                                                                |
-| Medicine    | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]`                                                          |
-| Medicine    | Restock | `medicine restock q/[QUANTITY]`                                                                                                     |
-|             | Exit    | `exit`                                                                                                                              |
+| Appointment | List    | `appt list`                                                                                                                  |
+| Appointment | Find    | `appt find [PATIENT_NAME]`                                                                                                   |
+| Appointment | Sort    | `appt sort by/ time` or `appt sort by/ importance`                                                                           |
+| Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                            |
+| Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                                                                      |
+| Patient     | find    | `pf find id/[ID_NUMBER]`                                                                                                     |
+| Patient     | List    | `pf list`                                                                                                                    |
+| Patient     | Edit    | `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                           |
+| MedicalTest | Add     | `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`                                                                     |
+| MedicalTest | Delete  | `pf result del id/[ID_NUMBER]`                                                                                               |
+| MedicalTest | List    | `pf result list id/[ID_NUMBER]`                                                                                              |
+| Medicine    | Add     | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                                                                               |
+| Medicine    | Remove  | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                                                                            |
+| Medicine    | List    | `medicine list`                                                                                                              |
+| Medicine    | Find    | `medicine find mn/[MEDICINE_NAME]`                                                                                           |
+| Medicine    | Delete  | `medicine delete mn[MEDICINE_NAME]`                                                                                          |
+| Medicine    | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]`                                                   |
+| Medicine    | Restock | `medicine restock q/[QUANTITY]`                                                                                              |
+|             | Exit    | `exit`                                                                                                                       |

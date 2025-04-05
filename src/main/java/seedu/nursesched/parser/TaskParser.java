@@ -121,7 +121,7 @@ public class TaskParser extends Parser {
         LocalTime byTime = null;
         int taskIndex = 0;
         if (!line.contains("id/")) {
-            logr.warning("Missing task index! [id/TASK_INDEX]");
+            logr.warning("Missing task index!");
             throw new NurseSchedException(ExceptionMessage.INVALID_TASK_EDIT_FORMAT);
         }
         try {
@@ -133,11 +133,26 @@ public class TaskParser extends Parser {
                     taskIndex = Integer.parseInt(parameter.substring(3));
                 } else if (parameter.contains("td/")) {
                     description = new StringBuilder(parameter.substring(3));
+                    if (description.isEmpty()) {
+                        logr.warning("Invalid attempt to edit current " +
+                                "task description with an empty description!");
+                        throw new NurseSchedException(ExceptionMessage.EMPTY_TASK_DESCRIPTION);
+                    }
                 } else if (parameter.contains("d/")) {
                     byDateString = parameter.substring(2);
+                    if (byDateString.isEmpty()) {
+                        logr.warning("Invalid attempt to edit current task due date with " +
+                                "empty input.");
+                        throw new NurseSchedException(ExceptionMessage.EMPTY_TASK_DATE_TIME);
+                    }
                     byDate = LocalDate.parse(byDateString);
                 } else if (parameter.contains("t/")) {
                     byTimeString = parameter.substring(2);
+                    if (byTimeString.isEmpty()) {
+                        logr.warning("Invalid attempt to edit current task due time with " +
+                                "empty input.");
+                        throw new NurseSchedException(ExceptionMessage.EMPTY_TASK_DATE_TIME);
+                    }
                     byTime = LocalTime.parse(byTimeString);
                 } else {
                     if (!description.isEmpty()) {
@@ -198,32 +213,61 @@ public class TaskParser extends Parser {
      */
     public static TaskParser getAddTaskParser(String line, String command) throws NurseSchedException {
         StringBuilder description;
-        LocalTime byTime;
         LocalDate byDate;
-        if (!line.contains("td/") || !line.contains("d/") || !line.contains("t/")) {
+        LocalTime byTime;
+        String dateString;
+        String timeString;
+
+        if (!line.contains("td/") || !line.contains(" d/") || !line.contains(" t/")) {
             logr.warning("Missing fields");
-            throw new NurseSchedException(ExceptionMessage.INVALID_TASKADD_FORMAT);
+            System.out.println("WTF");
+            throw new NurseSchedException(ExceptionMessage.INVALID_TASK_ADD_FORMAT);
         }
 
         try {
             //extracts task description
             description = new StringBuilder(line.substring(line.indexOf("td/") + 3, line.indexOf(" d/")));
+            if (description.isEmpty()) {
+                logr.warning("Attempt to add empty task description!");
+                throw new NurseSchedException(ExceptionMessage.EMPTY_TASK_DESCRIPTION);
+            }
 
             //extracts task's due date
-            byDate = LocalDate.parse(line.substring(line.indexOf(" d/") + 3, line.indexOf("t/") - 1));
-
+            dateString = line.substring(line.indexOf(" d/") + 3, line.indexOf("t/") - 1);
             //extracts task's due time
-            byTime = LocalTime.parse(line.substring(line.indexOf("t/") + 2));
+            timeString = line.substring(line.indexOf("t/") + 2);
+
+            if (dateString.isEmpty() || timeString.isEmpty()) {
+                logr.warning("Attempt to add empty task due date or time!");
+                throw new NurseSchedException(ExceptionMessage.EMPTY_TASK_DATE_TIME);
+            }
+
+            byDate = LocalDate.parse(dateString);
+            byTime = LocalTime.parse(timeString);
+
             if (byDate.isEqual(LocalDate.now()) && byTime.isBefore(LocalTime.now())) {
                 logr.warning("Due date and time cannot be before current date and time.");
                 throw new NurseSchedException(ExceptionMessage.INVALID_DUE_DATE_TIME);
             }
         } catch (DateTimeParseException e) {
             logr.warning("Invalid date or time format.");
+            String msg = e.getMessage();
+            //Find exactly where the error lies
+            if (msg.contains("HourOfDay")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_HOUR);
+            } else if (msg.contains("MinuteOfHour")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_MINUTE);
+            } else if (msg.contains("MonthOfYear")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_MONTH);
+            } else if (msg.contains("DayOfMonth")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_DAY);
+            } else if (msg.contains("Invalid date")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_DATE);
+            }
             throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
         } catch (IndexOutOfBoundsException e) {
             logr.warning("Invalid or missing fields");
-            throw new NurseSchedException(ExceptionMessage.INVALID_TASKADD_FORMAT);
+            throw new NurseSchedException(ExceptionMessage.INVALID_TASK_ADD_FORMAT);
         }
         return new TaskParser(command, description.toString(), byDate, byTime, false, 0);
     }

@@ -130,6 +130,10 @@ public class Task {
         }
         try {
             Task task = taskList.get(index - 1);
+            if (task.getIsDone()) {
+                logr.warning("Invalid attempt to mark an already marked task.");
+                throw new NurseSchedException(ExceptionMessage.MARKING_A_MARKED_TASK);
+            }
             task.setIsDone(true);
             TaskStorage.overwriteSaveFile(taskList);
             System.out.println("Task marked: " + taskList.get(index - 1).toString());
@@ -155,6 +159,10 @@ public class Task {
         }
         try {
             Task task = taskList.get(index - 1);
+            if (!task.getIsDone()) {
+                logr.warning("Invalid attempt to unmark an already unmarked task.");
+                throw new NurseSchedException(ExceptionMessage.UNMARKING_AN_UNMARKED_TASK);
+            }
             task.setIsDone(false);
             TaskStorage.overwriteSaveFile(taskList);
             System.out.println("Task unmarked: " + taskList.get(index - 1).toString());
@@ -243,6 +251,7 @@ public class Task {
      * @param keyword The keyword or phrase to be searched for.
      */
     public static void findTask(String keyword) {
+        assert !keyword.isEmpty() : "Keyword to find cannot be empty.";
         keyword = keyword.toLowerCase();
         int totalFound = 0;
         for (int i = 0; i < taskList.size(); i++) {
