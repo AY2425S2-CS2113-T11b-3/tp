@@ -27,13 +27,13 @@ public class ApptParser extends Parser {
     private static int apptIndex;
     private static String searchKeyword;
     private static String sortBy;
-    private String command;
-    private String name;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private LocalDate date;
-    private String notes;
-    private int importance;
+    private final String command;
+    private final String name;
+    private final LocalTime startTime;
+    private final LocalTime endTime;
+    private final LocalDate date;
+    private final String notes;
+    private final int importance;
 
     static {
         try {
@@ -95,7 +95,6 @@ public class ApptParser extends Parser {
         assert line != null : "Input line should not be null";
         logr.info("Extracting inputs from: " + line);
         line = line.trim();
-        line = line.toLowerCase();
         line = line.substring(line.indexOf(" ") + 1);
         String command = "";
         String name = "";
@@ -107,10 +106,10 @@ public class ApptParser extends Parser {
 
         try {
             if (line.contains(" ")) {
-                command = line.substring(0, line.indexOf(" "));
+                command = line.substring(0, line.indexOf(" ")).toLowerCase();
                 line = line.substring(line.indexOf(" ") + 1);
             } else {
-                command = line;
+                command = line.toLowerCase();
                 line = null;
             }
         } catch (IndexOutOfBoundsException e) {
@@ -121,7 +120,10 @@ public class ApptParser extends Parser {
 
         switch (command) {
         case "add" -> {
-            assert line != null;
+
+            if (line == null){
+                throw new NurseSchedException(ExceptionMessage.INVALID_APPTADD_FORMAT);
+            }
             if (!line.contains("p/") || !line.contains("s/") ||
                     !line.contains("d/") || !line.contains("e/")) {
                 logr.warning("Missing fields");
@@ -180,13 +182,13 @@ public class ApptParser extends Parser {
         case "del", "mark", "unmark" -> {
             if (line == null || line.trim().isEmpty()) {
                 logr.warning("Missing index field in command");
-                throw new NurseSchedException(ExceptionMessage.INVALID_INDEX_PARAMETER);
+                throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
             }
 
             String indexStr = line.trim();
             if (!indexStr.toLowerCase().startsWith("id/") || indexStr.length() <= 3) {
                 logr.warning("Missing index field in command");
-                throw new NurseSchedException(ExceptionMessage.INVALID_INDEX_PARAMETER);
+                throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
             }
 
             apptIndex = parseIndex(indexStr.substring(3));
@@ -350,6 +352,11 @@ public class ApptParser extends Parser {
 
         int index = 0;
         try {
+            if (line.length() > 10) { // Max int is 10 digits
+                logr.warning("Index value too large: " + line);
+                throw new NurseSchedException(ExceptionMessage.INDEX_PARAMETER_TOO_LARGE);
+            }
+
             index = Integer.parseInt(line) - 1;
             if (index < 0) {
                 logr.warning("Negative index: " + line);

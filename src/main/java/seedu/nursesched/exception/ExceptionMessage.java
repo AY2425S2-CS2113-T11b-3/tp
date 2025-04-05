@@ -45,6 +45,7 @@ public enum ExceptionMessage {
     INVALID_SORTING_LIST("List is empty. Nothing to sort."),
     MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
     INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
+    INDEX_PARAMETER_TOO_LARGE("The index provided is too large. Please use up to 4 digits only."),
 
     // ====================Medicine Specific Exceptions====================
     INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: MEDICINE_NAME | QUANTITY in" +
@@ -65,7 +66,6 @@ public enum ExceptionMessage {
     MISSING_MEDICINE_NAME("No Medicine name input"),
     MEDICINE_NONEXISTENT("Medicine does not exist!"),
 
-    //APPT errors
     // ====================Appointment Specific Exceptions====================
     INVALID_PATIENT_APPT_ADD("Patient name not found in patient list! Add patient to " +
                                      "patient list before adding appointment!"),
