@@ -22,8 +22,8 @@ public class Command {
      * Performs the execution of commands after the input has been parsed.
      *
      * @param isExit A boolean which is true if the exit command is being executed.
-     * @param in The input command to be parsed.
-     * @param ui The user interface class for interacting with the user.
+     * @param in     The input command to be parsed.
+     * @param ui     The user interface class for interacting with the user.
      */
     public static void executeCommands(boolean isExit, Scanner in, Ui ui) {
         String input;
@@ -284,7 +284,8 @@ public class Command {
 
                 default:
                     System.out.println("Unknown command!");
-                    System.out.println("Command should start with \"appt\", \"pf\", \"shift\" or \"task\"");
+                    System.out.println("Command should start with \"appt\", \"pf\", \"shift\", \"task\", \"medicine\" "
+                            + "or \"exit\"");
                     break;
                 }
             } catch (NurseSchedException e) {
