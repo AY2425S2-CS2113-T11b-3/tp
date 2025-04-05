@@ -49,6 +49,8 @@ supply.
     * [Deleting a medicine](#deleting-a-medicine-medicine-delete)
     * [Editing a medicine](#editing-a-medicine-medicine-edit)
     * [Restocking a medicine](#restocking-a-medicine-medicine-restock)
+* [Other commands](#other-commands)
+    * [Exit](#exit-exit-ns)
 * [FAQ](#faq)
 * [Command summary](#command-summary)
 
@@ -64,10 +66,13 @@ supply.
 ## Features
 
 > Notes about the command format:
-> * Words in `UPPER_CASE` and in square brackets are the parameters to be supplied by the user.<br> e.g `medicine add
-    mn/[MEDICINE_NAME] q/[QUANTITY]`, `[MEDICINE_NANE]` and `[QUANTITY]` are parameters which can be used as `medicine add
+> * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br> e.g `medicine add
+    mn/MEDICINE_NAME q/QUANTITY`, `MEDICINE_NANE` and `QUANTITY` are parameters which can be used as `medicine add
     mn/Paracetamol q/50`.
-> * Markers with `/` are compulsory. <br> e.g `medicine restock q/[QUANTITY]`, `q/` must be included in the command
+> * Markers with `/` are compulsory. <br> e.g `medicine restock q/[QUANTITY]`, `q/` must be included in the command.
+> * Order of markers must follow the command format exactly.<br> e.g
+    `medicine edit mn/MEDICINE_NAME un/UPDATED_NAME uq/UPDATED_QUANTITY` cannot be typed in as `medicine edit
+    un/UPDATED_NAME mn/MEDICINE_NAME uq/UPDATED_QUANTITY`
 > * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple
     lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 
@@ -479,7 +484,7 @@ Example of usage:
 
 Adds a specific quantity of medicine to the current supply list.
 
-Format: `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`
+Format: `medicine add mn/MEDICINE_NAME q/QUANTITY`
 
 Example:
 
@@ -489,7 +494,7 @@ Example:
 
 Removes a specific quantity of medicine from the current supply list.
 
-Format: `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`
+Format: `medicine remove mn/MEDICINE_NAME q/QUANTITY`
 
 Example:
 
@@ -508,7 +513,7 @@ Format: `medicine list`
 
 Finds a specific medicine from the current supply.
 
-Format: `medicine find mn/[MEDICINE_NAME]`
+Format: `medicine find mn/MEDICINE_NAME`
 
 Example:
 
@@ -518,7 +523,7 @@ Example:
 
 Deletes a specific medicine from the current supply.
 
-Format: `medicine delete mn/[MEDICINE_NAME]`
+Format: `medicine delete mn/MEDICINE_NAME`
 
 Example:
 
@@ -528,7 +533,7 @@ Example:
 
 Edits the information of a specific medicine from the current supply.
 
-Format: `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]`
+Format: `medicine edit mn/MEDICINE_NAME un/UPDATED_NAME uq/UPDATED_QUANTITY`
 
 * Edits `MEDICINE_NAME` to `UPDATED_NAME` and its respective `QUANTITY` to `UPDATED_QUANTITY`
 
@@ -541,7 +546,7 @@ Example:
 
 Checks which medicine needs restocking based on the input quantity.
 
-Format: `medicine restock q/[QUANTITY]`
+Format: `medicine restock q/QUANTITY`
 
 * Lists all medicines which have quantity lesser than `QUANTITY`.
 
@@ -552,11 +557,11 @@ Example:
 
 ### Other commands
 
-### Exit: `exit`
+### Exit: `exit ns`
 
 Exits the NurseSched app.
 
-Format: `exit`
+Format: `exit ns`
 
 ## FAQ
 
@@ -606,3 +611,22 @@ Format: `exit`
 | Medicine    | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]`                                                   |
 | Medicine    | Restock | `medicine restock q/[QUANTITY]`                                                                                              |
 |             | Exit    | `exit`                                                                                                                       |
+| Appointment | List    | `appt list`                                                                                                                         |
+| Appointment | Find    | `appt find [PATIENT_NAME]`                                                                                                          |
+| Appointment | Sort    | `appt sort by/ time` or `appt sort by/ importance`                                                                                  |
+| Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                                   |
+| Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                                                                             |
+| Patient     | find    | `pf find id/[ID_NUMBER]`                                                                                                            |
+| Patient     | List    | `pf list`                                                                                                                           |
+| Patient     | Edit    | `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                                  |
+| MedicalTest | Add     | `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`                                                                            |
+| MedicalTest | Delete  | `pf result del id/[ID_NUMBER]`                                                                                                      |
+| MedicalTest | List    | `pf result list id/[ID_NUMBER]`                                                                                                     |
+| Medicine    | Add     | `medicine add mn/MEDICINE_NAME q/QUANTITY`                                                                                          |
+| Medicine    | Remove  | `medicine remove mn/MEDICINE_NAME q/QUANTITY`                                                                                       |
+| Medicine    | List    | `medicine list`                                                                                                                     |
+| Medicine    | Find    | `medicine find mn/MEDICINE_NAME`                                                                                                    |
+| Medicine    | Delete  | `medicine delete mn/MEDICINE_NAME`                                                                                                  |
+| Medicine    | Edit    | `medicine edit mn/MEDICINE_NAME un/UPDATED_NAME uq/UPDATED_QUANTITY`                                                                |
+| Medicine    | Restock | `medicine restock q/QUANTITY`                                                                                                       |
+|             | Exit    | `exit ns`                                                                                                                           |
