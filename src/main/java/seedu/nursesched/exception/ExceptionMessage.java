@@ -14,11 +14,12 @@ public enum ExceptionMessage {
     INVALID_START_TIME("Start time must be before end time."),
     INVALID_DUE_DATE_TIME("Due date must be after current date and time."),
     INVALID_SHIFTDEL_FORMAT("Invalid shift del format! Input as:" +
-            " shift del [sn/SHIFT_NUMBER]"),
+            " shift del [id/SHIFT_NUMBER]"),
     INVALID_SHIFTEDIT_FORMAT("Invalid shift edit format! Input as: " +
-            "shift edit [sn/SHIFT_NUMBER] [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
-    INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark [sn/SHIFT_NUMBER]"),
-    INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark [sn/SHIFT_NUMBER]"),
+            "shift edit [id/SHIFT_NUMBER] [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
+    INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark [id/SHIFT_NUMBER]"),
+    INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark [id/SHIFT_NUMBER]"),
+    INVALID_SHIFTLOGOT_FORMAT("Invalid shift log format! Input as: shift logot [id/SHIFT_NUMBER] [h/HOURS]"),
     INVALID_SHIFT_NUMBER("There is no shift with that specified index!"),
     NEGATIVE_INDEX("Index must be a positive integer greater than 0!"),
     ZERO_INDEX("Index cannot be zero!"),
