@@ -69,9 +69,6 @@ public class TaskParser extends Parser {
         line = line.trim();
         line = line.substring(line.indexOf(" ") + 1);
         String command = "";
-        StringBuilder description = new StringBuilder();
-        LocalDate byDate = null;
-        LocalTime byTime = null;
         boolean isDone = false;
         int taskIndex = 0;
 
@@ -100,10 +97,10 @@ public class TaskParser extends Parser {
         case "find":
             return getFindTaskParser(line, command);
         default:
-            System.out.println("Unknown command: " + command);
+            System.out.println("Unknown task command!");
             break;
         }
-        logr.warning("Invalid command: " + command);
+        logr.warning("Unknown command: " + command);
         return null;
     }
 
@@ -187,6 +184,10 @@ public class TaskParser extends Parser {
 
     public static TaskParser getIndexParser(String line, String command) throws NurseSchedException {
         int taskIndex;
+        if (!line.contains("id/")) {
+            logr.warning("Missing task index!");
+            throw new NurseSchedException(ExceptionMessage.MISSING_INDEX);
+        }
         try {
             taskIndex = Integer.parseInt(line.substring(line.indexOf("id/") + 3));
             if (taskIndex <= 0) {
