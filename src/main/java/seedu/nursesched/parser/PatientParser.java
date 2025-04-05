@@ -81,12 +81,14 @@ public class PatientParser extends Parser {
     public static PatientParser extractInputs(String line) throws NurseSchedException {
         assert line != null : "Input line cannot be null";
 
+        line = line.replace("\t", " ");
+
         if (line.trim().isEmpty()) {
             throw new NurseSchedException(ExceptionMessage.INPUT_EMPTY);
         }
 
         line = line.trim();
-        line = line.substring(line.indexOf(" ") + 1);
+        line = line.substring(line.indexOf(" ") + 1).trim();
         String command;
         String id = null;
         String name = null;
@@ -345,6 +347,10 @@ public class PatientParser extends Parser {
 
     private static void validateID(String id) throws NurseSchedException {
         // Validate ID format (4 digits)
+        if (id.trim().isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.MISSING_ID);
+        }
+
         if (id.length() != 4) {
             if (id.trim().length() != 4) {
                 if (id.contains(" ")) {
