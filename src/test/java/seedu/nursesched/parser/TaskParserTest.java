@@ -1,17 +1,32 @@
 package seedu.nursesched.parser;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.storage.TaskStorage;
 import seedu.nursesched.task.Task;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TaskParserTest {
+    static ArrayList<Task> originalList;
+
+    @BeforeAll
+    public static void saveOriginalList() {
+        originalList = Task.getTaskList();
+    }
+
+    @AfterAll
+    public static void restoreOriginalList() {
+        TaskStorage.overwriteSaveFile(originalList);
+    }
     @Test
     public void getAddTaskParser_validInputs_taskParametersParsed() throws NurseSchedException {
         String dateTmr = LocalDate.now().plusDays(1).toString();
@@ -24,6 +39,29 @@ public class TaskParserTest {
         assertEquals("Prepare bed for Patient John", taskParser.getDescription());
         assertEquals(dateTmr, taskParser.getByDate().toString());
         assertEquals(timeNow, taskParser.getByTime().toString());
+    }
+
+    @Test
+    public void addTaskParser_emptyInputs_throwsNurseSchedException() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        String dateTomorrow = LocalDate.now().plusDays(1).format(dateFormatter);
+        String timeNow = LocalTime.now().format(timeFormatter);
+
+        Task.getTaskList().clear();
+        //Missing description
+        String input1 = "task add td/ d/" + dateTomorrow + " t/" + timeNow;
+        //Missing date
+        String input2 = "task add td/Task d/" + " t/" + timeNow;
+        //Missing time
+        String input3 = "task add td/Task d/" + dateTomorrow + " t/ ";
+
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getAddTaskParser(input1, "add"));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getAddTaskParser(input2, "add"));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getAddTaskParser(input3, "add"));
     }
 
     @Test
