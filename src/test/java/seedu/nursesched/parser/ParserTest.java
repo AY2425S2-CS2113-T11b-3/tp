@@ -3,8 +3,6 @@ package seedu.nursesched.parser;
 import seedu.nursesched.exception.NurseSchedException;
 import org.junit.jupiter.api.Test;
 
-import seedu.nursesched.patient.Patient;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 

@@ -8,7 +8,9 @@ import seedu.nursesched.storage.PatientTestStorage;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MedicalTestTest {
     static ArrayList<MedicalTest> initialMedicalTestList;
