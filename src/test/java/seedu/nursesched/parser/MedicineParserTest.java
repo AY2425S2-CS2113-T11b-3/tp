@@ -4,12 +4,34 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.medicine.Medicine;
+import seedu.nursesched.storage.MedicineStorage;
 
 class MedicineParserTest {
+    static ArrayList<Medicine> initialMedicineList;
+
+    @BeforeAll
+    public static void saveInitialList() {
+        initialMedicineList = Medicine.getMedicineList();
+    }
+
+    @AfterAll
+    public static void restoreInitialList() {
+        MedicineStorage.overwriteSaveFile(initialMedicineList);
+    }
+
+    @BeforeEach
+    void setUp() {
+        Medicine.medicineList = new ArrayList<>();
+    }
 
     @Test
     void extractInputs_validAddCommand_returnsCorrectParser() throws NurseSchedException {

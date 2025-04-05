@@ -13,10 +13,9 @@ public class NurseSched {
     }
 
     public void run() {
-        String input = null;
         boolean isExit = false;
         Scanner in = new Scanner(System.in);
-        ui.greetingMessage();
+        ui.showGreetingMessage();
 
         Command.executeCommands(isExit, in, ui);
     }

@@ -614,7 +614,10 @@ This section provides instructions for testing the various features of NurseSche
 ### Adding an appointment
 **Prerequisites**: List all appointments using the `appt list` command. Initially, no appointments in the list.
 
-**Test case**: `appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`  
+**Test case**: 
+* Add patient profile into patients list: `pf add id/1001 p/Jean a/25 g/F c/66887799 n/requires constant supervision`  
+* Add appointment for that patient: `appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`  
+
 **Expected**: Appointment is added to the list. Details of the added appointment shown in the status message. Appointment list now contains 1 appointment.
 
 **Test case**: `appt add` (without all required parameters)  

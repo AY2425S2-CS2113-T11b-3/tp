@@ -3,6 +3,7 @@ package seedu.nursesched.medicine;
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.storage.MedicineStorage;
+import seedu.nursesched.ui.Ui;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
@@ -15,10 +16,11 @@ import java.util.ArrayList;
 
 /**
  * Represents a medicine in the inventory system.
- * Provides methods for managing the quantity, searching, adding, removing, and editing medicines.
+ * Provides methods for managing the quantity (add and remove), searching, adding, deleting, restocking and editing
+ * medicines.
  */
 public class Medicine {
-    protected static ArrayList<Medicine> medicineList;
+    public static ArrayList<Medicine> medicineList;
     private static final Logger logr = Logger.getLogger("Medicine");
 
     private int quantity;
@@ -38,12 +40,12 @@ public class Medicine {
     }
 
     /**
-     * Constructs a new Medicine object with the specified quantity and name.
+     * Constructs a Medicine object with a given quantity and name.
      *
-     * @param quantity     The quantity of the medicine.
-     * @param medicineName The name of the medicine.
-     * @throws IllegalArgumentException if quantity is less than or equal to 0 or if the medicine name is null or empty.
+     * @param quantity     Quantity of the medicine (must be > 0).
+     * @param medicineName Name of the medicine (non-null and non-empty).
      */
+
     public Medicine(int quantity, String medicineName) {
         assert quantity > 0 : "Quantity must be greater than 0";
         assert medicineName != null && !medicineName.trim().isEmpty() : "Medicine name cannot be null or empty";
@@ -54,13 +56,14 @@ public class Medicine {
     }
 
     /**
-     * Adds a specified quantity of medicine to the inventory.
-     * If the medicine already exists, its quantity is updated; otherwise, a new medicine is added.
+     * Adds a specified quantity of a medicine to the inventory.
+     * If the medicine exists, increases its quantity; otherwise, adds it as a new entry.
      *
-     * @param quantity     The quantity to add.
-     * @param medicineName The name of the medicine.
-     * @throws NurseSchedException If the medicine name is invalid or the quantity is not valid.
+     * @param quantity     Quantity to add.
+     * @param medicineName Name of the medicine.
+     * @throws NurseSchedException If the medicine name is invalid or the quantity is non-positive.
      */
+
     public static void addMedicine(int quantity, String medicineName) throws NurseSchedException {
         assert medicineName != null : "Medicine name cannot be null";
         assert quantity > 0 : "Quantity must be greater than 0";
@@ -91,12 +94,13 @@ public class Medicine {
     }
 
     /**
-     * Removes a specified quantity of medicine from the inventory.
+     * Removes a specified quantity of a medicine from the inventory.
      *
-     * @param quantity     The quantity to remove.
-     * @param medicineName The name of the medicine.
-     * @throws NurseSchedException If the medicine does not exist or if there is not enough quantity to remove.
+     * @param quantity     Quantity to remove.
+     * @param medicineName Name of the medicine.
+     * @throws NurseSchedException If the medicine doesn't exist or if the quantity exceeds available stock.
      */
+
     public static void removeMedicine(int quantity, String medicineName) throws NurseSchedException {
         assert medicineName != null : "Medicine name cannot be null";
         assert quantity > 0 : "Quantity must be greater than 0";
@@ -125,10 +129,10 @@ public class Medicine {
     }
 
     /**
-     * Deletes a medicine from the inventory based on its name.
+     * Deletes a medicine from the inventory by its name.
      *
-     * @param medicineName The name of the medicine to delete.
-     * @throws NurseSchedException If the medicine does not exist.
+     * @param medicineName Name of the medicine to delete.
+     * @throws NurseSchedException If the medicine is not found in the list.
      */
     public static void deleteMedicine(String medicineName) throws NurseSchedException {
         assert medicineName != null : "Medicine name cannot be null";
@@ -149,8 +153,8 @@ public class Medicine {
     }
 
     /**
-     * Lists all medicines in the inventory.
-     * If the list is empty, prints a message indicating no medicines are available.
+     * Prints a list of all medicines in the inventory.
+     * Displays a message if no medicines are available.
      */
     public static void listMedicine() {
         logr.log(Level.INFO, "Listing all medicines");
@@ -168,11 +172,11 @@ public class Medicine {
     }
 
     /**
-     * Finds all medicines that match the given name (case-insensitive).
+     * Searches for medicines containing a specific keyword (case-insensitive).
      *
-     * @param medicineName The name or partial name of the medicine to search for.
-     * @return A list of matching medicines.
-     * @throws NurseSchedException If no matching medicines are found.
+     * @param medicineName Keyword or full name to search for.
+     * @return List of matching medicines.
+     * @throws NurseSchedException If no matches are found.
      */
     public static ArrayList<Medicine> findMedicine(String medicineName) throws NurseSchedException {
         assert medicineName != null : "Medicine name cannot be null";
@@ -189,20 +193,16 @@ public class Medicine {
             logr.log(Level.WARNING, "No medicines found matching: {0}", medicineName);
             throw new NurseSchedException(ExceptionMessage.MEDICINE_NONEXISTENT);
         } else {
-            for (int i = 0; i < matchingMedicine.size(); i++) {
-                Medicine medicine = matchingMedicine.get(i);
-                System.out.printf("%d. %s%n", i + 1, medicine);
-            }
+            Ui.printSearchResults(matchingMedicine, medicineName);
         }
         return matchingMedicine;
     }
 
     /**
-     * Finds all medicines that needs to be restocked (lesser than restockQuantity provided).
-     * <p>
+     * Displays medicines that need to be restocked (below a given quantity).
      *
-     * @param restockQuantity Medicines which are below this specified quantity needs to be restocked.
-     * @throws NurseSchedException If no medicine needs to be restocked.
+     * @param restockQuantity Threshold below which medicines should be restocked.
+     * @throws NurseSchedException If no medicine is below the threshold.
      */
     public static void restockMedicine(int restockQuantity) throws NurseSchedException {
         assert restockQuantity > 0 : "Quantity must be greater than 0";
@@ -227,10 +227,10 @@ public class Medicine {
     }
 
     /**
-     * Finds a specific medicine based on its name.
+     * Finds a specific medicine by name (case-insensitive).
      *
-     * @param medicineName The name of the medicine.
-     * @return The Medicine object if found, otherwise null.
+     * @param medicineName Exact name of the medicine.
+     * @return The matching Medicine object, or null if not found.
      */
     public static Medicine findSpecificMedicine(String medicineName) {
         assert medicineName != null : "Medicine name cannot be null";
@@ -248,12 +248,12 @@ public class Medicine {
     }
 
     /**
-     * Edits the name and/or quantity of a specific medicine.
+     * Updates the name and/or quantity of an existing medicine.
      *
-     * @param medicineName    The name of the medicine to edit.
-     * @param updatedName     The new name for the medicine.
-     * @param updatedQuantity The new quantity for the medicine.
-     * @throws NurseSchedException If the medicine cannot be found or the new quantity is invalid.
+     * @param medicineName    Current name of the medicine.
+     * @param updatedName     New name to update.
+     * @param updatedQuantity New quantity to set.
+     * @throws NurseSchedException If the medicine is not found or the new quantity is invalid.
      */
     public static void editMedicine(String medicineName, String updatedName, int updatedQuantity) throws
             NurseSchedException {
@@ -279,7 +279,7 @@ public class Medicine {
     }
 
     /**
-     * Returns a string representation of the medicine object, including its quantity and name.
+     * Returns a formatted string representing the medicine (quantity and name).
      *
      * @return A string representation of the medicine.
      */
@@ -288,20 +288,12 @@ public class Medicine {
         return "[" + quantity + "] " + medicineName;
     }
 
-    /**
-     * Returns the current quantity of the medicine.
-     *
-     * @return The quantity of the medicine.
-     */
+
     public int getQuantity() {
         return quantity;
     }
 
-    /**
-     * Returns the name of the medicine.
-     *
-     * @return The name of the medicine.
-     */
+
     public String getMedicineName() {
         return medicineName;
     }
@@ -330,30 +322,16 @@ public class Medicine {
         this.quantity -= amount;
     }
 
-    /**
-     * Returns the list of all medicines.
-     *
-     * @return The list of all the medicines.
-     */
+
     public static ArrayList<Medicine> getMedicineList() {
         return medicineList;
     }
 
-    /**
-     * Sets a specified amount as the current quantity of the medicine.
-     *
-     * @param quantity The new quantity to be set as the quantity.
-     */
     public void setQuantity(int quantity) {
         assert quantity > 0 : "Quantity must be greater than 0";
         this.quantity = quantity;
     }
 
-    /**
-     * Sets a specified medicine name as the current medicine name.
-     *
-     * @param medicineName The new medicine name to be set as the current medicine name.
-     */
     public void setMedicineName(String medicineName) {
         assert medicineName != null && !medicineName.trim().isEmpty() : "Medicine name cannot be null or empty";
         this.medicineName = medicineName;

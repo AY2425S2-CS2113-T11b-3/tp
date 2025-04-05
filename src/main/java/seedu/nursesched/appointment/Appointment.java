@@ -100,9 +100,9 @@ public class Appointment {
         Appointment possibleClash = findApptClashes(startTime, endTime, date);
         if (possibleClash != null) {
             System.out.println("There is another patient, " + possibleClash.name +
-                    " with an appointment clashing with the given time and date! " +
-                    "Please enter a different date or time outside of "
-                    + possibleClash.startTime+ "-" + possibleClash.endTime);
+                    " with an appointment clashing with the given time and date! ");
+            System.out.println("Please enter a different date or time outside of " +
+                    possibleClash.getDate() + ": " + possibleClash.startTime+ "-" + possibleClash.endTime);
             logr.info("Appointment already exists, appointment not added");
             return;
         }
@@ -247,6 +247,17 @@ public class Appointment {
             }
 
             checkApptDateTime(date, startTime, endTime);
+
+            Appointment possibleClash = findApptClashes(startTime, endTime, date);
+            if (possibleClash != null && possibleClash != prevAppt) {
+                System.out.println("There is another patient, " + possibleClash.name +
+                        " with an appointment clashing with the given time and date! " +
+                        "Please enter a different date or time outside of " +
+                        possibleClash.getDate() + ": " + possibleClash.startTime+ "-" + possibleClash.endTime);
+                logr.info("Appointment already exists, appointment not added");
+                return;
+            }
+
 
             Appointment updatedAppt = new Appointment(name, startTime, endTime, date, notes, importance);
             apptList.set(index, updatedAppt);

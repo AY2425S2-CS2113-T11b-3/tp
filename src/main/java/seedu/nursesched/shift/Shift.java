@@ -87,8 +87,14 @@ public class Shift {
      * @param shiftTask The task assigned during the shift.
      */
     public static void addShift(LocalTime startTime, LocalTime endTime, LocalDate date,
-                                String shiftTask) {
+                                String shiftTask) throws NurseSchedException {
         assert startTime != null && endTime != null && date != null && shiftTask != null : "Invalid shift details";
+
+        if (date.isBefore(LocalDate.now())) {
+            logr.warning("Attempted to add shift with past date: " + date);
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_DATE);
+        }
+
         Shift shift = new Shift(startTime, endTime, date, shiftTask);
         shiftList.add(shift);
         ShiftStorage.overwriteSaveFile(shiftList);
