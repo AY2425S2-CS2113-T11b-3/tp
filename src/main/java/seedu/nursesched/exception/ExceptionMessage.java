@@ -67,6 +67,7 @@ public enum ExceptionMessage {
     INVALID_SORTING_LIST("List is empty. Nothing to sort."),
     MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
     INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
+    INDEX_PARAMETER_TOO_LARGE("The index provided is too large. Please use up to 4 digits only."),
     INVALID_TASK_FIND_FIELDS("Invalid task find fields! Input as: task find td/[KEYWORD]"),
 
     //APPT errors
