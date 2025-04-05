@@ -51,7 +51,7 @@ public class MedicalTest {
      */
     public static void addMedicalTest(MedicalTest test, String id) {
         medicalTestList.add(test);
-        System.out.println("Medical test added for patient with ID " + id + ".");
+        System.out.println("Medical test added for patient with ID " + id);
         PatientTestStorage.overwriteSaveFile(medicalTestList);
     }
 
@@ -61,9 +61,13 @@ public class MedicalTest {
      * @param patientId The ID of the patient whose tests will be removed.
      */
     public static void removeTestsForPatient(String patientId) {
-        medicalTestList.removeIf(test -> test.getPatientId().equals(patientId));
-        System.out.println("All medical tests deleted for patient ID " + patientId);
-        PatientTestStorage.overwriteSaveFile(medicalTestList);
+        boolean isRemoved = medicalTestList.removeIf(test -> test.getPatientId().equals(patientId));
+        if (isRemoved) {
+            System.out.println("All medical tests deleted for ID: " + patientId);
+            PatientTestStorage.overwriteSaveFile(medicalTestList);
+        } else {
+            System.out.println("No medical tests found for ID: " + patientId);
+        }
     }
 
     /**
@@ -81,9 +85,9 @@ public class MedicalTest {
             }
         }
         if (!found) {
-            System.out.println("No medical tests found for patient ID: " + patientId);
+            System.out.println("No medical tests found for ID: " + patientId);
         } else {
-            System.out.println("All medical tests listed for patient ID " + patientId);
+            System.out.println("All medical tests listed for ID: " + patientId);
         }
     }
 

@@ -9,7 +9,6 @@ import seedu.nursesched.parser.PatientParser;
 import seedu.nursesched.parser.ShiftParser;
 import seedu.nursesched.parser.TaskParser;
 import seedu.nursesched.parser.Parser;
-import seedu.nursesched.patient.MedicalTest;
 import seedu.nursesched.patient.Patient;
 import seedu.nursesched.shift.Shift;
 import seedu.nursesched.task.Task;

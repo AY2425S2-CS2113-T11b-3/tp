@@ -304,6 +304,10 @@ public class Task {
         return taskList;
     }
 
+    public static void resetTaskList() {
+        taskList = new ArrayList<Task>();
+    }
+
     @Override
     public String toString() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
