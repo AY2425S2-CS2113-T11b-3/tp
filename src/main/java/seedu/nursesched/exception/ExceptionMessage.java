@@ -5,8 +5,6 @@ public enum ExceptionMessage {
     INVALID_FORMAT("Invalid command format!"),
     INVALID_SHIFTADD_FORMAT("Invalid shift add format! Input as:" +
             " shift add [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
-    INVALID_APPTADD_FORMAT("Invalid appointment add format! Input as:" +
-            " appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
     INVALID_PATIENT_ADD_FORMAT("Invalid patient add format! Input as:\n" +
             "pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]"),
     INVALID_TIME_FORMAT("Invalid time format! Input as HH:mm"),
@@ -24,7 +22,6 @@ public enum ExceptionMessage {
     INVALID_SHIFT_NUMBER("There is no shift with that specified index!"),
     NEGATIVE_INDEX("Index must be a positive integer greater than 0!"),
     ZERO_INDEX("Index cannot be zero!"),
-    INVALID_APPT_NUMBER("There is no appointment with that specified index!"),
     INVALID_PATIENT_NUMBER("Index is greater than number of patients in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
     PARSING_ERROR("Error parsing command!"),
@@ -51,8 +48,6 @@ public enum ExceptionMessage {
     EMPTY_PATIENT_INFO("Patient information cannot be empty!"),
     INVALID_PATIENT_INFO("Patient ID is invalid!"),
     MISSING_PATIENT_FIELDS("Some patient fields are missing!"),
-    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit id/[INDEX] p/[PATIENT_NAME] " +
-            "s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE] n/[NOTES]"),
     PATIENT_NOT_FOUND("Patient not found!"),
     EMPTY_PATIENT_TEST_NAME("Patient test name cannot be empty!"),
     EMPTY_PATIENT_TEST_RESULT("Patient test result cannot be empty!"),
@@ -63,14 +58,23 @@ public enum ExceptionMessage {
     PATIENT_ID_EXIST("Patient ID already exist!"),
     EMPTY_PATIENT_ID_FIELD("Patient ID field cannot be empty!"),
     MISSING_EDIT_INPUT("Edit fields cannot be empty!"),
-    INVALID_IMPORTANCE_FORMAT("Importance should be an integer from 1 to 3. \n" +
-            "1:LOW, 2:MEDIUM, 3:HIGH"),
-    INVALID_SORT_PARAMETER("Can only be sorted by time or importance!"),
     INVALID_SORTING_LIST("List is empty. Nothing to sort."),
     MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
     INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
+    // ====================Appointment Specific Exceptions====================
     INVALID_PATIENT_APPT_ADD("Patient name not found in patient list! Add patient to " +
-            "patient list before adding appointment!"),
+                                     "patient list before adding appointment!"),
+    INVALID_SORT_PARAMETER("Can only be sorted by time or importance!"),
+    INVALID_IMPORTANCE_FORMAT("Importance should be an integer from 1 to 3. \n" +
+            "1:LOW, 2:MEDIUM, 3:HIGH"),
+    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit id/[INDEX] p/[PATIENT_NAME] " +
+            "s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE] n/[NOTES]"),
+    INVALID_APPT_NUMBER("There is no appointment with that specified index!"),
+    INVALID_APPTADD_FORMAT("Invalid appointment add format! Input as:" +
+            " appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
+    INVALID_APPT_DATE_TIME("Appointment date and time must be after current date and time."),
+    UNMARKING_UNMARKED_APPT("Cant unmark an appointment that was already unmarked!"),
+    MARKING_MARKED_APPT("Cant mark an appointment that was already marked!"),
     // ====================Task Specific Exceptions====================
     INVALID_TASK_FIND_FIELDS("Invalid task find fields! Input as: task find td/KEYWORD"),
     INVALID_TASK_EDIT_FORMAT("Invalid task edit format! Input as: "
@@ -87,7 +91,7 @@ public enum ExceptionMessage {
     INVALID_DAY("Invalid day in due date (YYYY-MM-DDDD)! There are at most 31 days in a month!"),
     INVALID_HOUR("Invalid hour in due time (HH:mm)! Hours can only range from 00 to 23!"),
     INVALID_MINUTE("Invalid minutes in due time (HH:mm)! Minutes can only range from 00 to 59!"),
-    INVALID_DATE("Invalid date! Take note that some months have less than 31 days!"),;
+    INVALID_DATE("Invalid date! Take note that some months have less than 31 days!");
     // ============================================================
 
     private final String message;

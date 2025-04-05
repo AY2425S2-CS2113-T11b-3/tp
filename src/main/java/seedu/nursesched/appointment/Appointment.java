@@ -92,23 +92,28 @@ public class Appointment {
                                LocalTime startTime, LocalTime endTime,
                                LocalDate date, String notes, int importance) throws NurseSchedException {
         LocalDate today = LocalDate.now();
+        LocalTime todayTime = LocalTime.now();
+
         assert !name.isEmpty() : "Name should not be empty!";
-        assert startTime.isBefore(endTime) : "Appointment's start time cannot be after its end time!";
-        assert date.isEqual(today) || date.isAfter(today) : "Appointment date cannot be in the past!";
         assert importance <=3 && importance >= 1 : "Importance has to be between 0 and 3!";
 
-        Appointment possibleClash = findAppointment(startTime, date);
+        Appointment possibleClash = findApptClashes(startTime, endTime, date);
         if (possibleClash != null) {
             System.out.println("There is another patient, " + possibleClash.name +
-                    " with the same appointment time and date! " +
-                    "Please enter a different time/date");
+                    " with an appointment clashing with the given time and date! " +
+                    "Please enter a different date or time outside of "
+                    + possibleClash.startTime+ "-" + possibleClash.endTime);
             logr.info("Appointment already exists, appointment not added");
             return;
         }
-
         if (!isInPatientList(name)){
             throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_APPT_ADD);
         }
+
+        checkApptDateTime(date, startTime, endTime);
+        assert (date.isAfter(today) || (date.isEqual(today) && startTime.isAfter(todayTime))) :
+                "Appointment date cannot be in the past!";
+        assert startTime.isBefore(endTime) : "Appointment's start time cannot be after its end time!";
 
         Appointment appt = new Appointment(name, startTime, endTime, date, notes, importance);
         apptList.add(appt);
@@ -140,11 +145,14 @@ public class Appointment {
     /**
      * Mark an appointment from the appointment list as done based on the given index.
      *
-     * @param index The index of the appointment to be removed (1-based index).
+     * @param index The index of the appointment to be marked (1-based index).
      */
-    public static void markAppt(int index){
+    public static void markAppt(int index) throws NurseSchedException {
         assert index >= 0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
+            if (apptList.get(index).getStatus()){
+                throw new NurseSchedException(ExceptionMessage.MARKING_MARKED_APPT);
+            }
             apptList.get(index).setDone(true);
             AppointmentStorage.overwriteSaveFile(apptList);
             System.out.println("Marked appointment as done!");
@@ -159,32 +167,35 @@ public class Appointment {
     /**
      * Unmark an appointment from the appointment list based on the given index.
      *
-     * @param index The index of the appointment to be removed (1-based index).
+     * @param index The index of the appointment to be unmarked (1-based index).
      */
-    public static void unmarkAppt(int index) {
+    public static void unmarkAppt(int index) throws NurseSchedException {
         assert index>0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
         try{
+            if (!apptList.get(index).getStatus()){
+                throw new NurseSchedException(ExceptionMessage.UNMARKING_UNMARKED_APPT);
+            }
             apptList.get(index).setDone(false);
             AppointmentStorage.overwriteSaveFile(apptList);
             System.out.println("Marked appointment as undone!");
             logr.info("Appointment unmarked: " + apptList.get(index).toString());
-        }catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             System.out.println("There is no appointment with index: " + (index+1));
             logr.warning("There is no appointment with index: " + (index+1));
         }
     }
 
     /**
-     * Finds and returns an appointment from the appointment list that matches
-     * the given patient name, start time, and date.
+     * Finds and returns an appointment from the appointment list that could clash
+     * with the given start time, end time and date.
      * @param startTime The start time of the appointment.
      * @param date      The date of the appointment.
      * @return          The matching appointment if found, otherwise return null.
      */
-    public static Appointment findAppointment(LocalTime startTime, LocalDate date) {
+    public static Appointment findApptClashes(LocalTime startTime, LocalTime endTime, LocalDate date) {
         for (Appointment appointment : apptList) {
-            if (appointment.startTime.equals(startTime)
-                    && appointment.date.equals(date)) {
+            if (appointment.date.equals(date) &&
+                    (appointment.startTime.isBefore(endTime) && appointment.endTime.isAfter(startTime))) {
                 return appointment;
             }
         }
@@ -195,7 +206,7 @@ public class Appointment {
      * Filter for appointments by patient names.
      * @param patientName The keyword to search for in patient name.
      */
-    public static void filterAppointment(String patientName) {
+    public static void findAppointment(String patientName) {
         ArrayList<Appointment> searchResults = new ArrayList<>();
         for (Appointment appointment : apptList) {
             if (appointment.getName().toLowerCase().contains(patientName.toLowerCase())) {
@@ -235,11 +246,7 @@ public class Appointment {
                 importance = prevAppt.importance;
             }
 
-            if (startTime.isAfter(endTime)) {
-                System.out.println("Start time cannot be after end time. Defaulting back to previous timings!");
-                logr.warning("Edit failed. Start time (" + startTime + ") is after end time (" + endTime + ")");
-                return;
-            }
+            checkApptDateTime(date, startTime, endTime);
 
             Appointment updatedAppt = new Appointment(name, startTime, endTime, date, notes, importance);
             apptList.set(index, updatedAppt);
@@ -263,9 +270,7 @@ public class Appointment {
      */
     public static void sortByImportance() throws NurseSchedException {
         if (apptList.isEmpty()){
-            String message = "Appointment list is empty. Nothing to sort.";
-            System.out.println(message);
-            logr.warning(message);
+            logr.warning("Appointment list is empty. Nothing to sort.");
             throw new NurseSchedException(ExceptionMessage.INVALID_SORTING_LIST);
         }
 
@@ -307,6 +312,26 @@ public class Appointment {
             }
         }
         return false;
+    }
+
+    public static void checkApptDateTime(LocalDate date, LocalTime startTime, LocalTime endTime)
+            throws NurseSchedException {
+
+        LocalTime todayTime = LocalTime.now();
+        LocalDate today = LocalDate.now();
+
+        if (date.isBefore(today) || (date.isEqual(today) &&
+                (startTime.isBefore(todayTime) || endTime.isBefore(todayTime)))) {
+            logr.warning("Command failed. Date time " + date + " " + startTime + " " + endTime
+                    + " has already passed");
+            throw new NurseSchedException(ExceptionMessage.INVALID_APPT_DATE_TIME);
+        }
+
+        if (startTime.isAfter(endTime)) {
+            logr.warning("Command failed. Start time (" + startTime + ") is after end time (" + endTime + ")");
+            throw new NurseSchedException(ExceptionMessage.INVALID_START_TIME);
+        }
+
     }
 
 
