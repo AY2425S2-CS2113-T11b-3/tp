@@ -284,8 +284,8 @@ public class Command {
 
                 default:
                     System.out.println("Unknown command!");
-                    System.out.println("Command should start with \"appt\", \"pf\", \"shift\", \"task\", \"medicine\" " +
-                            "or \"exit\"");
+                    System.out.println("Command should start with \"appt\", \"pf\", \"shift\", \"task\", \"medicine\" "
+                            + "or \"exit\"");
                     break;
                 }
             } catch (NurseSchedException e) {
