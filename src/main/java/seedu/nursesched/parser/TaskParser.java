@@ -220,7 +220,6 @@ public class TaskParser extends Parser {
 
         if (!line.contains("td/") || !line.contains(" d/") || !line.contains(" t/")) {
             logr.warning("Missing fields");
-            System.out.println("WTF");
             throw new NurseSchedException(ExceptionMessage.INVALID_TASK_ADD_FORMAT);
         }
 
