@@ -58,7 +58,25 @@ class ShiftTest {
     }
 
     @Test
-    void listShifts() {
+    void listShifts_emptyList_printsNoShiftsMessage() {
+        Shift.getShiftList().clear();
+        Shift.listShifts();
+    }
+
+    @Test
+    void getShiftList_containsAddedShift() {
+        Shift.getShiftList().clear();
+
+        Shift.addShift(
+                LocalTime.of(8, 0),
+                LocalTime.of(10, 0),
+                LocalDate.of(2025, 4, 1),
+                "Routine check"
+        );
+
+        ArrayList<Shift> list = Shift.getShiftList();
+        assertEquals(1, list.size());
+        assertEquals("Routine check", list.get(0).getShiftTask());
     }
 
     @Test
@@ -103,6 +121,7 @@ class ShiftTest {
 
     @Test
     void editShift_validIndex_shiftUpdatedCorrectly() throws NurseSchedException {
+        Shift.getShiftList().clear();
         LocalTime originalStart = LocalTime.of(10, 0);
         LocalTime originalEnd = LocalTime.of(11, 0);
         LocalDate originalDate = LocalDate.of(2025, 4, 1);
@@ -123,5 +142,51 @@ class ShiftTest {
         assertEquals(newEnd, editedShift.getEndTime());
         assertEquals(newDate, editedShift.getDate());
         assertEquals(newTask, editedShift.getShiftTask());
+    }
+
+    @Test
+    void sortShiftsChronologically_shiftsSortedCorrectly() {
+        Shift.getShiftList().clear();
+
+        Shift.addShift(
+                LocalTime.of(10, 0),
+                LocalTime.of(12, 0),
+                LocalDate.of(2025, 4, 3),
+                "Late shift"
+        );
+        Shift.addShift(
+                LocalTime.of(8, 0),
+                LocalTime.of(10, 0),
+                LocalDate.of(2025, 4, 2),
+                "Early shift"
+        );
+        Shift.addShift(
+                LocalTime.of(9, 0),
+                LocalTime.of(11, 0),
+                LocalDate.of(2025, 4, 3),
+                "Mid shift"
+        );
+
+        Shift.sortShiftsChronologically();
+
+        assertEquals("Early shift", Shift.getShiftList().get(0).getShiftTask());
+        assertEquals("Mid shift", Shift.getShiftList().get(1).getShiftTask());
+        assertEquals("Late shift", Shift.getShiftList().get(2).getShiftTask());
+    }
+
+    @Test
+    void logOvertime_validInput_logsCorrectly() {
+        Shift.getShiftList().clear();
+
+        Shift.addShift(
+                LocalTime.of(10, 0),
+                LocalTime.of(12, 0),
+                LocalDate.of(2025, 4, 3),
+                "Shift with OT"
+        );
+        Shift.logOvertime(0, 2.5);
+
+        double loggedHours = Shift.getShiftList().get(0).getOvertimeHours();
+        assertEquals(2.5, loggedHours);
     }
 }
