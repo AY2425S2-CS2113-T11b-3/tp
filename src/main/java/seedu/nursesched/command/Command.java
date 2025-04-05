@@ -182,6 +182,11 @@ public class Command {
                         Shift.sortShiftsChronologically();
                         Shift.listShifts();
                     }
+                    if (shift.equals("logot")) {
+                        double hours = Double.parseDouble(shiftParser.getShiftTask());
+                        int index = shiftParser.getIndex();
+                        Shift.logOvertime(index, hours);
+                    }
                     if (shift.equals("list")) {
                         Shift.listShifts();
                     }

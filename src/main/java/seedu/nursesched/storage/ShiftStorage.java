@@ -61,9 +61,11 @@ public class ShiftStorage {
         LocalTime endTime = LocalTime.parse(parts[2]);
         LocalDate date = LocalDate.parse(parts[3]);
         String task = parts.length > 4 ? parts[4] : "";
+        double overtime = parts.length > 5 ? Double.parseDouble(parts[5]) : 0.0;
 
         Shift shift = new Shift(startTime, endTime, date, task);
         shift.setDone(isDone);
+        shift.setOvertimeHours(overtime);
         return shift;
     }
 
@@ -78,7 +80,8 @@ public class ShiftStorage {
         return shift.getStatus() + " | " + shift.getStartTime()
                 + " | " + shift.getEndTime()
                 + " | " + shift.getDate()
-                + " | " + shift.getShiftTask();
+                + " | " + shift.getShiftTask()
+                + " | " + shift.getOvertimeHours();
     }
 
     /**
