@@ -30,6 +30,7 @@ public class Command {
             try {
                 String line = ui.readCommand(in);
                 ui.showResults();
+                line = line.trim();
                 String type = Parser.extractType(line);
 
                 switch (type) {

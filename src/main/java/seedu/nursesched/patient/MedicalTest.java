@@ -104,6 +104,10 @@ public class MedicalTest {
         return result;
     }
 
+    public static ArrayList<MedicalTest> getMedicalTestList() {
+        return medicalTestList;
+    }
+
     /**
      * Returns a string representation of the medical test in the format:
      * Patient ID: {@code patientId} - Test: {@code testName}, Result: {@code result}.
