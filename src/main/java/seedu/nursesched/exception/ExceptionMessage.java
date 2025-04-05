@@ -53,6 +53,7 @@ public enum ExceptionMessage {
     PATIENT_AGE_DIGITS("Patient age must not contain any non-digits or spaces!"),
     INVALID_CONTACT_LENGTH("Contact length must be 8 digits!"),
     PATIENT_CONTACT_DIGITS("Patient contact must not contain non-digits or spaces!"),
+    ID_CONTAINS_SPACES("Patient ID must not contain spaces!"),
 
     // ====================Medicine Specific Exceptions====================
     INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: MEDICINE_NAME | QUANTITY in" +

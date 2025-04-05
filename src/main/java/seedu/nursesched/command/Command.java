@@ -118,7 +118,6 @@ public class Command {
                         break;
                     }
                     if (input.equals("del")) {
-                        MedicalTest.removeTestsForPatient(patientParser.getId());
                         Patient.removePatient(patientParser.getId());
                         break;
                     }

@@ -59,25 +59,8 @@ public class Patient {
             }
         }
 
-        try {
-            int ageNumber = Integer.parseInt(age);
-            if (ageNumber < 0) {
-                throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_NEGATIVE);
-            } else if (ageNumber > 125) {
-                throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_LIMIT);
-            }
-        } catch (NumberFormatException e) {
-            throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_DIGITS);
-        }
-
-        try {
-            int contactNumber = Integer.parseInt(contact);
-            if (contactNumber < 10000000 || contactNumber > 99999999) {
-                throw new NurseSchedException(ExceptionMessage.INVALID_CONTACT_LENGTH);
-            }
-        } catch (NumberFormatException e) {
-            throw new NurseSchedException(ExceptionMessage.PATIENT_CONTACT_DIGITS);
-        }
+        verifyAge(age);
+        verifyContact(contact);
 
         this.id = id;
         this.name = name;
@@ -115,14 +98,15 @@ public class Patient {
                 patientsList.remove(patient);
                 System.out.println("Patient information removed for ID: " + id);
                 found = true;
+                MedicalTest.removeTestsForPatient(patient.getId());
                 break;
             }
         }
 
-        PatientStorage.overwriteSaveFile(patientsList);
-
         if (!found) {
             throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
+        } else {
+            PatientStorage.overwriteSaveFile(patientsList);
         }
     }
 
@@ -148,7 +132,7 @@ public class Patient {
      * @throws NurseSchedException If the ID is invalid or no patient is found.
      */
     public static void printProfileWithID(String id) throws NurseSchedException {
-        if (id.length() > 4 || id.length() < 3) {
+        if (id.length() != 4) {
             throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
         }
 
@@ -187,7 +171,7 @@ public class Patient {
      * @param newNotes   The new notes (if provided).
      */
     public static void editPatientDetails(String id, String newName, String newAge, String newGender,
-                                          String newContact, String newNotes) {
+                                          String newContact, String newNotes) throws NurseSchedException {
         boolean found = false;
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
@@ -196,12 +180,14 @@ public class Patient {
                     patient.name = newName;
                 }
                 if (newAge != null) {
+                    verifyAge(newAge);
                     patient.age = newAge;
                 }
                 if (newGender != null) {
                     patient.gender = newGender.toUpperCase();
                 }
                 if (newContact != null) {
+                    verifyContact(newContact);
                     patient.contact = newContact;
                 }
                 if (newNotes != null) {
@@ -211,11 +197,35 @@ public class Patient {
                 break;
             }
         }
-
-        PatientStorage.overwriteSaveFile(patientsList);
-
+        
         if (!found) {
-            System.out.println("No patient found with ID: " + id);
+            throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
+        } else {
+            PatientStorage.overwriteSaveFile(patientsList);
+        }
+    }
+
+    private static void verifyContact(String contact) throws NurseSchedException {
+        try {
+            int contactNumber = Integer.parseInt(contact);
+            if (contactNumber < 10000000 || contactNumber > 99999999) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_CONTACT_LENGTH);
+            }
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.PATIENT_CONTACT_DIGITS);
+        }
+    }
+
+    private static void verifyAge(String age) throws NurseSchedException {
+        try {
+            int ageNumber = Integer.parseInt(age);
+            if (ageNumber < 0) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_NEGATIVE);
+            } else if (ageNumber > 125) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_LIMIT);
+            }
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_DIGITS);
         }
     }
 
@@ -255,11 +265,11 @@ public class Patient {
     @Override
     public String toString() {
         return "Patient Details:\n" +
-                "  ID: P" + id + "\n" +
+                "  ID: " + id + "\n" +
                 "  Name: " + name + "\n" +
                 "  Age: " + age + " years old\n" +
                 "  Gender: " + gender + "\n" +
                 "  Contact: " + contact + "\n" +
-                (notes.isEmpty() ? "" : "  Notes: " + notes);
+                (notes.isEmpty() ? "  Notes: No notes were given." : "  Notes: " + notes);
     }
 }
