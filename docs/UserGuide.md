@@ -50,7 +50,7 @@ supply.
     * [Editing a medicine](#editing-a-medicine-medicine-edit)
     * [Restocking a medicine](#restocking-a-medicine-medicine-restock)
 * [Other commands](#other-commands)
-    * [Exit](#exit-exit)
+    * [Exit](#exit-exit-ns)
 * [FAQ](#faq)
 * [Command summary](#command-summary)
 
