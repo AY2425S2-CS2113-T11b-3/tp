@@ -79,7 +79,7 @@ public class Command {
 
                         break;
                     case "find":
-                        Appointment.filterAppointment(apptParser.getSearchKeyword());
+                        Appointment.findAppointment(apptParser.getSearchKeyword());
                         break;
                     case "edit":
                         Appointment.editAppt(
