@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import java.util.Comparator;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -203,6 +204,14 @@ public class Shift {
         System.out.println("Shift updated:");
         System.out.println(updatedShift);
         logr.info("Shift updated at index " + index + ": " + updatedShift);
+    }
+
+    /**
+     * Sorts the shift list in chronological order by date and start time.
+     */
+    public static void sortShiftsChronologically() {
+        shiftList.sort(Comparator.comparing(Shift::getDate).thenComparing(Shift::getStartTime));
+        System.out.println("Shifts sorted by date and start time.");
     }
 
     public void setDone(boolean done) {

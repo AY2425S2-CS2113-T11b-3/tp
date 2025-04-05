@@ -119,6 +119,9 @@ public class ShiftParser extends Parser {
             } else if (command.equals("edit")) {
                 return getShiftEditParser(remaining, command);
 
+            } else if (command.equals("sort")) {
+                return new ShiftParser("sort", null, null, null, "", 0);
+
             } else {
                 logr.warning("Invalid command: " + command);
                 throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
