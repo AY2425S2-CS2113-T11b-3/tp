@@ -9,8 +9,6 @@ public enum ExceptionMessage {
             " appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
     INVALID_PATIENT_ADD_FORMAT("Invalid patient add format! Input as:\n" +
             "pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]"),
-    INVALID_TASKADD_FORMAT("Invalid task add format! Input as: "
-            + "task add [td/TASK_DESCRIPTION] [d/DUE_DATE] [t/DUE_TIME]"),
     INVALID_TIME_FORMAT("Invalid time format! Input as HH:mm"),
     INVALID_DATE_FORMAT("Invalid date format! Input as YYYY-MM-DD"),
     INVALID_DATETIME_FORMAT("Invalid date or time format! Input date as YYYY-MM-DD, input time as HH:mm"),
@@ -28,7 +26,6 @@ public enum ExceptionMessage {
     ZERO_INDEX("Index cannot be zero!"),
     INVALID_APPT_NUMBER("There is no appointment with that specified index!"),
     INVALID_PATIENT_NUMBER("Index is greater than number of patients in the list!"),
-    TASK_INDEX_OUT_OF_BOUNDS("Task index is not within 1 and the total number of tasks in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
     PARSING_ERROR("Error parsing command!"),
     INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: [MEDICINE_NAME] | [QUANTITY] in" +
@@ -56,12 +53,9 @@ public enum ExceptionMessage {
     MISSING_PATIENT_FIELDS("Some patient fields are missing!"),
     INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit id/[INDEX] p/[PATIENT_NAME] " +
             "s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE] n/[NOTES]"),
-    INVALID_TASK_INDEX("Invalid task index! Index should be an integer!"),
     PATIENT_NOT_FOUND("Patient not found!"),
     EMPTY_PATIENT_TEST_NAME("Patient test name cannot be empty!"),
     EMPTY_PATIENT_TEST_RESULT("Patient test result cannot be empty!"),
-    INVALID_TASK_EDIT_FORMAT("Invalid task edit format! Input as: "
-            + "task edit [id/TASK_INDEX] [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]"),
     EMPTY_INPUT_DETAILS("Input details cannot be empty!"),
     MISSING_ID("Patient ID cannot be empty!"),
     EMPTY_PATIENT_FIELDS("Some patient fields are empty!"),
@@ -77,8 +71,24 @@ public enum ExceptionMessage {
     INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
     INVALID_PATIENT_APPT_ADD("Patient name not found in patient list! Add patient to " +
             "patient list before adding appointment!"),
-    INVALID_TASK_FIND_FIELDS("Invalid task find fields! Input as: task find td/[KEYWORD]");
-
+    // ====================Task Specific Exceptions====================
+    INVALID_TASK_FIND_FIELDS("Invalid task find fields! Input as: task find td/KEYWORD"),
+    INVALID_TASK_EDIT_FORMAT("Invalid task edit format! Input as: "
+            + "task edit id/TASK_INDEX [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]"),
+    TASK_INDEX_OUT_OF_BOUNDS("Task index is not within 1 and the total number of tasks in the list!"),
+    INVALID_TASK_ADD_FORMAT("Invalid task add format! Input as: "
+            + "task add td/TASK_DESCRIPTION d/DUE_DATE t/DUE_TIME"),
+    INVALID_TASK_INDEX("Invalid task index! Index should be an integer!"),
+    EMPTY_TASK_DESCRIPTION("Task description cannot be empty!"),
+    EMPTY_TASK_DATE_TIME("Tasks' due date and time cannot be empty!"),
+    MARKING_A_MARKED_TASK("That task is already marked, cannot mark it again!"),
+    UNMARKING_AN_UNMARKED_TASK("That task is already unmarked, cannot unmark it again!"),
+    INVALID_MONTH("Invalid month in due date (YYYY-MM-DDDD)! Months can only range from 01 - 12!"),
+    INVALID_DAY("Invalid day in due date (YYYY-MM-DDDD)! There are at most 31 days in a month!"),
+    INVALID_HOUR("Invalid hour in due time (HH:mm)! Hours can only range from 00 to 23!"),
+    INVALID_MINUTE("Invalid minutes in due time (HH:mm)! Minutes can only range from 00 to 59!"),
+    INVALID_DATE("Invalid date! Take note that some months have less than 31 days!"),;
+    // ============================================================
 
     private final String message;
 
