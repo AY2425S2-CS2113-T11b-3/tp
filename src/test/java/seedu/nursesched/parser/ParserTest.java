@@ -132,11 +132,11 @@ public class ParserTest {
 
         assertNotNull(apptParser);
         assertEquals("add", apptParser.getCommand());
-        assertEquals("jean doe", apptParser.getName());
+        assertEquals("Jean doe", apptParser.getName());
         assertEquals(LocalTime.parse("13:00"), apptParser.getStartTime());
         assertEquals(LocalTime.parse("14:00"), apptParser.getEndTime());
         assertEquals(LocalDate.parse("2025-02-15"), apptParser.getDate());
-        assertEquals("needs a wheelchair. very annoying!", apptParser.getNotes());
+        assertEquals("Needs a wheelchair. Very annoying!", apptParser.getNotes());
     }
 
     @Test
@@ -188,7 +188,7 @@ public class ParserTest {
 
         assertNotNull(apptParser);
         assertEquals("add", apptParser.getCommand());
-        assertEquals("jean doe", apptParser.getName());
+        assertEquals("Jean Doe", apptParser.getName());
         assertEquals(LocalTime.parse("13:00"), apptParser.getStartTime());
         assertEquals(LocalTime.parse("14:00"), apptParser.getEndTime());
         assertEquals(LocalDate.parse("2025-02-15"), apptParser.getDate());
