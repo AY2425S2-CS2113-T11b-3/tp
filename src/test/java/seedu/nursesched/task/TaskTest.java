@@ -1,10 +1,14 @@
 package seedu.nursesched.task;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import seedu.nursesched.exception.NurseSchedException;
+import seedu.nursesched.storage.TaskStorage;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -12,6 +16,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TaskTest {
+    static ArrayList<Task> originalList;
+
+    @BeforeAll
+    public static void saveOriginalList() {
+        originalList = Task.getTaskList();
+    }
+
+    @AfterAll
+    public static void restoreOriginalList() {
+        TaskStorage.overwriteSaveFile(originalList);
+    }
+
     //Tests related to adding of tasks
     @Test
     public void addTask_validInputs_taskAdded() throws NurseSchedException {
@@ -100,19 +116,35 @@ public class TaskTest {
                 () -> Task.markTask(2));
     }
 
-    //Tests related to unmarking of tasks
     @Test
-    public void unmarkTask_validIndex_taskMarked() throws NurseSchedException {
+    public void markTask_taskAlreadyMarked_throwsNurseSchedException() throws NurseSchedException {
         LocalDate dateTomorrow = LocalDate.now().plusDays(1);
         LocalTime timeNow = LocalTime.now();
         Task.getTaskList().clear();
-
-        //Add a task which is due 24 hours later
+        //Add a marked task which is due 24 hours later
         Task.addTask(
                 "Prepare medication for Jean",
                 dateTomorrow,
                 timeNow,
-                false
+                true
+        );
+        assertThrows(NurseSchedException.class,
+                () -> Task.markTask(1));
+    }
+
+    //Tests related to unmarking of tasks
+    @Test
+    public void unmarkTask_validIndex_taskUnmarked() throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+        Task.getTaskList().clear();
+
+        //Adds a marked task which is due 24 hours later
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                true
         );
         Task.unmarkTask(1);
         assertFalse(Task.getTaskList().get(0).getIsDone());
@@ -135,6 +167,22 @@ public class TaskTest {
                 () -> Task.unmarkTask(0));
         assertThrows(AssertionError.class,
                 () -> Task.unmarkTask(-1));
+    }
+
+    @Test
+    public void unmarkTask_taskAlreadyUnmarked_throwsNurseSchedException() throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+        Task.getTaskList().clear();
+        //Adds an unmarked task which is due 24 hours later
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                false
+        );
+        assertThrows(NurseSchedException.class,
+                () -> Task.unmarkTask(1));
     }
 
     @Test
