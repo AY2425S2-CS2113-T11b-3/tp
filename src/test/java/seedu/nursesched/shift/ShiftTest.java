@@ -42,8 +42,12 @@ class ShiftTest {
         ShiftParser shiftParser = ShiftParser.extractInputs(inputString);
         assertNotNull(shiftParser);
 
-        shiftList.add(new Shift(shiftParser.getStartTime(), shiftParser.getEndTime(), shiftParser.getDate(),
-                shiftParser.getShiftTask()));
+        shiftList.add(new Shift(
+                shiftParser.getStartTime(),
+                shiftParser.getEndTime(),
+                shiftParser.getDate(),
+                shiftParser.getShiftTask()
+        ));
 
         LocalTime startTime = shiftParser.getStartTime();
         LocalTime endTime = shiftParser.getEndTime();
@@ -66,8 +70,12 @@ class ShiftTest {
         ShiftParser shiftParserAdd = ShiftParser.extractInputs(inputStringAdd);
         assertNotNull(shiftParserAdd);
 
-        shiftList.add(new Shift(shiftParserAdd.getStartTime(), shiftParserAdd.getEndTime(), shiftParserAdd.getDate(),
-                shiftParserAdd.getShiftTask()));
+        shiftList.add(new Shift(
+                shiftParserAdd.getStartTime(),
+                shiftParserAdd.getEndTime(),
+                shiftParserAdd.getDate(),
+                shiftParserAdd.getShiftTask()
+        ));
 
         assertEquals(1, shiftList.size());
 
@@ -78,7 +86,27 @@ class ShiftTest {
     }
 
     @Test
-    void listShifts() {
+    void listShifts_emptyList_printsNoShiftsMessage() {
+        Shift.getShiftList().clear();
+        Shift.listShifts();
+    }
+
+    @Test
+    void getShiftList_containsAddedShift() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        LocalDate futureDate = LocalDate.now().plusDays(1);
+
+        Shift.addShift(
+                LocalTime.of(8, 0),
+                LocalTime.of(10, 0),
+                futureDate,
+                "Routine check"
+        );
+
+        ArrayList<Shift> list = Shift.getShiftList();
+        assertEquals(1, list.size());
+        assertEquals("Routine check", list.get(0).getShiftTask());
     }
 
     @Test
@@ -88,8 +116,12 @@ class ShiftTest {
         ShiftParser shiftParserAdd = ShiftParser.extractInputs(inputString);
         assertNotNull(shiftParserAdd);
 
-        shiftList.add(new Shift(shiftParserAdd.getStartTime(), shiftParserAdd.getEndTime(), shiftParserAdd.getDate(),
-                shiftParserAdd.getShiftTask()));
+        shiftList.add(new Shift(
+                shiftParserAdd.getStartTime(),
+                shiftParserAdd.getEndTime(),
+                shiftParserAdd.getDate(),
+                shiftParserAdd.getShiftTask()
+        ));
 
         String expected = "[ ] From: 10:00, To: 11:00, Date: 2004-01-01, shiftTask: test";
 
@@ -99,7 +131,12 @@ class ShiftTest {
     @Test
     void markAndUnmarkShift_statusChangesCorrectly() throws NurseSchedException {
         ShiftParser parser = ShiftParser.extractInputs("shift add s/10:00 e/11:00 d/2004-01-01 st/test");
-        Shift shift = new Shift(parser.getStartTime(), parser.getEndTime(), parser.getDate(), parser.getShiftTask());
+        Shift shift = new Shift(
+                parser.getStartTime(),
+                parser.getEndTime(),
+                parser.getDate(),
+                parser.getShiftTask()
+        );
         shiftList.add(shift);
 
         shift.setDone(true);
@@ -112,7 +149,12 @@ class ShiftTest {
     @Test
     void shiftGetters_returnCorrectValues() throws NurseSchedException {
         ShiftParser parser = ShiftParser.extractInputs("shift add s/08:00 e/10:00 d/2004-01-01 st/rounds");
-        Shift shift = new Shift(parser.getStartTime(), parser.getEndTime(), parser.getDate(), parser.getShiftTask());
+        Shift shift = new Shift(
+                parser.getStartTime(),
+                parser.getEndTime(),
+                parser.getDate(),
+                parser.getShiftTask()
+        );
 
         assertEquals(LocalTime.of(8, 0), shift.getStartTime());
         assertEquals(LocalTime.of(10, 0), shift.getEndTime());
@@ -123,9 +165,11 @@ class ShiftTest {
 
     @Test
     void editShift_validIndex_shiftUpdatedCorrectly() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
         LocalTime originalStart = LocalTime.of(10, 0);
         LocalTime originalEnd = LocalTime.of(11, 0);
-        LocalDate originalDate = LocalDate.of(2025, 6, 10);
+        LocalDate originalDate = LocalDate.now().plusDays(1);
         String originalTask = "Initial shift";
 
         Shift.addShift(originalStart, originalEnd, originalDate, originalTask);
@@ -133,7 +177,7 @@ class ShiftTest {
 
         LocalTime newStart = LocalTime.of(12, 0);
         LocalTime newEnd = LocalTime.of(13, 0);
-        LocalDate newDate = LocalDate.of(2025, 4, 2);
+        LocalDate newDate = LocalDate.now().plusDays(2);
         String newTask = "Updated shift";
 
         Shift.editShift(0, newStart, newEnd, newDate, newTask);
@@ -143,5 +187,41 @@ class ShiftTest {
         assertEquals(newEnd, editedShift.getEndTime());
         assertEquals(newDate, editedShift.getDate());
         assertEquals(newTask, editedShift.getShiftTask());
+    }
+
+    @Test
+    void sortShiftsChronologically_shiftsSortedCorrectly() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        LocalDate date1 = LocalDate.now().plusDays(1);
+        LocalDate date2 = LocalDate.now().plusDays(2);
+
+        Shift.addShift(LocalTime.of(10, 0), LocalTime.of(12, 0), date2, "Late shift");
+        Shift.addShift(LocalTime.of(8, 0), LocalTime.of(10, 0), date1, "Early shift");
+        Shift.addShift(LocalTime.of(9, 0), LocalTime.of(11, 0), date2, "Mid shift");
+
+        Shift.sortShiftsChronologically();
+
+        assertEquals("Early shift", Shift.getShiftList().get(0).getShiftTask());
+        assertEquals("Mid shift", Shift.getShiftList().get(1).getShiftTask());
+        assertEquals("Late shift", Shift.getShiftList().get(2).getShiftTask());
+    }
+
+    @Test
+    void logOvertime_validInput_logsCorrectly() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        LocalDate futureDate = LocalDate.now().plusDays(1);
+
+        Shift.addShift(
+                LocalTime.of(10, 0),
+                LocalTime.of(12, 0),
+                futureDate,
+                "Shift with OT"
+        );
+
+        Shift.logOvertime(0, 2.5);
+        double loggedHours = Shift.getShiftList().get(0).getOvertimeHours();
+        assertEquals(2.5, loggedHours);
     }
 }

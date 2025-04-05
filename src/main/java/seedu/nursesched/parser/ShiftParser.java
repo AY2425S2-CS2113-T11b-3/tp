@@ -262,7 +262,6 @@ public class ShiftParser extends Parser {
         return new ShiftParser(command, null, null, null, "", shiftIndex);
     }
 
-
     /**
      * Parses a delete shift command and extracts the shift index.
      *
