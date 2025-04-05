@@ -64,7 +64,8 @@ class ShiftTest {
     }
 
     @Test
-    void getShiftList_containsAddedShift() {
+    void getShiftList_containsAddedShift() throws NurseSchedException {
+
         Shift.getShiftList().clear();
 
         Shift.addShift(
@@ -145,7 +146,7 @@ class ShiftTest {
     }
 
     @Test
-    void sortShiftsChronologically_shiftsSortedCorrectly() {
+    void sortShiftsChronologically_shiftsSortedCorrectly() throws NurseSchedException {
         Shift.getShiftList().clear();
 
         Shift.addShift(
@@ -175,7 +176,7 @@ class ShiftTest {
     }
 
     @Test
-    void logOvertime_validInput_logsCorrectly() {
+    void logOvertime_validInput_logsCorrectly() throws NurseSchedException {
         Shift.getShiftList().clear();
 
         Shift.addShift(
