@@ -18,9 +18,8 @@ import seedu.nursesched.parser.ShiftParser;
 import seedu.nursesched.storage.ShiftStorage;
 
 class ShiftTest {
-    private final List<Shift> shiftList = new ArrayList<>();
-
     static ArrayList<Shift> initialShiftList;
+    private final List<Shift> shiftList = new ArrayList<>();
 
     @BeforeAll
     public static void saveInitialList() {
