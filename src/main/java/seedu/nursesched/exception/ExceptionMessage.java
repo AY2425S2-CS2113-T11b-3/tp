@@ -5,8 +5,6 @@ public enum ExceptionMessage {
     INVALID_FORMAT("Invalid command format!"),
     INVALID_SHIFTADD_FORMAT("Invalid shift add format! Input as:" +
             " shift add [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
-    INVALID_PATIENT_ADD_FORMAT("Invalid patient add format! Input as:\n" +
-            "pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]"),
     INVALID_TIME_FORMAT("Invalid time format! Input as HH:mm"),
     INVALID_DATE_FORMAT("Invalid date format! Input as YYYY-MM-DD"),
     INVALID_DATETIME_FORMAT("Invalid date or time format! Input date as YYYY-MM-DD, input time as HH:mm"),
@@ -24,8 +22,15 @@ public enum ExceptionMessage {
     INVALID_SHIFT_NUMBER("There is no shift with that specified index!"),
     NEGATIVE_INDEX("Index must be a positive integer greater than 0!"),
     ZERO_INDEX("Index cannot be zero!"),
-    INVALID_PATIENT_NUMBER("Index is greater than number of patients in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
+    INVALID_SORTING_LIST("List is empty. Nothing to sort."),
+    MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
+    INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
+    INDEX_PARAMETER_TOO_LARGE("The index provided is too large. Please use up to 4 digits only."),
+
+    // ====================Patient Specific Exceptions====================
+    INVALID_PATIENT_ADD_FORMAT("Invalid patient add format! Input as:\n" +
+            "pf add id/ID_NUMBER p/PATIENT_NAME a/AGE g/GENDER c/CONTACT n/[NOTES]"),
     PARSING_ERROR("Error parsing command!"),
     MISSING_SEARCH_TERM("Missing search term after 'find'!"),
     INVALID_ID_LENGTH("Patient ID must be 4 digits long."),
@@ -43,10 +48,11 @@ public enum ExceptionMessage {
     PATIENT_ID_EXIST("Patient ID already exist!"),
     EMPTY_PATIENT_ID_FIELD("Patient ID field cannot be empty!"),
     MISSING_EDIT_INPUT("Edit fields cannot be empty!"),
-    INVALID_SORTING_LIST("List is empty. Nothing to sort."),
-    MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
-    INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
-    INDEX_PARAMETER_TOO_LARGE("The index provided is too large. Please use up to 4 digits only."),
+    PATIENT_AGE_NEGATIVE("Patient age cannot be negative!"),
+    PATIENT_AGE_LIMIT("Patient age cannot be greater than the maximum age!"),
+    PATIENT_AGE_DIGITS("Patient age must not contain any non-digits or spaces!"),
+    INVALID_CONTACT_LENGTH("Contact length must be 8 digits!"),
+    PATIENT_CONTACT_DIGITS("Patient contact must not contain non-digits or spaces!"),
 
     // ====================Medicine Specific Exceptions====================
     INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: MEDICINE_NAME | QUANTITY in" +

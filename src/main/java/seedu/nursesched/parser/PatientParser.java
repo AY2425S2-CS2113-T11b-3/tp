@@ -181,7 +181,7 @@ public class PatientParser extends Parser {
         }
         case "find" -> {
             try {
-                if (line.length() != 7) {
+                if (line.trim().length() != 7) {
                     throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
                 }
                 id = line.substring(line.indexOf("id/") + 3, line.indexOf("id/") + 7);

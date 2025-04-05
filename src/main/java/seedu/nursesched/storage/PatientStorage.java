@@ -29,7 +29,7 @@ public class PatientStorage {
                 patientList.add(patient);
             }
         } catch (FileNotFoundException | NurseSchedException e) {
-            System.out.println("Error reading file.");
+            System.out.println("Error reading file. There might be corruption in the data file.");
         }
         return patientList;
     }

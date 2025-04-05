@@ -59,6 +59,26 @@ public class Patient {
             }
         }
 
+        try {
+            int ageNumber = Integer.parseInt(age);
+            if (ageNumber < 0) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_NEGATIVE);
+            } else if (ageNumber > 125) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_LIMIT);
+            }
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_DIGITS);
+        }
+
+        try {
+            int contactNumber = Integer.parseInt(contact);
+            if (contactNumber < 10000000 || contactNumber > 99999999) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_CONTACT_LENGTH);
+            }
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.PATIENT_CONTACT_DIGITS);
+        }
+
         this.id = id;
         this.name = name;
         this.age = age;
