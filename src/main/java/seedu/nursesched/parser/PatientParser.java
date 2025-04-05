@@ -256,7 +256,7 @@ public class PatientParser extends Parser {
                 command = line.substring(0, line.indexOf(" "));
                 line = line.substring(line.indexOf(" ") + 1);
             } catch (StringIndexOutOfBoundsException e) {
-                throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
+                throw new NurseSchedException(ExceptionMessage.MISSING_ID);
             }
 
             switch (command) {
