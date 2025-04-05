@@ -28,23 +28,6 @@ public enum ExceptionMessage {
     TASK_INDEX_OUT_OF_BOUNDS("Task index is not within 1 and the total number of tasks in the list!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
     PARSING_ERROR("Error parsing command!"),
-    INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: [MEDICINE_NAME] | [QUANTITY] in" +
-            " storage file."),
-    INVALID_MEDICINEEDIT_FORMAT("Invalid medicine edit format! Input as: medicine edit mn/[MEDICINE_NAME] " +
-            "un/[UPDATE_NAME] uq/[UPDATED_QUANTITY]"),
-    INVALID_MEDICINEDELETE_FORMAT("Invalid medicine delete format! Input as: medicine delete mn/[MEDICINE_NAME]"),
-    INVALID_MEDICINEFIND_FORMAT("Invalid medicine find format! Input as: medicine find mn/[MEDICINE_NAME]"),
-    INVALID_MEDICINE_FORMAT("Try adding add, remove, edit, list, find, restock or delete!"),
-    INVALID_MEDICINEADD_FORMAT("Invalid medicine add format! Input as: medicine add mn/[MEDICINE_NAME] q/[QUANTITY]"),
-    INVALID_MEDICINERESTOCK_FORMAT("Invalid medicine restock format! Input as: medicine restock q/[QUANTITY]"),
-    INVALID_MEDICINEREMOVE_FORMAT("Invalid medicine remove format! Input as: medicine remove mn/[MEDICINE_NAME]" +
-            " q/[QUANTITY]"),
-    NO_RESTOCK_REQUIRED("No restock required!"),
-    NEGATIVE_MEDICINE_QUANTITY("Medicine quantity must be a positive integer!"),
-    INVALID_MEDICINE_QUANTITY("Medicine quantity is too big! Should be lesser than existing quantity."),
-    MISSING_MEDICINE_QUANTITY("No medicine quantity input"),
-    MISSING_MEDICINE_NAME("No Medicine name input"),
-    MEDICINE_NONEXISTENT("Medicine does not exist!"),
     MISSING_SEARCH_TERM("Missing search term after 'find'!"),
     INVALID_ID_LENGTH("Patient ID must be 4 digits long."),
     INVALID_ID_INPUT("Patient ID must contain only digits."),
@@ -68,6 +51,25 @@ public enum ExceptionMessage {
     MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
     INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
     INVALID_TASK_FIND_FIELDS("Invalid task find fields! Input as: task find td/[KEYWORD]"),
+
+    // Medicine errors
+    INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: MEDICINE_NAME | QUANTITY in" +
+            " storage file."),
+    INVALID_MEDICINEEDIT_FORMAT("Invalid medicine edit format! Input as: medicine edit mn/MEDICINE_NAME " +
+            "un/UPDATE_NAME uq/UPDATED_QUANTITY"),
+    INVALID_MEDICINEDELETE_FORMAT("Invalid medicine delete format! Input as: medicine delete mn/MEDICINE_NAME"),
+    INVALID_MEDICINEFIND_FORMAT("Invalid medicine find format! Input as: medicine find mn/MEDICINE_NAME"),
+    INVALID_MEDICINE_FORMAT("Try adding add, remove, edit, list, find, restock or delete!"),
+    INVALID_MEDICINEADD_FORMAT("Invalid medicine add format! Input as: medicine add mn/MEDICINE_NAME q/QUANTITY"),
+    INVALID_MEDICINERESTOCK_FORMAT("Invalid medicine restock format! Input as: medicine restock q/QUANTITY"),
+    INVALID_MEDICINEREMOVE_FORMAT("Invalid medicine remove format! Input as: medicine remove mn/MEDICINE_NAME" +
+            " q/QUANTITY"),
+    NO_RESTOCK_REQUIRED("No restock required!"),
+    NEGATIVE_MEDICINE_QUANTITY("Medicine quantity must be a positive integer!"),
+    INVALID_MEDICINE_QUANTITY("Medicine quantity is too big! Should be lesser than existing quantity."),
+    MISSING_MEDICINE_QUANTITY("No medicine quantity input"),
+    MISSING_MEDICINE_NAME("No Medicine name input"),
+    MEDICINE_NONEXISTENT("Medicine does not exist!"),
 
     //APPT errors
     INVALID_PATIENT_APPT_ADD("Patient name not found in patient list! Add patient to " +

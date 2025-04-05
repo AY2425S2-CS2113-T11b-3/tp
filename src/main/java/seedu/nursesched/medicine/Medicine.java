@@ -3,6 +3,7 @@ package seedu.nursesched.medicine;
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.storage.MedicineStorage;
+import seedu.nursesched.ui.Ui;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * Provides methods for managing the quantity, searching, adding, removing, and editing medicines.
  */
 public class Medicine {
-    protected static ArrayList<Medicine> medicineList;
+    public static ArrayList<Medicine> medicineList;
     private static final Logger logr = Logger.getLogger("Medicine");
 
     private int quantity;
@@ -189,10 +190,7 @@ public class Medicine {
             logr.log(Level.WARNING, "No medicines found matching: {0}", medicineName);
             throw new NurseSchedException(ExceptionMessage.MEDICINE_NONEXISTENT);
         } else {
-            for (int i = 0; i < matchingMedicine.size(); i++) {
-                Medicine medicine = matchingMedicine.get(i);
-                System.out.printf("%d. %s%n", i + 1, medicine);
-            }
+            Ui.printSearchResults(matchingMedicine, medicineName);
         }
         return matchingMedicine;
     }
