@@ -55,6 +55,8 @@ public enum ExceptionMessage {
     PATIENT_CONTACT_DIGITS("Patient contact must not contain non-digits or spaces!"),
     ID_CONTAINS_SPACES("Patient ID must not contain spaces!"),
     EMPTY_PATIENT_LIST("Patient list is empty!"),
+    MISSING_ID_IDENTIFIER("Missing id/ identifier!"),
+    PATIENT_DUPLICATE_IDENTIFIER("There are multiple identifiers, ensure that there is only 1 for each field!"),
 
     // ====================Medicine Specific Exceptions====================
     INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: MEDICINE_NAME | QUANTITY in" +

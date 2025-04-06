@@ -49,9 +49,7 @@ public class Patient {
             throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_FIELDS);
         }
 
-        if (!gender.equalsIgnoreCase("M") && !gender.equalsIgnoreCase("F")) {
-            throw new NurseSchedException(ExceptionMessage.INVALID_GENDER);
-        }
+        verifyGender(gender);
 
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
@@ -68,6 +66,12 @@ public class Patient {
         this.notes = notes;
         this.gender = gender.toUpperCase();
         this.contact = contact;
+    }
+
+    private static void verifyGender(String gender) throws NurseSchedException {
+        if (!gender.equalsIgnoreCase("M") && !gender.equalsIgnoreCase("F")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_GENDER);
+        }
     }
 
     /**
@@ -183,6 +187,7 @@ public class Patient {
                     patient.age = newAge;
                 }
                 if (newGender != null) {
+                    verifyGender(newGender);
                     patient.gender = newGender.toUpperCase();
                 }
                 if (newContact != null) {
