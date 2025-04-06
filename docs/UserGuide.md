@@ -616,6 +616,11 @@ Format: `exit ns`
 
 **A**: All the data is stored in the /data/ folder. Simply transfer this folder to the other computer.
 
+**Q** What happens if the data file is corrupted?
+
+**A** NurseSched will continue to run, but there may be unpredictable behaviour. Please ensure that the
+corrupted file is handled accordingly.
+
 ## Command Summary
 
 | List        | Action  | Format                                                                                                                            |
