@@ -288,6 +288,7 @@ Creates a profile for a patient.
 Format: `pf add id/ID_NUMBER p/PATIENT_NAME a/AGE g/GENDER c/CONTACT n/[NOTES]`
 
 * Adds a profile for the specified patient: `PATIENT_NAME`.
+* Names are allowed to contain any characters or even numbers.
 * ID_NUMBER must be 4 digits only.
 * CONTACT must be 8 digits only.
 * All fields must be provided except for NOTES, n/ is still required.
@@ -615,6 +616,11 @@ Format: `exit ns`
 **Q**: How do I transfer my data to another computer?
 
 **A**: All the data is stored in the /data/ folder. Simply transfer this folder to the other computer.
+
+**Q** What happens if the data file is corrupted?
+
+**A** NurseSched will continue to run, but there may be unpredictable behaviour. Please ensure that the
+corrupted file is handled accordingly.
 
 ## Command Summary
 
