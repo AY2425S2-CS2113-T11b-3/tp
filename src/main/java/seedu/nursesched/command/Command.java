@@ -43,7 +43,7 @@ public class Command {
                     switch (command) {
                     case "add":
                         Appointment.addAppt(
-                                apptParser.getName(),
+                                apptParser.getID(),
                                 apptParser.getStartTime(),
                                 apptParser.getEndTime(),
                                 apptParser.getDate(),
@@ -84,7 +84,7 @@ public class Command {
                     case "edit":
                         Appointment.editAppt(
                                 apptParser.getIndex(),
-                                apptParser.getName(),
+                                apptParser.getID(),
                                 apptParser.getStartTime(),
                                 apptParser.getEndTime(),
                                 apptParser.getDate(),
