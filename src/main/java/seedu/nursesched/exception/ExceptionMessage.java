@@ -24,9 +24,6 @@ public enum ExceptionMessage {
     ZERO_INDEX("Index cannot be zero!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
     INVALID_SORTING_LIST("List is empty. Nothing to sort."),
-    MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
-    INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
-    INDEX_PARAMETER_TOO_LARGE("The index provided is too large. Please use up to 4 digits only."),
 
     // ====================Patient Specific Exceptions====================
     INVALID_PATIENT_ADD_FORMAT("Invalid patient add format! Input as:\n" +
@@ -81,19 +78,23 @@ public enum ExceptionMessage {
     MEDICINE_NONEXISTENT("Medicine does not exist!"),
 
     // ====================Appointment Specific Exceptions====================
-    INVALID_PATIENT_APPT_ADD("Patient name not found in patient list! Add patient to " +
+    INVALID_PATIENT_APPT_ADD("Patient ID not found in patient list! Add patient to " +
                                      "patient list before adding appointment!"),
     INVALID_SORT_PARAMETER("Can only be sorted by time or importance!"),
+    INVALID_FIND_PARAMETER("Can only find appointments using name (p/) or ID (id/)!"),
     INVALID_IMPORTANCE_FORMAT("Importance should be an integer from 1 to 3. \n" +
             "1:LOW, 2:MEDIUM, 3:HIGH"),
-    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit id/[INDEX] p/[PATIENT_NAME] " +
-            "s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE] n/[NOTES]"),
+    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit aid/APPT_INDEX [id/PATIENT_ID] " +
+            "[s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPORTANCE] [n/NOTES]"),
     INVALID_APPT_NUMBER("There is no appointment with that specified index!"),
     INVALID_APPTADD_FORMAT("Invalid appointment add format! Input as:" +
-            " appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
+            " appt add id/PATIENT_ID s/START_TIME e/END_TIME d/DATE [im/IMPORTANCE] [n/NOTES]"),
     INVALID_APPT_DATE_TIME("Appointment date and time must be after current date and time."),
     UNMARKING_UNMARKED_APPT("Cant unmark an appointment that was already unmarked!"),
     MARKING_MARKED_APPT("Cant mark an appointment that was already marked!"),
+    MISSING_INDEX_PARAMETER("Missing aid/INDEX field for index."),
+    INVALID_INDEX_PARAMETER("aid/INDEX field must be an integer only."),
+    INDEX_PARAMETER_TOO_LARGE("The index provided is too large. Please use up to 4 digits only."),
 
     // ====================Task Specific Exceptions====================
     INVALID_TASK_FIND_FIELDS("Invalid task find fields! Input as: task find td/KEYWORD"),

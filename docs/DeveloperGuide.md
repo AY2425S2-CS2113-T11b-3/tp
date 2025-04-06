@@ -645,7 +645,7 @@ This section provides instructions for testing the various features of NurseSche
 
 **Test case**: 
 * Add patient profile into patients list: `pf add id/1001 p/Jean a/25 g/F c/66887799 n/requires constant supervision`  
-* Add appointment for that patient: `appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`  
+* Add appointment for that patient: `appt add id/1001 s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`  
 
 **Expected**: Appointment is added to the list. Details of the added appointment shown in the status message. Appointment list now contains 1 appointment.
 
@@ -653,56 +653,59 @@ This section provides instructions for testing the various features of NurseSche
 **Expected**: No appointment is added. Error details shown in the status message. Appointment list remains empty.
 
 **Other incorrect add commands to try**:
-- `appt add p/Jean Doe` (missing start time, end time, date, importance, and notes)
-- `appt add p/Jean Doe s/13:00 e/14:00` (missing date, importance, and notes)
-- `appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/5 n/super healthy` (importance value out of range)
+- `appt add id/1001` (missing start time, end time, date, importance, and notes)
+- `appt add id/1001 s/13:00 e/14:00` (missing date, importance, and notes)
+- `appt add id/1001 s/13:00 e/14:00 d/2025-02-12 im/5 n/super healthy` (importance value out of range)
 
 **Expected**: Similar to previous error behavior.
 
 ### Deleting an appointment
 **Prerequisites**: List all appointments using the `appt list` command. At least one appointment in the list.
 
-**Test case**: `appt del id/1`  
+**Test case**: `appt del aid/1`  
 **Expected**: First appointment is deleted from the list. Details of the deleted appointment shown in the status message. Appointment list now contains one fewer appointment.
 
-**Test case**: `appt del id/0`  
+**Test case**: `appt del aid/0`  
 **Expected**: No appointment is deleted. Error details shown in the status message. Appointment list remains unchanged.
 
 ### Marking an appointment
 **Prerequisites**: List all appointments using the `appt list` command. At least one appointment in the list that is not completed.
 
-**Test case**: `appt mark id/1`  
+**Test case**: `appt mark aid/1`  
 **Expected**: First appointment is marked as completed. Status message indicates successful marking. Appointment list shows the appointment with completed status.
 
-**Test case**: `appt mark id/0`  
+**Test case**: `appt mark aid/0`  
 **Expected**: No appointment is marked. Error details shown in the status message. Appointment status remains unchanged.
 
 ### Unmarking an appointment
 **Prerequisites**: List all appointments using the `appt list` command. At least one appointment marked as completed in the list.
 
-**Test case**: `appt unmark id/1` (assuming first appointment is marked as completed)  
+**Test case**: `appt unmark aid/1` (assuming first appointment is marked as completed)  
 **Expected**: First appointment is unmarked. Status message indicates successful unmarking. Appointment list shows the appointment with uncompleted status.
 
-**Test case**: `appt unmark id/0`  
+**Test case**: `appt unmark aid/0`  
 **Expected**: No appointment is unmarked. Error details shown in the status message. Appointment status remains unchanged.
 
 ### Editing an appointment
 **Prerequisites**: List all appointments using the `appt list` command. At least one appointment in the list.
 
-**Test case**: `appt edit id/1 p/edited name s/13:00 e/15:00`  
-**Expected**: First appointment's patient name, start time, and end time are updated. Status message shows successful update. Appointment list reflects the changes.
+**Test case**: `appt edit aid/1 s/13:00 e/15:00`  
+**Expected**: First appointment's start time, and end time are updated. Status message shows successful update. Appointment list reflects the changes.
 
-**Test case**: `appt edit id/0 im/1`  
+**Test case**: `appt edit aid/0 im/1`  
 **Expected**: No appointment is edited. Error details shown in the status message. Appointment list remains unchanged.
 
 ### Searching for an appointment
 **Prerequisites**: List all appointments using the `appt list` command. Multiple appointments in the list.
 
-**Test case**: `appt find Jean Doe` (assuming there's an appointment with this patient name)  
+**Test case**: `appt find p/Jean Doe` (assuming there's an appointment with this patient name)  
 **Expected**: Displays all appointments for patient "Jean Doe".
 
 **Test case**: `appt find Unknown Patient` (assuming there's no appointment with this patient name)  
 **Expected**: Message indicating that no appointments were found for the specified patient.
+
+**Test case**: `appt find id/1001` (assuming there's an appointment with this patient ID)  
+**Expected**: Displays all appointments for patient with ID: 1001.
 
 ### Sorting appointments
 **Prerequisites**: List all appointments using the `appt list` command. Multiple appointments in the list with different importance levels and times.

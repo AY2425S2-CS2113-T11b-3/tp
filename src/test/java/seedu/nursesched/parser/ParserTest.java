@@ -15,7 +15,7 @@ public class ParserTest {
 
     @Test
     public void testExtractInputs_appointmentUnmarkCommand() throws NurseSchedException {
-        String input = "appt unmark id/1";
+        String input = "appt unmark aid/1";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
         assertNotNull(apptParser);
@@ -41,12 +41,12 @@ public class ParserTest {
 
     @Test
     public void testExtractInputs_appointmentAddCommand() throws NurseSchedException {
-        String input = "appt add p/Jean doe s/13:00 e/14:00 d/2025-02-15 n/Needs a wheelchair. Very annoying!";
+        String input = "appt add id/1804 s/13:00 e/14:00 d/2025-02-15 n/Needs a wheelchair. Very annoying!";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
         assertNotNull(apptParser);
         assertEquals("add", apptParser.getCommand());
-        assertEquals("Jean doe", apptParser.getName());
+        assertEquals(1804, apptParser.getID());
         assertEquals(LocalTime.parse("13:00"), apptParser.getStartTime());
         assertEquals(LocalTime.parse("14:00"), apptParser.getEndTime());
         assertEquals(LocalDate.parse("2025-02-15"), apptParser.getDate());
@@ -55,7 +55,7 @@ public class ParserTest {
 
     @Test
     public void testExtractInputs_appointmentDeleteCommand() throws NurseSchedException {
-        String input = "appt del id/1";
+        String input = "appt del aid/1";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
         assertNotNull(apptParser);
@@ -65,7 +65,7 @@ public class ParserTest {
 
     @Test
     public void testExtractInputs_appointmentMarkCommand() throws NurseSchedException {
-        String input = "appt mark id/1";
+        String input = "appt mark aid/1";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
         assertNotNull(apptParser);
@@ -97,12 +97,12 @@ public class ParserTest {
 
     @Test
     public void testExtractInputs_appointmentNoNotes() throws NurseSchedException {
-        String input = "appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-15 n/";
+        String input = "appt add id/1804 s/13:00 e/14:00 d/2025-02-15 n/";
         ApptParser apptParser = ApptParser.extractInputs(input);
 
         assertNotNull(apptParser);
         assertEquals("add", apptParser.getCommand());
-        assertEquals("Jean Doe", apptParser.getName());
+        assertEquals(1804, apptParser.getID());
         assertEquals(LocalTime.parse("13:00"), apptParser.getStartTime());
         assertEquals(LocalTime.parse("14:00"), apptParser.getEndTime());
         assertEquals(LocalDate.parse("2025-02-15"), apptParser.getDate());
@@ -111,9 +111,9 @@ public class ParserTest {
 
     @Test
     public void testExtractInputs_caseInsensitiveAddCommand() throws NurseSchedException {
-        String input1 = "appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-15 n/Lowercase";
-        String input2 = "appt ADD p/Jean Doe s/13:00 e/14:00 d/2025-02-15 n/Uppercase";
-        String input3 = "appt aDd p/Jean Doe s/13:00 e/14:00 d/2025-02-15 n/Mixed case";
+        String input1 = "appt add id/1804 s/13:00 e/14:00 d/2025-02-15 n/Lowercase";
+        String input2 = "appt ADD id/1804 s/13:00 e/14:00 d/2025-02-15 n/Uppercase";
+        String input3 = "appt aDd id/1804 s/13:00 e/14:00 d/2025-02-15 n/Mixed case";
 
         ApptParser apptParser1 = ApptParser.extractInputs(input1);
         ApptParser apptParser2 = ApptParser.extractInputs(input2);

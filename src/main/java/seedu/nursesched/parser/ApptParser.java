@@ -25,10 +25,13 @@ public class ApptParser extends Parser {
 
 
     private static int apptIndex;
+    private static int ID;
     private static String searchKeyword;
     private static String sortBy;
+    private static String searchBy = null;
     private final String command;
     private final String name;
+
     private final LocalTime startTime;
     private final LocalTime endTime;
     private final LocalDate date;
@@ -65,7 +68,7 @@ public class ApptParser extends Parser {
      */
     public ApptParser(String command, String name, LocalTime startTime, LocalTime endTime,
                       LocalDate date, String notes, int apptIndex, String searchKeyword,
-                      int importance, String sortBy) {
+                      int importance, String sortBy, int ID, String searchBy) {
         this.command = command;
         this.name = name;
         this.startTime = startTime;
@@ -74,7 +77,9 @@ public class ApptParser extends Parser {
         this.notes = notes;
         this.apptIndex = apptIndex;
         this.searchKeyword = searchKeyword;
+        this.searchBy = searchBy;
         this.importance = importance;
+        this.ID = ID;
         this.sortBy = sortBy;
 
         logr.info("ApptParser created: " + this);
@@ -124,17 +129,17 @@ public class ApptParser extends Parser {
             if (line == null){
                 throw new NurseSchedException(ExceptionMessage.INVALID_APPTADD_FORMAT);
             }
-            if (!line.contains("p/") || !line.contains("s/") ||
+            if (!line.contains("id/") || !line.contains("s/") ||
                     !line.contains("d/") || !line.contains("e/")) {
                 logr.warning("Missing fields");
                 throw new NurseSchedException(ExceptionMessage.INVALID_APPTADD_FORMAT);
             }
 
             try {
-                // Extract patient name
-                int nameIndex = line.indexOf("p/") + 2;
-                int nameEnd = findNextFieldIndex(line, nameIndex);
-                name = line.substring(nameIndex, nameEnd).trim();
+                // Extract patient ID
+                int idIndex = line.indexOf("id/") + 3;
+                int idEnd = findNextFieldIndex(line, idIndex);
+                ID = parseID(line.substring(idIndex, idEnd).trim());
 
                 // Extract appointment's start time
                 int startIndex = line.indexOf("s/") + 2;
@@ -147,9 +152,10 @@ public class ApptParser extends Parser {
                 endTime = LocalTime.parse(line.substring(endIndex, endEnd).trim());
 
                 // Extract appointment's date
-                int dateIndex = line.indexOf("d/") + 2;
-                int dateEnd = findNextFieldIndex(line, dateIndex);
-                date = LocalDate.parse(line.substring(dateIndex, dateEnd).trim());
+                String abstractedLine = line.substring(endEnd);
+                int dateIndex = abstractedLine.indexOf("d/") + 2;
+                int dateEnd = findNextFieldIndex(abstractedLine, dateIndex);
+                date = LocalDate.parse(abstractedLine.substring(dateIndex, dateEnd).trim());
 
                 // Extract importance if present
                 if (line.contains("im/")) {
@@ -176,7 +182,7 @@ public class ApptParser extends Parser {
             }
 
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         case "del", "mark", "unmark" -> {
@@ -186,19 +192,19 @@ public class ApptParser extends Parser {
             }
 
             String indexStr = line.trim();
-            if (!indexStr.toLowerCase().startsWith("id/") || indexStr.length() <= 3) {
+            if (!indexStr.toLowerCase().startsWith("aid/") || indexStr.length() <= 4) {
                 logr.warning("Missing index field in command");
                 throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
             }
 
-            apptIndex = parseIndex(indexStr.substring(3));
+            apptIndex = parseIndex(indexStr.substring(4));
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         case "list" -> {
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         case "sort" -> {
@@ -215,61 +221,84 @@ public class ApptParser extends Parser {
                 sortBy = "time";
             }
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         case "find" -> {
             if (line == null) {
                 throw new NurseSchedException(ExceptionMessage.MISSING_SEARCH_TERM);
             }
-            searchKeyword = line;
+            if (!(line.contains("id/") || line.contains("p/"))){
+                throw new NurseSchedException(ExceptionMessage.INVALID_FIND_PARAMETER);
+            }
+            if (line.contains("id/")){
+                int idIndex = line.indexOf("id/") + 3;
+                searchKeyword = line.substring(idIndex).trim();
+                int testID = parseID(searchKeyword);
+                searchBy = "id";
+            }
+            else if (line.contains("p/")){
+                try {
+                    int nameIndex = line.indexOf("p/") + 3;
+                    searchKeyword = line.substring(nameIndex).trim();
+                    searchBy = "p";
+                } catch (Exception e) {
+                    System.out.println("No name provided");
+                }
+            }
+
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         case "edit" -> {
-            if (line == null || line.trim().isEmpty() || !line.contains("id/")) {
+            if (line == null || line.trim().isEmpty() || !line.contains("aid/")) {
                 logr.warning("Missing index field in edit command");
                 throw new NurseSchedException(ExceptionMessage.INVALID_APPTEDIT_FORMAT);
             }
 
             try {
                 // Extract index
-                int idStart = line.indexOf("id/") + 3;
-                int idEnd = findNextFieldIndex(line, idStart);
-                String idStr = line.substring(idStart, idEnd).trim();
+                int indexStart = line.indexOf("aid/") + 4;
+                int indexEnd = findNextFieldIndex(line, indexStart);
+                String indexStr = line.substring(indexStart, indexEnd).trim();
 
                 // Check if there's actually a number after id/
-                if (idStr.isEmpty()) {
-                    logr.warning("Missing index number after id/ prefix");
+                if (indexStr.isEmpty()) {
+                    logr.warning("Missing index number after aid/ prefix");
                     throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
                 }
 
                 try {
-                    apptIndex = parseIndex(idStr);
+                    apptIndex = parseIndex(indexStr);
                 } catch (NumberFormatException e) {
                     // This is caught by parseIndex
                     throw e;
                 }
 
-                line = line.substring(idEnd).trim();
+                line = line.substring(indexEnd).trim();
                 if (line.isEmpty()){
                     System.out.println("At least one optional field must be provided for an edit (see below).");
                     throw new NurseSchedException(ExceptionMessage.INVALID_APPTEDIT_FORMAT);
                 }
 
+                // To separate detection for pid/ and d/
+                String abstractedLine = line;
+
                 // Process optional fields
                 try {
-                    if (line.contains("p/")) {
-                        int nameStart = line.indexOf("p/") + 2;
-                        int nameEnd = findNextFieldIndex(line, nameStart);
-                        name = line.substring(nameStart, nameEnd).trim();
-                        if (name.isEmpty()) {
-                            System.out.println("No name found in name field. Defaulting to previous name.");
-                            name = null;
+                    if (line.contains("id/")) {
+                        int pidStart = line.indexOf("id/") + 3;
+                        int pidEnd = findNextFieldIndex(line, pidStart);
+                        String pidStr = line.substring(pidStart, pidEnd).trim();
+                        abstractedLine = line.substring(pidEnd).trim();
+                        ID = parseID(pidStr);
+                        if (pidStr.isEmpty()) {
+                            System.out.println("No ID found in id field. Defaulting to previous ID.");
+                            ID = -1;
                         }
                     } else {
-                        name = null;
+                        ID = -1;
                     }
 
                     if (line.contains("s/")) {
@@ -284,10 +313,10 @@ public class ApptParser extends Parser {
                         endTime = LocalTime.parse(line.substring(eIndex, eEnd).trim());
                     }
 
-                    if (line.contains("d/")) {
-                        int dIndex = line.indexOf("d/") + 2;
-                        int dEnd = findNextFieldIndex(line, dIndex);
-                        date = LocalDate.parse(line.substring(dIndex, dEnd).trim());
+                    if (abstractedLine.contains("d/")) {
+                        int dIndex = abstractedLine.indexOf("d/") + 2;
+                        int dEnd = findNextFieldIndex(abstractedLine, dIndex);
+                        date = LocalDate.parse(abstractedLine.substring(dIndex, dEnd).trim());
                     }
 
                     if (line.contains("im/")) {
@@ -315,12 +344,12 @@ public class ApptParser extends Parser {
                     throw e;
                 }
             } catch (StringIndexOutOfBoundsException e) {
-                logr.warning("Missing index number after id/ prefix");
+                logr.warning("Missing index number after aid/ prefix");
                 throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
             }
 
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         default -> {
@@ -328,6 +357,34 @@ public class ApptParser extends Parser {
             return null;
         }
 
+        }
+    }
+
+
+    private static int parseID(String id) throws NurseSchedException {
+        for (char c : id.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
+            }
+        }
+
+        // Validate ID format (4 digits)
+        if (id.length() != 4) {
+            if (id.trim().length() != 4) {
+                if (id.contains(" ")) {
+                    throw new NurseSchedException(ExceptionMessage.ID_CONTAINS_SPACES);
+                } else {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
+                }
+            } else {
+                id = id.trim();
+            }
+        }
+
+        try {
+            return Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
         }
     }
 
@@ -382,7 +439,7 @@ public class ApptParser extends Parser {
     private static int findNextFieldIndex(String line, int startPos) {
         // All possible next field markers
         int[] markers = {
-                line.indexOf("p/", startPos),
+                line.indexOf("id/", startPos),
                 line.indexOf("s/", startPos),
                 line.indexOf("e/", startPos),
                 line.indexOf("d/", startPos),
@@ -430,12 +487,20 @@ public class ApptParser extends Parser {
         return importance;
     }
 
+    public int getID () {
+        return ID;
+    }
+
     public int getIndex () {
         return apptIndex;
     }
 
     public String getSearchKeyword () {
         return searchKeyword;
+    }
+
+    public String getSearchBy () {
+        return searchBy;
     }
 
     public String getSortBy () {

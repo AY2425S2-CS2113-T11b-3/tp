@@ -44,7 +44,7 @@ public class Command {
                     switch (command) {
                     case "add":
                         Appointment.addAppt(
-                                apptParser.getName(),
+                                apptParser.getID(),
                                 apptParser.getStartTime(),
                                 apptParser.getEndTime(),
                                 apptParser.getDate(),
@@ -80,12 +80,21 @@ public class Command {
 
                         break;
                     case "find":
-                        Appointment.findAppointment(apptParser.getSearchKeyword());
+                        String searchBy = apptParser.getSearchBy();
+                        if (searchBy.equals("id")){
+                            Appointment.findApptByID(apptParser.getSearchKeyword());
+                        }
+
+                        if (searchBy.equals("p")){
+                            Appointment.findApptByName(apptParser.getSearchKeyword());
+                        }
+
+
                         break;
                     case "edit":
                         Appointment.editAppt(
                                 apptParser.getIndex(),
-                                apptParser.getName(),
+                                apptParser.getID(),
                                 apptParser.getStartTime(),
                                 apptParser.getEndTime(),
                                 apptParser.getDate(),
