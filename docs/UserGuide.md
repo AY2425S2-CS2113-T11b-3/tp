@@ -288,6 +288,7 @@ Creates a profile for a patient.
 Format: `pf add id/ID_NUMBER p/PATIENT_NAME a/AGE g/GENDER c/CONTACT n/[NOTES]`
 
 * Adds a profile for the specified patient: `PATIENT_NAME`.
+* Names are allowed to contain any characters or even numbers.
 * ID_NUMBER must be 4 digits only.
 * CONTACT must be 8 digits only.
 * All fields must be provided except for NOTES, n/ is still required.
