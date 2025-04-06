@@ -82,6 +82,7 @@ public enum ExceptionMessage {
                                      "patient list before adding appointment!"),
     INVALID_SORT_PARAMETER("Can only be sorted by time or importance!"),
     INVALID_FIND_PARAMETER("Can only find appointments using name (p/) or ID (id/)!"),
+    MISSING_NAME_PARAMETER("No name provided!"),
     INVALID_IMPORTANCE_FORMAT("Importance should be an integer from 1 to 3. \n" +
             "1:LOW, 2:MEDIUM, 3:HIGH"),
     INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit aid/APPT_INDEX [id/PATIENT_ID] " +
