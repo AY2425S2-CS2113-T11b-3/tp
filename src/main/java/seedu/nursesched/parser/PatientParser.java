@@ -329,7 +329,7 @@ public class PatientParser extends Parser {
             return new PatientParser(command, id, name, age, gender, contact, notes);
         }
         default -> {
-            throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
+            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_COMMAND);
         }
         }
     }

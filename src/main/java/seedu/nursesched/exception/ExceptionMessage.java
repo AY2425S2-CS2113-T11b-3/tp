@@ -57,6 +57,8 @@ public enum ExceptionMessage {
     EMPTY_PATIENT_LIST("Patient list is empty!"),
     MISSING_ID_IDENTIFIER("Missing id/ identifier!"),
     PATIENT_DUPLICATE_IDENTIFIER("There are multiple identifiers, ensure that there is only 1 for each field!"),
+    INVALID_PATIENT_COMMAND("Invalid Patient command, use either 'add', 'del', `list`, \n`result add`, `result del`, " +
+            "or `result list`!"),
 
     // ====================Medicine Specific Exceptions====================
     INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: MEDICINE_NAME | QUANTITY in" +
