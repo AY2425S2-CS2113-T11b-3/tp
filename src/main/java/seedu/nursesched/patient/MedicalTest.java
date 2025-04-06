@@ -19,7 +19,11 @@ public class MedicalTest {
     private final String result;
 
     static {
-        medicalTestList = PatientTestStorage.readFile();
+        try {
+            medicalTestList = PatientTestStorage.readFile();
+        } catch (NurseSchedException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**

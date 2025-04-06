@@ -99,7 +99,6 @@ public class Command {
                     }
                     break;
                 case "pf":
-                    //Todo
                     PatientParser patientParser = PatientParser.extractInputs(line);
                     if (patientParser == null) {
                         System.out.println("Invalid inputs for Patient based command!");

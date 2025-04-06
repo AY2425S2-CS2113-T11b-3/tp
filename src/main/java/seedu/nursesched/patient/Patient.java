@@ -23,7 +23,11 @@ public class Patient {
     private String notes;
 
     static {
-        patientsList = PatientStorage.readFile();
+        try {
+            patientsList = PatientStorage.readFile();
+        } catch (NurseSchedException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**

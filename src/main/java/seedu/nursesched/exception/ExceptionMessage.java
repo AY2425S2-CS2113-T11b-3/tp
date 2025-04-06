@@ -59,6 +59,7 @@ public enum ExceptionMessage {
     PATIENT_DUPLICATE_IDENTIFIER("There are multiple identifiers, ensure that there is only 1 for each field!"),
     INVALID_PATIENT_COMMAND("Invalid Patient command, use either 'add', 'del', `list`, \n`result add`, `result del`, " +
             "or `result list`!"),
+    ERROR_READING_FILE("Error reading file. There might be corruption in the data file."),
 
     // ====================Medicine Specific Exceptions====================
     INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: MEDICINE_NAME | QUANTITY in" +
