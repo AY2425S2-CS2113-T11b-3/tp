@@ -28,9 +28,10 @@ public class ApptParser extends Parser {
     private static int ID;
     private static String searchKeyword;
     private static String sortBy;
+    private static String searchBy = null;
     private final String command;
     private final String name;
-    private static String searchBy = null;
+
     private final LocalTime startTime;
     private final LocalTime endTime;
     private final LocalDate date;

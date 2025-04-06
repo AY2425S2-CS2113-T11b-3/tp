@@ -247,7 +247,7 @@ public class AppointmentTest {
         assertEquals("Needs a wheelchair", appt.getNotes());
         Patient.removePatient("1804");
     }
-/*
+
     @Test
     public void editAppt_onlyEditEndTime_apptEdited() throws NurseSchedException {
         String input = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
@@ -268,7 +268,7 @@ public class AppointmentTest {
         assertEquals("Needs a wheelchair", appt.getNotes());
         Patient.removePatient("1804");
     }
-*/
+
     @Test
     public void editAppt_onlyEditNotes_apptEdited() throws NurseSchedException {
         String input = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
