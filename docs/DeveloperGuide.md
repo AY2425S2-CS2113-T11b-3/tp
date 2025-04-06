@@ -225,9 +225,8 @@ follows these steps:
    - The updated due `byDate` and `byTime` is before the current date and time
 3. Editing the task: It makes use of the appropriate setter methods to update the task with its new details. At least
    one of the optional fields must be provided.
-   Given below is an example usage scenario and how the edit task mechanism behaves at each step.
-
-Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
+   
+Given below is an example usage scenario and how the edit task mechanism behaves at each step.
 
 Step 1. The user launches the application for the first time. The `taskList` will be initialized with the task
 data stored (if exists).
@@ -238,7 +237,7 @@ and updates the saved file to reflect the change.
 ![AddTaskSequenceDiagram](assets/taskImages/AddTaskSequenceDiagram.png)
 
 Step 3. The user then realised that some task details were incorrect, thus she needs to edit it from the task list.
-The user initiates the editing of a task by calling the `editTask` function with the index of the task to be edited.
+The user initiates the editing of a task by calling the `editTask` function with the `index` of the task to be edited.
 
 Step 4. The system attempts to edit the specified task from the list. If unsuccessful, the system logs a warning and 
 throws a custom exception, `NurseSchedException`, with a relevant message indicating the specific error.

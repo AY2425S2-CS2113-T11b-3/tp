@@ -14,11 +14,13 @@ activate Command
 
 Command -> Parser : extractType(user input)
 activate Parser
+
 Parser --> Command : task type
 deactivate Parser
 
 Command -> TaskParser : extractInputs(user input parameters)
 activate TaskParser
+
 TaskParser --> Command : TaskParser object with parameters
 deactivate TaskParser
 
@@ -28,26 +30,34 @@ activate Task
 
 Task -> taskList : get task by index
 activate taskList
+
 taskList --> Task : return task to be edited
 deactivate taskList
 
+opt description field not empty
+    Task -> Task : setDescription(updated description)
+    activate Task
+    Task --> Task : description updated
+    deactivate Task
+end
+
 opt due date field not empty
     Task -> Task : setByDate(updated date)
-
+    activate Task
+    Task --> Task : due date updated
+    deactivate Task
 end
 
 opt due time field not empty
     Task -> Task : setByTime(updated time)
-
-end
-
-opt description field not empty
-    Task -> Task : setDescription(updated description)
-
+    activate Task
+    Task --> Task : due time updated
+    deactivate Task
 end
 
 Task -> TaskStorage : overwriteFile()
 activate TaskStorage
+
 TaskStorage --> Task : File saved
 deactivate TaskStorage
 
