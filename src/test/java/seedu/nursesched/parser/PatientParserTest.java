@@ -95,14 +95,15 @@ class PatientParserTest {
     void extractInputs_listCommandWithExtraInput_throwsException() {
         Exception exception = assertThrows(NurseSchedException.class, () ->
                 PatientParser.extractInputs("pf list extra"));
-        assertEquals("Invalid command format!", exception.getMessage());
+        assertEquals("Invalid Patient command, use either 'add', 'del', `list`, \n" +
+                "`result add`, `result del`, or `result list`!", exception.getMessage());
     }
 
     @Test
     void extractInputs_findCommandMissingId_throwsException() {
         Exception exception = assertThrows(NurseSchedException.class, () ->
                 PatientParser.extractInputs("pf find"));
-        assertEquals("Patient ID cannot be empty!", exception.getMessage());
+        assertEquals("Missing id/ identifier!", exception.getMessage());
     }
 
     @Test
@@ -157,8 +158,10 @@ class PatientParserTest {
 
     @Test
     void extractInputs_invalidCommand_returnsNull() throws NurseSchedException {
-        PatientParser parser = PatientParser.extractInputs("pf invalid");
-        assertNull(parser);
+        Exception exception = assertThrows(NurseSchedException.class, () ->
+                PatientParser.extractInputs("pf invalid"));
+        assertEquals("Invalid Patient command, use either 'add', 'del', `list`, \n" +
+                "`result add`, `result del`, or `result list`!", exception.getMessage());
     }
 
     @Test
