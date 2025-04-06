@@ -224,4 +224,38 @@ class ShiftTest {
         double loggedHours = Shift.getShiftList().get(0).getOvertimeHours();
         assertEquals(2.5, loggedHours);
     }
+
+    @Test
+    void markShift_alreadyMarked_shouldGiveWarningMessage() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        // Add a new shift and mark it
+        Shift.addShift(
+                LocalTime.of(14, 0),
+                LocalTime.of(18, 0),
+                LocalDate.now().plusDays(1),
+                "Test shift"
+        );
+        Shift.markShift(0); // mark once
+
+        // Try to mark it again
+        Shift.markShift(0);  // Expected: warning message, no change
+        assertEquals(true, Shift.getShiftList().get(0).getStatus());
+    }
+
+    @Test
+    void unmarkShift_alreadyUnmarked_shouldGiveWarningMessage() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        Shift.addShift(
+                LocalTime.of(9, 0),
+                LocalTime.of(12, 0),
+                LocalDate.now().plusDays(1),
+                "Test shift"
+        );
+
+        // Try to unmark an already unmarked shift
+        Shift.unmarkShift(0);  // Expected: warning message, no change
+        assertEquals(false, Shift.getShiftList().get(0).getStatus());
+    }
 }

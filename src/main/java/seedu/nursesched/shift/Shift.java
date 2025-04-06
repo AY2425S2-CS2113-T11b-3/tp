@@ -137,18 +137,20 @@ public class Shift {
         }
     }
 
-    /**
-     * Marks a shift from the shift list as done based on the given index.
-     *
-     * @param index The index of the shift to be marked as done (0-based index).
-     */
     public static void markShift(int index) {
         assert index >= 0 && index < shiftList.size() : "Index must be valid and within bounds!";
         try {
-            shiftList.get(index).setDone(true);
+            Shift shift = shiftList.get(index);
+            if (shift.getStatus()) {
+                System.out.println("Shift #" + (index + 1) + " is already marked as done.");
+                logr.info("Attempted to mark an already marked shift at index " + index);
+                return;
+            }
+
+            shift.setDone(true);
             System.out.println("Marked shift as done!");
-            System.out.println(shiftList.get(index));
-            logr.info("Shift marked: " + shiftList.get(index).toString());
+            System.out.println(shift);
+            logr.info("Shift marked: " + shift);
             ShiftStorage.overwriteSaveFile(shiftList);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("There is no shift with index: " + (index + 1));
@@ -164,9 +166,16 @@ public class Shift {
     public static void unmarkShift(int index) {
         assert index >= 0 && index < shiftList.size() : "Index must be valid and within bounds!";
         try {
-            shiftList.get(index).setDone(false);
+            Shift shift = shiftList.get(index);
+            if (!shift.getStatus()) {
+                System.out.println("Shift #" + (index + 1) + " is already unmarked.");
+                logr.info("Attempted to unmark an already unmarked shift at index " + index);
+                return;
+            }
+
+            shift.setDone(false);
             System.out.println("Marked shift as undone!");
-            logr.info("Shift unmarked: " + shiftList.get(index).toString());
+            logr.info("Shift unmarked: " + shift);
             ShiftStorage.overwriteSaveFile(shiftList);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("There is no shift with index: " + (index + 1));
