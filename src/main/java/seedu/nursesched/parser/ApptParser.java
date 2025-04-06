@@ -238,13 +238,12 @@ public class ApptParser extends Parser {
                 searchBy = "id";
             }
             else if (line.contains("p/")){
-                try {
-                    int nameIndex = line.indexOf("p/") + 3;
-                    searchKeyword = line.substring(nameIndex).trim();
-                    searchBy = "p";
-                } catch (Exception e) {
-                    System.out.println("No name provided");
+                int nameIndex = line.indexOf("p/") + 2;
+                if (nameIndex>= line.length()) {
+                    throw new NurseSchedException(ExceptionMessage.MISSING_NAME_PARAMETER);
                 }
+                searchKeyword = line.substring(nameIndex).trim();
+                searchBy = "p";
             }
 
             return new ApptParser(command, name, startTime, endTime, date, notes,
