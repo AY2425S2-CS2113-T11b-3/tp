@@ -366,6 +366,10 @@ This is so that they can retrieve information quickly, especially with how hecti
 | v2.0    | Nurse    | save appointment information                                        | retrieve previously stored appointment information                     | 
 | v2.0    | Nurse    | rank importance of appointments                                     | arrange my appointments based off priority                             |
 | v2.0    | Nurse    | list medicine that is below a certain quantity                      | know which medicine to restock                                         |
+| v2.0    | Nurse    | Save shift information                                              | Keep track of shift history even after exiting NurseSched              |
+| v2.0    | Nurse    | Mark or unmark a shift                                              | Indicate if a shift has been completed or not                          |
+| v2.0    | Nurse    | Log overtime hours for a shift                                      | Keep a record of extra hours worked for reporting and planning         |
+| v2.0    | Nurse    | Sort shifts chronologically                                         | View the most recent and upcoming shifts more easily                   |
 
 ## Non-Functional Requirements
 
@@ -542,6 +546,27 @@ This section provides instructions for testing the various features of NurseSche
 
 **Test case**: `shift list` (after adding multiple shifts)  
 **Expected**: List displays all shifts with their completion status, date, time range, and task.
+
+### Sorting shifts chronologically
+**Prerequisites**: Multiple shifts added with different dates and times.
+
+**Test case**: `shift sort`  
+**Expected**: Shifts are sorted by `DATE` then `START_TIME` in ascending order. Status message confirms sorting.
+
+**Test case**: `shift sort` (with 0 or 1 shift)  
+**Expected**: List remains unchanged. Sorting succeeds silently or with a gentle confirmation.
+
+### Logging overtime
+**Prerequisites**: At least one shift in the list.
+
+**Test case**: `shift logot id/1 h/2.5`  
+**Expected**: Overtime of 2.5 hours is logged for the first shift. Status message confirms logging.
+
+**Test case**: `shift logot id/0 h/1.0`  
+**Expected**: No overtime is logged. Error message shown. Shift list remains unchanged.
+
+**Test case**: `shift logot id/1 h/-3`  
+**Expected**: No overtime is logged. Error message shown due to invalid negative input.
 
 ## Patient List
 

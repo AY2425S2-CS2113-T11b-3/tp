@@ -178,7 +178,7 @@ Example of usage:
 
 Adds a shift, including the date, start time, end time and assigned task.
 
-Format: `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`
+Format: `shift add s/START_TIME e/END_TIME d/DATE st/TASK_DESCRIPTION`
 
 * Adds a shift with a time range and task for a specific date
 * `START_TIME` and `END_TIME` must be in HH:mm format
@@ -192,7 +192,7 @@ Example:
 
 Edits an existing shift in the shift list.
 
-Format: `shift edit id/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`
+Format: `shift edit id/SHIFT_INDEX s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`
 
 * Edits the shift at the specified `SHIFT_INDEX`. The `SHIFT_INDEX` refers to the index number shown in the displayed
   shift list.
@@ -208,7 +208,7 @@ Example:
 
 Marks a shift to show its completion.
 
-Format: `shift mark id/[SHIFT_INDEX]`
+Format: `shift mark id/SHIFT_INDEX`
 
 * Marks the shift with index `SHIFT_INDEX` as completed
 * `SHIFT_INDEX` must be a number between 1 to the total number of shifts in the list.
@@ -221,7 +221,7 @@ Example:
 
 Unmarks a shift to show that it is uncompleted.
 
-Format: `shift unmark id/[SHIFT_INDEX]`
+Format: `shift unmark id/SHIFT_INDEX`
 
 * Unmarks the shift with index `SHIFT_INDEX` as uncompleted
 * `SHIFT_INDEX` must be a number between 1 to the total number of shifts in the list.
@@ -234,7 +234,7 @@ Example:
 
 Deletes a shift from the list.
 
-Format: `shift del id/[SHIFT_INDEX]`
+Format: `shift del id/SHIFT_INDEX`
 
 * Deletes a shift with the specified index
 * `SHIFT_INDEX` must be a number between 1 to the total number of shifts in the list.
@@ -242,6 +242,32 @@ Format: `shift del id/[SHIFT_INDEX]`
 Example:
 
 `shift del id/3`
+
+### Sorting shifts chronologically: `shift sort`
+
+Sorts all existing shifts in the list in chronological order based on date and start time.
+
+Format: `shift sort`
+
+* After sorting, the updated order will be reflected when listing shifts.
+* Sorting is based first on `DATE`, then on `START_TIME`.
+
+Example:
+
+`shift sort`
+
+### Logging overtime for a shift: `shift logot`
+
+Logs overtime hours worked for a shift.
+
+Format: `shift logot id/SHIFT_INDEX h/OVERTIME_HOURS`
+
+* Records the number of overtime hours worked for the shift at `SHIFT_INDEX`
+* `OVERTIME_HOURS` must be a positive decimal or integer (e.g. 2 or 1.5)
+
+Example:
+
+`shift logot id/1 h/2.5`
 
 ### Listing all shifts: `shift list`
 
@@ -586,11 +612,13 @@ Format: `exit ns`
 | Task        | Edit    | `task edit id/TASK_INDEX [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]`                                                  |
 | Task        | Find    | `task find td/KEYWORD`                                                                                                            |
 | Task        | List    | `task list`                                                                                                                       |
-| Shift       | Add     | `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`                                                            |
-| Shift       | Edit    | `shift edit id/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`                                      |
-| Shift       | Mark    | `shift mark id/[SHIFT_INDEX]`                                                                                                     |
-| Shift       | Unmark  | `shift unmark id/[SHIFT_INDEX]`                                                                                                   |
-| Shift       | Delete  | `shift del id/[SHIFT_INDEX]`                                                                                                      |
+| Shift       | Add     | `shift add s/START_TIME e/END_TIME d/DATE st/TASK_DESCRIPTION`                                                                    |
+| Shift       | Edit    | `shift edit id/SHIFT_INDEX s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`                                        |
+| Shift       | Mark    | `shift mark id/SHIFT_INDEX`                                                                                                       |
+| Shift       | Unmark  | `shift unmark id/SHIFT_INDEX`                                                                                                     |
+| Shift       | Delete  | `shift del id/SHIFT_INDEX`                                                                                                        |
+| Shift       | LogOt   | `shift logot id/SHIFT_INDEX h/OVERTIME_HOURS`                                                                                     |
+| Shift       | Sort    | `shift sort`                                                                                                                      |
 | Shift       | List    | `shift list`                                                                                                                      |
 | Patient     | Add     | `pf add id/ID_NUMBER p/PATIENT_NAME a/AGE g/GENDER c/CONTACT n/[NOTES]`                                                           |
 | Patient     | Delete  | `pf del id/ID_NUMBER`                                                                                                             |
