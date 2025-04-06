@@ -30,6 +30,7 @@ public class ApptParser extends Parser {
     private static String sortBy;
     private final String command;
     private final String name;
+    private static String searchBy = null;
     private final LocalTime startTime;
     private final LocalTime endTime;
     private final LocalDate date;
@@ -66,7 +67,7 @@ public class ApptParser extends Parser {
      */
     public ApptParser(String command, String name, LocalTime startTime, LocalTime endTime,
                       LocalDate date, String notes, int apptIndex, String searchKeyword,
-                      int importance, String sortBy, int ID) {
+                      int importance, String sortBy, int ID, String searchBy) {
         this.command = command;
         this.name = name;
         this.startTime = startTime;
@@ -75,6 +76,7 @@ public class ApptParser extends Parser {
         this.notes = notes;
         this.apptIndex = apptIndex;
         this.searchKeyword = searchKeyword;
+        this.searchBy = searchBy;
         this.importance = importance;
         this.ID = ID;
         this.sortBy = sortBy;
@@ -179,7 +181,7 @@ public class ApptParser extends Parser {
             }
 
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         case "del", "mark", "unmark" -> {
@@ -196,12 +198,12 @@ public class ApptParser extends Parser {
 
             apptIndex = parseIndex(indexStr.substring(4));
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         case "list" -> {
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         case "sort" -> {
@@ -218,24 +220,34 @@ public class ApptParser extends Parser {
                 sortBy = "time";
             }
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         case "find" -> {
-            if (line == null || !(line.contains("id/") || line.contains("p/"))) {
+            if (line == null) {
                 throw new NurseSchedException(ExceptionMessage.MISSING_SEARCH_TERM);
+            }
+            if (!(line.contains("id/") || line.contains("p/"))){
+                throw new NurseSchedException(ExceptionMessage.INVALID_FIND_PARAMETER);
             }
             if (line.contains("id/")){
                 int idIndex = line.indexOf("id/") + 3;
                 searchKeyword = line.substring(idIndex).trim();
+                int testID = parseID(searchKeyword);
+                searchBy = "id";
             }
             else if (line.contains("p/")){
-                int nameIndex = line.indexOf("p/") + 3;
-                searchKeyword = line.substring(nameIndex).trim();
+                try {
+                    int nameIndex = line.indexOf("p/") + 3;
+                    searchKeyword = line.substring(nameIndex).trim();
+                    searchBy = "p";
+                } catch (Exception e) {
+                    System.out.println("No name provided");
+                }
             }
 
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         case "edit" -> {
@@ -252,7 +264,7 @@ public class ApptParser extends Parser {
 
                 // Check if there's actually a number after id/
                 if (indexStr.isEmpty()) {
-                    logr.warning("Missing index number after id/ prefix");
+                    logr.warning("Missing index number after aid/ prefix");
                     throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
                 }
 
@@ -281,7 +293,7 @@ public class ApptParser extends Parser {
                         abstractedLine = line.substring(pidEnd).trim();
                         ID = parseID(pidStr);
                         if (pidStr.isEmpty()) {
-                            System.out.println("No ID found in pid field. Defaulting to previous ID.");
+                            System.out.println("No ID found in id field. Defaulting to previous ID.");
                             ID = -1;
                         }
                     } else {
@@ -331,12 +343,12 @@ public class ApptParser extends Parser {
                     throw e;
                 }
             } catch (StringIndexOutOfBoundsException e) {
-                logr.warning("Missing index number after id/ prefix");
+                logr.warning("Missing index number after aid/ prefix");
                 throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
             }
 
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID);
+                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
         }
 
         default -> {
@@ -349,6 +361,12 @@ public class ApptParser extends Parser {
 
 
     private static int parseID(String id) throws NurseSchedException {
+        for (char c : id.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
+            }
+        }
+
         // Validate ID format (4 digits)
         if (id.length() != 4) {
             if (id.trim().length() != 4) {
@@ -359,12 +377,6 @@ public class ApptParser extends Parser {
                 }
             } else {
                 id = id.trim();
-            }
-        }
-
-        for (char c : id.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
             }
         }
 
@@ -484,6 +496,10 @@ public class ApptParser extends Parser {
 
     public String getSearchKeyword () {
         return searchKeyword;
+    }
+
+    public String getSearchBy () {
+        return searchBy;
     }
 
     public String getSortBy () {

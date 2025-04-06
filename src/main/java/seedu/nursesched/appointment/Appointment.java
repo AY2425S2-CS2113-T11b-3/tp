@@ -217,7 +217,7 @@ public class Appointment {
      * Filter for appointments by patient names.
      * @param patientName The keyword to search for in patient name.
      */
-    public static void findAppointment(String patientName) {
+    public static void findApptByName(String patientName) {
         ArrayList<Appointment> searchResults = new ArrayList<>();
         for (Appointment appointment : apptList) {
             if (appointment.getName().toLowerCase().contains(patientName.toLowerCase())) {
@@ -225,6 +225,16 @@ public class Appointment {
             }
         }
         Ui.printSearchResults(searchResults, patientName);
+    }
+
+    public static void findApptByID(String ID) {
+        ArrayList<Appointment> searchResults = new ArrayList<>();
+        for (Appointment appointment : apptList) {
+            if (appointment.getID() == Integer.parseInt(ID)) {
+                searchResults.add(appointment);
+            }
+        }
+        Ui.printSearchResults(searchResults, ID);
     }
 
     public static void editAppt(int index, int ID,
