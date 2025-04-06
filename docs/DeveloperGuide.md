@@ -80,7 +80,7 @@ API: `Patient.java`
 The `Patient` component,
 
 - Manages patient information including ID, name, age, gender, contact information, and medical notes.
-- Enforces data integrity through validation rules (4-digit numeric ID, M/F gender restriction).
+- Enforces data integrity through validation rules (4-digit numeric ID, M/F gender, 8-digit numeric contact number restriction).
 - Handles deletion by automatically removing associated medical tests.
 - Maintains a static list (patientsList) as the single source of truth for all patient records.
 - Throws custom exceptions (NurseSchedException) for error handling.
@@ -122,7 +122,15 @@ Step 2. The user adds patients using the addPatient method. For example:
 
 ```Patient("1234", "John Doe", "30", "M", "91234567", "Allergic to penicillin")```
 
+The following sequence diagram shows how adding patient information goes:
+
+![addPatientSequenceDiagram.png](assets/patientImages/addPatientSequenceDiagram.png)
+
 Step 3. The user decides to remove a patient by calling removePatient("1234").
+
+The following sequence diagram shows how the delete patient information goes:
+
+![removePatientSequenceDiagram.png](assets/patientImages/removePatientSequenceDiagram.png)
 
 Step 4. The system:
 
@@ -136,10 +144,6 @@ Step 5. If the ID does not exist (e.g., "9999"), the system throws:
 ```NurseSchedException: Patient not found.```
 
 Step 6. The CLI displays the outcome (success or error) to the user.
-
-The following sequence diagram shows how the delete patient information goes:
-
-![removePatientSequenceDiagram.png](assets/patientImages/removePatientSequenceDiagram.png)
 
 #### Design Considerations
 

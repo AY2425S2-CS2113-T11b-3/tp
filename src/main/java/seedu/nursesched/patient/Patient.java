@@ -100,18 +100,18 @@ public class Patient {
     public static void removePatient(String id) throws NurseSchedException {
         assert id != null : "Patient ID cannot be null";
 
-        boolean found = false;
+        boolean isFound = false;
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
                 patientsList.remove(patient);
                 System.out.println("Patient information removed for ID: " + id);
-                found = true;
+                isFound = true;
                 MedicalTest.removeTestsForPatient(patient.getId());
                 break;
             }
         }
 
-        if (!found) {
+        if (!isFound) {
             throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
         } else {
             PatientStorage.overwriteSaveFile(patientsList);
@@ -179,10 +179,10 @@ public class Patient {
      */
     public static void editPatientDetails(String id, String newName, String newAge, String newGender,
                                           String newContact, String newNotes) throws NurseSchedException {
-        boolean found = false;
+        boolean isFound = false;
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
-                found = true;
+                isFound = true;
                 if (newName != null) {
                     patient.name = newName;
                 }
@@ -206,7 +206,7 @@ public class Patient {
             }
         }
         
-        if (!found) {
+        if (!isFound) {
             throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
         } else {
             PatientStorage.overwriteSaveFile(patientsList);
