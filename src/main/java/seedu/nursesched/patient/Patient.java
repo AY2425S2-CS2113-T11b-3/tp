@@ -23,7 +23,11 @@ public class Patient {
     private String notes;
 
     static {
-        patientsList = PatientStorage.readFile();
+        try {
+            patientsList = PatientStorage.readFile();
+        } catch (NurseSchedException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -49,9 +53,7 @@ public class Patient {
             throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_FIELDS);
         }
 
-        if (!gender.equals("M") && !gender.equals("F")) {
-            throw new NurseSchedException(ExceptionMessage.INVALID_GENDER);
-        }
+        verifyGender(gender);
 
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
@@ -66,8 +68,14 @@ public class Patient {
         this.name = name;
         this.age = age;
         this.notes = notes;
-        this.gender = gender;
+        this.gender = gender.toUpperCase();
         this.contact = contact;
+    }
+
+    private static void verifyGender(String gender) throws NurseSchedException {
+        if (!gender.equalsIgnoreCase("M") && !gender.equalsIgnoreCase("F")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_GENDER);
+        }
     }
 
     /**
@@ -92,18 +100,18 @@ public class Patient {
     public static void removePatient(String id) throws NurseSchedException {
         assert id != null : "Patient ID cannot be null";
 
-        boolean found = false;
+        boolean isFound = false;
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
                 patientsList.remove(patient);
                 System.out.println("Patient information removed for ID: " + id);
-                found = true;
+                isFound = true;
                 MedicalTest.removeTestsForPatient(patient.getId());
                 break;
             }
         }
 
-        if (!found) {
+        if (!isFound) {
             throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
         } else {
             PatientStorage.overwriteSaveFile(patientsList);
@@ -115,10 +123,9 @@ public class Patient {
      * Prints the information of all patients in the list.
      * If the list is empty, it prints a message indicating that no patient information is available.
      */
-    public static void listPatientInformation() {
+    public static void listPatientInformation() throws NurseSchedException {
         if (patientsList.isEmpty()) {
-            System.out.println("Patient information is empty.");
-            return;
+            throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_LIST);
         }
         for (Patient patient : patientsList) {
             System.out.println(patient.toString());
@@ -172,10 +179,10 @@ public class Patient {
      */
     public static void editPatientDetails(String id, String newName, String newAge, String newGender,
                                           String newContact, String newNotes) throws NurseSchedException {
-        boolean found = false;
+        boolean isFound = false;
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
-                found = true;
+                isFound = true;
                 if (newName != null) {
                     patient.name = newName;
                 }
@@ -184,6 +191,7 @@ public class Patient {
                     patient.age = newAge;
                 }
                 if (newGender != null) {
+                    verifyGender(newGender);
                     patient.gender = newGender.toUpperCase();
                 }
                 if (newContact != null) {
@@ -198,7 +206,7 @@ public class Patient {
             }
         }
         
-        if (!found) {
+        if (!isFound) {
             throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
         } else {
             PatientStorage.overwriteSaveFile(patientsList);
@@ -268,7 +276,7 @@ public class Patient {
                 "  ID: " + id + "\n" +
                 "  Name: " + name + "\n" +
                 "  Age: " + age + " years old\n" +
-                "  Gender: " + gender + "\n" +
+                "  Gender: " + gender.toUpperCase() + "\n" +
                 "  Contact: " + contact + "\n" +
                 (notes.isEmpty() ? "  Notes: No notes were given." : "  Notes: " + notes);
     }

@@ -8,13 +8,13 @@ participant ":PatientParser" as PatientParser
 participant ":Patient" as Patient
 participant ":Storage" as Storage
 
-User -> Command : "pf del id/1234"
+User -> Command : pf add id/1234 p/John Doe a/30 g/M \nc/91234567 n/Allergic to penicillin"
 activate Command
-  Command -> Parser : extractType("pf del id/1234")
+  Command -> Parser : extractType(line)
   activate Parser
     Parser --> Command : Return "pf"
   deactivate Parser
-    Command -> PatientParser : extractInputs("del id/1234")
+    Command -> PatientParser : extractInputs(line)
   activate PatientParser
     PatientParser -> PatientParser : validateID(id="1234")
     activate PatientParser
@@ -22,7 +22,7 @@ activate Command
     deactivate PatientParser
     PatientParser --> Command : Return PatientParser(id="1234")
   deactivate PatientParser
-    Command -> Patient : removePatient("1234")
+    Command -> Patient : addPatient(id="1234", name="John Doe", age="30", gender="M", \ncontact="91234567", notes="Allergic to penicillin")
   activate Patient
     Patient -> Storage : overwriteSaveFile(patientsList)
   activate Storage

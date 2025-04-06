@@ -30,6 +30,7 @@ public class Command {
             try {
                 String line = ui.readCommand(in);
                 ui.showResults();
+                line = line.trim();
                 String type = Parser.extractType(line);
 
                 switch (type) {
@@ -107,7 +108,6 @@ public class Command {
                     }
                     break;
                 case "pf":
-                    //Todo
                     PatientParser patientParser = PatientParser.extractInputs(line);
                     if (patientParser == null) {
                         System.out.println("Invalid inputs for Patient based command!");

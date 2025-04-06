@@ -80,7 +80,7 @@ API: `Patient.java`
 The `Patient` component,
 
 - Manages patient information including ID, name, age, gender, contact information, and medical notes.
-- Enforces data integrity through validation rules (4-digit numeric ID, M/F gender restriction).
+- Enforces data integrity through validation rules (4-digit numeric ID, M/F gender, 8-digit numeric contact number restriction).
 - Handles deletion by automatically removing associated medical tests.
 - Maintains a static list (patientsList) as the single source of truth for all patient records.
 - Throws custom exceptions (NurseSchedException) for error handling.
@@ -122,7 +122,15 @@ Step 2. The user adds patients using the addPatient method. For example:
 
 ```Patient("1234", "John Doe", "30", "M", "91234567", "Allergic to penicillin")```
 
+The following sequence diagram shows how adding patient information goes:
+
+![addPatientSequenceDiagram.png](assets/patientImages/addPatientSequenceDiagram.png)
+
 Step 3. The user decides to remove a patient by calling removePatient("1234").
+
+The following sequence diagram shows how the delete patient information goes:
+
+![removePatientSequenceDiagram.png](assets/patientImages/removePatientSequenceDiagram.png)
 
 Step 4. The system:
 
@@ -136,10 +144,6 @@ Step 5. If the ID does not exist (e.g., "9999"), the system throws:
 ```NurseSchedException: Patient not found.```
 
 Step 6. The CLI displays the outcome (success or error) to the user.
-
-The following sequence diagram shows how the delete patient information goes:
-
-![removePatientSequenceDiagram.png](assets/patientImages/removePatientSequenceDiagram.png)
 
 #### Design Considerations
 
@@ -366,6 +370,10 @@ This is so that they can retrieve information quickly, especially with how hecti
 | v2.0    | Nurse    | save appointment information                                        | retrieve previously stored appointment information                     | 
 | v2.0    | Nurse    | rank importance of appointments                                     | arrange my appointments based off priority                             |
 | v2.0    | Nurse    | list medicine that is below a certain quantity                      | know which medicine to restock                                         |
+| v2.0    | Nurse    | Save shift information                                              | Keep track of shift history even after exiting NurseSched              |
+| v2.0    | Nurse    | Mark or unmark a shift                                              | Indicate if a shift has been completed or not                          |
+| v2.0    | Nurse    | Log overtime hours for a shift                                      | Keep a record of extra hours worked for reporting and planning         |
+| v2.0    | Nurse    | Sort shifts chronologically                                         | View the most recent and upcoming shifts more easily                   |
 
 ## Non-Functional Requirements
 
@@ -542,6 +550,27 @@ This section provides instructions for testing the various features of NurseSche
 
 **Test case**: `shift list` (after adding multiple shifts)  
 **Expected**: List displays all shifts with their completion status, date, time range, and task.
+
+### Sorting shifts chronologically
+**Prerequisites**: Multiple shifts added with different dates and times.
+
+**Test case**: `shift sort`  
+**Expected**: Shifts are sorted by `DATE` then `START_TIME` in ascending order. Status message confirms sorting.
+
+**Test case**: `shift sort` (with 0 or 1 shift)  
+**Expected**: List remains unchanged. Sorting succeeds silently or with a gentle confirmation.
+
+### Logging overtime
+**Prerequisites**: At least one shift in the list.
+
+**Test case**: `shift logot id/1 h/2.5`  
+**Expected**: Overtime of 2.5 hours is logged for the first shift. Status message confirms logging.
+
+**Test case**: `shift logot id/0 h/1.0`  
+**Expected**: No overtime is logged. Error message shown. Shift list remains unchanged.
+
+**Test case**: `shift logot id/1 h/-3`  
+**Expected**: No overtime is logged. Error message shown due to invalid negative input.
 
 ## Patient List
 

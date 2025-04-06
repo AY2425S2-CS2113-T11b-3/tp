@@ -11,21 +11,22 @@ package "Patient Information" {
     -gender: String
     -contact: String
     -notes: String
-    #patientsList: ArrayList<Patient>
+    # {static} patientsList: ArrayList<Patient>
     +Patient(id, name, age, gender, contact, notes)
     +addPatient(Patient)
     +removePatient(String)
     +listPatientInformation()
-    +editPatientDetails(...)
+    +editPatientDetails(id, name, age, gender, contact, notes)
     +printProfileWithID(String)
   }
 
   class MedicalTest {
-    -id: String
+    -patientId: String
     -testName: String
     -result: String
-    #medicalTestList: ArrayList<>
-    +addMedicalTest(...)
+    #{static}medicalTestList: ArrayList<MedicalTest>
+    +MedicalTest(patientId, testName, result)
+    +addMedicalTest(MedicalTest)
     +removeTestsForPatient(String)
     +listTestsForPatient(String)
   }
@@ -44,17 +45,16 @@ package "Command Process" {
     -gender: String
     -contact: String
     -notes: String
+    +PatientParser(command, id, name, age, gender, contact, notes)
     +extractInputs(String): PatientParser
-    +getCommand(): String
-    +getId(): String
     +validateID(String)
   }
 }
 
-Command -right-> PatientParser : "1. parses input"
-Command -right-> Patient : "2. executes commands"
+Command .right.> PatientParser : 1. parses input >
+Command ..> Patient : 2. executes >
 
-Patient *-- "0..*" MedicalTest : contains
-PatientParser ..> Patient : creates
+Patient *-right- "0..*" MedicalTest : contains >
+
 
 @enduml
