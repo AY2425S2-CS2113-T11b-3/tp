@@ -370,6 +370,16 @@ public class Appointment {
 
     }
 
+    public static void removeAppointmentsForPatient(int patientId) {
+        ArrayList<Appointment> appointmentsToRemove = new ArrayList<>();
+
+        for (Appointment appointment : apptList) {
+            if (appointment.getID() == patientId) {
+                appointmentsToRemove.add(appointment);
+            }
+        }
+        apptList.removeAll(appointmentsToRemove);
+    }
 
     /**
      * Displays all appointment currently stored in the appointment list.

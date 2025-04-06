@@ -328,10 +328,8 @@ public class PatientParser extends Parser {
 
             return new PatientParser(command, id, name, age, gender, contact, notes);
         }
-        default -> {
-            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_COMMAND);
         }
-        }
+        throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_COMMAND);
     }
 
     private static void checkIdExists(String line) throws NurseSchedException {
@@ -362,16 +360,14 @@ public class PatientParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.MISSING_ID);
         }
 
-        if (id.length() != 4) {
-            if (id.trim().length() != 4) {
-                if (id.contains(" ")) {
-                    throw new NurseSchedException(ExceptionMessage.ID_CONTAINS_SPACES);
-                } else {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
-                }
+        if (id.trim().length() != 4) {
+            if (id.contains(" ")) {
+                throw new NurseSchedException(ExceptionMessage.ID_CONTAINS_SPACES);
             } else {
-                id = id.trim();
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
             }
+        } else {
+            id = id.trim();
         }
 
         for (char c : id.toCharArray()) {

@@ -1,5 +1,6 @@
 package seedu.nursesched.patient;
 
+import seedu.nursesched.appointment.Appointment;
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.storage.PatientStorage;
@@ -53,6 +54,7 @@ public class Patient {
             throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_FIELDS);
         }
 
+        validateID(id);
         verifyGender(gender);
 
         for (Patient patient : patientsList) {
@@ -75,6 +77,29 @@ public class Patient {
     private static void verifyGender(String gender) throws NurseSchedException {
         if (!gender.equalsIgnoreCase("M") && !gender.equalsIgnoreCase("F")) {
             throw new NurseSchedException(ExceptionMessage.INVALID_GENDER);
+        }
+    }
+
+    private static void validateID(String id) throws NurseSchedException {
+        // Validate ID format (4 digits)
+        if (id.trim().isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.MISSING_ID);
+        }
+
+        if (id.trim().length() != 4) {
+            if (id.contains(" ")) {
+                throw new NurseSchedException(ExceptionMessage.ID_CONTAINS_SPACES);
+            } else {
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
+            }
+        } else {
+            id = id.trim();
+        }
+
+        for (char c : id.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
+            }
         }
     }
 
@@ -101,8 +126,10 @@ public class Patient {
         assert id != null : "Patient ID cannot be null";
 
         boolean isFound = false;
+        validateID(id);
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
+                Appointment.removeAppointmentsForPatient(Integer.parseInt(id));
                 patientsList.remove(patient);
                 System.out.println("Patient information removed for ID: " + id);
                 isFound = true;
