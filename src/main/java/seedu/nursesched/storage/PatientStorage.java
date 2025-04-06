@@ -1,5 +1,6 @@
 package seedu.nursesched.storage;
 
+import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.patient.Patient;
 
@@ -13,7 +14,7 @@ import java.util.Scanner;
 public class PatientStorage {
     private static final String FILE_PATH = "data/Patient.txt";
 
-    public static ArrayList<Patient> readFile() {
+    public static ArrayList<Patient> readFile() throws NurseSchedException {
         File patientFile = new File(FILE_PATH);
         ArrayList<Patient> patientList = new ArrayList<>();
 
@@ -29,7 +30,7 @@ public class PatientStorage {
                 patientList.add(patient);
             }
         } catch (FileNotFoundException | NurseSchedException e) {
-            System.out.println("Error reading file. There might be corruption in the data file.");
+            throw new NurseSchedException(ExceptionMessage.ERROR_READING_FILE);
         }
         return patientList;
     }
@@ -47,6 +48,10 @@ public class PatientStorage {
             notes = parts[5];
         } catch (IndexOutOfBoundsException exception) {
             notes = "";
+        }
+
+        if (parts.length != 7) {
+            throw new NurseSchedException(ExceptionMessage.ERROR_READING_FILE);
         }
 
         return new Patient(id, name, age, gender, contact, notes);

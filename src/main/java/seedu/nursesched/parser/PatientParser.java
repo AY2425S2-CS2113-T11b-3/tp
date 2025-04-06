@@ -5,6 +5,8 @@ import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.patient.MedicalTest;
 import seedu.nursesched.patient.Patient;
 
+import java.util.regex.Pattern;
+
 /**
  * The PatientParser class parses the input of the user to make sense of the command.
  * It extracts commands and relevant parameters, validating them before processing.
@@ -85,8 +87,12 @@ public class PatientParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INPUT_EMPTY);
         }
 
+        line = normalizeIdentifiers(line.trim());
+        checkForDuplicateIdentifiersForPatientInfo(line.trim());
+        line = line.replace("\t", " ");
+
         line = line.trim();
-        line = line.substring(line.indexOf(" ") + 1);
+        line = line.substring(line.indexOf(" ") + 1).trim();
         String command;
         String id = null;
         String name = null;
@@ -100,11 +106,11 @@ public class PatientParser extends Parser {
         // If there are no parameters like "pf list", then throw an exception that treats
         // the line as the command
         try {
-            if (line.contains(" ")) {
-                command = line.substring(0, line.indexOf(" "));
-                line = line.substring(line.indexOf(" ") + 1);
+            if (line.contains("id/")) {
+                command = line.substring(0, line.indexOf("id/")).toLowerCase().trim();
+                line = line.substring(line.indexOf("id/"));
             } else {
-                command = line;
+                command = line.toLowerCase();
             }
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Invalid inputs! Please try again.");
@@ -174,6 +180,8 @@ public class PatientParser extends Parser {
         case "find" -> {
             id = checkForId(line, id);
 
+            validateID(id);
+
             return new PatientParser(command, id, name, age, gender, contact, notes);
         }
         case "edit" -> {
@@ -187,7 +195,7 @@ public class PatientParser extends Parser {
                 validateID(id);
 
             } else {
-                throw new NurseSchedException(ExceptionMessage.MISSING_ID);
+                throw new NurseSchedException(ExceptionMessage.MISSING_ID_IDENTIFIER);
             }
 
             if (line.isEmpty()) {
@@ -249,87 +257,92 @@ public class PatientParser extends Parser {
 
             return new PatientParser(command, id, name, age, gender, contact, notes);
         }
-        case "result" -> {
+        case "result add" -> {
+            checkIdExists(line);
+
             try {
-                command = line.substring(0, line.indexOf(" "));
-                line = line.substring(line.indexOf(" ") + 1);
-            } catch (StringIndexOutOfBoundsException e) {
-                throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
-            }
+                // Extract patient ID
+                id = extractValue(line, "id/", "t/");
 
-            switch (command) {
-            case "add" -> {
-                try {
-                    command = "result add";
+                validateID(id);
 
-                    // Extract patient ID
-                    id = extractValue(line, "id/");
-                    // Extract test details (test name, date, result)
-                    String testName = line.substring(line.indexOf("t/") + 2, line.indexOf("r/") - 1);
-                    String testResult = line.substring(line.indexOf("r/") + 2);
+                // Extract test details (test name, date, result)
+                String testName = line.substring(line.indexOf("t/") + 2, line.indexOf("r/") - 1);
+                String testResult = line.substring(line.indexOf("r/") + 2);
 
-                    // Find the patient by ID and add the test
-                    Patient patient = findPatientById(id);
-
-                    if (patient == null) {
-                        throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
-                    }
-
-                    // Validate and create the medical test
-                    MedicalTest test = new MedicalTest(id, testName, testResult);
-
-                    MedicalTest.addMedicalTest(test, id);
-
-                    return new PatientParser(command, id, name, age, gender, contact, notes);
-                } catch (IndexOutOfBoundsException e) {
-                    throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
+                if (testName.isEmpty()) {
+                    throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_TEST_NAME);
+                } else if (testResult.isEmpty()) {
+                    throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_TEST_RESULT);
                 }
-            }
-            case "del" -> {
-                // Extract patient ID to delete all medical tests
-                command = "result del";
 
-                id = extractValue(line, "id/");
-
-                // Find patient by ID
+                // Find the patient by ID and add the test
                 Patient patient = findPatientById(id);
 
                 if (patient == null) {
                     throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
                 }
 
-                MedicalTest.removeTestsForPatient(id);
+                // Validate and create the medical test
+                MedicalTest test = new MedicalTest(id, testName, testResult);
+
+                MedicalTest.addMedicalTest(test, id);
 
                 return new PatientParser(command, id, name, age, gender, contact, notes);
+            } catch (IndexOutOfBoundsException e) {
+                throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
             }
-            case "list" -> {
-                command = "result list";
+        }
+        case "result del" -> {
+            // Extract patient ID to delete all medical tests
+            checkIdExists(line);
+            id = line.substring(line.indexOf("id/") + 3);
 
-                id = extractValue(line, "id/");
+            validateID(id);
 
-                // Find patient by ID
-                Patient patient = findPatientById(id);
+            // Find patient by ID
+            Patient patient = findPatientById(id);
 
-                if (patient == null) {
-                    throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
-                }
-
-                MedicalTest.listTestsForPatient(id);
-
-                return new PatientParser(command, id, name, age, gender, contact, notes);
+            if (patient == null) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
             }
-            default -> throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
+
+            MedicalTest.removeTestsForPatient(id);
+
+            return new PatientParser(command, id, name, age, gender, contact, notes);
+        }
+        case "result list" -> {
+            checkIdExists(line);
+            id = line.substring(line.indexOf("id/") + 3);
+
+            validateID(id);
+
+            // Find patient by ID
+            Patient patient = findPatientById(id);
+
+            if (patient == null) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
             }
+
+            MedicalTest.listTestsForPatient(id);
+
+            return new PatientParser(command, id, name, age, gender, contact, notes);
         }
         default -> {
-            return null;
+            throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_COMMAND);
         }
+        }
+    }
+
+    private static void checkIdExists(String line) throws NurseSchedException {
+        if (!line.contains("id/")) {
+            throw new NurseSchedException(ExceptionMessage.MISSING_ID_IDENTIFIER);
         }
     }
 
     private static String checkForId(String line, String id) throws NurseSchedException {
         if (!line.contains("id/")) {
-            throw new NurseSchedException(ExceptionMessage.MISSING_ID);
+            throw new NurseSchedException(ExceptionMessage.MISSING_ID_IDENTIFIER);
         } else {
             id = line.substring(line.indexOf("id/") + 3).trim();
         }
@@ -345,6 +358,10 @@ public class PatientParser extends Parser {
 
     private static void validateID(String id) throws NurseSchedException {
         // Validate ID format (4 digits)
+        if (id.trim().isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.MISSING_ID);
+        }
+
         if (id.length() != 4) {
             if (id.trim().length() != 4) {
                 if (id.contains(" ")) {
@@ -393,13 +410,37 @@ public class PatientParser extends Parser {
         return null;
     }
 
-    private static String extractValue(String line, String key) throws NurseSchedException {
+    // Convert command identifiers to lower case
+    private static String normalizeIdentifiers(String input) {
+        String[] identifiers = {"id/", "p/", "a/", "g/", "c/", "n/", "t/", "r/"};
+
+        String normalized = input;
+
+        for (String identifier : identifiers) {
+            normalized = normalized.replaceAll("(?i)" + Pattern.quote(identifier), identifier);
+        }
+
+        return normalized;
+    }
+
+    private static void checkForDuplicateIdentifiersForPatientInfo(String line) throws NurseSchedException {
+        String[] identifiers = {"id/", "p/", "a/", "g/", "c/", "n/", "t/", "r/"};
+
+        for (String identifier : identifiers) {
+            int firstIndex = line.indexOf(identifier);
+            if (firstIndex != -1 && line.indexOf(identifier, firstIndex + 1) != -1) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_DUPLICATE_IDENTIFIER);
+            }
+        }
+    }
+
+    private static String extractValue(String line, String key, String identifier) throws NurseSchedException {
         int startIdx = line.indexOf(key) + key.length();
         if (startIdx == -1) {
             System.out.println("Missing value for " + key);
             throw new NurseSchedException(ExceptionMessage.PARSING_ERROR);
         }
-        int endIdx = line.indexOf(" ", startIdx);
+        int endIdx = line.indexOf(identifier, startIdx);
         if (endIdx == -1) {
             endIdx = line.length();
         }
