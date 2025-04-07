@@ -78,6 +78,18 @@ public class Shift {
         logr.info("Shift created: " + this);
     }
 
+    /**
+     * Checks whether a new shift would overlap with any existing shift on the same date.
+     * A shift is considered overlapping if its time range intersects with any other shift's time range,
+     * except when the new shift starts exactly when an existing one ends, or ends exactly when another starts.
+     *
+     * @param newStart     The proposed start time of the new or updated shift.
+     * @param newEnd       The proposed end time of the new or updated shift.
+     * @param date         The date on which the shift would occur.
+     * @param ignoreIndex  The index of a shift to ignore during the check (used when editing an existing shift),
+     *                     or -1 if no shift should be ignored (used when adding).
+     * @return {@code true} if the new shift overlaps with any existing shift (excluding ignored index); {@code false} otherwise.
+     */
     private static boolean hasOverlap(LocalTime newStart, LocalTime newEnd, LocalDate date, int ignoreIndex) {
         for (int i = 0; i < shiftList.size(); i++) {
             if (i == ignoreIndex) {
