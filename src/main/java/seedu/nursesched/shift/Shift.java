@@ -299,8 +299,14 @@ public class Shift {
     /**
      * Sorts the shift list in chronological order, first by date, then by start time.
      * Updates the list in place and prints confirmation.
+     *
+     * @throws NurseSchedException If the shift list is empty.
      */
-    public static void sortShiftsChronologically() {
+    public static void sortShiftsChronologically() throws NurseSchedException {
+        if (shiftList.isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_SORTING_LIST);
+        }
+
         shiftList.sort(Comparator.comparing(Shift::getDate).thenComparing(Shift::getStartTime));
         System.out.println("Shifts sorted by date and start time.");
     }
