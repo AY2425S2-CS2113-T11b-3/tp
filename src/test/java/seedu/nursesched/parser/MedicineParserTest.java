@@ -234,7 +234,8 @@ class MedicineParserTest {
             MedicineParser.extractInputs(inputString);
         });
 
-        assertEquals("Quantity is too large! Max allowed is 2,147,483,647.", exception.getMessage());
+        assertEquals("Quantity is too large or invalid type! Max allowed is 2,147,483,647.",
+                exception.getMessage());
     }
 
     @Test
@@ -245,7 +246,8 @@ class MedicineParserTest {
             MedicineParser.extractInputs(inputString);
         });
 
-        assertEquals("Quantity is too large! Max allowed is 2,147,483,647.", exception.getMessage());
+        assertEquals("Quantity is too large or invalid type! Max allowed is 2,147,483,647.",
+                exception.getMessage());
     }
 
     @Test
