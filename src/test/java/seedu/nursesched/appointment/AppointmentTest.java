@@ -42,8 +42,8 @@ public class AppointmentTest {
 
         ApptParser apptParser = ApptParser.extractInputs(input);
 
-        String Id = Integer.toString(apptParser.getID());
-        Patient.addPatient(new Patient(Id, "Jean Doe", "25", "F",
+        String id = Integer.toString(apptParser.getID());
+        Patient.addPatient(new Patient(id, "Jean Doe", "25", "F",
                 "12345678", "Allergic to penicillin"));
 
         assertNotNull(apptParser);
