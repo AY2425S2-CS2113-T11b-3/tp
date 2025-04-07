@@ -1,69 +1,59 @@
 @startuml
 
+hide footbox
 actor User
-participant ":Appointment" as Appointment
-participant "apptList:ArrayList<Appointment>" as apptList
-participant ":AppointmentStorage" as AppointmentStorage
-participant "logr:Logger" as Logger
+participant ":Command" as Command
+participant ":Parser" as Parser
+participant ":ApptParser" as ApptParser
+participant ":Appointment" as Appt
+participant ":AppointmentStorage" as Storage
 
-User -> Appointment : addAppt(name, startTime, endTime, date, notes, importance)
-activate Appointment
+User -> Command : appt add id/1234 s/13:00 e/14:00 d/2025-12-12 \nim/3 n/Needs a wheelchair"
+activate Command
+  Command -> Parser : extractType(line)
+
+  activate Parser
+    Parser --> Command : Return "appt"
+  deactivate Parser
+
+  Command -> ApptParser : extractInputs(line)
+
+  activate ApptParser
+
+    ApptParser --> Command : ApptParser \nobject with parameters
+  deactivate ApptParser
+
+  Command -> Appt : addAppt(id="1234", startTime=13:00, endTime=14:00, date=2025-12-12, \nim=3, notes="Needs a wheelchair")
+
+  activate Appt
+
+    Appt -> Appt: findApptClashes(startTime=13:00,endTime=14:00,date=2025-12-12)
+    activate Appt
+        Appt --> Appt: Possible Appointment Clashes
+    deactivate Appt
 
 
-Appointment -> Appointment : findAppointment(startTime, date)
-activate Appointment
 
-loop for each appointment in apptList
-    Appointment -> apptList : check for time conflict
-    activate apptList
-    apptList --> Appointment : matching appointment or null
-    deactivate apptList
-end
+    alt Appointment clashes exists
+        Appt -> Command : Appointment \nnot added
+    else No appointment clashes
 
-Appointment --> Appointment : possibleClash
-deactivate Appointment
+        Appt -> Appt: checkApptDateTime(date,startTime,endTime)
+        activate Appt
+        deactivate Appt
 
-alt time conflict exists
-    Appointment -> System.out : print conflict message
-    System.out --> User : display conflict message
+        Appt -> Storage : appendToFile(Appt)
+        activate Storage
+            Storage --> Appt : File saved
+        deactivate Storage
 
-    Appointment -> Logger : log(INFO, "Appointment already exists")
-    activate Logger
-    Logger --> Appointment
-    deactivate Logger
+        Appt --> Command: Appointment \nadded
+        deactivate Appt
+    end
 
-    Appointment --> User : return without adding
-else no conflict
-    create "newAppt:Appointment" as newAppt
-    Appointment -> newAppt : new Appointment(name, startTime, endTime, date, notes, importance)
-    activate newAppt
-    newAppt --> Appointment
-    deactivate newAppt
 
-    Appointment -> apptList : add(newAppt)
-    activate apptList
-    apptList --> Appointment
-    deactivate apptList
 
-    Appointment -> AppointmentStorage : appendToFile(newAppt)
-    activate AppointmentStorage
-    AppointmentStorage -> FileWriter : write(formattedString)
-    activate FileWriter
-    FileWriter --> AppointmentStorage
-    deactivate FileWriter
-    AppointmentStorage --> Appointment
-    deactivate AppointmentStorage
 
-    Appointment -> System.out : print confirmation
-    System.out --> User : display confirmation
-
-    Appointment -> Logger : log(INFO, "Appointment added")
-    activate Logger
-    Logger --> Appointment
-    deactivate Logger
-end
-
-Appointment --> User : return
-deactivate Appointment
-
+  Command --> User
+deactivate Command
 @enduml
