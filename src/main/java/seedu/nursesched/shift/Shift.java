@@ -88,7 +88,8 @@ public class Shift {
      * @param date         The date on which the shift would occur.
      * @param ignoreIndex  The index of a shift to ignore during the check (used when editing an existing shift),
      *                     or -1 if no shift should be ignored (used when adding).
-     * @return {@code true} if the new shift overlaps with any existing shift (excluding ignored index); {@code false} otherwise.
+     * @return {@code true} if the new shift overlaps with any existing shift
+     *         (excluding the one at {@code ignoreIndex}); {@code false} otherwise.
      */
     private static boolean hasOverlap(LocalTime newStart, LocalTime newEnd, LocalDate date, int ignoreIndex) {
         for (int i = 0; i < shiftList.size(); i++) {
