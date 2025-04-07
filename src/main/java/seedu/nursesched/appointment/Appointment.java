@@ -22,7 +22,7 @@ import seedu.nursesched.ui.Ui;
 
 /**
  * Represents all appointments.
- * It stores details such as the start time, end time, date, patient name and notes.
+ * It stores details such as the start time, end time, date, patient name, patient ID and notes.
  */
 public class Appointment {
     protected static ArrayList<Appointment> apptList;
@@ -62,11 +62,12 @@ public class Appointment {
     /**
      * Constructs an Appointment object with specified details.
      *
-     * @param id        The ID of the patient involved in the appointment.
-     * @param startTime The start time of the appointment.
-     * @param endTime   The end time of the appointment.
-     * @param date      The date on which the appointment occurs.
-     * @param notes     The notes for the specified appointment.
+     * @param id         The ID of the patient involved in the appointment.
+     * @param startTime  The start time of the appointment.
+     * @param endTime    The end time of the appointment.
+     * @param date       The date on which the appointment occurs.
+     * @param notes      The notes for the specified appointment.
+     * @param importance The importance ranking of the appointment.
      */
 
     public Appointment(int id, LocalTime startTime, LocalTime endTime,
@@ -84,11 +85,12 @@ public class Appointment {
     /**
      * Adds a new appointment to the appointment list.
      *
-     * @param id The name of the patient involved in the appointment.
-     * @param startTime The start time of the appointment.
-     * @param endTime   The end time of the appointment.
-     * @param date      The date of the appointment.
-     * @param notes     The notes for the appointment.
+     * @param id          The ID of the patient involved in the appointment.
+     * @param startTime   The start time of the appointment.
+     * @param endTime     The end time of the appointment.
+     * @param date        The date of the appointment.
+     * @param notes       The notes for the appointment.
+     * @param importance  The importance ranking of the appointment.
      */
     public static void addAppt(int id,
                                LocalTime startTime, LocalTime endTime,
@@ -126,8 +128,8 @@ public class Appointment {
 
     /**
      * Deletes aan appointment from the appointment list based on the given index.
-     *
      * @param index The index of the appointment to be removed (1-based index).
+     * @throws IndexOutOfBoundsException If no appointment exists with specified index.
      */
     public static void deleteAppt(int index) {
         assert index >= 1 && index < apptList.size() : "Index must be between 1 and " + (apptList.size());
@@ -145,8 +147,9 @@ public class Appointment {
 
     /**
      * Mark an appointment from the appointment list as done based on the given index.
-     *
      * @param index The index of the appointment to be marked (1-based index).
+     * @throws NurseSchedException If appointment is already marked before marking.
+     * @throws IndexOutOfBoundsException If no appointment exists with specified index.
      */
     public static void markAppt(int index) throws NurseSchedException {
         assert index >= 0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
@@ -167,8 +170,9 @@ public class Appointment {
 
     /**
      * Unmark an appointment from the appointment list based on the given index.
-     *
      * @param index The index of the appointment to be unmarked (1-based index).
+     * @throws NurseSchedException If appointment is already marked before marking.
+     * @throws IndexOutOfBoundsException If no appointment exists with specified index.
      */
     public static void unmarkAppt(int index) throws NurseSchedException {
         assert index>0 && index < apptList.size() : "Index must be between 1 and " + (apptList.size() - 1);
@@ -203,6 +207,11 @@ public class Appointment {
         return null;
     }
 
+    /**
+     * Finds and returns the patient name using the patient's ID.
+     * @param       id The patient's ID.
+     * @return      The name of the patient with matching ID, otherwise return null.
+     */
     public static String findPatientName(int id){
         ArrayList<Patient> pfList = Patient.getPatientsList();
         for (Patient p : pfList) {
@@ -215,7 +224,7 @@ public class Appointment {
 
     /**
      * Filter for appointments by patient names.
-     * @param patientName The keyword to search for in patient name.
+     * @param patientName   The keyword to search for in patient name.
      */
     public static void findApptByName(String patientName) {
         ArrayList<Appointment> searchResults = new ArrayList<>();
@@ -227,6 +236,10 @@ public class Appointment {
         Ui.printSearchResults(searchResults, patientName);
     }
 
+    /**
+     * Filter for appointments by patient ID.
+     * @param id    The ID used to filter appointments.
+     */
     public static void findApptByID(String id) {
         ArrayList<Appointment> searchResults = new ArrayList<>();
         for (Appointment appointment : apptList) {
@@ -237,6 +250,31 @@ public class Appointment {
         Ui.printSearchResults(searchResults, id);
     }
 
+
+    /**
+     * Edits an existing appointment identified by its index in the appointment list.
+     * Fields can be selectively updated.
+     * Parameters not specified will retain their original values.
+     * Performs validation checks, including:
+     * <ul>
+     *     <li>Ensuring the index is valid.</li>
+     *     <li>Ensuring the patient ID (if changed) exists.</li>
+     *     <li>Validating the start and end times relative to the date.</li>
+     *     <li>Checking for scheduling conflicts with other existing appointments.</li>
+     * </ul>
+     * If a scheduling conflict is detected with another appointment, a message is printed,
+     * and the edit is not performed.
+     * If the edit is successful, the updated appointment list is saved to storage.
+     * @param index      The index of the appointment to edit in the list.
+     * @param id         The new patient ID for the appointment.
+     * @param startTime  The new start time for the appointment.
+     * @param endTime    The new end time for the appointment.
+     * @param date       The new date for the appointment.
+     * @param notes      The new notes for the appointment.
+     * @param importance The new importance level for the appointment.
+     * @throws NurseSchedException If the provided index is out of bounds, if the provided patient ID is invalid,
+     *                             or if the resulting date/time combination is invalid.
+     */
     public static void editAppt(int index, int id,
                                        LocalTime startTime, LocalTime endTime,
                                        LocalDate date, String notes, int importance) throws NurseSchedException {
@@ -348,6 +386,19 @@ public class Appointment {
         logr.info("Appointment list sorted chronologically");
     }
 
+
+    /**
+     * Validates the date, start time, and end time for a potential appointment.
+     * <p>
+     * Ensures that the appointment is scheduled for a future date and time,
+     * and that the start time is not after the end time on the given date.
+     *
+     * @param date      The date of the appointment to check.
+     * @param startTime The start time of the appointment to check.
+     * @param endTime   The end time of the appointment to check.
+     * @throws NurseSchedException If the specified date/time is in the past
+     *                             or if the start time is after the end time
+     */
     public static void checkApptDateTime(LocalDate date, LocalTime startTime, LocalTime endTime)
             throws NurseSchedException {
 
@@ -368,6 +419,15 @@ public class Appointment {
 
     }
 
+
+    /**
+     * Removes all appointments associated with a specific patient ID from the main appointment list.
+     * <p>
+     * Iterates through the shared apptList and removes any Appointment
+     * whose patient ID matches the provided patientId
+     * <p>
+     * @param patientId The ID of the patient whose appointments are to be removed.
+     */
     public static void removeAppointmentsForPatient(int patientId) {
         ArrayList<Appointment> appointmentsToRemove = new ArrayList<>();
 
@@ -377,6 +437,7 @@ public class Appointment {
             }
         }
         apptList.removeAll(appointmentsToRemove);
+        AppointmentStorage.overwriteSaveFile(apptList);
     }
 
     /**
