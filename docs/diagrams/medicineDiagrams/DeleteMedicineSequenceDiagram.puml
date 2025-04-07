@@ -1,20 +1,25 @@
 @startuml
 'https://plantuml.com/sequence-diagram
-skinparam ParticipantPadding 20
+skinparam ParticipantPadding 15
+hide footbox
 
 Actor User
 participant ":Medicine" as Medicine
-participant ":NurseSchedException" as NurseSchedException
-participant ":medicineList:ArrayList<Medicine>" as medicineList
+participant "medicineList:ArrayList<Medicine>" as medicineList
 participant ":MedicineStorage" as medicineStorage
-
 User-> Medicine: deleteMedicine(medicineName)
 activate Medicine
 
-loop for all medicine in medicineList
-Medicine -> medicineList: medicine.getMedicineName()
+Medicine -> medicineList : removeIf(predicate)
 activate medicineList
-alt equalsIgnoreCase(medicineName)
+loop for all medicine in\n medicineList
+medicineList -> Medicine : getMedicineName()
+    activate Medicine
+    Medicine --> medicineList : medicineName
+    deactivate Medicine
+
+
+alt equalsIgnoreCase\n(medicineName)
 medicineList -> medicineList : remove(medicineName)
 activate medicineList
 medicineList --> medicineList
@@ -24,21 +29,19 @@ else !equals\nIgnore\nCase\n(medicine\nName)
 medicineList --> Medicine: removed = false
 deactivate medicineList
 end
+end
 
 alt removed
-medicineList -> medicineStorage : overwriteSaveFile(medicineList)
-activate medicineList
+Medicine -> medicineStorage : overwriteSaveFile(medicineList)
 activate medicineStorage
-medicineStorage --> medicineList
+medicineStorage --> Medicine
 deactivate medicineStorage
-deactivate medicineList
 Medicine --> User : System.out.println()
 
 else !removed
 
-Medicine -> NurseSchedException : NurseSchedException()
-activate NurseSchedException
-NurseSchedException --> User : NurseSchedException
+Medicine --> User : NurseSchedException
+deactivate Medicine
 end
 
 @enduml

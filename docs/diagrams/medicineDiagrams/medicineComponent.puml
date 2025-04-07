@@ -1,0 +1,53 @@
+@startuml
+
+hide circle
+skinparam classAttributeIconSize 0
+
+package "Medicine Details" {
+  class Medicine {
+        # {static} medicineList: ArrayList<Medicine>
+        - quantity: int
+        - medicineName: String
+
+        + Medicine(quantity, medicineName)
+        + {static} addMedicine(quantity, medicineName)
+        + {static} removeMedicine(quantity, medicineName)
+        + {static} deleteMedicine(medicineName)
+        + {static} listMedicine()
+        + {static} findMedicine(medicineName))
+        + {static} restockMedicine(restockQuantity)
+        + {static} findSpecificMedicine(medicineName)
+        + {static} editMedicine(medicineName, updatedName, updatedQuantity)
+        + addQuantity(amount)
+        + removeQuantity(amount)
+  }
+
+}
+
+package "Command Process" {
+  class Command {
+    +executeCommands(boolean, Scanner, Ui)
+  }
+
+  class MedicineParser {
+            -command: String
+            -medicineName: String
+            -quantity: int
+            -updatedName: String
+
+            + MedicineParser(command, medicineName, quantity, updatedName)
+            + {static} extractInputs(line): MedicineParser
+            + {static} getMedicineAddParser(remaining, command): MedicineParser
+            + {static} getMedicineRemoveParser(remaining, command): MedicineParser
+            + {static} getMedicineFindParser(remaining, command): MedicineParser
+            + {static} getMedicineDeleteParser(remaining, command): MedicineParser
+            + {static} getMedicineEditParser(remaining, command) : MedicineParser
+            + {static} getMedicineRestockParser(remaining, command) : MedicineParser
+            + {static} extractValue(input, startMarker, endMarker) : MedicineParser
+  }
+}
+
+Command .right.> MedicineParser : 1. parses input >
+Command ..> Medicine : 2. executes >
+
+@enduml

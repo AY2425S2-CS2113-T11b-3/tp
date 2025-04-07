@@ -40,7 +40,8 @@ Code can be found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?sea
 
 - Gave details on the `Medicine` component.
 - Describe the implementation of one of the `medicine delete` feature, including the implementing `medicine add` before.
-- Add sequence diagrams for `medicine delete` and `medicine add`
+- Add sequence diagrams for `medicine delete` and `medicine add`.
+- Add class diagram for `Medicine` component.
 
 #### Contributions to team-based tasks
 
