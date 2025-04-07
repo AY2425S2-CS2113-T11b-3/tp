@@ -46,6 +46,24 @@ class ShiftParserTest {
     }
 
     @Test
+    void testExtractInputs_markCommand_missingIndex() {
+        String input = "shift mark";
+        assertThrows(NurseSchedException.class, () -> ShiftParser.extractInputs(input));
+    }
+
+    @Test
+    void testExtractInputs_markCommand_invalidIndexFormat() {
+        String input = "shift mark id/abc";
+        assertThrows(NurseSchedException.class, () -> ShiftParser.extractInputs(input));
+    }
+
+    @Test
+    void testExtractInputs_markCommand_negativeIndex() {
+        String input = "shift mark id/-2";
+        assertThrows(NurseSchedException.class, () -> ShiftParser.extractInputs(input));
+    }
+
+    @Test
     void testExtractInputs_unmarkCommand_validInput() throws NurseSchedException {
         String input = "shift unmark id/2";
         ShiftParser parser = ShiftParser.extractInputs(input);
@@ -141,12 +159,6 @@ class ShiftParserTest {
     }
 
     @Test
-    void testExtractInputs_editCommand_missingFields() {
-        String input = "shift edit id/1 s/09:00 e/11:00 st/Test";
-        assertThrows(NurseSchedException.class, () -> ShiftParser.extractInputs(input));
-    }
-
-    @Test
     void testExtractInputs_addCommand_extraWhitespace() throws NurseSchedException {
         String input = "  shift   add  s/08:00   e/09:00   d/2025-04-02   st/Check ";
         ShiftParser parser = ShiftParser.extractInputs(input);
@@ -154,5 +166,67 @@ class ShiftParserTest {
         assertNotNull(parser);
         assertEquals("add", parser.getCommand());
         assertEquals("check", parser.getShiftTask()); // Should be lowercased
+    }
+
+    @Test
+    void testExtractInputs_editCommand_onlyTask() throws NurseSchedException {
+        String input = "shift edit id/2 st/Inventory check";
+        ShiftParser parser = ShiftParser.extractInputs(input);
+
+        assertNotNull(parser);
+        assertEquals("edit", parser.getCommand());
+        assertEquals(1, parser.getIndex());
+        assertEquals("inventory check", parser.getShiftTask());
+        assertEquals(null, parser.getStartTime());
+        assertEquals(null, parser.getEndTime());
+        assertEquals(null, parser.getDate());
+    }
+
+    @Test
+    void testExtractInputs_editCommand_onlyStartTime() throws NurseSchedException {
+        String input = "shift edit id/1 s/07:00";
+        ShiftParser parser = ShiftParser.extractInputs(input);
+
+        assertNotNull(parser);
+        assertEquals("edit", parser.getCommand());
+        assertEquals(0, parser.getIndex());
+        assertEquals(LocalTime.of(7, 0), parser.getStartTime());
+        assertEquals(null, parser.getEndTime());
+        assertEquals(null, parser.getDate());
+        assertEquals(null, parser.getShiftTask());
+    }
+
+    @Test
+    void testExtractInputs_editCommand_emptyTask() {
+        String input = "shift edit id/1 st/  ";
+        assertThrows(NurseSchedException.class, () -> ShiftParser.extractInputs(input));
+    }
+
+    @Test
+    void testExtractInputs_editCommand_noFieldsProvided() {
+        String input = "shift edit id/1";
+        assertThrows(NurseSchedException.class, () -> ShiftParser.extractInputs(input));
+    }
+
+    @Test
+    void testExtractInputs_editCommand_invalidTime() {
+        String input = "shift edit id/1 s/9am";
+        assertThrows(NurseSchedException.class, () -> ShiftParser.extractInputs(input));
+    }
+
+    @Test
+    void testExtractInputs_editCommand_invalidDate() {
+        String input = "shift edit id/1 d/April-10-2025";
+        assertThrows(NurseSchedException.class, () -> ShiftParser.extractInputs(input));
+    }
+
+    @Test
+    void testExtractInputs_addCommand_uppercaseAndExtraSpacingFields() throws NurseSchedException {
+        String input = "SHIFT  ADD   S/08:00 E/  10:00 D/2025-04-02 ST/Upper test";
+        ShiftParser parser = ShiftParser.extractInputs(input);
+
+        assertNotNull(parser);
+        assertEquals("add", parser.getCommand());
+        assertEquals("upper test", parser.getShiftTask());
     }
 }
