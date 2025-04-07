@@ -4,7 +4,7 @@ public enum ExceptionMessage {
     INPUT_EMPTY("Input line cannot be empty!"),
     INVALID_FORMAT("Invalid command format!"),
     INVALID_SHIFTADD_FORMAT("Invalid shift add format! Input as:" +
-            " shift add [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
+            " shift add s/START_TIME e/END_TIME d/DATE st/SHIFT_TASK"),
     INVALID_TIME_FORMAT("Invalid time format! Input as HH:mm"),
     INVALID_DATE_FORMAT("Invalid date format! Input as YYYY-MM-DD"),
     INVALID_DATETIME_FORMAT("Invalid date or time format! Input date as YYYY-MM-DD, input time as HH:mm"),
@@ -13,13 +13,14 @@ public enum ExceptionMessage {
     INVALID_DUE_DATE_TIME("Due date must be after current date and time."),
     INVALID_SHIFT_DATE("Shift date must be after current date!"),
     INVALID_SHIFTDEL_FORMAT("Invalid shift del format! Input as:" +
-            " shift del [id/SHIFT_NUMBER]"),
+            " shift del id/SHIFT_NUMBER"),
     INVALID_SHIFTEDIT_FORMAT("Invalid shift edit format! Input as: " +
-            "shift edit [id/SHIFT_NUMBER] [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
-    INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark [id/SHIFT_NUMBER]"),
-    INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark [id/SHIFT_NUMBER]"),
-    INVALID_SHIFTLOGOT_FORMAT("Invalid shift log format! Input as: shift logot [id/SHIFT_NUMBER] [h/HOURS]"),
+            "shift edit id/SHIFT_NUMBER [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
+    INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark id/SHIFT_NUMBER"),
+    INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark id/SHIFT_NUMBER"),
+    INVALID_SHIFTLOGOT_FORMAT("Invalid shift log format! Input as: shift logot id/SHIFT_NUMBER h/HOURS"),
     INVALID_SHIFT_NUMBER("There is no shift with that specified index!"),
+    SHIFT_TIMING_OVERLAP("Shift would overlap with another existing shift!"),
     NEGATIVE_INDEX("Index must be a positive integer greater than 0!"),
     ZERO_INDEX("Index cannot be zero!"),
     INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
