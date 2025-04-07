@@ -5,6 +5,7 @@
 * [Design](#design)
   * [UI component](#ui-component)
   * [Storage component](#storage-component)
+  * [Task component](#task-component)
   * [Patient component](#patient-component)
   * [Common classes](#common-classes)
 * [Implementation](#implementation)
@@ -70,6 +71,18 @@ The `Storage` component,
   objects.
 - depends on some classes in the `Appointment` and `Medicine` component (because the `Storage` components' job is to
   save/retrieve objects that belong to `Appointment` and `Medicine`)
+
+### Task component
+
+API: `Task.java`
+
+![TaskClassDiagram.png](assets/taskImages/TaskClassDiagram.png)
+
+The `Task` component,
+
+- Manages nurses' to-do tasks as a list, including the completion status, task description, due date and time.
+- Maintains a static list (taskList) as the single source of truth for all patient records.
+- Throws custom exceptions (NurseSchedException) for error handling.
 
 ### Patient component
 
