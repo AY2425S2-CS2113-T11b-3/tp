@@ -2,6 +2,7 @@ package seedu.nursesched.task;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.storage.TaskStorage;
@@ -28,6 +29,11 @@ public class TaskTest {
         TaskStorage.overwriteSaveFile(originalList);
     }
 
+    @BeforeEach
+    public void setUp() {
+        Task.resetTaskList();
+    }
+
     //Tests related to adding of tasks
     @Test
     public void addTask_validInputs_taskAdded() throws NurseSchedException {
@@ -52,6 +58,7 @@ public class TaskTest {
 
     @Test
     public void addTask_dateSetInThePast_throwsNurseSchedException() {
+        Task.getTaskList().clear();
         assertThrows(NurseSchedException.class,
                 () -> Task.addTask(
                         "Prepare medication for Jean",

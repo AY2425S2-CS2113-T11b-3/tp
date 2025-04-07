@@ -1,0 +1,48 @@
+@startuml
+
+hide circle
+skinparam classAttributeIconSize 0
+
+package "Task details" {
+  class Task {
+    # {static} taskList: ArrayList<Task>
+    -description: String
+    -byDate: LocalDate
+    -byTime: LocalTime
+    -isDone: boolean
+    +Task(description, byDate, byTime, isDone)
+    + {static} addTask(Task)
+    + {static} deleteTask(int)
+    + {static} markTask(int)
+    + {static} unmarkTask(int)
+    + {static} listTasks()
+    + {static} editTask(index, description, byDate, byTime)
+    + {static} findTask(String)
+  }
+}
+
+package "Command Process" {
+  class Command {
+    +executeCommands(boolean, Scanner, Ui)
+  }
+
+  class TaskParser {
+    -command: String
+    -description: String
+    -byDate: LocalDate
+    -byTime: LocalTime
+    -isDone: boolean
+    -taskIndex: int
+    +TaskParser(command, description, byDate, byTime, isDone, taskIndex)
+    + {static} extractInputs(String): TaskParser
+    + {static} getEditTaskParser(line, command): TaskParser
+    + {static} getIndexParser(line, command): TaskParser
+    + {static} getAddTaskParser(line, command): TaskParser
+    + {static} getFindTaskParser(line, command): TaskParser
+  }
+}
+
+Command .right.> TaskParser : 1. parses input >
+Command ..> Task : 2. executes >
+
+@enduml

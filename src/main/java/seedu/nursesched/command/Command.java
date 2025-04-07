@@ -9,7 +9,6 @@ import seedu.nursesched.parser.PatientParser;
 import seedu.nursesched.parser.ShiftParser;
 import seedu.nursesched.parser.TaskParser;
 import seedu.nursesched.parser.Parser;
-import seedu.nursesched.patient.MedicalTest;
 import seedu.nursesched.patient.Patient;
 import seedu.nursesched.shift.Shift;
 import seedu.nursesched.task.Task;
@@ -31,6 +30,7 @@ public class Command {
             try {
                 String line = ui.readCommand(in);
                 ui.showResults();
+                line = line.trim();
                 String type = Parser.extractType(line);
 
                 switch (type) {
@@ -44,7 +44,7 @@ public class Command {
                     switch (command) {
                     case "add":
                         Appointment.addAppt(
-                                apptParser.getName(),
+                                apptParser.getID(),
                                 apptParser.getStartTime(),
                                 apptParser.getEndTime(),
                                 apptParser.getDate(),
@@ -80,12 +80,21 @@ public class Command {
 
                         break;
                     case "find":
-                        Appointment.findAppointment(apptParser.getSearchKeyword());
+                        String searchBy = apptParser.getSearchBy();
+                        if (searchBy.equals("id")){
+                            Appointment.findApptByID(apptParser.getSearchKeyword());
+                        }
+
+                        if (searchBy.equals("p")){
+                            Appointment.findApptByName(apptParser.getSearchKeyword());
+                        }
+
+
                         break;
                     case "edit":
                         Appointment.editAppt(
                                 apptParser.getIndex(),
-                                apptParser.getName(),
+                                apptParser.getID(),
                                 apptParser.getStartTime(),
                                 apptParser.getEndTime(),
                                 apptParser.getDate(),
@@ -99,7 +108,6 @@ public class Command {
                     }
                     break;
                 case "pf":
-                    //Todo
                     PatientParser patientParser = PatientParser.extractInputs(line);
                     if (patientParser == null) {
                         System.out.println("Invalid inputs for Patient based command!");
@@ -118,7 +126,6 @@ public class Command {
                         break;
                     }
                     if (input.equals("del")) {
-                        MedicalTest.removeTestsForPatient(patientParser.getId());
                         Patient.removePatient(patientParser.getId());
                         break;
                     }
@@ -177,6 +184,15 @@ public class Command {
                         Shift.unmarkShift(
                                 shiftParser.getIndex()
                         );
+                    }
+                    if (shift.equals("sort")) {
+                        Shift.sortShiftsChronologically();
+                        Shift.listShifts();
+                    }
+                    if (shift.equals("logot")) {
+                        double hours = Double.parseDouble(shiftParser.getShiftTask());
+                        int index = shiftParser.getIndex();
+                        Shift.logOvertime(index, hours);
                     }
                     if (shift.equals("list")) {
                         Shift.listShifts();

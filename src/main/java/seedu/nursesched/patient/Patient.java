@@ -1,5 +1,6 @@
 package seedu.nursesched.patient;
 
+import seedu.nursesched.appointment.Appointment;
 import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.storage.PatientStorage;
@@ -23,7 +24,11 @@ public class Patient {
     private String notes;
 
     static {
-        patientsList = PatientStorage.readFile();
+        try {
+            patientsList = PatientStorage.readFile();
+        } catch (NurseSchedException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -49,9 +54,8 @@ public class Patient {
             throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_FIELDS);
         }
 
-        if (!gender.equals("M") && !gender.equals("F")) {
-            throw new NurseSchedException(ExceptionMessage.INVALID_GENDER);
-        }
+        validateID(id);
+        verifyGender(gender);
 
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
@@ -59,12 +63,44 @@ public class Patient {
             }
         }
 
+        verifyAge(age);
+        verifyContact(contact);
+
         this.id = id;
         this.name = name;
         this.age = age;
         this.notes = notes;
-        this.gender = gender;
+        this.gender = gender.toUpperCase();
         this.contact = contact;
+    }
+
+    private static void verifyGender(String gender) throws NurseSchedException {
+        if (!gender.equalsIgnoreCase("M") && !gender.equalsIgnoreCase("F")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_GENDER);
+        }
+    }
+
+    private static void validateID(String id) throws NurseSchedException {
+        // Validate ID format (4 digits)
+        if (id.trim().isEmpty()) {
+            throw new NurseSchedException(ExceptionMessage.MISSING_ID);
+        }
+
+        if (id.trim().length() != 4) {
+            if (id.contains(" ")) {
+                throw new NurseSchedException(ExceptionMessage.ID_CONTAINS_SPACES);
+            } else {
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
+            }
+        } else {
+            id = id.trim();
+        }
+
+        for (char c : id.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_ID_INPUT);
+            }
+        }
     }
 
     /**
@@ -89,20 +125,23 @@ public class Patient {
     public static void removePatient(String id) throws NurseSchedException {
         assert id != null : "Patient ID cannot be null";
 
-        boolean found = false;
+        boolean isFound = false;
+        validateID(id);
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
+                Appointment.removeAppointmentsForPatient(Integer.parseInt(id));
                 patientsList.remove(patient);
                 System.out.println("Patient information removed for ID: " + id);
-                found = true;
+                isFound = true;
+                MedicalTest.removeTestsForPatient(patient.getId());
                 break;
             }
         }
 
-        PatientStorage.overwriteSaveFile(patientsList);
-
-        if (!found) {
+        if (!isFound) {
             throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
+        } else {
+            PatientStorage.overwriteSaveFile(patientsList);
         }
     }
 
@@ -111,10 +150,9 @@ public class Patient {
      * Prints the information of all patients in the list.
      * If the list is empty, it prints a message indicating that no patient information is available.
      */
-    public static void listPatientInformation() {
+    public static void listPatientInformation() throws NurseSchedException {
         if (patientsList.isEmpty()) {
-            System.out.println("Patient information is empty.");
-            return;
+            throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_LIST);
         }
         for (Patient patient : patientsList) {
             System.out.println(patient.toString());
@@ -128,7 +166,7 @@ public class Patient {
      * @throws NurseSchedException If the ID is invalid or no patient is found.
      */
     public static void printProfileWithID(String id) throws NurseSchedException {
-        if (id.length() > 4 || id.length() < 3) {
+        if (id.length() != 4) {
             throw new NurseSchedException(ExceptionMessage.INVALID_ID_LENGTH);
         }
 
@@ -167,21 +205,24 @@ public class Patient {
      * @param newNotes   The new notes (if provided).
      */
     public static void editPatientDetails(String id, String newName, String newAge, String newGender,
-                                          String newContact, String newNotes) {
-        boolean found = false;
+                                          String newContact, String newNotes) throws NurseSchedException {
+        boolean isFound = false;
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
-                found = true;
+                isFound = true;
                 if (newName != null) {
                     patient.name = newName;
                 }
                 if (newAge != null) {
+                    verifyAge(newAge);
                     patient.age = newAge;
                 }
                 if (newGender != null) {
+                    verifyGender(newGender);
                     patient.gender = newGender.toUpperCase();
                 }
                 if (newContact != null) {
+                    verifyContact(newContact);
                     patient.contact = newContact;
                 }
                 if (newNotes != null) {
@@ -191,11 +232,35 @@ public class Patient {
                 break;
             }
         }
+        
+        if (!isFound) {
+            throw new NurseSchedException(ExceptionMessage.PATIENT_NOT_FOUND);
+        } else {
+            PatientStorage.overwriteSaveFile(patientsList);
+        }
+    }
 
-        PatientStorage.overwriteSaveFile(patientsList);
+    private static void verifyContact(String contact) throws NurseSchedException {
+        try {
+            int contactNumber = Integer.parseInt(contact);
+            if (contactNumber < 10000000 || contactNumber > 99999999) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_CONTACT_LENGTH);
+            }
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.PATIENT_CONTACT_DIGITS);
+        }
+    }
 
-        if (!found) {
-            System.out.println("No patient found with ID: " + id);
+    private static void verifyAge(String age) throws NurseSchedException {
+        try {
+            int ageNumber = Integer.parseInt(age);
+            if (ageNumber < 0) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_NEGATIVE);
+            } else if (ageNumber > 125) {
+                throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_LIMIT);
+            }
+        } catch (NumberFormatException e) {
+            throw new NurseSchedException(ExceptionMessage.PATIENT_AGE_DIGITS);
         }
     }
 
@@ -235,11 +300,11 @@ public class Patient {
     @Override
     public String toString() {
         return "Patient Details:\n" +
-                "  ID: P" + id + "\n" +
+                "  ID: " + id + "\n" +
                 "  Name: " + name + "\n" +
                 "  Age: " + age + " years old\n" +
-                "  Gender: " + gender + "\n" +
+                "  Gender: " + gender.toUpperCase() + "\n" +
                 "  Contact: " + contact + "\n" +
-                (notes.isEmpty() ? "" : "  Notes: " + notes);
+                (notes.isEmpty() ? "  Notes: No notes were given." : "  Notes: " + notes);
     }
 }

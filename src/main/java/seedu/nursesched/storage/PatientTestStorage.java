@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class PatientTestStorage {
     private static final String FILE_PATH = "data/PatientTest.txt";
 
-    public static ArrayList<MedicalTest> readFile() {
+    public static ArrayList<MedicalTest> readFile() throws NurseSchedException {
         File patientTestFile = new File(FILE_PATH);
         ArrayList<MedicalTest> patientTestList = new ArrayList<>();
 
@@ -23,23 +23,27 @@ public class PatientTestStorage {
         }
 
         try (Scanner fileScanner = new Scanner(patientTestFile)) {
+            int lineNumber = 0;
             while (fileScanner.hasNext()) {
+                lineNumber++;
                 String currentLine = fileScanner.nextLine();
-                MedicalTest patientTest = parsePatientTest(currentLine);
-                patientTestList.add(patientTest);
+
+                try {
+                    MedicalTest patientTest = parsePatientTest(currentLine);
+                    patientTestList.add(patientTest);
+                } catch (Exception e) {
+                    System.out.println("Error parsing line " + lineNumber + " of save file: " + currentLine);
+                    System.out.println("Consider removing that line from the save file. Bypassing line.");
+                }
             }
-        } catch (FileNotFoundException | NurseSchedException e) {
-            System.out.println("Error reading file.");
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found at: " + FILE_PATH);
         }
         return patientTestList;
     }
 
     private static MedicalTest parsePatientTest(String currentLine) throws NurseSchedException {
         String[] parts = currentLine.split(" \\| ");
-
-        if (parts.length != 3) {
-            throw new IllegalArgumentException("Invalid patient format in storage file: " + currentLine);
-        }
 
         String id = parts[0];
         String test = parts[1];

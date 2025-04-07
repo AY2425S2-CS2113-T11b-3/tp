@@ -74,7 +74,7 @@ public class AppointmentStorage {
         String[] parts = currentLine.split(" \\| ");
 
         String status = parts[0];
-        String patientName = parts[1];
+        int id = Integer.parseInt(parts[1]);
         String startTimeString = parts[2];
         String endTimeString = parts[3];
         String dateString = parts[4];
@@ -86,7 +86,7 @@ public class AppointmentStorage {
         LocalTime startTime = LocalTime.parse(startTimeString);
         LocalTime endTime = LocalTime.parse(endTimeString);
         LocalDate date = LocalDate.parse(dateString);
-        Appointment appointment = new Appointment(patientName, startTime, endTime, date, notes, importance);
+        Appointment appointment = new Appointment(id, startTime, endTime, date, notes, importance);
         if (status.equals("true")) {
             appointment.setDone(true);
         }
@@ -105,6 +105,7 @@ public class AppointmentStorage {
      */
     public static String formatString(Appointment appointment) {
         String patientName = appointment.getName();
+        int patientID = appointment.getID();
         boolean apptStatus = appointment.getStatus();
         String apptStartTime = appointment.getStartTime();
         String apptEndTime = appointment.getEndTime();
@@ -113,7 +114,7 @@ public class AppointmentStorage {
         int apptImportance = appointment.getImportance();
 
 
-        return apptStatus + " | " + patientName + " | " + apptStartTime
+        return apptStatus + " | " + patientID + " | " + apptStartTime
                 + " | " + apptEndTime + " | " + apptDate
                 + " | " + apptImportance + " | " + apptNotes;
     }

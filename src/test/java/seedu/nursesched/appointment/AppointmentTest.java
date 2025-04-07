@@ -34,6 +34,7 @@ public class AppointmentTest {
     @BeforeEach
     void setUp() {
         Appointment.apptList = new ArrayList<>();  // Reset appointment list
+        Patient.getPatientsList().clear();
     }
 
     // Method for adding patient profile first before adding appointment
@@ -41,50 +42,67 @@ public class AppointmentTest {
 
         ApptParser apptParser = ApptParser.extractInputs(input);
 
-        Patient patient = new Patient("1804", apptParser.getName(), "25",
-                "F", "12345678", "Allergic to penicillin");
-        Patient.addPatient(patient);
+        String id = Integer.toString(apptParser.getID());
+        Patient.addPatient(new Patient(id, "Jean Doe", "25", "F",
+                "12345678", "Allergic to penicillin"));
 
         assertNotNull(apptParser);
         Appointment.addAppt(
-                apptParser.getName(),
+                apptParser.getID(),
                 apptParser.getStartTime(),
                 apptParser.getEndTime(),
                 apptParser.getDate(),
                 apptParser.getNotes(),
                 apptParser.getImportance()
         );
-
-        Patient.removePatient("1804");
     }
 
+    void addApptEditTests(String input) throws NurseSchedException {
+
+        ApptParser apptParser = ApptParser.extractInputs(input);
+
+        Patient patient = new Patient("1804", "Jean Doe", "25",
+                "F", "12345678", "Allergic to penicillin");
+        Patient.addPatient(patient);
+
+        assertNotNull(apptParser);
+        Appointment.addAppt(
+                apptParser.getID(),
+                apptParser.getStartTime(),
+                apptParser.getEndTime(),
+                apptParser.getDate(),
+                apptParser.getNotes(),
+                apptParser.getImportance()
+        );
+    }
 
     // Tests related to appt add feature
     @Test
     void testAddAppt_apptAddedToList() throws NurseSchedException {
-        String input = "appt add p/Jean doe s/13:00 e/14:00 d/2026-02-15 " +
+        String input = "appt add id/1804 s/13:00 e/14:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
 
         addAppointment(input);
 
         Appointment appointment = Appointment.apptList.get(Appointment.apptList.size()-1);
-        assertEquals("jean doe", appointment.getName());
+        assertEquals("Jean Doe", appointment.getName());
         assertEquals("13:00", appointment.getStartTime());
         assertEquals("14:00", appointment.getEndTime());
         assertEquals("2026-02-15", appointment.getDate());
-        assertEquals("needs a wheelchair", appointment.getNotes());
+        assertEquals("Needs a wheelchair", appointment.getNotes());
         assertEquals(2, appointment.getImportance());
 
     }
 
     @Test
     void testAddAppt_notInPatientList_throwsNurseSchedException() throws NurseSchedException {
-        String input = "appt add p/Jean Doe s/13:00 e/14:00 d/2026-02-15 " +
+        String input = "appt add id/1804 s/13:00 e/14:00 d/2026-02-15 " +
                 "im/2 n/First appointment";
         ApptParser apptParser = ApptParser.extractInputs(input);
         assertNotNull(apptParser);
+
         assertThrows(NurseSchedException.class, () -> Appointment.addAppt(
-                apptParser.getName(),
+                apptParser.getID(),
                 apptParser.getStartTime(),
                 apptParser.getEndTime(),
                 apptParser.getDate(),
@@ -95,20 +113,20 @@ public class AppointmentTest {
 
     @Test
     void testToString_appointmentAsString() throws NurseSchedException {
-        String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 im/2 n/Needs a wheelchair";
+        String input = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 im/2 n/Needs a wheelchair";
         addAppointment(input);
 
-        String expected = "Name: jean doe, From: 15:00, To: 16:00, Date: 2026-02-15, " +
-                "Importance: MEDIUM, Notes: needs a wheelchair";
+        String expected = "ID: 1804, Name: Jean Doe, From: 15:00, To: 16:00, Date: 2026-02-15, " +
+                "Importance: MEDIUM, Notes: Needs a wheelchair";
         assertEquals(expected, Appointment.apptList.get(Appointment.apptList.size()-1).toString());
     }
 
     @Test
     public void testAddAppt_missingParameters_shouldThrowException() {
-        String input1 = "appt add s/15:00 e/16:00 d/2026-02-15 im/2 n/Needs a wheelchair";      // Missing name
-        String input2 = "appt add p/Jean doe e/16:00 d/2026-02-15 im/2 n/Needs a wheelchair";   //Missing start time
+        String input1 = "appt add s/15:00 e/16:00 d/2026-02-15 im/2 n/Needs a wheelchair";      // Missing ID
+        String input2 = "appt add id/1804 e/16:00 d/2026-02-15 im/2 n/Needs a wheelchair";   //Missing start time
         String input3 = "appt add s/15:00 d/2026-02-15 im/2 n/Needs a wheelchair";              // Missing end time
-        String input4 = "appt add p/Jean doe s/15:00 e/16:00 im/2 n/Needs a wheelchair";        // Missing date
+        String input4 = "appt add id/1804 s/15:00 e/16:00 im/2 n/Needs a wheelchair";        // Missing date
 
         assertThrows(NurseSchedException.class,
                 () -> ApptParser.extractInputs(input1));
@@ -122,7 +140,7 @@ public class AppointmentTest {
     }
     @Test
     void testAddAppt_invalidTimeFormat_shouldThrowException() {
-        String input = "appt add p/Jean Doe s/25:00 e/26:00 d/2026-02-15 im/1 n/Invalid time";
+        String input = "appt add id/1804 s/25:00 e/26:00 d/2026-02-15 im/1 n/Invalid time";
 
         try {
             ApptParser.extractInputs(input);
@@ -135,7 +153,7 @@ public class AppointmentTest {
 
     @Test
     void testAddAppt_invalidDateFormat_shouldThrowException() {
-        String input = "appt add p/Jean Doe s/10:00 e/11:00 d/15-02-2026 im/1 n/Invalid date";
+        String input = "appt add id/1804 s/10:00 e/11:00 d/15-02-2026 im/1 n/Invalid date";
         try {
             ApptParser.extractInputs(input);
             throw new AssertionError("Expected NurseSchedException to be thrown");
@@ -147,13 +165,13 @@ public class AppointmentTest {
 
     @Test
     void testAddAppt_duplicateAppointments_shouldNotBeAdded() throws NurseSchedException {
-        String input1 = "appt add p/Jean Doe s/13:00 e/14:00 d/2026-02-15 " +
+        String input1 = "appt add id/1804 s/13:00 e/14:00 d/2026-02-15 " +
                 "im/2 n/First appointment";
         addAppointment(input1);
 
         int sizeBefore = Appointment.apptList.size();
 
-        String input2 = "appt add p/John Doe s/13:00 e/14:00 d/2026-02-15 " +
+        String input2 = "appt add id/1803 s/13:00 e/14:00 d/2026-02-15 " +
                 "im/2 n/Conflicting appointment";
         addAppointment(input2);
 
@@ -168,162 +186,144 @@ public class AppointmentTest {
     @Test
     public void editAppt_validInputs_apptEdited() throws NurseSchedException {
 
-        String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 " +
+        String input = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
-        addAppointment(input);
+        addApptEditTests(input);
 
-        Appointment.editAppt(0, "edited name",
+        Appointment.editAppt(0, -1,
                 LocalTime.parse("16:00"), LocalTime.parse("17:00"),
                 LocalDate.parse("2026-03-15"), "edited note", 3);
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("edited name", appt.getName());
+        assertEquals(1804, appt.getID());
         assertEquals("16:00", appt.getStartTime());
         assertEquals("17:00", appt.getEndTime());
         assertEquals("2026-03-15", appt.getDate());
         assertEquals(3, appt.getImportance());
         assertEquals("edited note", appt.getNotes());
-
-    }
-
-    @Test
-    public void editAppt_onlyEditname_apptEdited() throws NurseSchedException {
-
-        String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 " +
-                "im/2 n/Needs a wheelchair";
-        addAppointment(input);
-
-        Appointment.editAppt(0, "edited name",
-                null, null,
-                null, null, -1);
-
-        Appointment appt = Appointment.apptList.get(0);
-
-        assertEquals("edited name", appt.getName());
-        assertEquals("15:00", appt.getStartTime());
-        assertEquals("16:00", appt.getEndTime());
-        assertEquals("2026-02-15", appt.getDate());
-        assertEquals(2, appt.getImportance());
-        assertEquals("needs a wheelchair", appt.getNotes());
+        Patient.removePatient("1804");
     }
 
     @Test
     public void editAppt_onlyEditDate_apptEdited() throws NurseSchedException {
-        String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 " +
+        String input = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
-        addAppointment(input);
+        addApptEditTests(input);
 
-        Appointment.editAppt(0, null,
+        Appointment.editAppt(0, -1,
                 null, null,
                 LocalDate.parse("2026-03-15"), null, -1);
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("jean doe", appt.getName());
+        assertEquals("Jean Doe", appt.getName());
         assertEquals("15:00", appt.getStartTime());
         assertEquals("16:00", appt.getEndTime());
         assertEquals("2026-03-15", appt.getDate());
         assertEquals(2, appt.getImportance());
-        assertEquals("needs a wheelchair", appt.getNotes());
+        assertEquals("Needs a wheelchair", appt.getNotes());
+        Patient.removePatient("1804");
     }
 
     @Test
     public void editAppt_onlyEditStartTime_apptEdited() throws NurseSchedException {
-        String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 " +
+        String input = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
-        addAppointment(input);
+        addApptEditTests(input);
 
-        Appointment.editAppt(0, null,
+        Appointment.editAppt(0, -1,
                 LocalTime.parse("14:00"), null,
                 null, null, -1);
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("jean doe", appt.getName());
+        assertEquals("Jean Doe", appt.getName());
         assertEquals("14:00", appt.getStartTime());
         assertEquals("16:00", appt.getEndTime());
         assertEquals("2026-02-15", appt.getDate());
         assertEquals(2, appt.getImportance());
-        assertEquals("needs a wheelchair", appt.getNotes());
-
+        assertEquals("Needs a wheelchair", appt.getNotes());
+        Patient.removePatient("1804");
     }
 
     @Test
     public void editAppt_onlyEditEndTime_apptEdited() throws NurseSchedException {
-        String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 " +
+        String input = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
-        addAppointment(input);
+        addApptEditTests(input);
 
-        Appointment.editAppt(0, null,
+        Appointment.editAppt(0, -1,
                 null, LocalTime.parse("17:00"),
                 null, null, -1);
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("jean doe", appt.getName());
+        assertEquals("Jean Doe", appt.getName());
         assertEquals("15:00", appt.getStartTime());
         assertEquals("17:00", appt.getEndTime());
         assertEquals("2026-02-15", appt.getDate());
         assertEquals(2, appt.getImportance());
-        assertEquals("needs a wheelchair", appt.getNotes());
-
+        assertEquals("Needs a wheelchair", appt.getNotes());
+        Patient.removePatient("1804");
     }
 
     @Test
     public void editAppt_onlyEditNotes_apptEdited() throws NurseSchedException {
-        String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 " +
+        String input = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
-        addAppointment(input);
+        addApptEditTests(input);
 
-        Appointment.editAppt(0, null,
+        Appointment.editAppt(0, -1,
                 null, null,
                 null, "edited note", -1);
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("jean doe", appt.getName());
+        assertEquals("Jean Doe", appt.getName());
         assertEquals("15:00", appt.getStartTime());
         assertEquals("16:00", appt.getEndTime());
         assertEquals("2026-02-15", appt.getDate());
         assertEquals(2, appt.getImportance());
         assertEquals("edited note", appt.getNotes());
+        Patient.removePatient("1804");
     }
 
     @Test
     public void editAppt_onlyEditImportance_apptEdited() throws NurseSchedException {
-        String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 " +
+        String input = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
-        addAppointment(input);
+        addApptEditTests(input);
 
-        Appointment.editAppt(0, null,
+        Appointment.editAppt(0, -1,
                 null, null,
                 null, null, 1);
 
         Appointment appt = Appointment.apptList.get(0);
 
-        assertEquals("jean doe", appt.getName());
+        assertEquals("Jean Doe", appt.getName());
         assertEquals("15:00", appt.getStartTime());
         assertEquals("16:00", appt.getEndTime());
         assertEquals("2026-02-15", appt.getDate());
         assertEquals(1, appt.getImportance());
-        assertEquals("needs a wheelchair", appt.getNotes());
+        assertEquals("Needs a wheelchair", appt.getNotes());
+        Patient.removePatient("1804");
     }
     @Test
     public void editAppt_invalidTaskIndex_throwsNurseSchedException() throws NurseSchedException {
-        String input = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 " +
+        String input = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
-        addAppointment(input);
+        addApptEditTests(input);
 
         assertThrows(NurseSchedException.class,
-                () -> Appointment.editAppt(2,null,
+                () -> Appointment.editAppt(2,-1,
                         null, null,
                         null, null, 1));
         assertThrows(NurseSchedException.class,
-                () -> Appointment.editAppt(-1,null,
+                () -> Appointment.editAppt(-1,-1,
                         null, null,
                         null, null, 1));
-
+        Patient.removePatient("1804");
     }
 
     @Test
@@ -334,26 +334,24 @@ public class AppointmentTest {
         Exception exception1 = assertThrows(NurseSchedException.class, () -> {
             ApptParser.extractInputs(input1);
         });
-        assertEquals("Invalid appointment edit format! Input as: " +
-                        "appt edit id/[INDEX] p/[PATIENT_NAME] s/[START_TIME] " +
-                        "e/[END_TIME] d/[DATE] im/[IMPORTANCE] n/[NOTES]",
+        assertEquals("Invalid appointment edit format! Input as: appt edit aid/APPT_INDEX " +
+                        "[id/PATIENT_ID] [s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPORTANCE] [n/NOTES]",
                 exception1.getMessage());
 
         Exception exception2 = assertThrows(NurseSchedException.class, () -> {
             ApptParser.extractInputs(input2);
         });
-        assertEquals("Invalid appointment edit format! Input as: " +
-                        "appt edit id/[INDEX] p/[PATIENT_NAME] s/[START_TIME] " +
-                        "e/[END_TIME] d/[DATE] im/[IMPORTANCE] n/[NOTES]",
+        assertEquals("Invalid appointment edit format! Input as: appt edit aid/APPT_INDEX " +
+                        "[id/PATIENT_ID] [s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPORTANCE] [n/NOTES]",
                 exception2.getMessage());
     }
 
     @Test
     public void sortApptByTime_apptListSorted() throws NurseSchedException {
-        String input1 = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 " +
+        String input1 = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
         addAppointment(input1);
-        String input2 = "appt add p/Jean doe s/10:00 e/11:00 d/2026-02-15 " +
+        String input2 = "appt add id/1803 s/10:00 e/11:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
         addAppointment(input2);
 
@@ -368,10 +366,10 @@ public class AppointmentTest {
 
     @Test
     public void sortApptByImportance_apptListSorted() throws NurseSchedException {
-        String input1 = "appt add p/Jean doe s/15:00 e/16:00 d/2026-02-15 " +
+        String input1 = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/1 n/Needs a wheelchair";
         addAppointment(input1);
-        String input2 = "appt add p/Jean doe s/10:00 e/11:00 d/2026-02-15 " +
+        String input2 = "appt add id/1803 s/10:00 e/11:00 d/2026-02-15 " +
                 "im/3 n/Needs a wheelchair";
         addAppointment(input2);
 

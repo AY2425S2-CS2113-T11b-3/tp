@@ -116,7 +116,7 @@ Format: `task mark id/TASK_INDEX`
 
 Example of usage:
 
-`task mark 3`
+`task mark id/3`
 
 ### Unmarking a task: `task unmark`
 
@@ -129,7 +129,7 @@ Format: `task unmark id/TASK_INDEX`
 
 Example of usage:
 
-`task unmark 3`
+`task unmark id/3`
 
 ### Editing a task: `task edit`
 
@@ -178,7 +178,7 @@ Example of usage:
 
 Adds a shift, including the date, start time, end time and assigned task.
 
-Format: `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`
+Format: `shift add s/START_TIME e/END_TIME d/DATE st/TASK_DESCRIPTION`
 
 * Adds a shift with a time range and task for a specific date
 * `START_TIME` and `END_TIME` must be in HH:mm format
@@ -192,7 +192,7 @@ Example:
 
 Edits an existing shift in the shift list.
 
-Format: `shift edit id/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`
+Format: `shift edit id/SHIFT_INDEX s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`
 
 * Edits the shift at the specified `SHIFT_INDEX`. The `SHIFT_INDEX` refers to the index number shown in the displayed
   shift list.
@@ -208,7 +208,7 @@ Example:
 
 Marks a shift to show its completion.
 
-Format: `shift mark id/[SHIFT_INDEX]`
+Format: `shift mark id/SHIFT_INDEX`
 
 * Marks the shift with index `SHIFT_INDEX` as completed
 * `SHIFT_INDEX` must be a number between 1 to the total number of shifts in the list.
@@ -221,7 +221,7 @@ Example:
 
 Unmarks a shift to show that it is uncompleted.
 
-Format: `shift unmark id/[SHIFT_INDEX]`
+Format: `shift unmark id/SHIFT_INDEX`
 
 * Unmarks the shift with index `SHIFT_INDEX` as uncompleted
 * `SHIFT_INDEX` must be a number between 1 to the total number of shifts in the list.
@@ -234,7 +234,7 @@ Example:
 
 Deletes a shift from the list.
 
-Format: `shift del id/[SHIFT_INDEX]`
+Format: `shift del id/SHIFT_INDEX`
 
 * Deletes a shift with the specified index
 * `SHIFT_INDEX` must be a number between 1 to the total number of shifts in the list.
@@ -242,6 +242,32 @@ Format: `shift del id/[SHIFT_INDEX]`
 Example:
 
 `shift del id/3`
+
+### Sorting shifts chronologically: `shift sort`
+
+Sorts all existing shifts in the list in chronological order based on date and start time.
+
+Format: `shift sort`
+
+* After sorting, the updated order will be reflected when listing shifts.
+* Sorting is based first on `DATE`, then on `START_TIME`.
+
+Example:
+
+`shift sort`
+
+### Logging overtime for a shift: `shift logot`
+
+Logs overtime hours worked for a shift.
+
+Format: `shift logot id/SHIFT_INDEX h/OVERTIME_HOURS`
+
+* Records the number of overtime hours worked for the shift at `SHIFT_INDEX`
+* `OVERTIME_HOURS` must be a positive decimal or integer (e.g. 2 or 1.5)
+
+Example:
+
+`shift logot id/1 h/2.5`
 
 ### Listing all shifts: `shift list`
 
@@ -259,24 +285,26 @@ Example:
 
 Creates a profile for a patient.
 
-Format: `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`
+Format: `pf add id/ID_NUMBER p/PATIENT_NAME a/AGE g/GENDER c/CONTACT n/[NOTES]`
 
 * Adds a profile for the specified patient: `PATIENT_NAME`.
+* Names are allowed to contain any characters or even numbers.
 * ID_NUMBER must be 4 digits only.
+* CONTACT must be 8 digits only.
 * All fields must be provided except for NOTES, n/ is still required.
 
 Example:
 
 `pf add id/1001 p/Jean a/25 g/F c/66887799 n/requires constant supervision`
 
-This adds a profile for Jean, Female, 25 years old, with a profile ID of 1001. Jean also has a family contact number
-and an additional note which mentions that she needs constant supervision.
+This adds a profile for a patient with ID 1001 named Jean, 25 years old and is female. Jean also has a family contact 
+number and an additional note which mentions that she needs constant supervision.
 
 ### Deleting a patient profile : `pf del`
 
 Delete a patient profile.
 
-Format: `pf del id/[ID_NUMBER]`
+Format: `pf del id/ID_NUMBER`
 
 * Deletes a profile for a patient with the specified ID number.
 * The ID number for the patient should currently exist in the list for patient information.
@@ -289,7 +317,7 @@ Example:
 
 Search for a patient profile.
 
-Format: `pf find id/[ID_NUMBER]`
+Format: `pf find id/ID_NUMBER`
 
 * Search the patient profile by the patient's ID.
 * Displays the patient information if the ID is found within the current list.
@@ -306,15 +334,17 @@ List out patient information for all patients within the list.
 Format: `pf list`
 
 * Displays all patient information stored in the list.
+* If notes is empty, "No notes were given." will be displayed by default.
 
 ### Editing a patient information : `pf edit`
 
 Edit patient information based on the patient selected.
 
-Format: `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`
+Format: `pf edit id/ID_NUMBER p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`
 
 * The selected profile depends on the patient ID.
 * If there is a need to only edit certain fields, only include the required identifiers.
+* At least one field should be updated.
 
 Example:
 
@@ -327,7 +357,7 @@ In both examples, the chosen fields are updated for the patient accordingly.
 
 Add medical tests and the results for the patient.
 
-Format: `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`
+Format: `pf result add id/ID_NUMBER t/TEST_NAME r/RESULTS`
 
 * Creates a medical test and the result for the patient based on the ID given.
 * Multiple entries of the test and result can be added.
@@ -341,7 +371,7 @@ Example:
 
 Deletes *all* medical tests for the patient.
 
-Format: `pf result del id/[ID_NUMBER]`
+Format: `pf result del id/ID_NUMBER`
 
 * Deletes all medical tests and results for the patient based on the ID given.
 
@@ -365,74 +395,77 @@ Example:
 
 Adds user’s appointments, date and time to the user’s appointment list.
 
-Format: `appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPORTANCE_RANKING] [n/NOTES]`
+Format: `appt add id/PATIENT_ID s/START_TIME e/END_TIME d/DATE [im/IMPORTANCE_RANKING] [n/NOTES]`
 
-* Adds a task to be done by the due date and time set by the user.
+* Adds an appointment for the patient with the patient ID: `PATIENT_ID`
+* **Note:** Appointments can only be added for patients already in the patients list
 * `START_TIME` and `END_TIME` must be in HH:mm format
 * `DATE` must be in YYYY-MM-DD format
 * `IMPORTANCE_RANKING` must be an integer between 1 and 3. (LOW, MEDIUM, HIGH)
+* `IMPORTANCE_RANKING` and `NOTES` are optional fields. Omit `im/` or `n/` if field is not provided.
+* Appointments with unassigned `IMPORTANCE_RANKING` are given an importance ranking of `MEDIUM` by default
 
 Example:
 
-`appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`
+`appt add id/1000 s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`
 
 ### Deleting an appointment: `appt del`
 
 Delete an appointment profile.
 
-Format: `appt del id/[APPT_INDEX]`
+Format: `appt del aid/APPT_INDEX`
 
 * Deletes an appointment with the specified index.
 * The `APPT_INDEX` refers to the index number shown in the displayed appointment
   list. The index must be a positive integer 1, 2, 3, ...
 
-Example: `appt del id/10`
+Example: `appt del aid/10`
 
 ### Marking an appointment: `appt mark`
 
 Marks an appointment to show its completion.
 
-Format: `appt mark id/[APPT_INDEX]`
+Format: `appt mark aid/APPT_INDEX`
 
 * Marks task with index `APPT_INDEX` as completed
-* `APPT_INDEX` must be a number between 1 to the total number of appointments in the list.
+* The `APPT_INDEX` refers to the index number shown in the displayed appointment
+  list. The index must be a positive integer 1, 2, 3, ...
 
 Example of usage:
 
-`appt mark id/3`
+`appt mark aid/3`
 
 ### Unmarking an appointment: `appt unmark`
 
 Unmarks an appointment to show that it is uncompleted.
 
-Format: `appt unmark id/[APPT_INDEX]`
+Format: `appt unmark aid/APPT_INDEX`
 
 * Unmarks a task with index `APPT_INDEX` as uncompleted
-* `APPT_INDEX` must be a number between 1 to the total number of appointments in the list.
+* The `APPT_INDEX` refers to the index number shown in the displayed appointment
+  list. The index must be a positive integer 1, 2, 3, ...
 
 Example of usage:
 
-`appt unmark id/3`
+`appt unmark aid/3`
 
 ### Editing an appointment: `appt edit`
 
-Edits an existing task in the task list.
+Edits an existing appointment in the appointment list.
 
 Format:
-`appt edit id/[APPT_INDEX] p/[NEW_PATIENT_NAME] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] n/[NEW_NOTES] [im/NEW_IMPORTANCE]`
+`appt edit aid/APPT_INDEX [id/NEW_PATIENT_ID] [s/NEW_START_TIME] [e/NEW_END_TIME] [d/NEW_DATE] [n/NEW_NOTES] [im/NEW_IMPORTANCE]`
 
-* Edits the task at the specified `APPT_INDEX`. The `APPT_INDEX` refers to the index number shown in the displayed
-  appointment
-  list. The index must be a positive integer 1, 2, 3, ...
+* Edits the appointment at the specified `APPT_INDEX` with. The `APPT_INDEX` refers to the index number shown in the displayed
+  appointment list. The index must be a positive integer 1, 2, 3, ...
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 
 Example of usage:
 
-* `appt edit id/1 p/ edited name s/13:00 e/15:00` Edits the appointment patient name, start time and end time of the 1st
-  appointment in the
-  appointment list.
-* `appt edit id/3 im/1` Edits the importance ranking of the 3rd appointment in the appointment list.
+* `appt edit aid/1 id/9999 s/13:00 e/15:00` Edits the appointment patient ID, start time and end time of the 1st
+  appointment in the appointment list.
+* `appt edit aid/3 im/1` Edits the importance ranking of the 3rd appointment in the appointment list.
 
 ### Listing all appointments: `appt list`
 
@@ -446,13 +479,28 @@ Example of usage:
 
 ### Finding an appointment: `appt find`
 
-Search for an appointment using patient's name.
+Search for an appointment using patient's name or ID.
 
-Format: `appt find [PATIENT_NAME]`
+#### Finding using Patient Name
 
-* Displays all appointments under `PATIENT_NAME` found within the current list.
+Displays all appointments under `PATIENT_NAME` found within the current list.
 
-Example: `appt find Jean Doe`
+Format: `appt find p/ PATIENT_NAME`
+
+Example of usage:
+
+`appt find p/ Jean Doe`
+
+#### Finding using Patient ID
+
+Displays all appointments under `PATIENT_ID` found within the current list.
+
+Format: `appt find id/ PATIENT_ID`
+
+Example of usage:
+
+`appt find id/1010`
+
 
 ### Sorting appointments: `appt sort`
 
@@ -571,63 +619,51 @@ Format: `exit ns`
 
 **A**: All the data is stored in the /data/ folder. Simply transfer this folder to the other computer.
 
+**Q** What happens if the data file is corrupted?
+
+**A** NurseSched will continue to run, but there may be unpredictable behaviour. Please ensure that the
+corrupted file is handled accordingly.
+
 ## Command Summary
 
-| List        | Action  | Format                                                                                                                              |
-|-------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
-| Task        | Add     | `task add td/TASK_DESCRIPTION d/DUE_DATE t/DUE_TIME`                                                                                |
-| Task        | Delete  | `task del id/TASK_INDEX`                                                                                                            |
-| Task        | Mark    | `task mark id/TASK_INDEX`                                                                                                           |
-| Task        | Unmark  | `task unmark id/TASK_INDEX`                                                                                                         |
-| Task        | Edit    | `task edit id/TASK_INDEX [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]`                                                    |
-| Task        | Find    | `task find td/KEYWORD`                                                                                                              |
-| Task        | List    | `task list`                                                                                                                         |
-| Shift       | Add     | `shift add s/[START_TIME] e/[END_TIME] d/[DATE] st/[TASK_DESCRIPTION]`                                                              |
-| Shift       | Edit    | `shift edit id/[SHIFT_INDEX] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`                                        |
-| Shift       | Mark    | `shift mark id/[SHIFT_INDEX]`                                                                                                       |
-| Shift       | Unmark  | `shift unmark id/[SHIFT_INDEX]`                                                                                                     |
-| Shift       | Delete  | `shift del id/[SHIFT_INDEX]`                                                                                                        |
-| Shift       | List    | `shift list`                                                                                                                        |
-| Appointment | Add     | `appt add p/[PATIENT_NAME] s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE_RANKING] n/[NOTES]`                                  |
-| Appointment | Delete  | `appt del id/[APPT_INDEX]`                                                                                                          |
-| Appointment | Mark    | `appt mark id/[APPT_INDEX]`                                                                                                         |
-| Appointment | Unmark  | `appt unmark id/[APPT_INDEX]`                                                                                                       |
-| Appointment | Edit    | `appt edit id/[APPT_INDEX] p/[NEW_PATIENT_NAME] s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] n/[NEW_NOTES] im/[NEW_IMPORTANCE]` |
-| Appointment | List    | `appt list`                                                                                                                         |
-| Appointment | Find    | `appt find [PATIENT_NAME]`                                                                                                          |
-| Appointment | Sort    | `appt sort by/ time` or `appt sort by/ importance`                                                                                  |
-| Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                                   |
-| Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                                                                             |
-| Patient     | find    | `pf find id/[ID_NUMBER]`                                                                                                            |
-| Patient     | List    | `pf list`                                                                                                                           |
-| Patient     | Edit    | `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                                  |
-| MedicalTest | Add     | `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`                                                                            |
-| MedicalTest | Delete  | `pf result del id/[ID_NUMBER]`                                                                                                      |
-| MedicalTest | List    | `pf result list id/[ID_NUMBER]`                                                                                                     |
-| Medicine    | Add     | `medicine add mn/[MEDICINE_NAME] q/[QUANTITY]`                                                                                      |
-| Medicine    | Remove  | `medicine remove mn/[MEDICINE_NAME] q/[QUANTITY]`                                                                                   |
-| Medicine    | List    | `medicine list`                                                                                                                     |
-| Medicine    | Find    | `medicine find mn/[MEDICINE_NAME]`                                                                                                  |
-| Medicine    | Delete  | `medicine delete mn[MEDICINE_NAME]`                                                                                                 |
-| Medicine    | Edit    | `medicine edit mn/[MEDICINE_NAME] un/[UPDATED_NAME] uq/[UPDATED_QUANTITY]`                                                          |
-| Medicine    | Restock | `medicine restock q/[QUANTITY]`                                                                                                     |
-|             | Exit    | `exit`                                                                                                                              |
-| Appointment | List    | `appt list`                                                                                                                         |
-| Appointment | Find    | `appt find [PATIENT_NAME]`                                                                                                          |
-| Appointment | Sort    | `appt sort by/ time` or `appt sort by/ importance`                                                                                  |
-| Patient     | Add     | `pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                                   |
-| Patient     | Delete  | `pf del id/[ID_NUMBER]`                                                                                                             |
-| Patient     | find    | `pf find id/[ID_NUMBER]`                                                                                                            |
-| Patient     | List    | `pf list`                                                                                                                           |
-| Patient     | Edit    | `pf edit id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                                  |
-| MedicalTest | Add     | `pf result add id/[ID_NUMBER] t/[TEST_NAME] r/[RESULTS]`                                                                            |
-| MedicalTest | Delete  | `pf result del id/[ID_NUMBER]`                                                                                                      |
-| MedicalTest | List    | `pf result list id/[ID_NUMBER]`                                                                                                     |
-| Medicine    | Add     | `medicine add mn/MEDICINE_NAME q/QUANTITY`                                                                                          |
-| Medicine    | Remove  | `medicine remove mn/MEDICINE_NAME q/QUANTITY`                                                                                       |
-| Medicine    | List    | `medicine list`                                                                                                                     |
-| Medicine    | Find    | `medicine find mn/MEDICINE_NAME`                                                                                                    |
-| Medicine    | Delete  | `medicine delete mn/MEDICINE_NAME`                                                                                                  |
-| Medicine    | Edit    | `medicine edit mn/MEDICINE_NAME un/UPDATED_NAME uq/UPDATED_QUANTITY`                                                                |
-| Medicine    | Restock | `medicine restock q/QUANTITY`                                                                                                       |
-|             | Exit    | `exit ns`                                                                                                                           |
+| List        | Action  | Format                                                                                                                            |
+|-------------|---------|-----------------------------------------------------------------------------------------------------------------------------------|
+| Task        | Add     | `task add td/TASK_DESCRIPTION d/DUE_DATE t/DUE_TIME`                                                                              |
+| Task        | Delete  | `task del id/TASK_INDEX`                                                                                                          |
+| Task        | Mark    | `task mark id/TASK_INDEX`                                                                                                         |
+| Task        | Unmark  | `task unmark id/TASK_INDEX`                                                                                                       |
+| Task        | Edit    | `task edit id/TASK_INDEX [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]`                                                  |
+| Task        | Find    | `task find td/KEYWORD`                                                                                                            |
+| Task        | List    | `task list`                                                                                                                       |
+| Shift       | Add     | `shift add s/START_TIME e/END_TIME d/DATE st/TASK_DESCRIPTION`                                                                    |
+| Shift       | Edit    | `shift edit id/SHIFT_INDEX s/[NEW_START_TIME] e/[NEW_END_TIME] d/[NEW_DATE] st/[NEW_TASK]`                                        |
+| Shift       | Mark    | `shift mark id/SHIFT_INDEX`                                                                                                       |
+| Shift       | Unmark  | `shift unmark id/SHIFT_INDEX`                                                                                                     |
+| Shift       | Delete  | `shift del id/SHIFT_INDEX`                                                                                                        |
+| Shift       | LogOt   | `shift logot id/SHIFT_INDEX h/OVERTIME_HOURS`                                                                                     |
+| Shift       | Sort    | `shift sort`                                                                                                                      |
+| Shift       | List    | `shift list`                                                                                                                      |
+| Patient     | Add     | `pf add id/ID_NUMBER p/PATIENT_NAME a/AGE g/GENDER c/CONTACT n/[NOTES]`                                                           |
+| Patient     | Delete  | `pf del id/ID_NUMBER`                                                                                                             |
+| Patient     | Find    | `pf find id/ID_NUMBER`                                                                                                            |
+| Patient     | List    | `pf list`                                                                                                                         |
+| Patient     | Edit    | `pf edit id/ID_NUMBER p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]`                                                  |
+| MedicalTest | Add     | `pf result add id/ID_NUMBER t/TEST_NAME r/RESULTS`                                                                                |
+| MedicalTest | Delete  | `pf result del id/ID_NUMBER`                                                                                                      |
+| MedicalTest | List    | `pf result list id/ID_NUMBER`                                                                                                     |
+| Appointment | Add     | `appt add id/PATIENT_ID s/START_TIME e/END_TIME d/DATE [im/IMPORTANCE_RANKING] [n/NOTES]`                                         |
+| Appointment | Delete  | `appt del aid/APPT_INDEX`                                                                                                         |
+| Appointment | Mark    | `appt mark aid/APPT_INDEX`                                                                                                        |
+| Appointment | Unmark  | `appt unmark aid/APPT_INDEX`                                                                                                      |
+| Appointment | Edit    | `appt edit aid/APPT_INDEX [id/NEW_PATIENT_ID] [s/NEW_START_TIME] [e/NEW_END_TIME] [d/NEW_DATE] [n/NEW_NOTES] [im/NEW_IMPORTANCE]` |
+| Appointment | List    | `appt list`                                                                                                                       |
+| Appointment | Find    | `appt find p/PATIENT_NAME` or  `appt find p/PATIENT_ID`                                                                           |
+| Appointment | Sort    | `appt sort by/time` or `appt sort by/importance`                                                                                  |
+| Medicine    | Add     | `medicine add mn/MEDICINE_NAME q/QUANTITY`                                                                                        |
+| Medicine    | Remove  | `medicine remove mn/MEDICINE_NAME q/QUANTITY`                                                                                     |
+| Medicine    | List    | `medicine list`                                                                                                                   |
+| Medicine    | Find    | `medicine find mn/MEDICINE_NAME`                                                                                                  |
+| Medicine    | Delete  | `medicine delete mn/MEDICINE_NAME`                                                                                                |
+| Medicine    | Edit    | `medicine edit mn/MEDICINE_NAME un/UPDATED_NAME uq/UPDATED_QUANTITY`                                                              |
+| Medicine    | Restock | `medicine restock q/QUANTITY`                                                                                                     |
+|             | Exit    | `exit ns`                                                                                                                         |

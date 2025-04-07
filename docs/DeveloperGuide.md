@@ -5,6 +5,7 @@
 * [Design](#design)
   * [UI component](#ui-component)
   * [Storage component](#storage-component)
+  * [Task component](#task-component)
   * [Patient component](#patient-component)
   * [Common classes](#common-classes)
 * [Implementation](#implementation)
@@ -49,27 +50,65 @@ Note: Importing a Gradle project is slightly different from importing a normal J
    2. Run the tests to ensure they all pass.
 
 ## Design
+The application architecture emphasizes a separation of concerns, dividing responsibilities among distinct components.
+
+The main work of the application is performed by the following components:
 
 ### UI component
 
 API: `Ui.java`
 
 [//]: # (todo: insert Ui diagram & add details)
-[//]: # (to be implemented in v2.1)
+Handles user interface interactions:
+* Captures user input
+* Display information to the user
+
+### Parser component
+Base API: `Parser.java`
+
+Specific Implementations: 
+* `PatientParser.java`
+* `AppointmentParser.java`
+* `MedicineParser.java`
+* `TaskParser.java`
+* `ShiftParser.java`
+
+Each specific parser inherits from the base Parser and is responsible for parsing the 
+arguments of a command string related to its specific domain.
+
+Parsed inputs are forwarded as structured command information to the Command component for execution.
+
+### Command component: 
+API: `Command.java`
+
+The central processing unit of the application.
+
+Receives processed command requests from the respective parsers and calls the respective methods 
+in the 5 different list classes.
 
 ### Storage component
+Represented by multiple components
+* `PatientStorage.java` 
+* `AppointmentStorage.java` 
+* `MedicineStorage.java`
+* `TaskStorage.java` 
+* `ShiftStorage.java`
 
-API: `Storage.java`
+Handles data persistence for each specific data type:
+* Each Storage component is responsible for one specific list type. 
+* Reads and writes data from/to each list's specific save file.
 
-[//]: # (todo: add storage class & insert Storage diagram)
-[//]: # (to be implemented in v2.1)
+### Task component
 
-The `Storage` component,
+API: `Task.java`
 
-- can save the appointments list and medicine supply data in txt format, and read them back into the corresponding
-  objects.
-- depends on some classes in the `Appointment` and `Medicine` component (because the `Storage` components' job is to
-  save/retrieve objects that belong to `Appointment` and `Medicine`)
+![TaskClassDiagram.png](assets/taskImages/TaskClassDiagram.png)
+
+The `Task` component,
+
+- Manages nurses' to-do tasks as a list, including the completion status, task description, due date and time.
+- Maintains a static list (taskList) as the single source of truth for all patient records.
+- Throws custom exceptions (NurseSchedException) for error handling.
 
 ### Patient component
 
@@ -80,9 +119,24 @@ API: `Patient.java`
 The `Patient` component,
 
 - Manages patient information including ID, name, age, gender, contact information, and medical notes.
-- Enforces data integrity through validation rules (4-digit numeric ID, M/F gender restriction).
+- Enforces data integrity through validation rules (4-digit numeric ID, M/F gender, 8-digit numeric contact number restriction).
 - Handles deletion by automatically removing associated medical tests.
 - Maintains a static list (patientsList) as the single source of truth for all patient records.
+- Throws custom exceptions (NurseSchedException) for error handling.
+
+
+### Appointment component
+
+API: `Appointment.java`
+
+![ApptComponent.png](assets/appointmentImages/ApptComponent.png)
+
+The `Appointment` component,
+
+- Manages appointment information including status, patient ID, name, start time, end time, date, importance level and notes.
+- Integrates with the Patient component to verify patient existence prior to appointment creation.
+- Ensures data integrity through validation rules (e.g., 4-digit numeric patient ID, importance levels restricted to 1–3, and robust date-time error handling).
+- Maintains a static list (apptList) as the single source of truth for all appointments.
 - Throws custom exceptions (NurseSchedException) for error handling.
 
 ### Common classes
@@ -118,11 +172,19 @@ Given below is an example usage scenario and how the removal mechanism behaves a
 
 Step 1. The user launches the application. The patientsList is initialized, either empty or populated from saved data.
 
-Step 2. The user adds patients using the addPatient method. For example:
+Step 2. The user adds patients using the `addPatient` method. For example:
 
 ```Patient("1234", "John Doe", "30", "M", "91234567", "Allergic to penicillin")```
 
-Step 3. The user decides to remove a patient by calling removePatient("1234").
+The following sequence diagram shows how adding patient information goes:
+
+![addPatientSequenceDiagram.png](assets/patientImages/addPatientSequenceDiagram.png)
+
+Step 3. The user decides to remove a patient by calling `removePatient("1234")`.
+
+The following sequence diagram shows how deleting patient information goes:
+
+![removePatientSequenceDiagram.png](assets/patientImages/removePatientSequenceDiagram.png)
 
 Step 4. The system:
 
@@ -136,10 +198,6 @@ Step 5. If the ID does not exist (e.g., "9999"), the system throws:
 ```NurseSchedException: Patient not found.```
 
 Step 6. The CLI displays the outcome (success or error) to the user.
-
-The following sequence diagram shows how the delete patient information goes:
-
-![removePatientSequenceDiagram.png](assets/patientImages/removePatientSequenceDiagram.png)
 
 #### Design Considerations
 
@@ -221,9 +279,8 @@ follows these steps:
    - The updated due `byDate` and `byTime` is before the current date and time
 3. Editing the task: It makes use of the appropriate setter methods to update the task with its new details. At least
    one of the optional fields must be provided.
-   Given below is an example usage scenario and how the edit task mechanism behaves at each step.
-
-Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
+   
+Given below is an example usage scenario and how the edit task mechanism behaves at each step.
 
 Step 1. The user launches the application for the first time. The `taskList` will be initialized with the task
 data stored (if exists).
@@ -234,7 +291,7 @@ and updates the saved file to reflect the change.
 ![AddTaskSequenceDiagram](assets/taskImages/AddTaskSequenceDiagram.png)
 
 Step 3. The user then realised that some task details were incorrect, thus she needs to edit it from the task list.
-The user initiates the editing of a task by calling the `editTask` function with the index of the task to be edited.
+The user initiates the editing of a task by calling the `editTask` function with the `index` of the task to be edited.
 
 Step 4. The system attempts to edit the specified task from the list. If unsuccessful, the system logs a warning and 
 throws a custom exception, `NurseSchedException`, with a relevant message indicating the specific error.
@@ -261,7 +318,7 @@ Aspect: How edit task executes:
 
 #### Implementation
 
-The `sortAppointmentByImportance` method is responsible for sorting all appointments in the appointment list. The implementation
+The `sortByImportance` method is responsible for sorting all appointments in the appointment list. The implementation
 follows these steps:
 
 1. Validation and Logging: The method first checks if the apptList is empty. If it is, a warning message is logged, 
@@ -279,8 +336,8 @@ Given below is an example usage scenario and how the sorting mechanism behaves a
 Step 1. The user launches the application for the first time. The `apptList` will be initialized
 with stored appointment data (if exists).
 
-Step 2. The user adds multiple appointments using the addAppointment operation. If successful, 
-the system logs the addition and updates the saved file.
+Step 2. The user adds multiple appointments using the addAppt operation. If successful, 
+the system updates the saved file.
 
 ![Add appointment Sequence Diagram](./assets/appointmentImages/AddApptSequenceDiagram.png)
 
@@ -337,35 +394,56 @@ This is so that they can retrieve information quickly, especially with how hecti
 
 ## User Stories
 
-| Version | As a ... | I want to ...                                                       | So that I can ...                                                      |
-|---------|----------|---------------------------------------------------------------------|------------------------------------------------------------------------|
-| v2.0    | Nurse    | Search for a patient's profile                                      | I can locate the patient's details easily                              |
-| v2.0    | Nurse    | Edit patient's information                                          | I can fix any incorrect information                                    |
-| v2.0    | Nurse    | Add more fields for patient information like patient ID, gender etc | I can keep track of additional information relating to the patient     |
-| v2.0    | Nurse    | Input medical test results                                          | I am aware of the conditions of my patients                            |
-| v2.0    | Nurse    | Delete medical test results                                         | I am able to fix any errors in the test results                        |
-| v2.0    | Nurse    | Check patient's medical tests                                       | I can quickly retrieve test results for my patients                    |
-| v2.0    | Nurse    | Save patients information                                           | I can keep track and load patient information after exiting NurseSched |
-| v2.0    | Nurse    | Add tasks to my todo list                                           | keep track of my things to do                                          |
-| v2.0    | Nurse    | List out my tasks                                                   | I can view all the things to be completed                              |
-| v2.0    | Nurse    | Check off things from my to-do list                                 | I know which tasks have been completed                                 |
-| v2.0    | Nurse    | Delete my tasks                                                     | I can remove irrelevant tasks                                          |
-| v2.0    | Nurse    | Edit my to-do list                                                  | I can fill it with updated information that I need to keep track of    |
-| v2.0    | Nurse    | Search for a task                                                   | I can locate a specific task with a keyword                            |
-| v2.0    | Nurse    | Save my task list                                                   | I can load and save my existing task list                              |
-| v2.0    | Nurse    | add in an amount of medicine to the list                            | update my medicine supply                                              |
-| v2.0    | Nurse    | remove an amount of medicine from the list                          | update my medicine supply                                              |
-| v2.0    | Nurse    | search for a specific medicine from the list                        | see how much of the medicine I have left                               |
-| v2.0    | Nurse    | edit the information of the medicine                                | ensure that my medicine supply is up-to-date                           |
-| v2.0    | Nurse    | delete a specific medicine                                          | entirely remove a medicine from the list                               |
-| v2.0    | Nurse    | view the total supply of medicine left                              | know what needs to be restocked                                        |
-| v2.0    | Nurse    | save the medicine supply list                                       | keep track of the supply                                               |
-| v2.0    | Nurse    | search for an appointment                                           | filter the list of appointments                                        |
-| v2.0    | Nurse    | edit appointment dates and time                                     | update my schedule                                                     |
-| v2.0    | Nurse    | arrange appointments in chronological order                         | view my upcoming appointments first                                    | 
-| v2.0    | Nurse    | save appointment information                                        | retrieve previously stored appointment information                     | 
-| v2.0    | Nurse    | rank importance of appointments                                     | arrange my appointments based off priority                             |
-| v2.0    | Nurse    | list medicine that is below a certain quantity                      | know which medicine to restock                                         |
+| Version | As a ... | I want to ...                                                       | So that I can ...                                                            |
+|---------|----------|---------------------------------------------------------------------|------------------------------------------------------------------------------|
+| v1.0    | Nurse    | Add in basic information like name, age etc                         | keep track of the patients' details                                          |
+| v1.0    | Nurse    | Delete patient's information                                        | remove patients when they have been discharged                               |
+| v1.0    | Nurse    | Add in important information for each patient                       | check important information to take note of before the appointment           |
+| v1.0    | Nurse    | List patient information                                            | view the entire list                                                         |
+| v1.0    | Nurse    | Add in patients' appointment dates & times                          | add in new appointments                                                      |
+| v1.0    | Nurse    | Remove appointments                                                 | keep track of cancelled appointments                                         |
+| v1.0    | Nurse    | Mark appointment dates & times as done                              | update my schedule                                                           |
+| v1.0    | Nurse    | List appointments                                                   | view the entire appointment list                                             |
+| v1.0    | Nurse    | View the total number of appointments left for my patients          | plan what is to be done for each appointment                                 |
+| v1.0    | Nurse    | List my own schedule                                                | check my schedule                                                            |
+| v1.0    | Nurse    | Add my shift timings & dates                                        | keep track of my shifts                                                      |
+| v1.0    | Nurse    | Delete shift timings & dates                                        | update my working schedule                                                   |
+| v1.0    | Nurse    | Search for a specific shift                                         | check for shifts at specific times                                           |
+| v1.0    | Nurse    | View total shift hours per month                                    | manage working hours                                                         |
+| v1.0    | Nurse    | Edit my shift timings & dates                                       | update my schedule                                                           |
+| v1.0    | Nurse    | Check-off medicine which I have administered                        | keep track of which medicine I have administered to prevent re-administering |
+| v1.0    | Nurse    | Add in medicine which I have not administered                       | keep track of what to administer later on                                    |
+| v2.0    | Nurse    | Search for a patient's profile                                      | locate the patient's details easily                                          |
+| v2.0    | Nurse    | Edit patient's information                                          | fix any incorrect information                                                |
+| v2.0    | Nurse    | Add more fields for patient information like patient ID, gender etc | keep track of additional information relating to the patient                 |
+| v2.0    | Nurse    | Input medical test results                                          | be aware of the conditions of my patients                                    |
+| v2.0    | Nurse    | Delete medical test results                                         | fix any errors in the test results                                           |
+| v2.0    | Nurse    | Check patient's medical tests                                       | quickly retrieve test results for my patients                                |
+| v2.0    | Nurse    | Save patients information                                           | keep track and load patient information after exiting NurseSched             |
+| v2.0    | Nurse    | Add tasks to my todo list                                           | keep track of my things to do                                                |
+| v2.0    | Nurse    | List out my tasks                                                   | view all the things to be completed                                          |
+| v2.0    | Nurse    | Check off things from my to-do list                                 | know which tasks have been completed                                         |
+| v2.0    | Nurse    | Delete my tasks                                                     | remove irrelevant tasks                                                      |
+| v2.0    | Nurse    | Edit my to-do list                                                  | fill it with updated information that I need to keep track of                |
+| v2.0    | Nurse    | Search for a task                                                   | locate a specific task with a keyword                                        |
+| v2.0    | Nurse    | Save my task list                                                   | load and save my existing task list                                          |
+| v2.0    | Nurse    | add in an amount of medicine to the list                            | update my medicine supply                                                    |
+| v2.0    | Nurse    | remove an amount of medicine from the list                          | update my medicine supply                                                    |
+| v2.0    | Nurse    | search for a specific medicine from the list                        | see how much of the medicine I have left                                     |
+| v2.0    | Nurse    | edit the information of the medicine                                | ensure that my medicine supply is up-to-date                                 |
+| v2.0    | Nurse    | delete a specific medicine                                          | entirely remove a medicine from the list                                     |
+| v2.0    | Nurse    | view the total supply of medicine left                              | know what needs to be restocked                                              |
+| v2.0    | Nurse    | save the medicine supply list                                       | keep track of the supply                                                     |
+| v2.0    | Nurse    | search for an appointment                                           | filter the list of appointments                                              |
+| v2.0    | Nurse    | edit appointment dates and time                                     | update my schedule                                                           |
+| v2.0    | Nurse    | arrange appointments in chronological order                         | view my upcoming appointments first                                          | 
+| v2.0    | Nurse    | save appointment information                                        | retrieve previously stored appointment information                           | 
+| v2.0    | Nurse    | rank importance of appointments                                     | arrange my appointments based off priority                                   |
+| v2.0    | Nurse    | list medicine that is below a certain quantity                      | know which medicine to restock                                               |
+| v2.0    | Nurse    | Save shift information                                              | keep track of shift history even after exiting NurseSched                    |
+| v2.0    | Nurse    | Mark or unmark a shift                                              | indicate if a shift has been completed or not                                |
+| v2.0    | Nurse    | Log overtime hours for a shift                                      | keep a record of extra hours worked for reporting and planning               |
+| v2.0    | Nurse    | Sort shifts chronologically                                         | view the most recent and upcoming shifts more easily                         |
 
 ## Non-Functional Requirements
 
@@ -543,6 +621,27 @@ This section provides instructions for testing the various features of NurseSche
 **Test case**: `shift list` (after adding multiple shifts)  
 **Expected**: List displays all shifts with their completion status, date, time range, and task.
 
+### Sorting shifts chronologically
+**Prerequisites**: Multiple shifts added with different dates and times.
+
+**Test case**: `shift sort`  
+**Expected**: Shifts are sorted by `DATE` then `START_TIME` in ascending order. Status message confirms sorting.
+
+**Test case**: `shift sort` (with 0 or 1 shift)  
+**Expected**: List remains unchanged. Sorting succeeds silently or with a gentle confirmation.
+
+### Logging overtime
+**Prerequisites**: At least one shift in the list.
+
+**Test case**: `shift logot id/1 h/2.5`  
+**Expected**: Overtime of 2.5 hours is logged for the first shift. Status message confirms logging.
+
+**Test case**: `shift logot id/0 h/1.0`  
+**Expected**: No overtime is logged. Error message shown. Shift list remains unchanged.
+
+**Test case**: `shift logot id/1 h/-3`  
+**Expected**: No overtime is logged. Error message shown due to invalid negative input.
+
 ## Patient List
 
 ### Adding a patient profile
@@ -614,63 +713,69 @@ This section provides instructions for testing the various features of NurseSche
 ### Adding an appointment
 **Prerequisites**: List all appointments using the `appt list` command. Initially, no appointments in the list.
 
-**Test case**: `appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`  
+**Test case**: 
+* Add patient profile into patients list: `pf add id/1001 p/Jean a/25 g/F c/66887799 n/requires constant supervision`  
+* Add appointment for that patient: `appt add id/1001 s/13:00 e/14:00 d/2025-02-12 im/2 n/super healthy`  
+
 **Expected**: Appointment is added to the list. Details of the added appointment shown in the status message. Appointment list now contains 1 appointment.
 
 **Test case**: `appt add` (without all required parameters)  
 **Expected**: No appointment is added. Error details shown in the status message. Appointment list remains empty.
 
 **Other incorrect add commands to try**:
-- `appt add p/Jean Doe` (missing start time, end time, date, importance, and notes)
-- `appt add p/Jean Doe s/13:00 e/14:00` (missing date, importance, and notes)
-- `appt add p/Jean Doe s/13:00 e/14:00 d/2025-02-12 im/5 n/super healthy` (importance value out of range)
+- `appt add id/1001` (missing start time, end time, date, importance, and notes)
+- `appt add id/1001 s/13:00 e/14:00` (missing date, importance, and notes)
+- `appt add id/1001 s/13:00 e/14:00 d/2025-02-12 im/5 n/super healthy` (importance value out of range)
 
 **Expected**: Similar to previous error behavior.
 
 ### Deleting an appointment
 **Prerequisites**: List all appointments using the `appt list` command. At least one appointment in the list.
 
-**Test case**: `appt del id/1`  
+**Test case**: `appt del aid/1`  
 **Expected**: First appointment is deleted from the list. Details of the deleted appointment shown in the status message. Appointment list now contains one fewer appointment.
 
-**Test case**: `appt del id/0`  
+**Test case**: `appt del aid/0`  
 **Expected**: No appointment is deleted. Error details shown in the status message. Appointment list remains unchanged.
 
 ### Marking an appointment
 **Prerequisites**: List all appointments using the `appt list` command. At least one appointment in the list that is not completed.
 
-**Test case**: `appt mark id/1`  
+**Test case**: `appt mark aid/1`  
 **Expected**: First appointment is marked as completed. Status message indicates successful marking. Appointment list shows the appointment with completed status.
 
-**Test case**: `appt mark id/0`  
+**Test case**: `appt mark aid/0`  
 **Expected**: No appointment is marked. Error details shown in the status message. Appointment status remains unchanged.
 
 ### Unmarking an appointment
 **Prerequisites**: List all appointments using the `appt list` command. At least one appointment marked as completed in the list.
 
-**Test case**: `appt unmark id/1` (assuming first appointment is marked as completed)  
+**Test case**: `appt unmark aid/1` (assuming first appointment is marked as completed)  
 **Expected**: First appointment is unmarked. Status message indicates successful unmarking. Appointment list shows the appointment with uncompleted status.
 
-**Test case**: `appt unmark id/0`  
+**Test case**: `appt unmark aid/0`  
 **Expected**: No appointment is unmarked. Error details shown in the status message. Appointment status remains unchanged.
 
 ### Editing an appointment
 **Prerequisites**: List all appointments using the `appt list` command. At least one appointment in the list.
 
-**Test case**: `appt edit id/1 p/edited name s/13:00 e/15:00`  
-**Expected**: First appointment's patient name, start time, and end time are updated. Status message shows successful update. Appointment list reflects the changes.
+**Test case**: `appt edit aid/1 s/13:00 e/15:00`  
+**Expected**: First appointment's start time, and end time are updated. Status message shows successful update. Appointment list reflects the changes.
 
-**Test case**: `appt edit id/0 im/1`  
+**Test case**: `appt edit aid/0 im/1`  
 **Expected**: No appointment is edited. Error details shown in the status message. Appointment list remains unchanged.
 
 ### Searching for an appointment
 **Prerequisites**: List all appointments using the `appt list` command. Multiple appointments in the list.
 
-**Test case**: `appt find Jean Doe` (assuming there's an appointment with this patient name)  
+**Test case**: `appt find p/Jean Doe` (assuming there's an appointment with this patient name)  
 **Expected**: Displays all appointments for patient "Jean Doe".
 
 **Test case**: `appt find Unknown Patient` (assuming there's no appointment with this patient name)  
 **Expected**: Message indicating that no appointments were found for the specified patient.
+
+**Test case**: `appt find id/1001` (assuming there's an appointment with this patient ID)  
+**Expected**: Displays all appointments for patient with ID: 1001.
 
 ### Sorting appointments
 **Prerequisites**: List all appointments using the `appt list` command. Multiple appointments in the list with different importance levels and times.
@@ -757,6 +862,7 @@ To test data persistence:
 ## FAQ
 
 **Q**: How do I transfer my data to another computer?
+
 **A**: All the data is stored in the `/data/` folder. Simply transfer this folder to the other computer.
 
 ## Additional Test Cases
