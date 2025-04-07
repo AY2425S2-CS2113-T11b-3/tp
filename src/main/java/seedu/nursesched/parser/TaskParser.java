@@ -128,7 +128,7 @@ public class TaskParser extends Parser {
             for (String parameter : parameters) {
                 if (parameter.contains("id/")) {
                     taskIndex = Integer.parseInt(parameter.substring(3));
-                } if (!line.contains("td/") && line.contains("d/") && !line.contains("t/")) {
+                } else if (!line.contains("td/") && line.contains("d/") && !line.contains("t/")) {
                     logr.info("Empty edit parameters, no edits made.");
                     throw new NurseSchedException(ExceptionMessage.NO_EDITS_MADE);
                 } else if (parameter.contains("td/")) {
