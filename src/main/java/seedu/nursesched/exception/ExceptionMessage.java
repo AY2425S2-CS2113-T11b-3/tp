@@ -3,14 +3,19 @@ package seedu.nursesched.exception;
 public enum ExceptionMessage {
     INPUT_EMPTY("Input line cannot be empty!"),
     INVALID_FORMAT("Invalid command format!"),
-    INVALID_SHIFTADD_FORMAT("Invalid shift add format! Input as:" +
-            " shift add s/START_TIME e/END_TIME d/DATE st/SHIFT_TASK"),
     INVALID_TIME_FORMAT("Invalid time format! Input as HH:mm"),
     INVALID_DATE_FORMAT("Invalid date format! Input as YYYY-MM-DD"),
     INVALID_DATETIME_FORMAT("Invalid date or time format! Input date as YYYY-MM-DD, input time as HH:mm"),
-    SHIFT_TASK_EMPTY("Shift task cannot be empty!"),
     INVALID_START_TIME("Start time must be before end time."),
     INVALID_DUE_DATE_TIME("Due date must be after current date and time."),
+    NEGATIVE_INDEX("Index must be a positive integer greater than 0!"),
+    ZERO_INDEX("Index cannot be zero!"),
+    INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
+    INVALID_SORTING_LIST("List is empty. Nothing to sort."),
+    // ====================Shift Specific Exceptions====================
+    INVALID_SHIFTADD_FORMAT("Invalid shift add format! Input as:" +
+            " shift add s/START_TIME e/END_TIME d/DATE st/SHIFT_TASK"),
+    SHIFT_TASK_EMPTY("Shift task cannot be empty!"),
     INVALID_SHIFT_DATE("Shift date must be after current date!"),
     INVALID_SHIFTDEL_FORMAT("Invalid shift del format! Input as:" +
             " shift del id/SHIFT_NUMBER"),
@@ -21,10 +26,6 @@ public enum ExceptionMessage {
     INVALID_SHIFTLOGOT_FORMAT("Invalid shift log format! Input as: shift logot id/SHIFT_NUMBER h/HOURS"),
     INVALID_SHIFT_NUMBER("There is no shift with that specified index!"),
     SHIFT_TIMING_OVERLAP("Shift would overlap with another existing shift!"),
-    NEGATIVE_INDEX("Index must be a positive integer greater than 0!"),
-    ZERO_INDEX("Index cannot be zero!"),
-    INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
-    INVALID_SORTING_LIST("List is empty. Nothing to sort."),
 
     // ====================Patient Specific Exceptions====================
     INVALID_PATIENT_ADD_FORMAT("Invalid patient add format! Input as:\n" +
