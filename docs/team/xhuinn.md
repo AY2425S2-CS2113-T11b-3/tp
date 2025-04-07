@@ -12,7 +12,8 @@ Given below are my contributions to the project.
 
 #### Code contribution
 
-Code can be found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?search=&sort=totalCommits%20dsc&sortWithin=totalCommits%20dsc&timeframe=commit&mergegroup=&groupSelect=groupByRepos&breakdown=true&checkedFileTypes=docs~functional-code~test-code~other&since=2025-02-21&tabOpen=true&tabType=authorship&tabAuthor=xhuinn&tabRepo=AY2425S2-CS2113-T11b-3%2Ftp%5Bmaster%5D&authorshipIsMergeGroup=false&authorshipFileTypes=docs~functional-code~test-code&authorshipIsBinaryFileTypeChecked=false&authorshipIsIgnoredFilesChecked=false)
+Code can be
+found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?search=&sort=totalCommits%20dsc&sortWithin=totalCommits%20dsc&timeframe=commit&mergegroup=&groupSelect=groupByRepos&breakdown=true&checkedFileTypes=docs~functional-code~test-code~other&since=2025-02-21&tabOpen=true&tabType=authorship&tabAuthor=xhuinn&tabRepo=AY2425S2-CS2113-T11b-3%2Ftp%5Bmaster%5D&authorshipIsMergeGroup=false&authorshipFileTypes=docs~functional-code~test-code&authorshipIsBinaryFileTypeChecked=false&authorshipIsIgnoredFilesChecked=false)
 
 #### Enhancements Implemented
 
@@ -35,6 +36,7 @@ Code can be found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?sea
 #### Contributions to the UG
 
 - Gave details on how to use features related to the medicine list.
+- Added medicine user stories.
 
 #### Contributions to the DG
 
@@ -58,3 +60,4 @@ Code can be found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?sea
 
 - [PayPals DG review](https://github.com/nus-cs2113-AY2425S2/tp/pull/17)
 - [FinTrack DG review](https://github.com/nus-cs2113-AY2425S2/tp/pull/46)
+- Spot bugs in other group's DG and jar file during mock PE.
