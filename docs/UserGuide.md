@@ -334,6 +334,7 @@ List out patient information for all patients within the list.
 Format: `pf list`
 
 * Displays all patient information stored in the list.
+* If notes is empty, "No notes were given." will be displayed by default.
 
 ### Editing a patient information : `pf edit`
 

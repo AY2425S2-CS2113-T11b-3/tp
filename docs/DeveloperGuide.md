@@ -172,7 +172,7 @@ Given below is an example usage scenario and how the removal mechanism behaves a
 
 Step 1. The user launches the application. The patientsList is initialized, either empty or populated from saved data.
 
-Step 2. The user adds patients using the addPatient method. For example:
+Step 2. The user adds patients using the `addPatient` method. For example:
 
 ```Patient("1234", "John Doe", "30", "M", "91234567", "Allergic to penicillin")```
 
@@ -180,9 +180,9 @@ The following sequence diagram shows how adding patient information goes:
 
 ![addPatientSequenceDiagram.png](assets/patientImages/addPatientSequenceDiagram.png)
 
-Step 3. The user decides to remove a patient by calling removePatient("1234").
+Step 3. The user decides to remove a patient by calling `removePatient("1234")`.
 
-The following sequence diagram shows how the delete patient information goes:
+The following sequence diagram shows deleting patient information goes:
 
 ![removePatientSequenceDiagram.png](assets/patientImages/removePatientSequenceDiagram.png)
 
@@ -862,6 +862,7 @@ To test data persistence:
 ## FAQ
 
 **Q**: How do I transfer my data to another computer?
+
 **A**: All the data is stored in the `/data/` folder. Simply transfer this folder to the other computer.
 
 ## Additional Test Cases
