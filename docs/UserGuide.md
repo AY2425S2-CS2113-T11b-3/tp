@@ -588,6 +588,8 @@ Format: `medicine edit mn/MEDICINE_NAME un/UPDATED_NAME uq/UPDATED_QUANTITY`
 
 * Edits `MEDICINE_NAME` to `UPDATED_NAME` and its respective `QUANTITY` to `UPDATED_QUANTITY`
 * `UPDATED_NAME` cannot already exist in `medicine list`.
+* `MEDICINE_NAME` and `UPDATED_NAME` can be the same so that users are able to update the quantity directly without
+  adding/removing.
 
 Example:
 
@@ -605,7 +607,7 @@ Format: `medicine restock q/QUANTITY`
 Example:
 
 * `medicine restock q/30` Lists all the medicine name and their respective quantity, for medicines which have quantity
-  lesser than `QUANTITY`.
+  lesser than 30.
 
 ### Other commands
 
