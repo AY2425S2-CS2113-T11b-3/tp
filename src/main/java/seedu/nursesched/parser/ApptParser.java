@@ -15,9 +15,14 @@ import java.util.logging.SimpleFormatter;
 import java.io.File;
 
 /**
- * The ApptParser class parses the input of the user to make sense of the command.
- * It stores a command, name, start time, end time, date and notes if successfully parsed.
- * The methods within this class will return null if it does not understand the input.
+ * Parses the input of the user to make sense of the command.
+ * It extracts commands and relevant parameters, validating them before processing.
+ * This class supports various appointment-related commands, including add, del, mark, unmark,
+ * list, find, edit and sort.
+ * Each command follows a specific format and requires valid parameters. The parser extracts
+ * values from the input, verifies them, and encapsulates them in a {@code ApptParser} object
+ * for further processing.
+ * Exceptions are thrown if the input format is incorrect or required parameters are missing.
  */
 public class ApptParser extends Parser {
 
@@ -95,6 +100,7 @@ public class ApptParser extends Parser {
      *
      * @throws IndexOutOfBoundsException If the input line does not contain the expected parameters.
      * @throws DateTimeParseException If the input time or date is not of the expected format.
+     * @throws NurseSchedException If input fields are invalid or missing.
      */
     public static ApptParser extractInputs (String line) throws NurseSchedException {
         assert line != null : "Input line should not be null";
@@ -210,7 +216,7 @@ public class ApptParser extends Parser {
         case "sort" -> {
             if (line != null && line.contains("by/")) {
                 int byIndex = line.indexOf("by/") + 3;
-                sortBy = line.substring(byIndex).trim();
+                sortBy = line.substring(byIndex).trim().toLowerCase();
                 if (!sortBy.equals("time") && !sortBy.equals("importance")) {
                     logr.warning("Invalid sort parameter: " + sortBy);
                     throw new NurseSchedException(ExceptionMessage.INVALID_SORT_PARAMETER);
@@ -358,7 +364,20 @@ public class ApptParser extends Parser {
         }
     }
 
-
+    /**
+     * Parses a string representation of a patient ID into an integer.
+     * <p>
+     * Validates that the input string contains exactly four digits and no other characters.
+     * @param id    The string representation of the patient ID to parse.
+     * @return      The parsed integer ID if validation passes.
+     * @throws NurseSchedException If the input string:
+     *                             <ul>
+     *                                 <li>Contains non-digit characters.</li>
+     *                                 <li>Contains internal spaces.</li>
+     *                                 <li>Does not have exactly four digits.</li>
+     *                                 <li>Cannot be parsed as an integer for other reasons.</li>
+     *                             </ul>
+     */
     private static int parseID(String id) throws NurseSchedException {
         for (char c : id.toCharArray()) {
             if (!Character.isDigit(c)) {
@@ -386,6 +405,17 @@ public class ApptParser extends Parser {
         }
     }
 
+
+    /**
+     * Parses a string representation of an appointment importance level into an integer.
+     * <p>
+     * Validates that the input string is a valid integer between 1 and 3 (inclusive).
+     *
+     * @param importanceStr        The string representation of the importance level (e.g., "1", "2", "3").
+     * @return                     The parsed and validated integer importance level (1, 2, or 3).
+     * @throws NurseSchedException If the input string is not a valid integer or if the integer
+     *                             is outside the acceptable range [1, 3]
+     */
     public static int parseImportance(String importanceStr) throws NurseSchedException {
         try {
             int newImportance = Integer.parseInt(importanceStr);
@@ -400,6 +430,24 @@ public class ApptParser extends Parser {
         }
     }
 
+
+    /**
+     * Parses a string representation of a 1-based list index into a 0-based integer index.
+     * <p>
+     * Validates that the input string represents a positive integer and converts it
+     * to the corresponding 0-based index for list access. Also checks for potential
+     * integer overflow and invalid formats.
+     *
+     * @param line The string containing the 1-based index to parse.
+     * @return The parsed 0-based integer index.
+     * @throws NurseSchedException If the input string:
+     *                             <ul>
+     *                                 <li>Is empty or blank </li>
+     *                                 <li>Represents a number too large to fit in an int </li>
+     *                                 <li>Represents zero or a negative number </li>
+     *                                 <li>Contains non-digit characters or is otherwise not a valid integer format</li>
+     *                             </ul>
+     */
     public static int parseIndex (String line) throws NurseSchedException {
         if (line.trim().isEmpty()){
             throw new NurseSchedException(ExceptionMessage.MISSING_INDEX_PARAMETER);
@@ -433,7 +481,17 @@ public class ApptParser extends Parser {
         return index;
     }
 
-    // Helper method to find where the next field starts
+    /**
+     * Helper method to locate the start index of the next field marker in a command string.
+     * <p>
+     * Searches the input line starting from startPos for the earliest occurrence
+     * of any known field marker (e.g., "id/", "s/", "d/", "e/", "im/", "n/").
+     *
+     * @param line     The command string being parsed.
+     * @param startPos The 0-based index within line from where the search should begin.
+     * @return The 0-based index of the beginning of the *next* field marker found at or after startPos.
+     *         Returns the length of the line if no field markers are found after startPos.
+     */
     private static int findNextFieldIndex(String line, int startPos) {
         // All possible next field markers
         int[] markers = {

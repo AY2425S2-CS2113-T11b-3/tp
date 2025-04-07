@@ -123,6 +123,19 @@ The `Task` component,
 - Maintains a static list (taskList) as the single source of truth for all patient records.
 - Throws custom exceptions (NurseSchedException) for error handling.
 
+### Shift component
+
+**API**: `Shift.java`
+
+![shiftComponent.png](assets/shiftImages/shiftComponent.png)
+
+The `Shift` component,
+
+- Manages nurse work shifts, including start time, end time, date, assigned task, completion status, and overtime hours.
+- Enforces strict validation rules to prevent overlaps, invalid time formats, and scheduling shifts in the past.
+- Maintains a static list (shiftList) as the single source of truth for all shift records.
+- Throws custom exceptions (NurseSchedException) for robust error handling.
+
 ### Patient component
 
 API: `Patient.java`

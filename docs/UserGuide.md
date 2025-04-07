@@ -427,7 +427,7 @@ Marks an appointment to show its completion.
 
 Format: `appt mark aid/APPT_INDEX`
 
-* Marks task with index `APPT_INDEX` as completed
+* Marks appointment with index `APPT_INDEX` as completed
 * The `APPT_INDEX` refers to the index number shown in the displayed appointment
   list. The index must be a positive integer 1, 2, 3, ...
 
@@ -441,7 +441,7 @@ Unmarks an appointment to show that it is uncompleted.
 
 Format: `appt unmark aid/APPT_INDEX`
 
-* Unmarks a task with index `APPT_INDEX` as uncompleted
+* Unmarks appointment with index `APPT_INDEX` as uncompleted
 * The `APPT_INDEX` refers to the index number shown in the displayed appointment
   list. The index must be a positive integer 1, 2, 3, ...
 
@@ -584,6 +584,7 @@ Edits the information of a specific medicine from the current supply.
 Format: `medicine edit mn/MEDICINE_NAME un/UPDATED_NAME uq/UPDATED_QUANTITY`
 
 * Edits `MEDICINE_NAME` to `UPDATED_NAME` and its respective `QUANTITY` to `UPDATED_QUANTITY`
+* `UPDATED_NAME` cannot already exist in `medicine list`.
 
 Example:
 
@@ -656,7 +657,7 @@ corrupted file is handled accordingly.
 | Appointment | Unmark  | `appt unmark aid/APPT_INDEX`                                                                                                      |
 | Appointment | Edit    | `appt edit aid/APPT_INDEX [id/NEW_PATIENT_ID] [s/NEW_START_TIME] [e/NEW_END_TIME] [d/NEW_DATE] [n/NEW_NOTES] [im/NEW_IMPORTANCE]` |
 | Appointment | List    | `appt list`                                                                                                                       |
-| Appointment | Find    | `appt find p/PATIENT_NAME` or  `appt find p/PATIENT_ID`                                                                           |
+| Appointment | Find    | `appt find p/PATIENT_NAME` or  `appt find id/PATIENT_ID`                                                                          |
 | Appointment | Sort    | `appt sort by/time` or `appt sort by/importance`                                                                                  |
 | Medicine    | Add     | `medicine add mn/MEDICINE_NAME q/QUANTITY`                                                                                        |
 | Medicine    | Remove  | `medicine remove mn/MEDICINE_NAME q/QUANTITY`                                                                                     |
