@@ -192,10 +192,7 @@ public class MedicineParser extends Parser {
             assert !medicineName.trim().isEmpty() : "Medicine name cannot be empty";
             String quantityString = String.valueOf(Integer.parseInt(extractValue(remaining, "q/",
                     null)));
-//            if (quantityString.trim().isEmpty()) {
-//                throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
-//            }
-
+            
             if (quantityString.length() > 10) {
                 throw new NurseSchedException(ExceptionMessage.MEDICINE_QUANTITY_TOO_LARGE);
             }
