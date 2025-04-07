@@ -101,14 +101,11 @@ public class PatientParser extends Parser {
         String contact = null;
         String notes = null;
 
-        // Handle cases where the line is just the command itself
-        // If there are additional parameters, the command will be correctly parsed
-        // If there are no parameters like "pf list", then throw an exception that treats
-        // the line as the command
         try {
             if (line.contains("id/")) {
-                command = line.substring(0, line.indexOf("id/")).toLowerCase().trim();
-                line = line.substring(line.indexOf("id/"));
+                int idEnd = findNextFieldIndex(line, 0);
+                command = line.substring(0, idEnd).trim();
+                line = line.substring(idEnd);
             } else {
                 command = line.toLowerCase();
             }
@@ -124,38 +121,23 @@ public class PatientParser extends Parser {
             }
 
             validateAllFields(line);
+            validateIdentifierOrder(line);
 
             // Extract and validate ID first
-            try {
-                id = (line.substring(line.indexOf("id/") + 3, line.indexOf("p/") - 1)).trim();
-            } catch (StringIndexOutOfBoundsException e) {
-                throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_INFO);
-            }
+            id = extractValue(line, "id/", "p/");
 
             validateID(id);
 
             try {
-                line = line.substring(line.indexOf("p/"));
+                id = extractValue(line, "id/", "p/");
+                name = extractValue(line, "p/", "a/");
+                age = extractValue(line, "a/", "g/");
+                gender = extractValue(line, "g/", "c/");
+                contact = extractValue(line, "c/", "n/");
+                notes = line.substring(line.indexOf("n/") + 2).trim();
 
-                name = (line.substring(line.indexOf("p/") + 2, line.indexOf("a/") - 1)).trim();
-                line = line.substring(line.indexOf("a/"));
-
-                age = (line.substring(line.indexOf("a/") + 2, line.indexOf("g/") - 1)).trim();
-                line = line.substring(line.indexOf("g/"));
-
-                gender = (line.substring(line.indexOf("g/") + 2, line.indexOf("c/") - 1)).trim();
-                gender = gender.toUpperCase();
-                line = line.substring(line.indexOf("c/"));
-
-                contact = (line.substring(line.indexOf("c/") + 2, line.indexOf("n/") - 1)).trim();
-                line = line.substring(line.indexOf("n/"));
-
-                notes = (line.substring(line.indexOf("n/") + 2)).trim();
                 return new PatientParser(command, id, name, age, gender, contact, notes);
             } catch (IndexOutOfBoundsException e) {
-                if (!line.contains("p/") || !line.contains("a/") || !line.contains("g/") || !line.contains("c/")) {
-                    throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_ADD_FORMAT);
-                }
                 throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
             }
         }
@@ -163,8 +145,9 @@ public class PatientParser extends Parser {
             if (line.trim().equals("del")) {
                 throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_ID_FIELD);
             }
+            checkIdExists(line);
 
-            id = checkForId(line, id);
+            id = extractValue(line, "id/", "");
 
             // Validate ID format (4 digits)
             validateID(id);
@@ -178,7 +161,9 @@ public class PatientParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_FORMAT);
         }
         case "find" -> {
-            id = checkForId(line, id);
+            checkIdExists(line);
+
+            id = extractValue(line, "id/", "");
 
             validateID(id);
 
@@ -261,8 +246,16 @@ public class PatientParser extends Parser {
             checkIdExists(line);
 
             try {
+                if (!line.contains("t/") || !line.contains("r/")) {
+                    throw new NurseSchedException(ExceptionMessage.MISSING_PATIENT_FIELDS);
+                }
+
                 // Extract patient ID
                 id = extractValue(line, "id/", "t/");
+
+                if (id.contains("r/")) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_IDENTIFIER_ORDER);
+                }
 
                 validateID(id);
 
@@ -296,7 +289,7 @@ public class PatientParser extends Parser {
         case "result del" -> {
             // Extract patient ID to delete all medical tests
             checkIdExists(line);
-            id = line.substring(line.indexOf("id/") + 3);
+            id = extractValue(line, "id/", "");
 
             validateID(id);
 
@@ -313,7 +306,7 @@ public class PatientParser extends Parser {
         }
         case "result list" -> {
             checkIdExists(line);
-            id = line.substring(line.indexOf("id/") + 3);
+            id = extractValue(line, "id/", "");
 
             validateID(id);
 
@@ -338,15 +331,6 @@ public class PatientParser extends Parser {
         if (!line.contains("id/")) {
             throw new NurseSchedException(ExceptionMessage.MISSING_ID_IDENTIFIER);
         }
-    }
-
-    private static String checkForId(String line, String id) throws NurseSchedException {
-        if (!line.contains("id/")) {
-            throw new NurseSchedException(ExceptionMessage.MISSING_ID_IDENTIFIER);
-        } else {
-            id = line.substring(line.indexOf("id/") + 3).trim();
-        }
-        return id;
     }
 
     private static void validateAllFields(String line) throws NurseSchedException {
@@ -408,6 +392,21 @@ public class PatientParser extends Parser {
         return null;
     }
 
+    private static void validateIdentifierOrder(String line) throws NurseSchedException {
+        String[] expectedOrder = {"id/", "p/", "a/", "g/", "c/", "n/"};
+        int lastIndex = -1;
+
+        for (String identifier : expectedOrder) {
+            int currentIndex = line.indexOf(identifier);
+
+            if (currentIndex < lastIndex) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_IDENTIFIER_ORDER);
+            }
+
+            lastIndex = currentIndex;
+        }
+    }
+
     // Convert command identifiers to lower case
     private static String normalizeIdentifiers(String input) {
         String[] identifiers = {"id/", "p/", "a/", "g/", "c/", "n/", "t/", "r/"};
@@ -438,6 +437,11 @@ public class PatientParser extends Parser {
             System.out.println("Missing value for " + key);
             throw new NurseSchedException(ExceptionMessage.PARSING_ERROR);
         }
+
+        if (identifier.isEmpty()) {
+            return line.substring(startIdx).trim();
+        }
+
         int endIdx = line.indexOf(identifier, startIdx);
         if (endIdx == -1) {
             endIdx = line.length();

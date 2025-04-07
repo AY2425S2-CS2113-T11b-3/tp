@@ -20,7 +20,7 @@ activate Command
     activate PatientParser
     PatientParser --> PatientParser
     deactivate PatientParser
-    PatientParser --> Command : Return PatientParser(id="1234")
+    PatientParser --> Command : Return PatientParser(command="add", id="1234", name="John Doe", \nage="30", gender="M", contact="91234567", notes="Allergic to penicillin")
   deactivate PatientParser
     Command -> Patient : addPatient(id="1234", name="John Doe", age="30", gender="M", \ncontact="91234567", notes="Allergic to penicillin")
   activate Patient
