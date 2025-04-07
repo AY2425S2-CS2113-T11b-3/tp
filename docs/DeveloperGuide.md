@@ -6,6 +6,7 @@
     * [UI component](#ui-component)
     * [Storage component](#storage-component)
     * [Task component](#task-component)
+    * [Shift component](#shift-component)
     * [Patient component](#patient-component)
     * [Appointment component](#appointment-component)
     * [Medicine component](#medicine-component)
