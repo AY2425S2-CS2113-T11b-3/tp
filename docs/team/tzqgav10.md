@@ -43,3 +43,6 @@ Code can be found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?sea
 - Created issues and milestones in GitHub.
 - Updating UG/DG outside of own features.
 
+#### Contributions beyond the project team
+
+- [NextStep DG Review](https://github.com/nus-cs2113-AY2425S2/tp/pull/45)
