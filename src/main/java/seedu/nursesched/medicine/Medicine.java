@@ -263,6 +263,19 @@ public class Medicine {
 
         logr.log(Level.INFO, "Attempting to edit medicine: {0}", medicineName);
 
+        if (updatedName.trim().isEmpty()) {
+            logr.log(Level.WARNING, "Updated name is missing or empty");
+            throw new NurseSchedException(ExceptionMessage.MISSING_MEDICINE_NAME);
+        }
+
+        for (Medicine med : medicineList) {
+            if (med.getMedicineName().equalsIgnoreCase(updatedName) &&
+                    !med.getMedicineName().equalsIgnoreCase(medicineName)) {
+                logr.log(Level.WARNING, "Duplicate medicine name on edit: {0}", updatedName);
+                throw new NurseSchedException(ExceptionMessage.DUPLICATE_MEDICINE_NAME);
+            }
+        }
+
         for (Medicine medicine : medicineList) {
             if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
                 medicine.setMedicineName(updatedName);
@@ -274,9 +287,11 @@ public class Medicine {
                 return;
             }
         }
+
         logr.log(Level.WARNING, "Medicine not found: {0}", medicineName);
         System.out.println("Medicine " + medicineName + " not found.");
     }
+
 
     /**
      * Returns a formatted string representing the medicine (quantity and name).

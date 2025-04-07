@@ -536,6 +536,7 @@ Edits the information of a specific medicine from the current supply.
 Format: `medicine edit mn/MEDICINE_NAME un/UPDATED_NAME uq/UPDATED_QUANTITY`
 
 * Edits `MEDICINE_NAME` to `UPDATED_NAME` and its respective `QUANTITY` to `UPDATED_QUANTITY`
+* `UPDATED_NAME` cannot already exist in `medicine list`.
 
 Example:
 

@@ -63,6 +63,9 @@ public enum ExceptionMessage {
     MISSING_MEDICINE_QUANTITY("No medicine quantity input"),
     MISSING_MEDICINE_NAME("No Medicine name input"),
     MEDICINE_NONEXISTENT("Medicine does not exist!"),
+    DUPLICATE_MEDICINE_NAME("Updated medicine name already exists!"),
+    MEDICINE_QUANTITY_TOO_LARGE("Quantity is too large! Max allowed is 2,147,483,647."),
+    INVALID_MEDICINE_QUANTITY_FORMAT("Invalid quantity format! Enter a numeric value."),
 
     //APPT errors
     // ====================Appointment Specific Exceptions====================

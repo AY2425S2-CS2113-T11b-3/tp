@@ -24,6 +24,7 @@ public class MedicineStorage {
     public static ArrayList<Medicine> readFile() {
         File medicineFile = new File(FILE_PATH);
         ArrayList<Medicine> medicineList = new ArrayList<>();
+        ArrayList<Medicine> validLines = new ArrayList<>(); // To store valid lines
 
         if (!medicineFile.exists()) {
             medicineFile.getParentFile().mkdirs();
@@ -36,11 +37,15 @@ public class MedicineStorage {
                 Medicine medicine = parseMedicine(currentLine);
                 if (medicine != null) {
                     medicineList.add(medicine);
+                    validLines.add(medicine);  // Add valid medicine to the list of strings
                 }
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found at: " + FILE_PATH);
         }
+
+        // After reading all lines, overwrite the file with valid entries
+        overwriteSaveFile(validLines);
         return medicineList;
     }
 
@@ -49,43 +54,38 @@ public class MedicineStorage {
      * The expected format is: "medicineName | quantity"
      *
      * @param currentLine The line representing a medicine.
-     * @return A Medicine object with the parsed values.
-     * @throws IllegalArgumentException If the format is invalid.
+     * @return A Medicine object with the parsed values or null if invalid.
      */
     private static Medicine parseMedicine(String currentLine) {
         try {
             String[] parts = currentLine.split(" \\| ");
 
             if (parts.length != 2) {
-                System.out.println("Warning: Invalid medicine format -> " + currentLine);
-                System.out.println("Input saved medicine as [MEDICINE_NAME] | [QUANTITY]");
-                return null;
+                System.out.println("Warning: Invalid medicine format:" + currentLine);
+                return null; // Return null for invalid entry
             }
 
             String medicineName = parts[0].trim();
             if (medicineName.isEmpty()) {
-                System.out.println("Warning: Medicine name cannot be empty -> " + currentLine);
-                System.out.println("Input saved medicine as [MEDICINE_NAME] | [QUANTITY]");
-                return null;
+                System.out.println("Warning: Medicine name cannot be empty: " + currentLine);
+                return null; // Return null for invalid entry
             }
 
             int quantity;
             try {
                 quantity = Integer.parseInt(parts[1].trim());
             } catch (NumberFormatException e) {
-                System.out.println("Warning: Invalid quantity format -> " + currentLine);
-                System.out.println("Input saved medicine as [MEDICINE_NAME] | [QUANTITY]");
-                return null;
+                System.out.println("Warning: Invalid quantity format : " + currentLine);
+                return null; // Return null for invalid quantity format
             }
 
-            return new Medicine(quantity, medicineName);
+            return new Medicine(quantity, medicineName); // Return the valid medicine object
 
         } catch (Exception e) {
-            System.out.println("Unexpected error while parsing medicine -> " + currentLine);
-            return null;
+            System.out.println("Unexpected error while parsing medicine: " + currentLine);
+            return null; // Return null for unexpected errors
         }
     }
-
 
     /**
      * Formats a Medicine object into a string representation suitable for saving.
@@ -99,14 +99,14 @@ public class MedicineStorage {
     }
 
     /**
-     * Overwrites the storage file with the list of medicines.
+     * Overwrites the storage file with the list of valid medicines.
      *
-     * @param medicineList The list of medicines to save to the file.
+     * @param validLines The list of valid lines to save to the file.
      */
-    public static void overwriteSaveFile(ArrayList<Medicine> medicineList) {
+    public static void overwriteSaveFile(ArrayList<Medicine> validLines) {
         try (FileWriter writer = new FileWriter(FILE_PATH)) {
-            for (Medicine medicine : medicineList) {
-                writer.write(formatString(medicine) + "\n");
+            for (Medicine line : validLines) {
+                writer.write(formatString(line) + "\n");
             }
         } catch (IOException e) {
             System.out.println("Error saving medicines: " + e.getMessage());
