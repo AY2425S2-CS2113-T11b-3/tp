@@ -78,6 +78,27 @@ public class Shift {
         logr.info("Shift created: " + this);
     }
 
+    private static boolean hasOverlap(LocalTime newStart, LocalTime newEnd, LocalDate date, int ignoreIndex) {
+        for (int i = 0; i < shiftList.size(); i++) {
+            if (i == ignoreIndex) {
+                continue;
+            }
+
+            Shift existing = shiftList.get(i);
+            if (!existing.getDate().equals(date)) {
+                continue;
+            }
+
+            // Check Overlap
+            boolean overlaps = !(newEnd.compareTo(existing.getStartTime()) <= 0 ||
+                    newStart.compareTo(existing.getEndTime()) >= 0);
+            if (overlaps) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Adds a new shift to the shift list.
      *
@@ -88,17 +109,23 @@ public class Shift {
      */
     public static void addShift(LocalTime startTime, LocalTime endTime, LocalDate date,
                                 String shiftTask) throws NurseSchedException {
-        assert startTime != null && endTime != null && date != null && shiftTask != null : "Invalid shift details";
-
         if (date.isBefore(LocalDate.now())) {
             logr.warning("Attempted to add shift with past date: " + date);
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_DATE);
         }
 
+        if (!startTime.isBefore(endTime)) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_START_TIME);
+        }
+
+        if (hasOverlap(startTime, endTime, date, -1)) {
+            logr.warning("Attempted to add overlapping shift: " + startTime + " to " + endTime + " on " + date);
+            throw new NurseSchedException(ExceptionMessage.SHIFT_TIMING_OVERLAP);
+        }
+
         Shift shift = new Shift(startTime, endTime, date, shiftTask);
         shiftList.add(shift);
         ShiftStorage.overwriteSaveFile(shiftList);
-        logr.info("Shift added: " + shift);
         System.out.println("Shift added");
     }
 
@@ -194,22 +221,31 @@ public class Shift {
      */
     public static void editShift(int index, LocalTime newStartTime, LocalTime newEndTime,
                                  LocalDate newDate, String newTask) throws NurseSchedException {
-        assert index >= 0 && index < shiftList.size() : "Invalid shift index!";
-        assert newStartTime != null
-                && newEndTime != null
-                && newDate != null
-                && newTask != null : "New shift details cannot be null!";
-        assert newStartTime.isBefore(newEndTime) : "Start time must be before end time";
-
         if (index < 0 || index >= shiftList.size()) {
             logr.warning("Attempted to edit shift with invalid index: " + index);
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
         }
 
+        if (newDate.isBefore(LocalDate.now())) {
+            logr.warning("Attempted to edit shift to a past date: " + newDate);
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_DATE);
+        }
+
+        if (!newStartTime.isBefore(newEndTime)) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_START_TIME);
+        }
+
+        if (hasOverlap(newStartTime, newEndTime, newDate, index)) {
+            logr.warning("Attempted to edit shift to overlapping time: " + newStartTime + " to " + newEndTime);
+            throw new NurseSchedException(ExceptionMessage.SHIFT_TIMING_OVERLAP);
+        }
+
         Shift shift = shiftList.get(index);
         Shift updatedShift = new Shift(newStartTime, newEndTime, newDate, newTask);
         updatedShift.setDone(shift.getStatus());
+        updatedShift.setOvertimeHours(shift.getOvertimeHours());
         shiftList.set(index, updatedShift);
+
         ShiftStorage.overwriteSaveFile(shiftList);
         System.out.println("Shift updated:");
         System.out.println(updatedShift);

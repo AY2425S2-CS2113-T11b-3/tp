@@ -1,8 +1,5 @@
 package seedu.nursesched.shift;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -16,6 +13,10 @@ import org.junit.jupiter.api.Test;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.parser.ShiftParser;
 import seedu.nursesched.storage.ShiftStorage;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ShiftTest {
     static ArrayList<Shift> initialShiftList;
@@ -197,8 +198,8 @@ class ShiftTest {
         LocalDate date2 = LocalDate.now().plusDays(2);
 
         Shift.addShift(LocalTime.of(10, 0), LocalTime.of(12, 0), date2, "Late shift");
-        Shift.addShift(LocalTime.of(8, 0), LocalTime.of(10, 0), date1, "Early shift");
-        Shift.addShift(LocalTime.of(9, 0), LocalTime.of(11, 0), date2, "Mid shift");
+        Shift.addShift(LocalTime.of(8, 0), LocalTime.of(9, 0), date1, "Early shift");
+        Shift.addShift(LocalTime.of(9, 0), LocalTime.of(10, 0), date2, "Mid shift");
 
         Shift.sortShiftsChronologically();
 
@@ -257,5 +258,130 @@ class ShiftTest {
         // Try to unmark an already unmarked shift
         Shift.unmarkShift(0);  // Expected: warning message, no change
         assertEquals(false, Shift.getShiftList().get(0).getStatus());
+    }
+
+    @Test
+    void editShift_setToPastDate_shouldNotUpdate() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        Shift.addShift(
+                LocalTime.of(9, 0),
+                LocalTime.of(11, 0),
+                LocalDate.now().plusDays(1),
+                "Future shift"
+        );
+
+        LocalTime newStart = LocalTime.of(8, 0);
+        LocalTime newEnd = LocalTime.of(10, 0);
+        LocalDate newDate = LocalDate.of(2000, 1, 1); // Invalid past date
+        String newTask = "Past edit attempt";
+
+        assertThrows(NurseSchedException.class, () ->
+                Shift.editShift(0, newStart, newEnd, newDate, newTask)
+        );
+
+        // Verify the original data is unchanged
+        Shift edited = Shift.getShiftList().get(0);
+        assertEquals(LocalDate.now().plusDays(1), edited.getDate());
+        assertEquals("Future shift", edited.getShiftTask());
+    }
+
+    @Test
+    void editShift_preservesOvertimeHours() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        Shift.addShift(
+                LocalTime.of(9, 0),
+                LocalTime.of(11, 0),
+                LocalDate.now().plusDays(1),
+                "Original task"
+        );
+
+        Shift.logOvertime(0, 2.5); // Add overtime
+
+        // Edit task with overtime hours
+        Shift.editShift(
+                0,
+                LocalTime.of(10, 0),
+                LocalTime.of(12, 0),
+                LocalDate.now().plusDays(1),
+                "Updated task"
+        );
+
+        Shift shift = Shift.getShiftList().get(0);
+        assertEquals("Updated task", shift.getShiftTask());
+        assertEquals(2.5, shift.getOvertimeHours()); // Still there
+    }
+
+    @Test
+    void addShift_overlappingWithExisting_shouldThrowException() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        // Add first shift
+        Shift.addShift(
+                LocalTime.of(8, 0),
+                LocalTime.of(10, 0),
+                LocalDate.now().plusDays(1),
+                "Morning shift"
+        );
+
+        // Overlapping shift
+        assertThrows(NurseSchedException.class, () ->
+                Shift.addShift(
+                        LocalTime.of(9, 0),
+                        LocalTime.of(11, 0),
+                        LocalDate.now().plusDays(1),
+                        "Overlapping shift"
+                )
+        );
+
+        // Only one shift should exist
+        assertEquals(1, Shift.getShiftList().size());
+        assertEquals("Morning shift", Shift.getShiftList().get(0).getShiftTask());
+    }
+
+    @Test
+    void addShift_adjacentToExisting_shouldSucceed() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        LocalDate date = LocalDate.now().plusDays(1);
+        Shift.addShift(LocalTime.of(8, 0), LocalTime.of(10, 0), date, "Morning shift");
+        Shift.addShift(LocalTime.of(10, 0), LocalTime.of(12, 0), date, "Midday shift");
+
+        assertEquals(2, Shift.getShiftList().size());
+    }
+
+    @Test
+    void addShift_startAfterEnd_shouldThrowException() {
+        Shift.getShiftList().clear();
+
+        LocalDate date = LocalDate.now().plusDays(1);
+        LocalTime start = LocalTime.of(12, 0);
+        LocalTime end = LocalTime.of(10, 0); // Invalid: start > end
+
+        assertThrows(NurseSchedException.class, () ->
+                Shift.addShift(start, end, date, "Invalid time range")
+        );
+    }
+
+    @Test
+    void editShift_setStartAfterEnd_shouldThrowException() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        // Add a valid shift first
+        Shift.addShift(
+                LocalTime.of(9, 0),
+                LocalTime.of(11, 0),
+                LocalDate.now().plusDays(1),
+                "Initial shift"
+        );
+
+        // Now try to edit it to an invalid time
+        LocalTime newStart = LocalTime.of(12, 0);
+        LocalTime newEnd = LocalTime.of(10, 0); // Invalid range
+
+        assertThrows(NurseSchedException.class, () ->
+                Shift.editShift(0, newStart, newEnd, LocalDate.now().plusDays(1), "Updated task")
+        );
     }
 }
