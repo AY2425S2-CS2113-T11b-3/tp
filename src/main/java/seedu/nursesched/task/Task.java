@@ -49,6 +49,7 @@ public class Task {
             logr.log(Level.SEVERE, "File logger not working", e);
         }
         taskList = TaskStorage.readFile();
+
     }
 
     /**
@@ -177,6 +178,10 @@ public class Task {
      * Lists out all tasks in the task list.
      */
     public static void listTasks() {
+        if (taskList.isEmpty()) {
+            System.out.println("You have 0 tasks.");
+            return;
+        }
         int listSize = taskList.size();
         for (int index = 0; index < listSize; index++) {
             System.out.println((index + 1) + ". " + taskList.get(index).toString());

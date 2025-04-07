@@ -134,6 +134,9 @@ public class TaskParser extends Parser {
                         logr.warning("Invalid attempt to edit current " +
                                 "task description with an empty description!");
                         throw new NurseSchedException(ExceptionMessage.EMPTY_TASK_DESCRIPTION);
+                    } else if (description.toString().contains("|")) {
+                        logr.warning("Attempt to edit task with a description containing \"|\"!");
+                        throw new NurseSchedException(ExceptionMessage.INVALID_DESCRIPTION);
                     }
                 } else if (parameter.contains("d/")) {
                     byDateString = parameter.substring(2);
@@ -230,6 +233,9 @@ public class TaskParser extends Parser {
             if (description.isEmpty()) {
                 logr.warning("Attempt to add empty task description!");
                 throw new NurseSchedException(ExceptionMessage.EMPTY_TASK_DESCRIPTION);
+            } else if (description.toString().contains("|")) {
+                logr.warning("Attempt to add task with a description containing \"|\"!");
+                throw new NurseSchedException(ExceptionMessage.INVALID_DESCRIPTION);
             }
 
             //extracts task's due date
@@ -285,7 +291,16 @@ public class TaskParser extends Parser {
             logr.warning("Missing fields");
             throw new NurseSchedException(ExceptionMessage.INVALID_TASK_FIND_FIELDS);
         }
-        String keyword = line.substring(line.indexOf("td/") + 3);
+        String keyword = null;
+        try {
+            keyword = line.substring(line.indexOf("td/") + 3);
+            if (keyword.isEmpty()) {
+                logr.warning("Attempt to find task with empty keyword!");
+                throw new NurseSchedException(ExceptionMessage.MISSING_TASK_KEYWORD);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            throw new NurseSchedException(ExceptionMessage.MISSING_TASK_KEYWORD);
+        }
         return new TaskParser(command, keyword, null, null, false, 0);
     }
 
