@@ -355,39 +355,56 @@ This is so that they can retrieve information quickly, especially with how hecti
 
 ## User Stories
 
-| Version | As a ... | I want to ...                                                       | So that I can ...                                                      |
-|---------|----------|---------------------------------------------------------------------|------------------------------------------------------------------------|
-| v2.0    | Nurse    | Search for a patient's profile                                      | I can locate the patient's details easily                              |
-| v2.0    | Nurse    | Edit patient's information                                          | I can fix any incorrect information                                    |
-| v2.0    | Nurse    | Add more fields for patient information like patient ID, gender etc | I can keep track of additional information relating to the patient     |
-| v2.0    | Nurse    | Input medical test results                                          | I am aware of the conditions of my patients                            |
-| v2.0    | Nurse    | Delete medical test results                                         | I am able to fix any errors in the test results                        |
-| v2.0    | Nurse    | Check patient's medical tests                                       | I can quickly retrieve test results for my patients                    |
-| v2.0    | Nurse    | Save patients information                                           | I can keep track and load patient information after exiting NurseSched |
-| v2.0    | Nurse    | Add tasks to my todo list                                           | keep track of my things to do                                          |
-| v2.0    | Nurse    | List out my tasks                                                   | I can view all the things to be completed                              |
-| v2.0    | Nurse    | Check off things from my to-do list                                 | I know which tasks have been completed                                 |
-| v2.0    | Nurse    | Delete my tasks                                                     | I can remove irrelevant tasks                                          |
-| v2.0    | Nurse    | Edit my to-do list                                                  | I can fill it with updated information that I need to keep track of    |
-| v2.0    | Nurse    | Search for a task                                                   | I can locate a specific task with a keyword                            |
-| v2.0    | Nurse    | Save my task list                                                   | I can load and save my existing task list                              |
-| v2.0    | Nurse    | add in an amount of medicine to the list                            | update my medicine supply                                              |
-| v2.0    | Nurse    | remove an amount of medicine from the list                          | update my medicine supply                                              |
-| v2.0    | Nurse    | search for a specific medicine from the list                        | see how much of the medicine I have left                               |
-| v2.0    | Nurse    | edit the information of the medicine                                | ensure that my medicine supply is up-to-date                           |
-| v2.0    | Nurse    | delete a specific medicine                                          | entirely remove a medicine from the list                               |
-| v2.0    | Nurse    | view the total supply of medicine left                              | know what needs to be restocked                                        |
-| v2.0    | Nurse    | save the medicine supply list                                       | keep track of the supply                                               |
-| v2.0    | Nurse    | search for an appointment                                           | filter the list of appointments                                        |
-| v2.0    | Nurse    | edit appointment dates and time                                     | update my schedule                                                     |
-| v2.0    | Nurse    | arrange appointments in chronological order                         | view my upcoming appointments first                                    | 
-| v2.0    | Nurse    | save appointment information                                        | retrieve previously stored appointment information                     | 
-| v2.0    | Nurse    | rank importance of appointments                                     | arrange my appointments based off priority                             |
-| v2.0    | Nurse    | list medicine that is below a certain quantity                      | know which medicine to restock                                         |
-| v2.0    | Nurse    | Save shift information                                              | Keep track of shift history even after exiting NurseSched              |
-| v2.0    | Nurse    | Mark or unmark a shift                                              | Indicate if a shift has been completed or not                          |
-| v2.0    | Nurse    | Log overtime hours for a shift                                      | Keep a record of extra hours worked for reporting and planning         |
-| v2.0    | Nurse    | Sort shifts chronologically                                         | View the most recent and upcoming shifts more easily                   |
+| Version | As a ... | I want to ...                                                       | So that I can ...                                                            |
+|---------|----------|---------------------------------------------------------------------|------------------------------------------------------------------------------|
+| v1.0    | Nurse    | Add in basic information like name, age etc                         | keep track of the patients' details                                          |
+| v1.0    | Nurse    | Delete patient's information                                        | remove patients when they have been discharged                               |
+| v1.0    | Nurse    | Add in important information for each patient                       | check important information to take note of before the appointment           |
+| v1.0    | Nurse    | List patient information                                            | view the entire list                                                         |
+| v1.0    | Nurse    | Add in patients' appointment dates & times                          | add in new appointments                                                      |
+| v1.0    | Nurse    | Remove appointments                                                 | keep track of cancelled appointments                                         |
+| v1.0    | Nurse    | Mark appointment dates & times as done                              | update my schedule                                                           |
+| v1.0    | Nurse    | List appointments                                                   | view the entire appointment list                                             |
+| v1.0    | Nurse    | View the total number of appointments left for my patients          | plan what is to be done for each appointment                                 |
+| v1.0    | Nurse    | List my own schedule                                                | check my schedule                                                            |
+| v1.0    | Nurse    | Add my shift timings & dates                                        | keep track of my shifts                                                      |
+| v1.0    | Nurse    | Delete shift timings & dates                                        | update my working schedule                                                   |
+| v1.0    | Nurse    | Search for a specific shift                                         | check for shifts at specific times                                           |
+| v1.0    | Nurse    | View total shift hours per month                                    | manage working hours                                                         |
+| v1.0    | Nurse    | Edit my shift timings & dates                                       | update my schedule                                                           |
+| v1.0    | Nurse    | Check-off medicine which I have administered                        | keep track of which medicine I have administered to prevent re-administering |
+| v1.0    | Nurse    | Add in medicine which I have not administered                       | keep track of what to administer later on                                    |
+| v2.0    | Nurse    | Search for a patient's profile                                      | I can locate the patient's details easily                                    |
+| v2.0    | Nurse    | Edit patient's information                                          | I can fix any incorrect information                                          |
+| v2.0    | Nurse    | Add more fields for patient information like patient ID, gender etc | I can keep track of additional information relating to the patient           |
+| v2.0    | Nurse    | Input medical test results                                          | I am aware of the conditions of my patients                                  |
+| v2.0    | Nurse    | Delete medical test results                                         | I am able to fix any errors in the test results                              |
+| v2.0    | Nurse    | Check patient's medical tests                                       | I can quickly retrieve test results for my patients                          |
+| v2.0    | Nurse    | Save patients information                                           | I can keep track and load patient information after exiting NurseSched       |
+| v2.0    | Nurse    | Add tasks to my todo list                                           | keep track of my things to do                                                |
+| v2.0    | Nurse    | List out my tasks                                                   | I can view all the things to be completed                                    |
+| v2.0    | Nurse    | Check off things from my to-do list                                 | I know which tasks have been completed                                       |
+| v2.0    | Nurse    | Delete my tasks                                                     | I can remove irrelevant tasks                                                |
+| v2.0    | Nurse    | Edit my to-do list                                                  | I can fill it with updated information that I need to keep track of          |
+| v2.0    | Nurse    | Search for a task                                                   | I can locate a specific task with a keyword                                  |
+| v2.0    | Nurse    | Save my task list                                                   | I can load and save my existing task list                                    |
+| v2.0    | Nurse    | add in an amount of medicine to the list                            | update my medicine supply                                                    |
+| v2.0    | Nurse    | remove an amount of medicine from the list                          | update my medicine supply                                                    |
+| v2.0    | Nurse    | search for a specific medicine from the list                        | see how much of the medicine I have left                                     |
+| v2.0    | Nurse    | edit the information of the medicine                                | ensure that my medicine supply is up-to-date                                 |
+| v2.0    | Nurse    | delete a specific medicine                                          | entirely remove a medicine from the list                                     |
+| v2.0    | Nurse    | view the total supply of medicine left                              | know what needs to be restocked                                              |
+| v2.0    | Nurse    | save the medicine supply list                                       | keep track of the supply                                                     |
+| v2.0    | Nurse    | search for an appointment                                           | filter the list of appointments                                              |
+| v2.0    | Nurse    | edit appointment dates and time                                     | update my schedule                                                           |
+| v2.0    | Nurse    | arrange appointments in chronological order                         | view my upcoming appointments first                                          | 
+| v2.0    | Nurse    | save appointment information                                        | retrieve previously stored appointment information                           | 
+| v2.0    | Nurse    | rank importance of appointments                                     | arrange my appointments based off priority                                   |
+| v2.0    | Nurse    | list medicine that is below a certain quantity                      | know which medicine to restock                                               |
+| v2.0    | Nurse    | Save shift information                                              | Keep track of shift history even after exiting NurseSched                    |
+| v2.0    | Nurse    | Mark or unmark a shift                                              | Indicate if a shift has been completed or not                                |
+| v2.0    | Nurse    | Log overtime hours for a shift                                      | Keep a record of extra hours worked for reporting and planning               |
+| v2.0    | Nurse    | Sort shifts chronologically                                         | View the most recent and upcoming shifts more easily                         |
 
 ## Non-Functional Requirements
 
