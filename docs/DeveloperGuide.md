@@ -114,6 +114,8 @@ The `Task` component,
 
 **API**: `Shift.java`
 
+![shiftComponent.png](assets/shiftImages/shiftComponent.png)
+
 The `Shift` component,
 
 - Manages nurse work shifts, including start time, end time, date, assigned task, completion status, and overtime hours.
