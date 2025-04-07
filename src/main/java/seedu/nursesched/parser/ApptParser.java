@@ -218,7 +218,7 @@ public class ApptParser extends Parser {
                 logr.info("Sorting by: " + sortBy);
             } else {
                 // Default to sorting by time if no parameter specified
-                sortBy = "time";
+                throw new NurseSchedException(ExceptionMessage.INVALID_SORT_FORMAT);
             }
             return new ApptParser(command, name, startTime, endTime, date, notes,
                     apptIndex, searchKeyword, importance, sortBy, ID, searchBy);

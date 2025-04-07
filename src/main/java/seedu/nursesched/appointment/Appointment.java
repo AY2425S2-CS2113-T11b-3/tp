@@ -273,7 +273,15 @@ public class Appointment {
 
             checkApptDateTime(date, startTime, endTime);
 
+            // Temporarily remove the current appointment from the list
+            Appointment removedAppt = apptList.remove(index);
+
+            // Check for clashes with the temporary state of the list (without the current appointment)
             Appointment possibleClash = findApptClashes(startTime, endTime, date);
+
+            // Put the removed appointment back
+            apptList.add(index, removedAppt);
+
             if (possibleClash != null && possibleClash != prevAppt) {
                 System.out.println("There is another patient, " + possibleClash.name +
                         " with an appointment clashing with the given time and date! " +
