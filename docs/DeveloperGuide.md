@@ -13,6 +13,7 @@
   * [Medicine delete feature](#medicine-delete-feature)
   * [Task edit feature](#task-edit-feature)
   * [Appointment sort by importance feature](#appointment-sort-by-importance-feature)
+  * [Shift sort by time feature](#shift-sort-by-date-and-time-feature)
 * [Appendix: Requirements](#appendix-requirements)
   * [Product scope](#product-scope)
   * [User stories](#user-stories)
@@ -201,7 +202,7 @@ The following sequence diagram shows how deleting patient information goes:
 
 Step 4. The system:
 
-- Validates the ID is not null. 
+- Validates the ID is not null.
 - Searches for a patient with ID "1234". 
 - Removes the patient if found and prints:
   - ```Patient information removed for ID: 1234```
@@ -385,6 +386,65 @@ Aspect: How appointment sorting by importance executes:
     - Cons:
       - Performance impact for large lists
       - May be confusing for the user if appointments keep changing position
+
+### Shift sort by date and time feature
+
+#### Implementation
+
+The `sortShiftsChronologically` method is responsible for sorting all shifts in the shift list. The implementation
+follows these steps:
+
+1. Validation and Logging: The method first checks if the `shiftList` is empty. If it is, a warning message is logged,
+   and a `NurseSchedException` is thrown to indicate that there are no shifts to sort.
+2. Sorting Mechanism: The list is sorted using a comparator that prioritizes:
+    1. Date (earliest to latest)
+    2. Start time (earliest to latest)
+3. Saving Updated List: After sorting, the method overwrites the save file to ensure the changes persist.
+4. Logging Completion: An informational log entry is created to confirm that the sorting was successful.
+
+Given below is an example usage scenario and how the sorting mechanism behaves at each step.
+
+Step 1. The user launches the application for the first time. The `shiftList` will be initialized
+with stored shift data (if exists).
+
+Step 2. The user adds multiple shifts using the `addShift` operation. If successful,
+the system updates the saved file.
+
+![Add shift Sequence Diagram](./assets/shiftImages/addShiftSequenceDiagram.png)
+
+Step 3. The user decides to sort the shifts chronologically by date and time.
+The user initiates sorting by calling the `sortShiftsChronologically` function.
+
+![Sort Shift Sequence Diagram](./assets/shiftImages/sortShiftSequenceDiagram.png)
+
+Step 4. The system checks if the `shiftList` is empty. If it is, a warning is logged, and an exception is thrown.
+
+Step 5. If shifts exist, the system sorts them based on:
+- Date (from earliest to latest)
+- Start time (from earliest to latest for the same date)
+
+Step 6. The system overwrites the save file to reflect the sorted list.
+
+Step 7. The system outputs a confirmation message indicating that shifts have been successfully sorted.
+
+#### Design considerations
+
+Aspect: How shift sorting executes:
+
+- Alternative 1 (current choice): Shift list is only sorted when the method is called manually by the user.
+    - Pros:
+        - Simple to implement
+        - Offers better performance for large shift records
+    - Cons:
+        - Requires users to manually sort after edits or additions
+        - May result in a disorganized view if not sorted regularly
+- Alternative 2: Automatically resort list after each shift is added, deleted, or edited.
+    - Pros:
+        - Ensures the list is always in chronological order
+        - User does not have to take additional action to maintain order
+    - Cons:
+        - Slightly more processing time for frequent edits
+        - May confuse users when list updates unexpectedly
 
 # Appendix: Requirements
 
