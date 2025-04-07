@@ -121,7 +121,9 @@ public enum ExceptionMessage {
     ERROR_READING_TASK_FILE("Error reading task file! " +
             "Please ensure the task.txt file only contains tasks in the following format:" +
             "\n[ ] (or [X] if the task is completed) | <description> | <due date in YYYY-MM-DD> | <due time in HH:mm>"),
-    MISSING_TASK_KEYWORD("Task keyword cannot be empty!"),;
+    MISSING_TASK_KEYWORD("Task keyword cannot be empty!"),
+    INVALID_LIST_TASK("Invalid command to list tasks! Input as: task list"),
+    NO_EDITS_MADE("Empty inputs found, no edits were made.");
     // ============================================================
 
     private final String message;

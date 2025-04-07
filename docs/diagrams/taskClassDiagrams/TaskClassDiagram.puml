@@ -39,6 +39,7 @@ package "Command Process" {
     + {static} getIndexParser(line, command): TaskParser
     + {static} getAddTaskParser(line, command): TaskParser
     + {static} getFindTaskParser(line, command): TaskParser
+    + {static} getListTaskParser(line, command) : TaskParser
   }
 }
 

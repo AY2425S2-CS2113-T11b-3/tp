@@ -91,7 +91,7 @@ public class TaskParser extends Parser {
         case "mark", "unmark", "del":
             return getIndexParser(line, command);
         case "list":
-            return new TaskParser(command, "", null, null, isDone, taskIndex);
+            return getListTaskParser(line, command);
         case "edit":
             return getEditTaskParser(line, command);
         case "find":
@@ -128,6 +128,9 @@ public class TaskParser extends Parser {
             for (String parameter : parameters) {
                 if (parameter.contains("id/")) {
                     taskIndex = Integer.parseInt(parameter.substring(3));
+                } if (!line.contains("td/") && line.contains("d/") && !line.contains("t/")) {
+                    logr.info("Empty edit parameters, no edits made.");
+                    throw new NurseSchedException(ExceptionMessage.NO_EDITS_MADE);
                 } else if (parameter.contains("td/")) {
                     description = new StringBuilder(parameter.substring(3));
                     if (description.isEmpty()) {
@@ -302,6 +305,13 @@ public class TaskParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.MISSING_TASK_KEYWORD);
         }
         return new TaskParser(command, keyword, null, null, false, 0);
+    }
+
+    public static TaskParser getListTaskParser(String line, String command) throws NurseSchedException {
+        if (!line.equals("list")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_LIST_TASK);
+        }
+        return new TaskParser(command, null, null, null, false, 0);
     }
 
     public String getCommand() {
