@@ -73,6 +73,9 @@ supply.
 > * Order of markers must follow the command format exactly.<br> e.g
     `medicine edit mn/MEDICINE_NAME un/UPDATED_NAME uq/UPDATED_QUANTITY` cannot be typed in as `medicine edit
     un/UPDATED_NAME mn/MEDICINE_NAME uq/UPDATED_QUANTITY`
+> * Items in square brackets are optional.<br> e.g
+    `task edit id/TASK_INDEX [td/NEW_DESCRIPTION] [d/NEW_DUE_DATE] [t/NEW_DUE_TIME]`, `[td/NEW_DESCRIPTION]`,
+    `[d/NEW_DUE_DATE]` and `[t/NEW_DUE_TIME]` are optional fields.
 > * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple
     lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 
@@ -297,7 +300,7 @@ Example:
 
 `pf add id/1001 p/Jean a/25 g/F c/66887799 n/requires constant supervision`
 
-This adds a profile for a patient with ID 1001 named Jean, 25 years old and is female. Jean also has a family contact 
+This adds a profile for a patient with ID 1001 named Jean, 25 years old and is female. Jean also has a family contact
 number and an additional note which mentions that she needs constant supervision.
 
 ### Deleting a patient profile : `pf del`
@@ -456,7 +459,8 @@ Edits an existing appointment in the appointment list.
 Format:
 `appt edit aid/APPT_INDEX [id/NEW_PATIENT_ID] [s/NEW_START_TIME] [e/NEW_END_TIME] [d/NEW_DATE] [n/NEW_NOTES] [im/NEW_IMPORTANCE]`
 
-* Edits the appointment at the specified `APPT_INDEX` with. The `APPT_INDEX` refers to the index number shown in the displayed
+* Edits the appointment at the specified `APPT_INDEX` with. The `APPT_INDEX` refers to the index number shown in the
+  displayed
   appointment list. The index must be a positive integer 1, 2, 3, ...
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
@@ -500,7 +504,6 @@ Format: `appt find id/ PATIENT_ID`
 Example of usage:
 
 `appt find id/1010`
-
 
 ### Sorting appointments: `appt sort`
 
@@ -550,12 +553,12 @@ Example:
 
 ### Listing all medicine supply: `medicine list`
 
-Lists name of medicines and their respective quantity in the medicine supply.
+Lists names of medicines and their respective quantity in the medicine supply.
 
 Format: `medicine list`
 
 * Note that medicines with quantity 0 will appear in the `medicine list` as they are still relevant medicines that the
-  users need to restock.
+  user needs to restock.
 
 ### Finding a medicine name: `medicine find`
 
