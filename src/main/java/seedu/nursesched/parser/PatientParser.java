@@ -120,6 +120,7 @@ public class PatientParser extends Parser {
             }
 
             validateAllFields(line);
+            validateIdentifierOrder(line);
 
             // Extract and validate ID first
             id = extractValue(line, "id/", "p/");
@@ -160,7 +161,7 @@ public class PatientParser extends Parser {
         }
         case "find" -> {
             checkIdExists(line);
-            
+
             id = extractValue(line, "id/", "");
 
             validateID(id);
@@ -250,6 +251,10 @@ public class PatientParser extends Parser {
 
                 // Extract patient ID
                 id = extractValue(line, "id/", "t/");
+
+                if (id.contains("r/")) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_IDENTIFIER_ORDER);
+                }
 
                 validateID(id);
 
@@ -384,6 +389,21 @@ public class PatientParser extends Parser {
             }
         }
         return null;
+    }
+
+    private static void validateIdentifierOrder(String line) throws NurseSchedException {
+        String[] expectedOrder = {"id/", "p/", "a/", "g/", "c/", "n/"};
+        int lastIndex = -1;
+
+        for (String identifier : expectedOrder) {
+            int currentIndex = line.indexOf(identifier);
+
+            if (currentIndex < lastIndex) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_IDENTIFIER_ORDER);
+            }
+
+            lastIndex = currentIndex;
+        }
     }
 
     // Convert command identifiers to lower case
