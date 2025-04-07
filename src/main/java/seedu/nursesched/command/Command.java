@@ -261,7 +261,13 @@ public class Command {
                         );
                         break;
                     case "list":
-                        Medicine.listMedicine();
+                        String listCommand = line.trim().toLowerCase();
+                        if (listCommand.equals("medicine list")) {
+                            Medicine.listMedicine();
+                        } else {
+                            System.out.println("Unknown command!");
+                            System.out.println("Do you mean medicine list?");
+                        }
                         break;
                     case "find":
                         Medicine.findMedicine(
