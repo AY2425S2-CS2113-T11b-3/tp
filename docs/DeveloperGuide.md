@@ -49,27 +49,53 @@ Note: Importing a Gradle project is slightly different from importing a normal J
    2. Run the tests to ensure they all pass.
 
 ## Design
+The application architecture emphasizes a separation of concerns, dividing responsibilities among distinct components.
+
+The main work of the application is performed by the following components:
 
 ### UI component
 
 API: `Ui.java`
 
 [//]: # (todo: insert Ui diagram & add details)
-[//]: # (to be implemented in v2.1)
+Handles user interface interactions:
+* Captures user input
+* Display information to the user
+
+### Parser component
+Base API: `Parser.java`
+
+Specific Implementations: 
+* `PatientParser.java`
+* `AppointmentParser.java`
+* `MedicineParser.java`
+* `TaskParser.java`
+* `ShiftParser.java`
+
+Each specific parser inherits from the base Parser and is responsible for parsing the 
+arguments of a command string related to its specific domain.
+
+Parsed inputs are forwarded as structured command information to the Command component for execution.
+
+### Command component: 
+API: `Command.java`
+
+The central processing unit of the application.
+
+Receives processed command requests from the respective parsers and calls the respective methods 
+in the 5 different list classes.
 
 ### Storage component
+Represented by multiple components
+* `PatientStorage.java` 
+* `AppointmentStorage.java` 
+* `MedicineStorage.java`
+* `TaskStorage.java` 
+* `ShiftStorage.java`
 
-API: `Storage.java`
-
-[//]: # (todo: add storage class & insert Storage diagram)
-[//]: # (to be implemented in v2.1)
-
-The `Storage` component,
-
-- can save the appointments list and medicine supply data in txt format, and read them back into the corresponding
-  objects.
-- depends on some classes in the `Appointment` and `Medicine` component (because the `Storage` components' job is to
-  save/retrieve objects that belong to `Appointment` and `Medicine`)
+Handles data persistence for each specific data type:
+* Each Storage component is responsible for one specific list type. 
+* Reads and writes data from/to each list's specific save file.
 
 ### Patient component
 
