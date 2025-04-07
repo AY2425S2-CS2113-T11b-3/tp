@@ -10,9 +10,11 @@ public enum ExceptionMessage {
     INVALID_DUE_DATE_TIME("Due date must be after current date and time."),
     NEGATIVE_INDEX("Index must be a positive integer greater than 0!"),
     ZERO_INDEX("Index cannot be zero!"),
-    INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
     INVALID_SORTING_LIST("List is empty. Nothing to sort."),
+
     // ====================Shift Specific Exceptions====================
+    INVALID_SHIFT_COMMAND("Invalid shift command, use either 'add', 'del', 'mark/unmark', 'list', "
+            + "'logot' or 'sort'!"),
     INVALID_SHIFTADD_FORMAT("Invalid shift add format! Input as:" +
             " shift add s/START_TIME e/END_TIME d/DATE st/SHIFT_TASK"),
     SHIFT_TASK_EMPTY("Shift task cannot be empty!"),
