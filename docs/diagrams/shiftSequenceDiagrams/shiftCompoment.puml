@@ -1,0 +1,61 @@
+@startuml
+
+hide circle
+skinparam classAttributeIconSize 0
+
+package "Command Process" {
+  class Command {
+    +executeCommands(boolean, Scanner, Ui)
+  }
+
+  class ShiftParser {
+    -command: String
+    -startTime: LocalTime
+    -endTime: LocalTime
+    -date: LocalDate
+    -shiftTask: String
+    -shiftIndex: int
+    +ShiftParser(command, startTime, endTime, date, shiftTask, shiftIndex)
+    +{static}extractInputs(String): ShiftParser
+    +getCommand(): String
+    +getStartTime(): LocalTime
+    +getEndTime(): LocalTime
+    +getDate(): LocalDate
+    +getShiftTask(): String
+    +getNotes(): String
+    +getIndex(): int
+  }
+}
+
+package "Shift Information" {
+  class Shift {
+    -startTime: LocalTime
+    -endTime: LocalTime
+    -date: LocalDate
+    -shiftTask: String
+    -isDone: boolean
+    -overtimeHours: double
+    # {static} shiftList: ArrayList<Shift>
+    +Shift(startTime, endTime, date, shiftTask)
+    +{static}addShift(Shift)
+    +{static}deleteShiftByIndex(int)
+    +{static}listShifts()
+    +{static}markShift(int)
+    +{static}unmarkShift(int)
+    +{static}editShift(index, startTime, endTime, date, shiftTask)
+    +{static}logOvertime(index, hours)
+    +{static}sortShiftsChronologically()
+    +getStartTime(): LocalTime
+    +getEndTime(): LocalTime
+    +getDate(): LocalDate
+    +getShiftTask(): String
+    +getStatus(): boolean
+    +getOvertimeHours(): double
+    +toString(): String
+  }
+}
+
+Command .right.> ShiftParser : 1. parses input >
+Command ..> Shift : 2. executes >
+
+@enduml
