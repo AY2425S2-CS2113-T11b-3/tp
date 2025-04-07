@@ -1,0 +1,60 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+hide footbox
+
+Actor User
+participant ":Medicine" as Medicine
+participant "medicineList:ArrayList<Medicine>" as medicineList
+participant ":MedicineStorage" as medicineStorage
+participant "medicine:Medicine" as medicine
+participant " existingMedicine:Medicine" as existingMedicine
+
+User -> Medicine: addMedicine(quantity, medicineName)
+activate Medicine
+Medicine -> Medicine : findSpecificMedicine(medicineName)
+activate Medicine
+Medicine --> Medicine : existingMedicine or null
+deactivate Medicine
+
+
+
+'if statement: when existing medicine exists
+alt existingMedicine != null
+Medicine -> existingMedicine : addQuantity(quantity)
+activate existingMedicine
+existingMedicine --> Medicine
+deactivate existingMedicine
+
+create medicineStorage
+Medicine ->medicineStorage : overwriteSaveFile(medicineList)
+activate medicineStorage
+medicineStorage --> Medicine
+deactivate medicineStorage
+Medicine -->User : System.out.println()
+
+'else statement
+else existingMedicine == null
+create medicine
+Medicine -> medicine : Medicine(quantity, medicineName)
+activate medicine
+medicine --> Medicine
+deactivate medicine
+
+Medicine -> medicineList : add(medicine)
+activate medicineList
+medicineList --> Medicine
+deactivate medicineList
+
+Medicine -> medicineStorage : overwriteSaveFile(medicineList)
+
+activate medicineStorage
+medicineStorage --> Medicine
+deactivate medicineStorage
+
+
+Medicine -->User : System.out.println()
+deactivate Medicine
+end
+
+
+@enduml

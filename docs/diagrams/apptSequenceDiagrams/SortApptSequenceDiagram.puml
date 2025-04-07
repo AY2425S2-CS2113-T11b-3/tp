@@ -52,15 +52,12 @@ opt sortBy.equals("importance")
 
     Appt --> Command : List sorted successfully
     deactivate Appt
-    Command --> User
-    deactivate Command
+
     end
 
 
 end
-
-
-
-
+Command --> User
+    deactivate Command
 
 @enduml
