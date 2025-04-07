@@ -21,7 +21,7 @@ import java.util.logging.Level;
  * It contains details such as the task description, completion status, due date and time.
  */
 public class Task {
-    private static ArrayList<Task> taskList = new ArrayList<Task>();
+    private static ArrayList<Task> taskList;
     private static final Logger logr = Logger.getLogger("Task");
 
     private String description;
