@@ -24,7 +24,7 @@ public class MedicineStorage {
     public static ArrayList<Medicine> readFile() {
         File medicineFile = new File(FILE_PATH);
         ArrayList<Medicine> medicineList = new ArrayList<>();
-        ArrayList<Medicine> validLines = new ArrayList<>(); // To store valid lines
+        ArrayList<Medicine> validLines = new ArrayList<>();
 
         if (!medicineFile.exists()) {
             medicineFile.getParentFile().mkdirs();
@@ -37,14 +37,13 @@ public class MedicineStorage {
                 Medicine medicine = parseMedicine(currentLine);
                 if (medicine != null) {
                     medicineList.add(medicine);
-                    validLines.add(medicine);  // Add valid medicine to the list of strings
+                    validLines.add(medicine);
                 }
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found at: " + FILE_PATH);
         }
 
-        // After reading all lines, overwrite the file with valid entries
         overwriteSaveFile(validLines);
         return medicineList;
     }
@@ -62,13 +61,13 @@ public class MedicineStorage {
 
             if (parts.length != 2) {
                 System.out.println("Warning: Invalid medicine format:" + currentLine);
-                return null; // Return null for invalid entry
+                return null;
             }
 
             String medicineName = parts[0].trim();
             if (medicineName.isEmpty()) {
                 System.out.println("Warning: Medicine name cannot be empty: " + currentLine);
-                return null; // Return null for invalid entry
+                return null;
             }
 
             int quantity;
@@ -76,14 +75,14 @@ public class MedicineStorage {
                 quantity = Integer.parseInt(parts[1].trim());
             } catch (NumberFormatException e) {
                 System.out.println("Warning: Invalid quantity format : " + currentLine);
-                return null; // Return null for invalid quantity format
+                return null;
             }
 
-            return new Medicine(quantity, medicineName); // Return the valid medicine object
+            return new Medicine(quantity, medicineName);
 
         } catch (Exception e) {
             System.out.println("Unexpected error while parsing medicine: " + currentLine);
-            return null; // Return null for unexpected errors
+            return null;
         }
     }
 
