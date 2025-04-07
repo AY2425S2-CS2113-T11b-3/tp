@@ -103,8 +103,9 @@ public class PatientParser extends Parser {
 
         try {
             if (line.contains("id/")) {
-                command = line.substring(0, line.indexOf("id/")).toLowerCase().trim();
-                line = line.substring(line.indexOf("id/"));
+                int idEnd = findNextFieldIndex(line, 0);
+                command = line.substring(0, idEnd).trim();
+                line = line.substring(idEnd);
             } else {
                 command = line.toLowerCase();
             }
