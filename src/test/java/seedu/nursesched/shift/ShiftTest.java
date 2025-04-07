@@ -209,6 +209,19 @@ class ShiftTest {
     }
 
     @Test
+    void sortShiftsChronologically_emptyList_throwsException() throws NurseSchedException {
+        Shift.getShiftList().clear();
+
+        NurseSchedException thrown = assertThrows(
+                NurseSchedException.class,
+                Shift::sortShiftsChronologically,
+                "Expected sortShiftsChronologically() to throw"
+        );
+
+        assertEquals("List is empty. Nothing to sort.", thrown.getMessage());
+    }
+
+    @Test
     void logOvertime_validInput_logsCorrectly() throws NurseSchedException {
         Shift.getShiftList().clear();
 
