@@ -101,10 +101,12 @@ public class PatientParser extends Parser {
         String contact = null;
         String notes = null;
 
+        String listCheck = line.toLowerCase();
+
         try {
-            if (line.contains("id/")) {
+            if (!listCheck.contains("list") || line.contains("id/")) {
                 int idEnd = findNextFieldIndex(line, 0);
-                command = line.substring(0, idEnd).trim();
+                command = line.substring(0, idEnd).trim().toLowerCase();
                 line = line.substring(idEnd);
             } else {
                 command = line.toLowerCase();
@@ -116,7 +118,7 @@ public class PatientParser extends Parser {
 
         switch (command) {
         case "add" -> {
-            if (line.trim().equals("add")) {
+            if (line.trim().equalsIgnoreCase("add")) {
                 throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_INFO);
             }
 
@@ -142,7 +144,7 @@ public class PatientParser extends Parser {
             }
         }
         case "del" -> {
-            if (line.trim().equals("del")) {
+            if (line.trim().equalsIgnoreCase("del")) {
                 throw new NurseSchedException(ExceptionMessage.EMPTY_PATIENT_ID_FIELD);
             }
             checkIdExists(line);
@@ -155,7 +157,7 @@ public class PatientParser extends Parser {
             return new PatientParser(command, id, name, age, gender, contact, notes);
         }
         case "list" -> {
-            if (line.trim().equals("list")) {
+            if (line.trim().equalsIgnoreCase("list")) {
                 return new PatientParser(command, id, name, age, gender, contact, notes);
             }
             throw new NurseSchedException(ExceptionMessage.INVALID_FORMAT);
@@ -230,12 +232,14 @@ public class PatientParser extends Parser {
 
                 if (line.contains("n/")) {
                     int noteStart = line.indexOf("n/") + 2;
-                    notes = line.substring(noteStart).trim();
+                    int noteEnd = findNextFieldIndex(line, noteStart);
+                    notes = line.substring(noteStart, noteEnd).trim();
 
                     if (notes.isEmpty()) {
                         throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
                     }
                 }
+
             } catch (IndexOutOfBoundsException e) {
                 System.out.print(e.getMessage());
             }

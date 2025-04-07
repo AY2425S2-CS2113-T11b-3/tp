@@ -58,6 +58,7 @@ public enum ExceptionMessage {
     INVALID_PATIENT_COMMAND("Invalid Patient command, use either 'add', 'del', `list`, \n`result add`, `result del`, " +
             "or `result list`!"),
     INVALID_IDENTIFIER_ORDER("Invalid identifier order, ensure that the command is correctly formatted!"),
+    NO_CHANGES_FOUND("New fields must be different from old fields!"),
 
     // ====================Medicine Specific Exceptions====================
     INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: MEDICINE_NAME | QUANTITY in" +
