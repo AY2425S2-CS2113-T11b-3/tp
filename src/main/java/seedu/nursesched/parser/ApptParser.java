@@ -25,7 +25,7 @@ public class ApptParser extends Parser {
 
 
     private static int apptIndex;
-    private static int ID;
+    private static int id;
     private static String searchKeyword;
     private static String sortBy;
     private static String searchBy = null;
@@ -68,7 +68,7 @@ public class ApptParser extends Parser {
      */
     public ApptParser(String command, String name, LocalTime startTime, LocalTime endTime,
                       LocalDate date, String notes, int apptIndex, String searchKeyword,
-                      int importance, String sortBy, int ID, String searchBy) {
+                      int importance, String sortBy, int id, String searchBy) {
         this.command = command;
         this.name = name;
         this.startTime = startTime;
@@ -79,7 +79,7 @@ public class ApptParser extends Parser {
         this.searchKeyword = searchKeyword;
         this.searchBy = searchBy;
         this.importance = importance;
-        this.ID = ID;
+        this.id =id;
         this.sortBy = sortBy;
 
         logr.info("ApptParser created: " + this);
@@ -139,7 +139,7 @@ public class ApptParser extends Parser {
                 // Extract patient ID
                 int idIndex = line.indexOf("id/") + 3;
                 int idEnd = findNextFieldIndex(line, idIndex);
-                ID = parseID(line.substring(idIndex, idEnd).trim());
+                id = parseID(line.substring(idIndex, idEnd).trim());
 
                 // Extract appointment's start time
                 int startIndex = line.indexOf("s/") + 2;
@@ -182,7 +182,7 @@ public class ApptParser extends Parser {
             }
 
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
+                    apptIndex, searchKeyword, importance, sortBy, id, searchBy);
         }
 
         case "del", "mark", "unmark" -> {
@@ -199,12 +199,12 @@ public class ApptParser extends Parser {
 
             apptIndex = parseIndex(indexStr.substring(4));
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
+                    apptIndex, searchKeyword, importance, sortBy, id, searchBy);
         }
 
         case "list" -> {
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
+                    apptIndex, searchKeyword, importance, sortBy, id, searchBy);
         }
 
         case "sort" -> {
@@ -218,10 +218,10 @@ public class ApptParser extends Parser {
                 logr.info("Sorting by: " + sortBy);
             } else {
                 // Default to sorting by time if no parameter specified
-                sortBy = "time";
+                throw new NurseSchedException(ExceptionMessage.INVALID_SORT_FORMAT);
             }
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
+                    apptIndex, searchKeyword, importance, sortBy, id, searchBy);
         }
 
         case "find" -> {
@@ -236,8 +236,7 @@ public class ApptParser extends Parser {
                 searchKeyword = line.substring(idIndex).trim();
                 int testID = parseID(searchKeyword);
                 searchBy = "id";
-            }
-            else if (line.contains("p/")){
+            } else if (line.contains("p/")){
                 int nameIndex = line.indexOf("p/") + 2;
                 if (nameIndex>= line.length()) {
                     throw new NurseSchedException(ExceptionMessage.MISSING_NAME_PARAMETER);
@@ -247,7 +246,7 @@ public class ApptParser extends Parser {
             }
 
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
+                    apptIndex, searchKeyword, importance, sortBy, id, searchBy);
         }
 
         case "edit" -> {
@@ -291,13 +290,13 @@ public class ApptParser extends Parser {
                         int pidEnd = findNextFieldIndex(line, pidStart);
                         String pidStr = line.substring(pidStart, pidEnd).trim();
                         abstractedLine = line.substring(pidEnd).trim();
-                        ID = parseID(pidStr);
+                        id = parseID(pidStr);
                         if (pidStr.isEmpty()) {
                             System.out.println("No ID found in id field. Defaulting to previous ID.");
-                            ID = -1;
+                            id = -1;
                         }
                     } else {
-                        ID = -1;
+                        id = -1;
                     }
 
                     if (line.contains("s/")) {
@@ -348,7 +347,7 @@ public class ApptParser extends Parser {
             }
 
             return new ApptParser(command, name, startTime, endTime, date, notes,
-                    apptIndex, searchKeyword, importance, sortBy, ID, searchBy);
+                    apptIndex, searchKeyword, importance, sortBy, id, searchBy);
         }
 
         default -> {
@@ -487,7 +486,7 @@ public class ApptParser extends Parser {
     }
 
     public int getID () {
-        return ID;
+        return id;
     }
 
     public int getIndex () {

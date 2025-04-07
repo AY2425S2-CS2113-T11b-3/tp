@@ -33,7 +33,7 @@ public class Appointment {
     private final LocalTime endTime;
     private final LocalDate date;
     private final String notes;
-    private final int ID;
+    private final int id;
     private final int importance;
     private boolean isDone = false;
 
@@ -62,17 +62,17 @@ public class Appointment {
     /**
      * Constructs an Appointment object with specified details.
      *
-     * @param ID        The ID of the patient involved in the appointment.
+     * @param id        The ID of the patient involved in the appointment.
      * @param startTime The start time of the appointment.
      * @param endTime   The end time of the appointment.
      * @param date      The date on which the appointment occurs.
      * @param notes     The notes for the specified appointment.
      */
 
-    public Appointment(int ID, LocalTime startTime, LocalTime endTime,
+    public Appointment(int id, LocalTime startTime, LocalTime endTime,
                        LocalDate date, String notes, int importance) {
-        this.ID = ID;
-        this.name = findPatientName(ID);
+        this.id = id;
+        this.name = findPatientName(id);
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;
@@ -84,13 +84,13 @@ public class Appointment {
     /**
      * Adds a new appointment to the appointment list.
      *
-     * @param ID The name of the patient involved in the appointment.
+     * @param id The name of the patient involved in the appointment.
      * @param startTime The start time of the appointment.
      * @param endTime   The end time of the appointment.
      * @param date      The date of the appointment.
      * @param notes     The notes for the appointment.
      */
-    public static void addAppt(int ID,
+    public static void addAppt(int id,
                                LocalTime startTime, LocalTime endTime,
                                LocalDate date, String notes, int importance) throws NurseSchedException {
         LocalDate today = LocalDate.now();
@@ -107,7 +107,7 @@ public class Appointment {
             logr.info("Appointment already exists, appointment not added");
             return;
         }
-        if (findPatientName(ID) == null) {
+        if (findPatientName(id) == null) {
             throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_APPT_ADD);
         }
 
@@ -116,7 +116,7 @@ public class Appointment {
                 "Appointment date cannot be in the past!";
         assert startTime.isBefore(endTime) : "Appointment's start time cannot be after its end time!";
 
-        Appointment appt = new Appointment(ID, startTime, endTime, date, notes, importance);
+        Appointment appt = new Appointment(id, startTime, endTime, date, notes, importance);
         apptList.add(appt);
         AppointmentStorage.appendToFile(appt);
         System.out.println("Appointment added:");
@@ -203,10 +203,10 @@ public class Appointment {
         return null;
     }
 
-    public static String findPatientName(int ID){
+    public static String findPatientName(int id){
         ArrayList<Patient> pfList = Patient.getPatientsList();
         for (Patient p : pfList) {
-            if (Integer.parseInt(p.getId()) == ID){
+            if (Integer.parseInt(p.getId()) == id){
                 return p.getName();
             }
         }
@@ -227,17 +227,17 @@ public class Appointment {
         Ui.printSearchResults(searchResults, patientName);
     }
 
-    public static void findApptByID(String ID) {
+    public static void findApptByID(String id) {
         ArrayList<Appointment> searchResults = new ArrayList<>();
         for (Appointment appointment : apptList) {
-            if (appointment.getID() == Integer.parseInt(ID)) {
+            if (appointment.getID() == Integer.parseInt(id)) {
                 searchResults.add(appointment);
             }
         }
-        Ui.printSearchResults(searchResults, ID);
+        Ui.printSearchResults(searchResults, id);
     }
 
-    public static void editAppt(int index, int ID,
+    public static void editAppt(int index, int id,
                                        LocalTime startTime, LocalTime endTime,
                                        LocalDate date, String notes, int importance) throws NurseSchedException {
         if (index < 0 || index >= apptList.size()) {
@@ -248,8 +248,8 @@ public class Appointment {
             Appointment prevAppt = apptList.get(index);
 
             // If optional fields are empty, keep previous fields
-            if (ID == -1){
-                ID = prevAppt.ID;
+            if (id == -1){
+                id = prevAppt.id;
             }
             if (endTime == null) {
                 endTime = prevAppt.endTime;
@@ -267,13 +267,21 @@ public class Appointment {
                 importance = prevAppt.importance;
             }
 
-            if (findPatientName(ID) == null) {
+            if (findPatientName(id) == null) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_PATIENT_APPT_ADD);
             }
 
             checkApptDateTime(date, startTime, endTime);
 
+            // Temporarily remove the current appointment from the list
+            Appointment removedAppt = apptList.remove(index);
+
+            // Check for clashes with the temporary state of the list (without the current appointment)
             Appointment possibleClash = findApptClashes(startTime, endTime, date);
+
+            // Put the removed appointment back
+            apptList.add(index, removedAppt);
+
             if (possibleClash != null && possibleClash != prevAppt) {
                 System.out.println("There is another patient, " + possibleClash.name +
                         " with an appointment clashing with the given time and date! " +
@@ -284,7 +292,7 @@ public class Appointment {
             }
 
 
-            Appointment updatedAppt = new Appointment(ID, startTime, endTime, date, notes, importance);
+            Appointment updatedAppt = new Appointment(id, startTime, endTime, date, notes, importance);
             apptList.set(index, updatedAppt);
 
             System.out.println("Appointment updated:");
@@ -338,16 +346,6 @@ public class Appointment {
         AppointmentStorage.overwriteSaveFile(apptList);
         System.out.println("Appointments sorted chronologically.");
         logr.info("Appointment list sorted chronologically");
-    }
-
-    public static boolean isInPatientList(String name){
-        ArrayList<Patient> pfList = Patient.getPatientsList();
-        for (Patient p : pfList) {
-            if (p.getName().toLowerCase().equals(name.toLowerCase())){
-                return true;
-            }
-        }
-        return false;
     }
 
     public static void checkApptDateTime(LocalDate date, LocalTime startTime, LocalTime endTime)
@@ -410,7 +408,7 @@ public class Appointment {
         default -> "";
         };
 
-        return "ID: " + ID + ", " +
+        return "ID: " + id + ", " +
                 "Name: " + name + ", " +
                 "From: " + formattedStartTime + ", " +
                 "To: " + formattedEndTime + ", " +
@@ -428,7 +426,7 @@ public class Appointment {
     }
 
     public int getID() {
-        return ID;
+        return id;
     }
 
     public String getStartTime() {
