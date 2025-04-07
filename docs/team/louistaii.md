@@ -28,7 +28,8 @@ Code can be found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?sea
 
 #### Contributions to the DG
 
-- Gave details on the `Appointment` component.
+- Gave details on UI, Storage, Parser, Command Components in the Design section.
+- Gave details on the `Appointment` component including class diagram.
 - Describe the implementation of one of the features `appt sort`, including the implementation of  `appt add`.
 - Add sequence diagrams for `appt sort` and `appt add`
 
@@ -40,3 +41,6 @@ Code can be found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?sea
 - Updating UG/DG outside of own features.
 - Added JUnit tests to improve code coverage.
 
+#### Contributions beyond the project team
+- [Bookkeepr DG Review](https://github.com/nus-cs2113-AY2425S2/tp/pull/47)
+- [Rolladie DG Review](https://github.com/nus-cs2113-AY2425S2/tp/pull/42)
