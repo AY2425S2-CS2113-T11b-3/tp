@@ -216,7 +216,7 @@ public class ApptParser extends Parser {
         case "sort" -> {
             if (line != null && line.contains("by/")) {
                 int byIndex = line.indexOf("by/") + 3;
-                sortBy = line.substring(byIndex).trim();
+                sortBy = line.substring(byIndex).trim().toLowerCase();
                 if (!sortBy.equals("time") && !sortBy.equals("importance")) {
                     logr.warning("Invalid sort parameter: " + sortBy);
                     throw new NurseSchedException(ExceptionMessage.INVALID_SORT_PARAMETER);
