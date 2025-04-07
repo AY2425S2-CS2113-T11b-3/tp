@@ -45,7 +45,7 @@ class PatientParserTest {
     void extractInputs_addCommandMissingFields_throwsException() {
         Exception exception = assertThrows(NurseSchedException.class, () ->
                 PatientParser.extractInputs("pf add"));
-        assertEquals("Patient information cannot be empty!", exception.getMessage());
+        assertEquals("Some patient fields are missing!", exception.getMessage());
     }
 
     @Test
@@ -73,7 +73,7 @@ class PatientParserTest {
     void extractInputs_delCommandMissingId_throwsException() {
         Exception exception = assertThrows(NurseSchedException.class, () ->
                 PatientParser.extractInputs("pf del"));
-        assertEquals("Patient ID field cannot be empty!", exception.getMessage());
+        assertEquals("Missing id/ identifier!", exception.getMessage());
     }
 
     @Test

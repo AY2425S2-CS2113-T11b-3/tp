@@ -207,9 +207,27 @@ public class Patient {
     public static void editPatientDetails(String id, String newName, String newAge, String newGender,
                                           String newContact, String newNotes) throws NurseSchedException {
         boolean isFound = false;
+
         for (Patient patient : patientsList) {
             if (patient.getId().equals(id)) {
                 isFound = true;
+
+                if ((newName != null && newName.equals(patient.name))) {
+                    throw new NurseSchedException(ExceptionMessage.NO_CHANGES_FOUND);
+                }
+                if ((newAge != null && newAge.equals(patient.age))) {
+                    throw new NurseSchedException(ExceptionMessage.NO_CHANGES_FOUND);
+                }
+                if ((newGender != null && newGender.equalsIgnoreCase(patient.gender))) {
+                    throw new NurseSchedException(ExceptionMessage.NO_CHANGES_FOUND);
+                }
+                if ((newContact != null && newContact.equals(patient.contact))) {
+                    throw new NurseSchedException(ExceptionMessage.NO_CHANGES_FOUND);
+                }
+                if ((newNotes != null && newNotes.equals(patient.notes))) {
+                    throw new NurseSchedException(ExceptionMessage.NO_CHANGES_FOUND);
+                }
+
                 if (newName != null) {
                     patient.name = newName;
                 }
@@ -228,6 +246,7 @@ public class Patient {
                 if (newNotes != null) {
                     patient.notes = newNotes;
                 }
+
                 System.out.println("Patient information updated for ID: " + id);
                 break;
             }

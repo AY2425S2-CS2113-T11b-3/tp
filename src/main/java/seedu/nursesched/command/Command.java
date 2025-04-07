@@ -31,7 +31,7 @@ public class Command {
                 String line = ui.readCommand(in);
                 ui.showResults();
                 line = line.trim();
-                String type = Parser.extractType(line);
+                String type = Parser.extractType(line).toLowerCase();
 
                 switch (type) {
                 case "appt":
