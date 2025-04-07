@@ -85,6 +85,21 @@ The `Patient` component,
 - Maintains a static list (patientsList) as the single source of truth for all patient records.
 - Throws custom exceptions (NurseSchedException) for error handling.
 
+
+### Appointment component
+
+API: `Appointment.java`
+
+![ApptComponent.png](assets/appointmentImages/ApptComponent.png)
+
+The `Appointment` component,
+
+- Manages appointment information including status, patient ID, name, start time, end time, date, importance level and notes.
+- Integrates with the Patient component to verify patient existence prior to appointment creation.
+- Ensures data integrity through validation rules (e.g., 4-digit numeric patient ID, importance levels restricted to 1–3, and robust date-time error handling).
+- Maintains a static list (apptList) as the single source of truth for all appointments.
+- Throws custom exceptions (NurseSchedException) for error handling.
+
 ### Common classes
 
 Classes used by multiple components are in:
@@ -265,7 +280,7 @@ Aspect: How edit task executes:
 
 #### Implementation
 
-The `sortAppointmentByImportance` method is responsible for sorting all appointments in the appointment list. The implementation
+The `sortByImportance` method is responsible for sorting all appointments in the appointment list. The implementation
 follows these steps:
 
 1. Validation and Logging: The method first checks if the apptList is empty. If it is, a warning message is logged, 
@@ -283,8 +298,8 @@ Given below is an example usage scenario and how the sorting mechanism behaves a
 Step 1. The user launches the application for the first time. The `apptList` will be initialized
 with stored appointment data (if exists).
 
-Step 2. The user adds multiple appointments using the addAppointment operation. If successful, 
-the system logs the addition and updates the saved file.
+Step 2. The user adds multiple appointments using the addAppt operation. If successful, 
+the system updates the saved file.
 
 ![Add appointment Sequence Diagram](./assets/appointmentImages/AddApptSequenceDiagram.png)
 
