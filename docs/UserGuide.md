@@ -116,7 +116,7 @@ Format: `task mark id/TASK_INDEX`
 
 Example of usage:
 
-`task mark 3`
+`task mark id/3`
 
 ### Unmarking a task: `task unmark`
 
@@ -129,7 +129,7 @@ Format: `task unmark id/TASK_INDEX`
 
 Example of usage:
 
-`task unmark 3`
+`task unmark id/3`
 
 ### Editing a task: `task edit`
 
