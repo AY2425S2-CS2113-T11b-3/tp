@@ -136,18 +136,33 @@ public class MedicineParser extends Parser {
 
         try {
             medicineName = extractValue(remaining, "mn/", "q/");
-            quantity = Integer.parseInt(extractValue(remaining, "q/", null));
-            if (quantity <= 0) {
+            String quantityString = extractValue(remaining, "q/", null);
+
+            if (quantityString.length() > 10) {
+                throw new NurseSchedException(ExceptionMessage.MEDICINE_QUANTITY_TOO_LARGE);
+            }
+
+            long longQuantity = Long.parseLong(quantityString);
+            if (longQuantity > Integer.MAX_VALUE) {
+                throw new NurseSchedException(ExceptionMessage.MEDICINE_QUANTITY_TOO_LARGE);
+            }
+            if (longQuantity <= 0) {
                 throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
             }
-            quantity = Integer.parseInt(extractValue(remaining, "q/", null));
+
+            quantity = (int) longQuantity;
+
             logr.log(Level.INFO, "Extracted medicineName: {0}, quantity: {1}",
                     new Object[]{medicineName, quantity});
             return new MedicineParser(command, medicineName, quantity, "");
+        } catch (NumberFormatException e) {
+            logr.log(Level.SEVERE, "Invalid quantity format in: {0}", remaining);
+            throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_QUANTITY_FORMAT);
         } catch (RuntimeException e) {
             logr.log(Level.SEVERE, "Failed to parse add command: {0}", remaining);
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEADD_FORMAT);
         }
+
     }
 
     /**
@@ -177,16 +192,27 @@ public class MedicineParser extends Parser {
             assert !medicineName.trim().isEmpty() : "Medicine name cannot be empty";
             String quantityString = String.valueOf(Integer.parseInt(extractValue(remaining, "q/",
                     null)));
-            if (quantityString.trim().isEmpty()) {
-                throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
+            
+            if (quantityString.length() > 10) {
+                throw new NurseSchedException(ExceptionMessage.MEDICINE_QUANTITY_TOO_LARGE);
             }
-            quantity = Integer.parseInt(quantityString);
-            if (quantity <= 0) {
+
+            long longQuantity = Long.parseLong(quantityString);
+            if (longQuantity > Integer.MAX_VALUE) {
+                throw new NurseSchedException(ExceptionMessage.MEDICINE_QUANTITY_TOO_LARGE);
+            }
+            if (longQuantity <= 0) {
                 throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
             }
+
+            quantity = (int) longQuantity;
+
             logr.log(Level.INFO, "Extracted medicineName: {0}, quantity: {1}",
                     new Object[]{medicineName, quantity});
             return new MedicineParser(command, medicineName, quantity, "");
+        } catch (NumberFormatException e) {
+            logr.log(Level.SEVERE, "Invalid quantity format in: {0}", remaining);
+            throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_QUANTITY_FORMAT);
         } catch (RuntimeException e) {
             logr.log(Level.SEVERE, "Failed to parse remove command: {0}", remaining);
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEREMOVE_FORMAT);
@@ -211,6 +237,10 @@ public class MedicineParser extends Parser {
 
         try {
             medicineName = extractValue(remaining, "mn/", null);
+            if (medicineName.trim().isEmpty()) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEFIND_FORMAT);
+            }
+
             logr.log(Level.INFO, "Extracted medicineName: {0}", new Object[]{medicineName});
             return new MedicineParser(command, medicineName, 0, "");
         } catch (RuntimeException e) {
@@ -266,15 +296,31 @@ public class MedicineParser extends Parser {
         try {
             medicineName = extractValue(remaining, "mn/", "un/");
             updatedName = extractValue(remaining, "un/", "uq/");
-            updatedQuantity = Integer.parseInt(extractValue(remaining, "uq/", null));
-            if (updatedQuantity <= 0) {
+            String quantityString = extractValue(remaining, "uq/", null);
+
+            if (quantityString.length() > 10) {
+                throw new NurseSchedException(ExceptionMessage.MEDICINE_QUANTITY_TOO_LARGE);
+            }
+
+            long longQuantity = Long.parseLong(quantityString);
+            if (longQuantity > Integer.MAX_VALUE) {
+                throw new NurseSchedException(ExceptionMessage.MEDICINE_QUANTITY_TOO_LARGE);
+            }
+            if (longQuantity < 0) {
                 throw new NurseSchedException(ExceptionMessage.NEGATIVE_MEDICINE_QUANTITY);
             }
+
+            updatedQuantity = (int) longQuantity;
+
+
             logr.log(Level.INFO, "Extracted medicineName: {0}, updatedQuantity: {1}, updatedName: {2}",
                     new Object[]{medicineName, updatedQuantity, updatedQuantity});
             return new MedicineParser(command, medicineName, updatedQuantity, updatedName);
+        } catch (NumberFormatException e) {
+            logr.log(Level.SEVERE, "Invalid quantity format in: {0}", remaining);
+            throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINE_QUANTITY_FORMAT);
         } catch (RuntimeException e) {
-            logr.log(Level.SEVERE, "Failed to parse edit command: {0}", remaining);
+            logr.log(Level.SEVERE, "Failed to parse add command: {0}", remaining);
             throw new NurseSchedException(ExceptionMessage.INVALID_MEDICINEEDIT_FORMAT);
         }
     }

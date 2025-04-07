@@ -13,11 +13,11 @@ package "Patient Information" {
     -notes: String
     # {static} patientsList: ArrayList<Patient>
     +Patient(id, name, age, gender, contact, notes)
-    +addPatient(Patient)
-    +removePatient(String)
-    +listPatientInformation()
-    +editPatientDetails(id, name, age, gender, contact, notes)
-    +printProfileWithID(String)
+    + {static} addPatient(Patient)
+    +{static}removePatient(String)
+    +{static}listPatientInformation()
+    +{static}editPatientDetails(id, name, age, gender, contact, notes)
+    +{static}printProfileWithID(String)
   }
 
   class MedicalTest {
@@ -26,9 +26,9 @@ package "Patient Information" {
     -result: String
     #{static}medicalTestList: ArrayList<MedicalTest>
     +MedicalTest(patientId, testName, result)
-    +addMedicalTest(MedicalTest)
-    +removeTestsForPatient(String)
-    +listTestsForPatient(String)
+    +{static}addMedicalTest(MedicalTest)
+    +{static}removeTestsForPatient(String)
+    +{static}listTestsForPatient(String)
   }
 }
 
@@ -46,8 +46,9 @@ package "Command Process" {
     -contact: String
     -notes: String
     +PatientParser(command, id, name, age, gender, contact, notes)
-    +extractInputs(String): PatientParser
-    +validateID(String)
+    +{static}extractInputs(String): PatientParser
+    -{static}validateID(String)
+
   }
 }
 

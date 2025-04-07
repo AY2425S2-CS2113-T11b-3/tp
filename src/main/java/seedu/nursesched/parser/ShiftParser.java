@@ -172,30 +172,34 @@ public class ShiftParser extends Parser {
 
     /**
      * Parses an edit shift command and extracts updated shift details.
+     * Only fields provided in the command will be parsed; missing fields will be set to {@code null}
+     * and treated as unchanged in the edit operation.
+     *
+     * Requires: {@code id/} to specify which shift to edit.
+     * Optional: {@code s/} (start time), {@code e/} (end time), {@code d/} (date), {@code st/} (task).
      *
      * @param remaining The remaining command string.
-     * @param command   The command type.
-     * @return A ShiftParser object containing updated shift details.
-     * @throws NurseSchedException If the format is incorrect or values are invalid.
+     * @param command   The command type ("edit").
+     * @return A ShiftParser object with parsed values (nulls for omitted ones).
+     * @throws NurseSchedException If format is invalid or values are malformed.
      */
     private static ShiftParser getShiftEditParser(String remaining, String command) throws NurseSchedException {
         assert remaining != null : "Remaining command should not be null";
-        logr.info("Parsing edit command: " + remaining);
+        logr.info("Parsing edit command (partial supported): " + remaining);
 
         int shiftIndex;
-        LocalDate date;
-        LocalTime startTime;
-        LocalTime endTime;
-        String shiftTask;
+        LocalDate date = null;
+        LocalTime startTime = null;
+        LocalTime endTime = null;
+        String shiftTask = null;
 
-        if (!remaining.contains("id/") || !remaining.contains("s/") || !remaining.contains("e/")
-                || !remaining.contains("d/") || !remaining.contains("st/")) {
-            logr.warning("Invalid edit format.");
+        String idStr = extractEditValue(remaining, "id/");
+        if (idStr == null || idStr.isEmpty()) {
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTEDIT_FORMAT);
         }
 
         try {
-            shiftIndex = Integer.parseInt(extractEditValue(remaining, "id/")) - 1;
+            shiftIndex = Integer.parseInt(idStr) - 1;
             if (shiftIndex < 0) {
                 throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
             }
@@ -203,26 +207,53 @@ public class ShiftParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_NUMBER);
         }
 
-        try {
-            startTime = LocalTime.parse(extractEditValue(remaining, "s/"));
-            endTime = LocalTime.parse(extractEditValue(remaining, "e/"));
-        } catch (DateTimeParseException e) {
-            throw new NurseSchedException(ExceptionMessage.INVALID_TIME_FORMAT);
+        String sStr = extractEditValue(remaining, "s/");
+        if (sStr != null) {
+            if (sStr.isEmpty()) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_TIME_FORMAT);
+            }
+            try {
+                startTime = LocalTime.parse(sStr);
+            } catch (DateTimeParseException e) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_TIME_FORMAT);
+            }
         }
 
-        try {
-            date = LocalDate.parse(extractEditValue(remaining, "d/"));
-        } catch (DateTimeParseException e) {
-            throw new NurseSchedException(ExceptionMessage.INVALID_DATE_FORMAT);
+        String eStr = extractEditValue(remaining, "e/");
+        if (eStr != null) {
+            if (eStr.isEmpty()) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_TIME_FORMAT);
+            }
+            try {
+                endTime = LocalTime.parse(eStr);
+            } catch (DateTimeParseException e) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_TIME_FORMAT);
+            }
         }
 
-        shiftTask = extractEditValue(remaining, "st/");
-        if (shiftTask.isEmpty()) {
-            throw new NurseSchedException(ExceptionMessage.SHIFT_TASK_EMPTY);
+        String dStr = extractEditValue(remaining, "d/");
+        if (dStr != null) {
+            if (dStr.isEmpty()) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_DATE_FORMAT);
+            }
+            try {
+                date = LocalDate.parse(dStr);
+            } catch (DateTimeParseException e) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_DATE_FORMAT);
+            }
         }
 
-        if (!startTime.isBefore(endTime)) {
-            throw new NurseSchedException(ExceptionMessage.INVALID_START_TIME);
+        String taskStr = extractEditValue(remaining, "st/");
+        if (taskStr != null) {
+            shiftTask = taskStr.trim();
+            if (shiftTask.isEmpty()) {
+                throw new NurseSchedException(ExceptionMessage.SHIFT_TASK_EMPTY);
+            }
+        }
+
+        // Reject if no update fields are provided
+        if (startTime == null && endTime == null && date == null && shiftTask == null) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_SHIFTEDIT_FORMAT);
         }
 
         return new ShiftParser(command, startTime, endTime, date, shiftTask, shiftIndex);
@@ -389,13 +420,13 @@ public class ShiftParser extends Parser {
         assert input != null : "Input string must not be null";
         assert prefix != null : "Prefix must not be null";
 
-        String[] tokens = input.split(" (?=\\w+/)");
+        String[] tokens = input.split("\\s+(?=\\w+/)");
         for (String token : tokens) {
             if (token.startsWith(prefix)) {
                 return token.substring(prefix.length()).trim();
             }
         }
-        return "";
+        return null;
     }
 
     /**

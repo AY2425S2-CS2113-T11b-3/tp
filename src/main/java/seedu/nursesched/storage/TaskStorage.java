@@ -1,5 +1,7 @@
 package seedu.nursesched.storage;
 
+import seedu.nursesched.exception.ExceptionMessage;
+import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.task.Task;
 
 import java.io.File;
@@ -8,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -33,7 +36,10 @@ public class TaskStorage {
             while (fileScanner.hasNext()) {
                 String currentLine = fileScanner.nextLine();
                 Task task = parseTask(currentLine);
-                taskList.add(task);
+                if (task != null) {
+                    taskList.add(task);
+                }
+
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found at: " + FILE_PATH);
@@ -50,18 +56,55 @@ public class TaskStorage {
      * @throws IllegalArgumentException If the format is invalid.
      */
     private static Task parseTask(String currentLine) {
-        String[] parts = currentLine.split(" \\| ");
-        if (parts.length != 4) {
-            throw new IllegalArgumentException("Invalid task format in storage file: " + currentLine);
+        try {
+            String[] parts = currentLine.split(" \\| ");
+
+            if (parts.length != 4) {
+                System.out.println("Invalid task format in storage file: " + currentLine);
+                return null;
+            }
+
+            String completionStatus = parts[0];
+            if (!completionStatus.equals("[ ]") && !completionStatus.equals("[X]")) {
+                System.out.println("Invalid task's completion status in storage file: " + currentLine);
+                System.out.println("Completion status should be either [ ] or [X]");
+                return null;
+            }
+
+            boolean isDone = completionStatus.equals("[X]");
+
+            String description = parts[1];
+            if (description.isEmpty()) {
+                System.out.println("Invalid task description in storage file: " + currentLine);
+                return null;
+            }
+
+            LocalDate byDate;
+            LocalTime byTime;
+            try {
+                byDate = LocalDate.parse(parts[2]);
+                byTime = LocalTime.parse(parts[3]);
+            } catch (DateTimeParseException e) {
+                String msg = e.getMessage();
+                //Find exactly where the error lies
+                if (msg.contains("HourOfDay")) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_HOUR);
+                } else if (msg.contains("MinuteOfHour")) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_MINUTE);
+                } else if (msg.contains("MonthOfYear")) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_MONTH);
+                } else if (msg.contains("DayOfMonth")) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_DAY);
+                } else if (msg.contains("Invalid date")) {
+                    throw new NurseSchedException(ExceptionMessage.INVALID_DATE);
+                }
+                throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
+            }
+            return new Task(description, byDate, byTime, isDone);
+        } catch (Exception e) {
+            System.out.println("Unexpected error while parsing tasks -> " + currentLine);
+            return null;
         }
-
-        String completionStatus = parts[0];
-        boolean isDone = completionStatus.equals("[X]");
-        String description = parts[1];
-        LocalDate byDate = LocalDate.parse(parts[2]);
-        LocalTime byTime = LocalTime.parse(parts[3]);
-
-        return new Task(description, byDate, byTime, isDone);
     }
 
     /**

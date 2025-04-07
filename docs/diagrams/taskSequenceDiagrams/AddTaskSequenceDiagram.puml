@@ -13,11 +13,13 @@ activate Command
 
 Command -> Parser : extractType(user input)
 activate Parser
+
 Parser --> Command : task type
 deactivate Parser
 
 Command -> TaskParser : extractInputs(user input parameters)
 activate TaskParser
+
 TaskParser --> Command : TaskParser object with parameters
 deactivate TaskParser
 
@@ -28,7 +30,11 @@ Task -> taskList : add()
 activate taskList
 
 taskList -> Task : create new task
+activate Task
+
 Task --> taskList : new task
+deactivate Task
+
 taskList --> Task
 deactivate taskList
 

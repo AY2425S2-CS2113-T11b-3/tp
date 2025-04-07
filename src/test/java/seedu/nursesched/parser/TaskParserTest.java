@@ -71,6 +71,26 @@ public class TaskParserTest {
     }
 
     @Test
+    public void addTaskParser_invalidDescription_throwsNurseSchedException() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        String dateTomorrow = LocalDate.now().plusDays(1).format(dateFormatter);
+        String timeNow = LocalTime.now().format(timeFormatter);
+
+        //Invalid descriptions containing "|"
+        String input1 = "task add td/Important|Call patient Jean d/" + dateTomorrow + " t/" + timeNow;
+        String input2 = "task add td/| d/" + dateTomorrow + " t/" + timeNow;
+        String input3 = "task add td/Task| d/" + dateTomorrow + " t/" + timeNow;
+
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getAddTaskParser(input1, "add"));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getAddTaskParser(input2, "add"));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getAddTaskParser(input3, "add"));
+    }
+
+    @Test
     public void addTaskParser_missingParameters_throwsNurseSchedException() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
@@ -218,6 +238,32 @@ public class TaskParserTest {
                 () -> TaskParser.getEditTaskParser(input1, "edit"));
         assertThrows(NurseSchedException.class,
                 () -> TaskParser.getEditTaskParser(input2, "edit"));
+    }
+
+    @Test
+    public void editTaskParser_invalidDescription_throwsNurseSchedException() throws NurseSchedException {
+        LocalDate dateTomorrow = LocalDate.now().plusDays(1);
+        LocalTime timeNow = LocalTime.now();
+
+        //Add a task which is due 24 hours later
+        Task.addTask(
+                "Prepare medication for Jean",
+                dateTomorrow,
+                timeNow,
+                false
+        );
+
+        //Invalid descriptions containing "|"
+        String input1 = "task edit td/Important|Call patient Jean";
+        String input2 = "task edit td/| d/";
+        String input3 = "task edit td/Task| d/";
+
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getEditTaskParser(input1, "edit"));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getEditTaskParser(input2, "edit"));
+        assertThrows(NurseSchedException.class,
+                () -> TaskParser.getEditTaskParser(input3, "edit"));
     }
 
     @Test

@@ -1,6 +1,5 @@
 package seedu.nursesched.storage;
 
-import seedu.nursesched.exception.ExceptionMessage;
 import seedu.nursesched.exception.NurseSchedException;
 import seedu.nursesched.patient.Patient;
 
@@ -24,13 +23,21 @@ public class PatientStorage {
         }
 
         try (Scanner fileScanner = new Scanner(patientFile)) {
+            int lineNumber = 0;
             while (fileScanner.hasNext()) {
+                lineNumber++;
                 String currentLine = fileScanner.nextLine();
-                Patient patient = parsePatient(currentLine);
-                patientList.add(patient);
+
+                try {
+                    Patient patient = parsePatient(currentLine);
+                    patientList.add(patient);
+                } catch (Exception e) {
+                    System.out.println("Error parsing line " + lineNumber + " of save file: " + currentLine);
+                    System.out.println("Consider removing that line from the save file. Bypassing line.");
+                }
             }
-        } catch (FileNotFoundException | NurseSchedException e) {
-            throw new NurseSchedException(ExceptionMessage.ERROR_READING_FILE);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found at: " + FILE_PATH);
         }
         return patientList;
     }
@@ -44,14 +51,8 @@ public class PatientStorage {
         String gender = parts[3];
         String contact = parts[4];
         String notes = "";
-        try {
+        if (parts.length>5) {
             notes = parts[5];
-        } catch (IndexOutOfBoundsException exception) {
-            notes = "";
-        }
-
-        if (parts.length != 7) {
-            throw new NurseSchedException(ExceptionMessage.ERROR_READING_FILE);
         }
 
         return new Patient(id, name, age, gender, contact, notes);
@@ -59,7 +60,7 @@ public class PatientStorage {
 
     public static String formatString(Patient patient) {
         return patient.getId() + " | " + patient.getName() + " | " + patient.getAge() + " | "
-                + patient.getGender() + " | " + patient.getContact() + " | " + patient.getNotes() + " | ";
+                + patient.getGender() + " | " + patient.getContact() + " | " + patient.getNotes();
     }
 
     public static void overwriteSaveFile(ArrayList<Patient> patientList) {

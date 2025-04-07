@@ -5,6 +5,7 @@
 * [Design](#design)
   * [UI component](#ui-component)
   * [Storage component](#storage-component)
+  * [Task component](#task-component)
   * [Patient component](#patient-component)
   * [Common classes](#common-classes)
 * [Implementation](#implementation)
@@ -97,6 +98,31 @@ Handles data persistence for each specific data type:
 * Each Storage component is responsible for one specific list type. 
 * Reads and writes data from/to each list's specific save file.
 
+### Task component
+
+API: `Task.java`
+
+![TaskClassDiagram.png](assets/taskImages/TaskClassDiagram.png)
+
+The `Task` component,
+
+- Manages nurses' to-do tasks as a list, including the completion status, task description, due date and time.
+- Maintains a static list (taskList) as the single source of truth for all patient records.
+- Throws custom exceptions (NurseSchedException) for error handling.
+
+### Shift component
+
+**API**: `Shift.java`
+
+![shiftComponent.png](assets/shiftImages/shiftComponent.png)
+
+The `Shift` component,
+
+- Manages nurse work shifts, including start time, end time, date, assigned task, completion status, and overtime hours.
+- Enforces strict validation rules to prevent overlaps, invalid time formats, and scheduling shifts in the past.
+- Maintains a static list (shiftList) as the single source of truth for all shift records.
+- Throws custom exceptions (NurseSchedException) for robust error handling.
+
 ### Patient component
 
 API: `Patient.java`
@@ -159,7 +185,7 @@ Given below is an example usage scenario and how the removal mechanism behaves a
 
 Step 1. The user launches the application. The patientsList is initialized, either empty or populated from saved data.
 
-Step 2. The user adds patients using the addPatient method. For example:
+Step 2. The user adds patients using the `addPatient` method. For example:
 
 ```Patient("1234", "John Doe", "30", "M", "91234567", "Allergic to penicillin")```
 
@@ -167,9 +193,9 @@ The following sequence diagram shows how adding patient information goes:
 
 ![addPatientSequenceDiagram.png](assets/patientImages/addPatientSequenceDiagram.png)
 
-Step 3. The user decides to remove a patient by calling removePatient("1234").
+Step 3. The user decides to remove a patient by calling `removePatient("1234")`.
 
-The following sequence diagram shows how the delete patient information goes:
+The following sequence diagram shows how deleting patient information goes:
 
 ![removePatientSequenceDiagram.png](assets/patientImages/removePatientSequenceDiagram.png)
 
@@ -266,9 +292,8 @@ follows these steps:
    - The updated due `byDate` and `byTime` is before the current date and time
 3. Editing the task: It makes use of the appropriate setter methods to update the task with its new details. At least
    one of the optional fields must be provided.
-   Given below is an example usage scenario and how the edit task mechanism behaves at each step.
-
-Given below is an example usage scenario and how the delete medicine mechanism behaves at each step.
+   
+Given below is an example usage scenario and how the edit task mechanism behaves at each step.
 
 Step 1. The user launches the application for the first time. The `taskList` will be initialized with the task
 data stored (if exists).
@@ -279,7 +304,7 @@ and updates the saved file to reflect the change.
 ![AddTaskSequenceDiagram](assets/taskImages/AddTaskSequenceDiagram.png)
 
 Step 3. The user then realised that some task details were incorrect, thus she needs to edit it from the task list.
-The user initiates the editing of a task by calling the `editTask` function with the index of the task to be edited.
+The user initiates the editing of a task by calling the `editTask` function with the `index` of the task to be edited.
 
 Step 4. The system attempts to edit the specified task from the list. If unsuccessful, the system logs a warning and 
 throws a custom exception, `NurseSchedException`, with a relevant message indicating the specific error.
@@ -401,20 +426,20 @@ This is so that they can retrieve information quickly, especially with how hecti
 | v1.0    | Nurse    | Edit my shift timings & dates                                       | update my schedule                                                           |
 | v1.0    | Nurse    | Check-off medicine which I have administered                        | keep track of which medicine I have administered to prevent re-administering |
 | v1.0    | Nurse    | Add in medicine which I have not administered                       | keep track of what to administer later on                                    |
-| v2.0    | Nurse    | Search for a patient's profile                                      | I can locate the patient's details easily                                    |
-| v2.0    | Nurse    | Edit patient's information                                          | I can fix any incorrect information                                          |
-| v2.0    | Nurse    | Add more fields for patient information like patient ID, gender etc | I can keep track of additional information relating to the patient           |
-| v2.0    | Nurse    | Input medical test results                                          | I am aware of the conditions of my patients                                  |
-| v2.0    | Nurse    | Delete medical test results                                         | I am able to fix any errors in the test results                              |
-| v2.0    | Nurse    | Check patient's medical tests                                       | I can quickly retrieve test results for my patients                          |
-| v2.0    | Nurse    | Save patients information                                           | I can keep track and load patient information after exiting NurseSched       |
+| v2.0    | Nurse    | Search for a patient's profile                                      | locate the patient's details easily                                          |
+| v2.0    | Nurse    | Edit patient's information                                          | fix any incorrect information                                                |
+| v2.0    | Nurse    | Add more fields for patient information like patient ID, gender etc | keep track of additional information relating to the patient                 |
+| v2.0    | Nurse    | Input medical test results                                          | be aware of the conditions of my patients                                    |
+| v2.0    | Nurse    | Delete medical test results                                         | fix any errors in the test results                                           |
+| v2.0    | Nurse    | Check patient's medical tests                                       | quickly retrieve test results for my patients                                |
+| v2.0    | Nurse    | Save patients information                                           | keep track and load patient information after exiting NurseSched             |
 | v2.0    | Nurse    | Add tasks to my todo list                                           | keep track of my things to do                                                |
-| v2.0    | Nurse    | List out my tasks                                                   | I can view all the things to be completed                                    |
-| v2.0    | Nurse    | Check off things from my to-do list                                 | I know which tasks have been completed                                       |
-| v2.0    | Nurse    | Delete my tasks                                                     | I can remove irrelevant tasks                                                |
-| v2.0    | Nurse    | Edit my to-do list                                                  | I can fill it with updated information that I need to keep track of          |
-| v2.0    | Nurse    | Search for a task                                                   | I can locate a specific task with a keyword                                  |
-| v2.0    | Nurse    | Save my task list                                                   | I can load and save my existing task list                                    |
+| v2.0    | Nurse    | List out my tasks                                                   | view all the things to be completed                                          |
+| v2.0    | Nurse    | Check off things from my to-do list                                 | know which tasks have been completed                                         |
+| v2.0    | Nurse    | Delete my tasks                                                     | remove irrelevant tasks                                                      |
+| v2.0    | Nurse    | Edit my to-do list                                                  | fill it with updated information that I need to keep track of                |
+| v2.0    | Nurse    | Search for a task                                                   | locate a specific task with a keyword                                        |
+| v2.0    | Nurse    | Save my task list                                                   | load and save my existing task list                                          |
 | v2.0    | Nurse    | add in an amount of medicine to the list                            | update my medicine supply                                                    |
 | v2.0    | Nurse    | remove an amount of medicine from the list                          | update my medicine supply                                                    |
 | v2.0    | Nurse    | search for a specific medicine from the list                        | see how much of the medicine I have left                                     |
@@ -428,10 +453,10 @@ This is so that they can retrieve information quickly, especially with how hecti
 | v2.0    | Nurse    | save appointment information                                        | retrieve previously stored appointment information                           | 
 | v2.0    | Nurse    | rank importance of appointments                                     | arrange my appointments based off priority                                   |
 | v2.0    | Nurse    | list medicine that is below a certain quantity                      | know which medicine to restock                                               |
-| v2.0    | Nurse    | Save shift information                                              | Keep track of shift history even after exiting NurseSched                    |
-| v2.0    | Nurse    | Mark or unmark a shift                                              | Indicate if a shift has been completed or not                                |
-| v2.0    | Nurse    | Log overtime hours for a shift                                      | Keep a record of extra hours worked for reporting and planning               |
-| v2.0    | Nurse    | Sort shifts chronologically                                         | View the most recent and upcoming shifts more easily                         |
+| v2.0    | Nurse    | Save shift information                                              | keep track of shift history even after exiting NurseSched                    |
+| v2.0    | Nurse    | Mark or unmark a shift                                              | indicate if a shift has been completed or not                                |
+| v2.0    | Nurse    | Log overtime hours for a shift                                      | keep a record of extra hours worked for reporting and planning               |
+| v2.0    | Nurse    | Sort shifts chronologically                                         | view the most recent and upcoming shifts more easily                         |
 
 ## Non-Functional Requirements
 
@@ -850,6 +875,7 @@ To test data persistence:
 ## FAQ
 
 **Q**: How do I transfer my data to another computer?
+
 **A**: All the data is stored in the `/data/` folder. Simply transfer this folder to the other computer.
 
 ## Additional Test Cases

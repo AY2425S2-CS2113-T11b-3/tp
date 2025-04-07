@@ -34,6 +34,7 @@ public class AppointmentTest {
     @BeforeEach
     void setUp() {
         Appointment.apptList = new ArrayList<>();  // Reset appointment list
+        Patient.getPatientsList().clear();
     }
 
     // Method for adding patient profile first before adding appointment
@@ -41,9 +42,9 @@ public class AppointmentTest {
 
         ApptParser apptParser = ApptParser.extractInputs(input);
 
-        Patient patient = new Patient("1804", "Jean Doe", "25",
-                "F", "12345678", "Allergic to penicillin");
-        Patient.addPatient(patient);
+        String id = Integer.toString(apptParser.getID());
+        Patient.addPatient(new Patient(id, "Jean Doe", "25", "F",
+                "12345678", "Allergic to penicillin"));
 
         assertNotNull(apptParser);
         Appointment.addAppt(
@@ -54,8 +55,6 @@ public class AppointmentTest {
                 apptParser.getNotes(),
                 apptParser.getImportance()
         );
-
-        Patient.removePatient("1804");
     }
 
     void addApptEditTests(String input) throws NurseSchedException {
@@ -172,7 +171,7 @@ public class AppointmentTest {
 
         int sizeBefore = Appointment.apptList.size();
 
-        String input2 = "appt add id/1804 s/13:00 e/14:00 d/2026-02-15 " +
+        String input2 = "appt add id/1803 s/13:00 e/14:00 d/2026-02-15 " +
                 "im/2 n/Conflicting appointment";
         addAppointment(input2);
 
@@ -352,7 +351,7 @@ public class AppointmentTest {
         String input1 = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
         addAppointment(input1);
-        String input2 = "appt add id/1804 s/10:00 e/11:00 d/2026-02-15 " +
+        String input2 = "appt add id/1803 s/10:00 e/11:00 d/2026-02-15 " +
                 "im/2 n/Needs a wheelchair";
         addAppointment(input2);
 
@@ -370,7 +369,7 @@ public class AppointmentTest {
         String input1 = "appt add id/1804 s/15:00 e/16:00 d/2026-02-15 " +
                 "im/1 n/Needs a wheelchair";
         addAppointment(input1);
-        String input2 = "appt add id/1804 s/10:00 e/11:00 d/2026-02-15 " +
+        String input2 = "appt add id/1803 s/10:00 e/11:00 d/2026-02-15 " +
                 "im/3 n/Needs a wheelchair";
         addAppointment(input2);
 
