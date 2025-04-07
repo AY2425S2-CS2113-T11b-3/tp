@@ -64,11 +64,10 @@ public class AppointmentStorage {
     /**
      * Extracts appointment details from a string from the save file.
      * <p>
-     * Extracts status, patient name, start time, end time, date and notes.
+     * Extracts status, patient ID, start time, end time, date, notes and importance.
      * </p>
-     *
      * @param currentLine The formatted string containing appointment information.
-     * @return new Appointment object created with parsed information.
+     * @return            new Appointment object created with parsed information.
      */
     private static Appointment getDetails(String currentLine) {
         String[] parts = currentLine.split(" \\| ");
@@ -97,14 +96,12 @@ public class AppointmentStorage {
      * Formats an Appointment object into a string for storage.
      * <p>
      * String format:
-     * [Status] | [Patient Name] | [Start Time] | [End Time] | [Date] | [Notes]
+     * [Status] | [Patient ID] | [Start Time] | [End Time] | [Date] | [Importance] | [Notes]
      * </p>
-     *
      * @param appointment The appointment object to format.
-     * @return Formatted string for save file.
+     * @return            Formatted string for save file.
      */
     public static String formatString(Appointment appointment) {
-        String patientName = appointment.getName();
         int patientID = appointment.getID();
         boolean apptStatus = appointment.getStatus();
         String apptStartTime = appointment.getStartTime();
@@ -122,7 +119,6 @@ public class AppointmentStorage {
 
     /**
      * Overwrites the storage file with the current ArrayList of tasks.
-     *
      * @param apptList The ArrayList of Task objects to replace the save file with.
      */
     public static void overwriteSaveFile(ArrayList<Appointment> apptList) {
@@ -140,7 +136,6 @@ public class AppointmentStorage {
      * <p>
      * Does not modify existing content.
      * </p>
-     *
      * @param appt Appointment object to append to the storage file.
      */
     public static void appendToFile(Appointment appt) {
