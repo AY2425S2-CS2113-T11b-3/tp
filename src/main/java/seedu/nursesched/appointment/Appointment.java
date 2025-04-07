@@ -334,9 +334,7 @@ public class Appointment {
     public static void sortByTime() throws NurseSchedException {
 
         if (apptList.isEmpty()){
-            String message = "Appointment list is empty. Nothing to sort.";
-            System.out.println(message);
-            logr.warning(message);
+            logr.warning("Appointment list is empty. Nothing to sort.");
             throw new NurseSchedException(ExceptionMessage.INVALID_SORTING_LIST);
         }
 
