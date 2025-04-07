@@ -182,7 +182,7 @@ The following sequence diagram shows how adding patient information goes:
 
 Step 3. The user decides to remove a patient by calling `removePatient("1234")`.
 
-The following sequence diagram shows deleting patient information goes:
+The following sequence diagram shows how deleting patient information goes:
 
 ![removePatientSequenceDiagram.png](assets/patientImages/removePatientSequenceDiagram.png)
 
