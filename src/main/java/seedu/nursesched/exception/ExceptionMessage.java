@@ -116,7 +116,14 @@ public enum ExceptionMessage {
     INVALID_HOUR("Invalid hour in due time (HH:mm)! Hours can only range from 00 to 23!"),
     INVALID_MINUTE("Invalid minutes in due time (HH:mm)! Minutes can only range from 00 to 59!"),
     INVALID_DATE("Invalid date! Take note that some months have less than 31 days!"),
-    MISSING_INDEX("Task index is missing!"),;
+    MISSING_INDEX("Task index is missing!"),
+    INVALID_DESCRIPTION("Task description cannot contain the character \"|\"!"),
+    ERROR_READING_TASK_FILE("Error reading task file! " +
+            "Please ensure the task.txt file only contains tasks in the following format:" +
+            "\n[ ] (or [X] if the task is completed) | <description> | <due date in YYYY-MM-DD> | <due time in HH:mm>"),
+    MISSING_TASK_KEYWORD("Task keyword cannot be empty!"),
+    INVALID_LIST_TASK("Invalid command to list tasks! Input as: task list"),
+    NO_EDITS_MADE("Empty inputs found, no edits were made.");
     // ============================================================
 
     private final String message;
