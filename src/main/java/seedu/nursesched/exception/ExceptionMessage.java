@@ -77,6 +77,7 @@ public enum ExceptionMessage {
             " q/QUANTITY"),
     NO_RESTOCK_REQUIRED("No restock required!"),
     NEGATIVE_MEDICINE_QUANTITY("Medicine quantity must be a positive integer!"),
+    POSITIVE_MEDICINE_QUANTITY_ZERO("Medicine quantity must be a positive integer or 0!"),
     INVALID_MEDICINE_QUANTITY("Medicine quantity is too big! Should be lesser than existing quantity."),
     MISSING_MEDICINE_QUANTITY("No medicine quantity input"),
     MISSING_MEDICINE_NAME("No Medicine name input"),
