@@ -314,9 +314,7 @@ public class Command {
 
 
                 default:
-                    System.out.println("Unknown command!");
-                    System.out.println("Command should start with \"appt\", \"pf\", \"shift\", \"task\", \"medicine\" "
-                            + "or \"exit ns\"");
+                    System.out.println("Unknown command or missing fields!");
                     break;
                 }
             } catch (NurseSchedException e) {
