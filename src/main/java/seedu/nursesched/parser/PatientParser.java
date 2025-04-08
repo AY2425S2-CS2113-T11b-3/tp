@@ -234,10 +234,6 @@ public class PatientParser extends Parser {
                     int noteStart = line.indexOf("n/") + 2;
                     int noteEnd = findNextFieldIndex(line, noteStart);
                     notes = line.substring(noteStart, noteEnd).trim();
-
-                    if (notes.isEmpty()) {
-                        throw new NurseSchedException(ExceptionMessage.MISSING_EDIT_INPUT);
-                    }
                 }
 
             } catch (IndexOutOfBoundsException e) {
