@@ -14,6 +14,10 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
 
+/**
+ * Parses and extracts information from user commands related to task management.
+ * Supports operations like add, delete, mark, unmark, list, find and edit.
+ */
 public class TaskParser extends Parser {
     private static final Logger logr = Logger.getLogger("ApptParser");
 
@@ -180,6 +184,18 @@ public class TaskParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_TASK_INDEX);
         } catch (DateTimeParseException e) {
             logr.warning("Invalid date or time format.");
+            String msg = e.getMessage();
+            if (msg.contains("HourOfDay")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_HOUR);
+            } else if (msg.contains("MinuteOfHour")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_MINUTE);
+            } else if (msg.contains("MonthOfYear")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_MONTH);
+            } else if (msg.contains("DayOfMonth")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_DAY);
+            } else if (msg.contains("Invalid date")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_DATE);
+            }
             throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
         } catch (IndexOutOfBoundsException e) {
             logr.warning("Invalid or missing fields");
