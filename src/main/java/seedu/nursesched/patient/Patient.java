@@ -63,6 +63,8 @@ public class Patient {
             }
         }
 
+        age = age.replaceFirst("^0+(?!$)", "");
+        contact = contact.replaceFirst("^0+(?!$)", "");
         verifyAge(age);
         verifyContact(contact);
 
@@ -232,6 +234,7 @@ public class Patient {
                     patient.name = newName;
                 }
                 if (newAge != null) {
+                    newAge = newAge.replaceFirst("^0+(?!$)", "");
                     verifyAge(newAge);
                     patient.age = newAge;
                 }
@@ -240,6 +243,7 @@ public class Patient {
                     patient.gender = newGender.toUpperCase();
                 }
                 if (newContact != null) {
+                    newContact = newContact.replaceFirst("^0+(?!$)", "");
                     verifyContact(newContact);
                     patient.contact = newContact;
                 }
