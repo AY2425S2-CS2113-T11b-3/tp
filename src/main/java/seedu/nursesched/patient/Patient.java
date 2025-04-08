@@ -226,10 +226,8 @@ public class Patient {
                 if ((newContact != null && newContact.equals(patient.contact))) {
                     throw new NurseSchedException(ExceptionMessage.NO_CHANGES_FOUND);
                 }
-                if ((newNotes.equals(patient.notes))) {
+                if ((newNotes != null && newNotes.equals(patient.notes))) {
                     throw new NurseSchedException(ExceptionMessage.NO_CHANGES_FOUND);
-                } else {
-                    patient.notes = newNotes;
                 }
 
                 if (newName != null) {
@@ -248,6 +246,9 @@ public class Patient {
                     newContact = newContact.replaceFirst("^0+(?!$)", "");
                     verifyContact(newContact);
                     patient.contact = newContact;
+                }
+                if (newNotes != null) {
+                    patient.notes = newNotes;
                 }
 
                 System.out.println("Patient information updated for ID: " + id);
