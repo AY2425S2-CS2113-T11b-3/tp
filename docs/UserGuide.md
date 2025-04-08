@@ -538,6 +538,8 @@ Adds a specific quantity of medicine to the current supply list.
 
 Format: `medicine add mn/MEDICINE_NAME q/QUANTITY`
 
+* `QUANTITY` should be a positive integer value.
+
 Example:
 
 * `medicine add mn/paracetamol q/2` Adds 2 quantity of paracetamol into the medicine supply list.
@@ -547,6 +549,8 @@ Example:
 Removes a specific quantity of medicine from the current supply list.
 
 Format: `medicine remove mn/MEDICINE_NAME q/QUANTITY`
+
+* `QUANTITY` should be a positive integer value.
 
 Example:
 
@@ -591,6 +595,7 @@ Format: `medicine edit mn/MEDICINE_NAME un/UPDATED_NAME uq/UPDATED_QUANTITY`
 * `UPDATED_NAME` cannot already exist in `medicine list`.
 * `MEDICINE_NAME` and `UPDATED_NAME` can be the same so that users are able to update the quantity directly without
   adding/removing.
+* `UPDATED_QUANTITY` can be 0 or any positive integer.
 
 Example:
 
@@ -627,8 +632,8 @@ Format: `exit ns`
 
 **Q** What happens if the data file is corrupted?
 
-**A** NurseSched will continue to run, but there may be unpredictable behaviour. Please ensure that the
-corrupted file is handled accordingly.
+**A** As data is saved in a specific format, NurseSched will continue to run, but there may be unpredictable behaviour.
+Please ensure that the corrupted file is handled accordingly and data formats are all correct.
 
 ## Command Summary
 
