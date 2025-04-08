@@ -13,6 +13,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ShiftParserTest {
 
     @Test
+    public void extractInputs_invalidCommand_throwsException() {
+        String invalidCommand = "shift qqq";
+
+        NurseSchedException thrown = assertThrows(
+                NurseSchedException.class,
+                () -> ShiftParser.extractInputs(invalidCommand),
+                "Expected extractInputs() to throw"
+        );
+
+        assertEquals(
+                "Invalid shift command, use either 'add', 'del', 'mark/unmark', 'list', 'logot' or 'sort'!",
+                thrown.getMessage()
+        );
+    }
+
+    @Test
     void testExtractInputs_addCommand_validInput() throws NurseSchedException {
         String input = "shift add s/08:00 e/10:00 d/2025-04-02 st/Prepare room";
         ShiftParser parser = ShiftParser.extractInputs(input);

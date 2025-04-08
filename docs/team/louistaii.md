@@ -40,6 +40,9 @@ Code can be found [here](https://nus-cs2113-ay2425s2.github.io/tp-dashboard/?sea
 - Created issues on GitHub.
 - Updating UG/DG outside of own features.
 - Added JUnit tests to improve code coverage.
+- Participated in fixing bugs found during PE dry run.
+- Tested peers commands to catch any bugs.
+- Contributed to demo video.
 
 #### Contributions beyond the project team
 - [Bookkeepr DG Review](https://github.com/nus-cs2113-AY2425S2/tp/pull/47)

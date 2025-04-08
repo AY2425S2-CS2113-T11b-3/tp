@@ -127,7 +127,7 @@ public class ShiftParser extends Parser {
 
             } else {
                 logr.warning("Invalid command: " + command);
-                throw new NurseSchedException(ExceptionMessage.INVALID_COMMAND);
+                throw new NurseSchedException(ExceptionMessage.INVALID_SHIFT_COMMAND);
             }
 
 
