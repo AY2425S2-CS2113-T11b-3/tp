@@ -1,65 +1,63 @@
 @startuml
 
+hide footbox
 actor User
-participant ":Appointment" as Appointment
-participant ":NurseSchedException" as NurseSchedException
-participant "apptList:ArrayList<Appointment>" as apptList
-participant ":AppointmentStorage" as AppointmentStorage
-participant "logr:Logger" as Logger
+participant ":Command" as Command
+participant ":Parser" as Parser
+participant ":ApptParser" as ApptParser
+participant ":Appointment" as Appt
+participant "apptList:ArrayList" as ApptList
+participant ":AppointmentStorage" as ApptStorage
 
-User -> Appointment : sortByImportance()
-activate Appointment
+User -> Command : appt sort by/ importance
+activate Command
 
-Appointment -> apptList : isEmpty()
-activate apptList
-apptList --> Appointment : True / False
-deactivate apptList
+Command -> Parser : extractType(line)
+activate Parser
 
-opt apptList is empty
-    Appointment -> System.out : println("Appointment list is empty. Nothing to sort.")
-    System.out --> User : display message
+Parser --> Command : Return "appt"
+deactivate Parser
 
-    Appointment -> Logger : log(WARNING, "Appointment list is empty. Nothing to sort.")
-    activate Logger
-    Logger --> Appointment
-    deactivate Logger
+Command -> ApptParser : extractInputs(line)
+activate ApptParser
+ApptParser --> Command : ApptParser \nobject with \nparameters
+deactivate ApptParser
 
-    create NurseSchedException
-    Appointment -> NurseSchedException : NurseSchedException(ExceptionMessage.INVALID_SORTING_LIST)
-    activate NurseSchedException
+opt sortBy.equals("importance")
+    Command-> Appt : sortByImportance()
+    activate Appt
 
-    NurseSchedException -->[
-    deactivate NurseSchedException
+    Appt -> ApptList : isEmpty()
+    activate ApptList
+
+    ApptList --> Appt : True/False
+
+
+    alt apptList is empty
+        Appt --> Command : List is empty. \nNothing to sort.
+    else apptList is not empty
+        Appt -> ApptList : sort(Comparator)
+        ApptList --> Appt
+        deactivate ApptList
+
+
+
+    Appt -> ApptStorage : overwriteSaveFile()
+    activate ApptStorage
+
+    ApptStorage --> Appt : File saved
+    deactivate ApptStorage
+
+
+
+    Appt --> Command : List sorted successfully
+    deactivate Appt
+
+    end
+
+
 end
-
-Appointment -> apptList : sort(Comparator)
-activate apptList
-note right of apptList
-  1. Sort by importance (HIGH to LOW)
-  2. Sort by date (earliest to latest)
-  3. Sort by start time (earliest to latest)
-end note
-apptList --> Appointment
-deactivate apptList
-
-Appointment -> AppointmentStorage : overwriteSaveFile(apptList)
-activate AppointmentStorage
-AppointmentStorage -> FileWriter : write(formattedString)
-activate FileWriter
-FileWriter --> AppointmentStorage
-deactivate FileWriter
-AppointmentStorage --> Appointment
-deactivate AppointmentStorage
-
-Appointment -> System.out : println("Appointments sorted by importance level (HIGH to LOW).")
-System.out --> User : display message
-
-Appointment -> Logger : log(INFO, "Appointment list sorted by importance level")
-activate Logger
-Logger --> Appointment
-deactivate Logger
-
-Appointment --> User : return
-deactivate Appointment
+Command --> User
+    deactivate Command
 
 @enduml

@@ -14,6 +14,10 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
 
+/**
+ * Parses and extracts information from user commands related to task management.
+ * Supports operations like add, delete, mark, unmark, list, find and edit.
+ */
 public class TaskParser extends Parser {
     private static final Logger logr = Logger.getLogger("ApptParser");
 
@@ -69,9 +73,6 @@ public class TaskParser extends Parser {
         line = line.trim();
         line = line.substring(line.indexOf(" ") + 1);
         String command = "";
-        StringBuilder description = new StringBuilder();
-        LocalDate byDate = null;
-        LocalTime byTime = null;
         boolean isDone = false;
         int taskIndex = 0;
 
@@ -94,16 +95,16 @@ public class TaskParser extends Parser {
         case "mark", "unmark", "del":
             return getIndexParser(line, command);
         case "list":
-            return new TaskParser(command, "", null, null, isDone, taskIndex);
+            return getListTaskParser(line, command);
         case "edit":
             return getEditTaskParser(line, command);
         case "find":
             return getFindTaskParser(line, command);
         default:
-            System.out.println("Unknown command: " + command);
+            System.out.println("Unknown task command!");
             break;
         }
-        logr.warning("Invalid command: " + command);
+        logr.warning("Unknown command: " + command);
         return null;
     }
 
@@ -131,12 +132,18 @@ public class TaskParser extends Parser {
             for (String parameter : parameters) {
                 if (parameter.contains("id/")) {
                     taskIndex = Integer.parseInt(parameter.substring(3));
+                } else if (!line.contains("td/") && line.contains("d/") && !line.contains("t/")) {
+                    logr.info("Empty edit parameters, no edits made.");
+                    throw new NurseSchedException(ExceptionMessage.NO_EDITS_MADE);
                 } else if (parameter.contains("td/")) {
                     description = new StringBuilder(parameter.substring(3));
                     if (description.isEmpty()) {
                         logr.warning("Invalid attempt to edit current " +
                                 "task description with an empty description!");
                         throw new NurseSchedException(ExceptionMessage.EMPTY_TASK_DESCRIPTION);
+                    } else if (description.toString().contains("|")) {
+                        logr.warning("Attempt to edit task with a description containing \"|\"!");
+                        throw new NurseSchedException(ExceptionMessage.INVALID_DESCRIPTION);
                     }
                 } else if (parameter.contains("d/")) {
                     byDateString = parameter.substring(2);
@@ -177,6 +184,18 @@ public class TaskParser extends Parser {
             throw new NurseSchedException(ExceptionMessage.INVALID_TASK_INDEX);
         } catch (DateTimeParseException e) {
             logr.warning("Invalid date or time format.");
+            String msg = e.getMessage();
+            if (msg.contains("HourOfDay")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_HOUR);
+            } else if (msg.contains("MinuteOfHour")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_MINUTE);
+            } else if (msg.contains("MonthOfYear")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_MONTH);
+            } else if (msg.contains("DayOfMonth")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_DAY);
+            } else if (msg.contains("Invalid date")) {
+                throw new NurseSchedException(ExceptionMessage.INVALID_DATE);
+            }
             throw new NurseSchedException(ExceptionMessage.INVALID_DATETIME_FORMAT);
         } catch (IndexOutOfBoundsException e) {
             logr.warning("Invalid or missing fields");
@@ -187,6 +206,10 @@ public class TaskParser extends Parser {
 
     public static TaskParser getIndexParser(String line, String command) throws NurseSchedException {
         int taskIndex;
+        if (!line.contains("id/")) {
+            logr.warning("Missing task index!");
+            throw new NurseSchedException(ExceptionMessage.MISSING_INDEX);
+        }
         try {
             taskIndex = Integer.parseInt(line.substring(line.indexOf("id/") + 3));
             if (taskIndex <= 0) {
@@ -220,7 +243,6 @@ public class TaskParser extends Parser {
 
         if (!line.contains("td/") || !line.contains(" d/") || !line.contains(" t/")) {
             logr.warning("Missing fields");
-            System.out.println("WTF");
             throw new NurseSchedException(ExceptionMessage.INVALID_TASK_ADD_FORMAT);
         }
 
@@ -230,6 +252,9 @@ public class TaskParser extends Parser {
             if (description.isEmpty()) {
                 logr.warning("Attempt to add empty task description!");
                 throw new NurseSchedException(ExceptionMessage.EMPTY_TASK_DESCRIPTION);
+            } else if (description.toString().contains("|")) {
+                logr.warning("Attempt to add task with a description containing \"|\"!");
+                throw new NurseSchedException(ExceptionMessage.INVALID_DESCRIPTION);
             }
 
             //extracts task's due date
@@ -285,8 +310,24 @@ public class TaskParser extends Parser {
             logr.warning("Missing fields");
             throw new NurseSchedException(ExceptionMessage.INVALID_TASK_FIND_FIELDS);
         }
-        String keyword = line.substring(line.indexOf("td/") + 3);
+        String keyword = null;
+        try {
+            keyword = line.substring(line.indexOf("td/") + 3);
+            if (keyword.isEmpty()) {
+                logr.warning("Attempt to find task with empty keyword!");
+                throw new NurseSchedException(ExceptionMessage.MISSING_TASK_KEYWORD);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            throw new NurseSchedException(ExceptionMessage.MISSING_TASK_KEYWORD);
+        }
         return new TaskParser(command, keyword, null, null, false, 0);
+    }
+
+    public static TaskParser getListTaskParser(String line, String command) throws NurseSchedException {
+        if (!line.equals("list")) {
+            throw new NurseSchedException(ExceptionMessage.INVALID_LIST_TASK);
+        }
+        return new TaskParser(command, null, null, null, false, 0);
     }
 
     public String getCommand() {

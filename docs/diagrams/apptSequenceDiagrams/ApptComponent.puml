@@ -1,0 +1,65 @@
+@startuml
+
+hide circle
+skinparam classAttributeIconSize 0
+
+package "Appointment Information" {
+  class Appointment {
+      #{static} apptList: ArrayList<Appointment>
+      -name: String
+      -startTime: LocalTime
+      -endTime: LocalTime
+      -date: LocalDate
+      -notes: String
+      -id: int
+      -importance: int
+      -isDone: boolean
+      +Appointment(id, startTime, endTime, date, notes, importance)
+      +{static} addAppt(id, startTime, endTime, date, notes, importance)
+      +{static} deleteAppt(index)
+      +{static} markAppt(index)
+      +{static} unmarkAppt(index)
+      +{static} findApptClashes(startTime, endTime, date): Appointment
+      +{static} findPatientName(id): String
+      +{static} findApptByName(patientName)
+      +{static} findApptByID(id)
+      +{static} editAppt(index, id, startTime, endTime, date, notes, importance)
+      +{static} sortByImportance()
+      +{static} sortByTime()
+      +{static} checkApptDateTime(date, startTime, endTime)
+      +{static} removeAppointmentsForPatient(patientId)
+      +{static} list()
+    }
+}
+
+package "Command Process" {
+  class Command {
+    +executeCommands(boolean, Scanner, Ui)
+  }
+
+  class ApptParser {
+      {static} apptIndex: int
+      {static} id: int
+      {static} searchKeyword: String
+      {static} sortBy: String
+      {static} searchBy: String
+      -command: String
+      -name: String
+      -startTime: LocalTime
+      -endTime: LocalTime
+      -date: LocalDate
+      -notes: String
+      -importance: int
+      +ApptParser(command, name, startTime, endTime, date, notes, \n   apptIndex, searchKeyword, importance, sortBy, id, searchBy)
+      +{static} extractInputs(String): ApptParser
+      +{static} parseImportance(String): int
+      +{static} parseIndex(String): int
+      -{static} parseID(String): int
+      -{static} findNextFieldIndex(String, int): int
+    }
+
+Command .right.> ApptParser : 1. parses input >
+Command .down.> Appointment : 2. executes >
+
+
+@enduml

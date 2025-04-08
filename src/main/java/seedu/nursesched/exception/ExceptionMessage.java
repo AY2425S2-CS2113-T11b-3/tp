@@ -3,27 +3,35 @@ package seedu.nursesched.exception;
 public enum ExceptionMessage {
     INPUT_EMPTY("Input line cannot be empty!"),
     INVALID_FORMAT("Invalid command format!"),
-    INVALID_SHIFTADD_FORMAT("Invalid shift add format! Input as:" +
-            " shift add [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
-    INVALID_PATIENT_ADD_FORMAT("Invalid patient add format! Input as:\n" +
-            "pf add id/[ID_NUMBER] p/[PATIENT_NAME] a/[AGE] g/[GENDER] c/[CONTACT] n/[NOTES]"),
     INVALID_TIME_FORMAT("Invalid time format! Input as HH:mm"),
     INVALID_DATE_FORMAT("Invalid date format! Input as YYYY-MM-DD"),
     INVALID_DATETIME_FORMAT("Invalid date or time format! Input date as YYYY-MM-DD, input time as HH:mm"),
-    SHIFT_TASK_EMPTY("Shift task cannot be empty!"),
     INVALID_START_TIME("Start time must be before end time."),
     INVALID_DUE_DATE_TIME("Due date must be after current date and time."),
-    INVALID_SHIFTDEL_FORMAT("Invalid shift del format! Input as:" +
-            " shift del [sn/SHIFT_NUMBER]"),
-    INVALID_SHIFTEDIT_FORMAT("Invalid shift edit format! Input as: " +
-            "shift edit [sn/SHIFT_NUMBER] [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
-    INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark [sn/SHIFT_NUMBER]"),
-    INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark [sn/SHIFT_NUMBER]"),
-    INVALID_SHIFT_NUMBER("There is no shift with that specified index!"),
     NEGATIVE_INDEX("Index must be a positive integer greater than 0!"),
     ZERO_INDEX("Index cannot be zero!"),
-    INVALID_PATIENT_NUMBER("Index is greater than number of patients in the list!"),
-    INVALID_COMMAND("Invalid command! Use 'add' or 'del'."),
+    INVALID_SORTING_LIST("List is empty. Nothing to sort."),
+
+    // ====================Shift Specific Exceptions====================
+    INVALID_SHIFT_COMMAND("Invalid shift command, use either 'add', 'del', 'mark/unmark', 'list', "
+            + "'logot' or 'sort'!"),
+    INVALID_SHIFTADD_FORMAT("Invalid shift add format! Input as:" +
+            " shift add s/START_TIME e/END_TIME d/DATE st/SHIFT_TASK"),
+    SHIFT_TASK_EMPTY("Shift task cannot be empty!"),
+    INVALID_SHIFT_DATE("Shift date must be after current date!"),
+    INVALID_SHIFTDEL_FORMAT("Invalid shift del format! Input as:" +
+            " shift del id/SHIFT_NUMBER"),
+    INVALID_SHIFTEDIT_FORMAT("Invalid shift edit format! Input as: " +
+            "shift edit id/SHIFT_NUMBER [s/START_TIME] [e/END_TIME] [d/DATE] [st/SHIFT_TASK]"),
+    INVALID_SHIFTMARK_FORMAT("Invalid shift mark format! Input as: shift mark id/SHIFT_NUMBER"),
+    INVALID_SHIFTUNMARK_FORMAT("Invalid shift unmark format! Input as: shift unmark id/SHIFT_NUMBER"),
+    INVALID_SHIFTLOGOT_FORMAT("Invalid shift log format! Input as: shift logot id/SHIFT_NUMBER h/HOURS"),
+    INVALID_SHIFT_NUMBER("There is no shift with that specified index!"),
+    SHIFT_TIMING_OVERLAP("Shift would overlap with another existing shift!"),
+
+    // ====================Patient Specific Exceptions====================
+    INVALID_PATIENT_ADD_FORMAT("Invalid patient add format! Input as:\n" +
+            "pf add id/ID_NUMBER p/PATIENT_NAME a/AGE g/GENDER c/CONTACT n/[NOTES]"),
     PARSING_ERROR("Error parsing command!"),
     MISSING_SEARCH_TERM("Missing search term after 'find'!"),
     INVALID_ID_LENGTH("Patient ID must be 4 digits long."),
@@ -41,9 +49,19 @@ public enum ExceptionMessage {
     PATIENT_ID_EXIST("Patient ID already exist!"),
     EMPTY_PATIENT_ID_FIELD("Patient ID field cannot be empty!"),
     MISSING_EDIT_INPUT("Edit fields cannot be empty!"),
-    INVALID_SORTING_LIST("List is empty. Nothing to sort."),
-    MISSING_INDEX_PARAMETER("Missing id/[INDEX] field for index."),
-    INVALID_INDEX_PARAMETER("id/[INDEX] field must be an integer only."),
+    PATIENT_AGE_NEGATIVE("Patient age cannot be negative!"),
+    PATIENT_AGE_LIMIT("Patient age cannot be greater than the maximum age!"),
+    PATIENT_AGE_DIGITS("Patient age must not contain any non-digits or spaces!"),
+    INVALID_CONTACT_LENGTH("Contact length must be 8 digits!"),
+    PATIENT_CONTACT_DIGITS("Patient contact must not contain non-digits or spaces!"),
+    ID_CONTAINS_SPACES("Patient ID must not contain spaces!"),
+    EMPTY_PATIENT_LIST("Patient list is empty!"),
+    MISSING_ID_IDENTIFIER("Missing id/ identifier!"),
+    PATIENT_DUPLICATE_IDENTIFIER("There are multiple identifiers, ensure that there is only 1 for each field!"),
+    INVALID_PATIENT_COMMAND("Invalid Patient command, use either 'add', 'del', `list`, \n`result add`, `result del`, " +
+            "or `result list`!"),
+    INVALID_IDENTIFIER_ORDER("Invalid identifier order, ensure that the command is correctly formatted!"),
+    NO_CHANGES_FOUND("New fields must be different from old fields!"),
 
     // ====================Medicine Specific Exceptions====================
     INVALID_FORMAT_MEDICINE_SAVED("Invalid format in medicine storage file. Input as: MEDICINE_NAME | QUANTITY in" +
@@ -64,24 +82,29 @@ public enum ExceptionMessage {
     MISSING_MEDICINE_NAME("No Medicine name input"),
     MEDICINE_NONEXISTENT("Medicine does not exist!"),
     DUPLICATE_MEDICINE_NAME("Updated medicine name already exists!"),
-    MEDICINE_QUANTITY_TOO_LARGE("Quantity is too large! Max allowed is 2,147,483,647."),
+    MEDICINE_QUANTITY_TOO_LARGE("Quantity is too large or invalid type! Max allowed is 2,147,483,647."),
     INVALID_MEDICINE_QUANTITY_FORMAT("Invalid quantity format! Enter a numeric value."),
 
-    //APPT errors
     // ====================Appointment Specific Exceptions====================
-    INVALID_PATIENT_APPT_ADD("Patient name not found in patient list! Add patient to " +
+    INVALID_PATIENT_APPT_ADD("Patient ID not found in patient list! Add patient to " +
                                      "patient list before adding appointment!"),
     INVALID_SORT_PARAMETER("Can only be sorted by time or importance!"),
+    INVALID_SORT_FORMAT("Invalid sort format. Should be: appt sort by/ [time or importance]"),
+    INVALID_FIND_PARAMETER("Can only find appointments using name (p/) or ID (id/)!"),
+    MISSING_NAME_PARAMETER("No name provided!"),
     INVALID_IMPORTANCE_FORMAT("Importance should be an integer from 1 to 3. \n" +
             "1:LOW, 2:MEDIUM, 3:HIGH"),
-    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit id/[INDEX] p/[PATIENT_NAME] " +
-            "s/[START_TIME] e/[END_TIME] d/[DATE] im/[IMPORTANCE] n/[NOTES]"),
+    INVALID_APPTEDIT_FORMAT("Invalid appointment edit format! Input as: appt edit aid/APPT_INDEX [id/PATIENT_ID] " +
+            "[s/START_TIME] [e/END_TIME] [d/DATE] [im/IMPORTANCE] [n/NOTES]"),
     INVALID_APPT_NUMBER("There is no appointment with that specified index!"),
     INVALID_APPTADD_FORMAT("Invalid appointment add format! Input as:" +
-            " appt add [p/PATIENT_NAME] [s/START_TIME] [e/END_TIME] [d/DATE] [n/NOTES]"),
+            " appt add id/PATIENT_ID s/START_TIME e/END_TIME d/DATE [im/IMPORTANCE] [n/NOTES]"),
     INVALID_APPT_DATE_TIME("Appointment date and time must be after current date and time."),
     UNMARKING_UNMARKED_APPT("Cant unmark an appointment that was already unmarked!"),
     MARKING_MARKED_APPT("Cant mark an appointment that was already marked!"),
+    MISSING_INDEX_PARAMETER("Missing aid/INDEX field for index."),
+    INVALID_INDEX_PARAMETER("aid/INDEX field must be an integer only."),
+    INDEX_PARAMETER_TOO_LARGE("The index provided is too large. Please use up to 4 digits only."),
 
     // ====================Task Specific Exceptions====================
     INVALID_TASK_FIND_FIELDS("Invalid task find fields! Input as: task find td/KEYWORD"),
@@ -99,7 +122,15 @@ public enum ExceptionMessage {
     INVALID_DAY("Invalid day in due date (YYYY-MM-DDDD)! There are at most 31 days in a month!"),
     INVALID_HOUR("Invalid hour in due time (HH:mm)! Hours can only range from 00 to 23!"),
     INVALID_MINUTE("Invalid minutes in due time (HH:mm)! Minutes can only range from 00 to 59!"),
-    INVALID_DATE("Invalid date! Take note that some months have less than 31 days!");
+    INVALID_DATE("Invalid date! Take note that some months have less than 31 days!"),
+    MISSING_INDEX("Task index is missing!"),
+    INVALID_DESCRIPTION("Task description cannot contain the character \"|\"!"),
+    ERROR_READING_TASK_FILE("Error reading task file! " +
+            "Please ensure the task.txt file only contains tasks in the following format:" +
+            "\n[ ] (or [X] if the task is completed) | <description> | <due date in YYYY-MM-DD> | <due time in HH:mm>"),
+    MISSING_TASK_KEYWORD("Task keyword cannot be empty!"),
+    INVALID_LIST_TASK("Invalid command to list tasks! Input as: task list"),
+    NO_EDITS_MADE("Empty inputs found, no edits were made.");
     // ============================================================
 
     private final String message;

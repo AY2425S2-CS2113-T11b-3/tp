@@ -18,8 +18,9 @@ activate Command
   activate PatientParser
     PatientParser -> PatientParser : validateID(id="1234")
     activate PatientParser
+    PatientParser --> PatientParser
     deactivate PatientParser
-    PatientParser --> Command : Return PatientParser(id="1234")
+    PatientParser --> Command : Return PatientParser(command="del", id="1234")
   deactivate PatientParser
     Command -> Patient : removePatient("1234")
   activate Patient

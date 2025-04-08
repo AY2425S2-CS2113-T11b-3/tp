@@ -1,0 +1,35 @@
+@startuml
+
+hide footbox
+actor User
+participant ":Command" as Command
+participant ":Parser" as Parser
+participant ":PatientParser" as PatientParser
+participant ":Patient" as Patient
+participant ":Storage" as Storage
+
+User -> Command : pf add id/1234 p/John Doe a/30 g/M \nc/91234567 n/Allergic to penicillin"
+activate Command
+  Command -> Parser : extractType(line)
+  activate Parser
+    Parser --> Command : Return "pf"
+  deactivate Parser
+    Command -> PatientParser : extractInputs(line)
+  activate PatientParser
+    PatientParser -> PatientParser : validateID(id="1234")
+    activate PatientParser
+    PatientParser --> PatientParser
+    deactivate PatientParser
+    PatientParser --> Command : Return PatientParser(command="add", id="1234", name="John Doe", \nage="30", gender="M", contact="91234567", notes="Allergic to penicillin")
+  deactivate PatientParser
+    Command -> Patient : addPatient(id="1234", name="John Doe", age="30", gender="M", \ncontact="91234567", notes="Allergic to penicillin")
+  activate Patient
+    Patient -> Storage : overwriteSaveFile(patientsList)
+  activate Storage
+    Storage --> Patient
+  deactivate Storage
+    Patient --> Command
+  deactivate Patient
+    Command --> User
+deactivate Command
+@enduml

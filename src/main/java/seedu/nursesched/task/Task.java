@@ -21,7 +21,7 @@ import java.util.logging.Level;
  * It contains details such as the task description, completion status, due date and time.
  */
 public class Task {
-    private static ArrayList<Task> taskList = new ArrayList<Task>();
+    private static ArrayList<Task> taskList;
     private static final Logger logr = Logger.getLogger("Task");
 
     private String description;
@@ -49,6 +49,7 @@ public class Task {
             logr.log(Level.SEVERE, "File logger not working", e);
         }
         taskList = TaskStorage.readFile();
+
     }
 
     /**
@@ -177,6 +178,10 @@ public class Task {
      * Lists out all tasks in the task list.
      */
     public static void listTasks() {
+        if (taskList.isEmpty()) {
+            System.out.println("You have 0 tasks.");
+            return;
+        }
         int listSize = taskList.size();
         for (int index = 0; index < listSize; index++) {
             System.out.println((index + 1) + ". " + taskList.get(index).toString());
@@ -302,6 +307,10 @@ public class Task {
 
     public static ArrayList<Task> getTaskList() {
         return taskList;
+    }
+
+    public static void resetTaskList() {
+        taskList = new ArrayList<Task>();
     }
 
     @Override

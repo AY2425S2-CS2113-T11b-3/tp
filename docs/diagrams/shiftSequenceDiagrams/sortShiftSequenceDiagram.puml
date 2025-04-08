@@ -1,0 +1,54 @@
+@startuml
+
+hide footbox
+actor User
+participant ":Command" as Command
+participant ":Parser" as Parser
+participant ":ShiftParser" as ShiftParser
+participant ":Shift" as Shift
+participant "shiftList:ArrayList" as ShiftList
+participant ":ShiftStorage" as ShiftStorage
+
+User -> Command : shift sort
+activate Command
+
+Command -> Parser : extractType(line)
+activate Parser
+
+Parser --> Command : Return "shift"
+deactivate Parser
+
+Command -> ShiftParser : extractInputs(line)
+activate ShiftParser
+ShiftParser --> Command : ShiftParser \nobject with \nparameters
+deactivate ShiftParser
+
+opt sort command is issued
+    Command -> Shift : sortShiftsChronologically()
+    activate Shift
+
+    Shift -> ShiftList : isEmpty()
+    activate ShiftList
+    ShiftList --> Shift : True/False
+
+    alt shiftList is empty
+        Shift --> Command : List is empty. \nNothing to sort.
+    else shiftList is not empty
+        Shift -> ShiftList : sort(Comparator)
+        ShiftList --> Shift
+        deactivate ShiftList
+
+        Shift -> ShiftStorage : overwriteSaveFile()
+        activate ShiftStorage
+        ShiftStorage --> Shift : File saved
+        deactivate ShiftStorage
+
+        Shift --> Command : List sorted successfully
+    end
+
+    deactivate Shift
+    Command --> User
+    deactivate Command
+end
+
+@enduml

@@ -1,0 +1,53 @@
+@startuml
+
+hide footbox
+actor User
+participant ":Command" as Command
+participant ":Parser" as Parser
+participant ":ShiftParser" as ShiftParser
+participant ":Shift" as Shift
+participant ":ShiftStorage" as Storage
+
+User -> Command : shift add s/13:00 e/14:00 d/2025-12-12 \nst/Overnight ward check
+activate Command
+  Command -> Parser : extractType(line)
+
+  activate Parser
+    Parser --> Command : Return "shift"
+  deactivate Parser
+
+  Command -> ShiftParser : extractInputs(line)
+
+  activate ShiftParser
+    ShiftParser --> Command : ShiftParser \nobject with parameters
+  deactivate ShiftParser
+
+  Command -> Shift : addShift(startTime=13:00, endTime=14:00, date=2025-12-12, \ntask="Overnight ward check")
+
+  activate Shift
+
+    Shift -> Shift: findClashingShift(startTime=13:00,endTime=14:00,date=2025-12-12)
+    activate Shift
+      Shift --> Shift: Possible Shift Clashes
+    deactivate Shift
+
+    alt Shift clashes exists
+      Shift -> Command : Shift \nnot added
+    else No shift clashes
+
+      Shift -> Shift: checkShiftValidity(date,startTime,endTime)
+      activate Shift
+      deactivate Shift
+
+      Shift -> Storage : appendToFile(Shift)
+      activate Storage
+        Storage --> Shift : File saved
+      deactivate Storage
+
+      Shift --> Command: Shift \nadded
+      deactivate Shift
+    end
+
+  Command --> User
+deactivate Command
+@enduml
